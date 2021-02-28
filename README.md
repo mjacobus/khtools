@@ -2,10 +2,10 @@
 
 A few utilities for Kingdom Hall users.
 
-[![Build Status](https://travis-ci.com/mjacobus/khtools.svg?branch=master)](https://travis-ci.com/mjacobus/khtools)
-[![Maintainability](https://api.codeclimate.com/v1/badges/17449aaca20504da468f/maintainability)](https://codeclimate.com/github/mjacobus/khtools/maintainability)
-[![Coverage Status](https://coveralls.io/repos/github/mjacobus/khtools/badge.svg)](https://coveralls.io/github/mjacobus/khtools)
-
+[![Build Status](https://github.com/mjacobus/khtools/actions/workflows/rails-unit-tests.yml/badge.svg)](https://github.com/mjacobus/khtools/actions/workflows/rails-unit-tests.yml?query=branch%3Amaster)
+[![Rubocop](https://github.com/mjacobus/khtools/actions/workflows/rubocop.yml/badge.svg)](https://github.com/mjacobus/khtools/actions/workflows/rubocop.yml?query=branch%3Amaster)
+[![Maintainability](https://api.codeclimate.com/v1/badges/65fad0b0ff0bed478231/maintainability)](https://codeclimate.com/github/mjacobus/khtools/maintainability)
+[![Coverage Status](https://coveralls.io/repos/github/mjacobus/khtools/badge.svg?branch=master)](https://coveralls.io/github/mjacobus/khtools?branch=master)
 
 ### How to run/install the app:
 
