@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 class TestFactories
+  def users
+    @users ||= UserFactory.new(self)
+  end
+
+  def meetings
+    @meetings ||= Db::MeetingAttendance::MeetingFactory.new(self)
+  end
+
   class Factory
     attr_reader :factories
 
@@ -35,6 +43,12 @@ class TestFactories
   class UserFactory < Factory
     def attributes(overrides = {})
       { name: "User-#{seq}" }.merge(overrides)
+    end
+  end
+
+  class Db::MeetingAttendance::MeetingFactory < Factory
+    def attributes(overrides = {})
+      { title: "Meeting-#{seq}" }.merge(overrides)
     end
   end
 end
