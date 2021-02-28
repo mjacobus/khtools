@@ -30,9 +30,9 @@
 yarn-debug.log*
 .yarn-integrity
 /coverage
+/.env
 /.env.development.local
 /.env.test.local
 /.env.local
 /db/schema.rb
-/.env
 /var

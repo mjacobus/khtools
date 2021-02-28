@@ -7,23 +7,6 @@ Rails.application.routes.draw do
     get '/dev/login', to: 'development#login'
   end
 
-  get 'phones/random', to: 'phones#random_show', as: :random_phone
-
-  get 'history', to: 'call_attempts#call_history', as: :call_history
-
-  resources :territories do
-    resources :phones do
-      collection do
-        get :vcards
-      end
-      resources :call_attempts do
-        collection do
-          post 'create/:outcome', as: :create, action: :quick_create
-        end
-      end
-    end
-  end
-
   resources :users, only: %i[index] do
     member do
       patch :enable
