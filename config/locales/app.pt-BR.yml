@@ -7,6 +7,7 @@ pt-BR:
   'false': 'Não'
 
   app:
+    title: "KH Tools"
     messages:
       contact_admin: "Se você já logou mas não tem acesso, contate o admin de sua congregação."
     links:
