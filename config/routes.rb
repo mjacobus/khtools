@@ -7,6 +7,10 @@ Rails.application.routes.draw do
     get '/dev/login', to: 'development#login'
   end
 
+  namespace :meeting_attendance do
+    resources :meetings
+  end
+
   resources :users, only: %i[index] do
     member do
       patch :enable
