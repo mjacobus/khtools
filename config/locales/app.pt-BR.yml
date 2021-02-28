@@ -6,77 +6,14 @@ pt-BR:
       territory: Território
       phone: Telefone
     attributes:
-      territory:
-        user_id: Publicador
-      call_attempt_form:
-        outcome: Resultado
-        gender: Gênero
-        age: Idade
-        name: Nome
-        notes: Observações
-        reachable_by: Quando é melhor revisitar
-      call_attempt:
-        outcome: Resultado
-        gender: Gênero
-        age: Idade
-        name: Nome
-        notes: Observações
-        reachable_by: Quando é melhor revisitar
   'true': 'Sim'
   'false': 'Não'
 
   app:
-    title: "Gerenciador de Territórios"
     messages:
       contact_admin: "Se você já logou mas não tem acesso, contate o admin de sua congregação."
-      confirm_phone_delete: "Tem certeza de que deseja excluir este telefone?"
-      confirm_call_attempt_delete: "Tem certeza de que deseja excluir este telefonema?"
-      alert_someone_else_territory: "Cuidado! Este território está designado para outro publicador."
-      page_not_found: "Página não encontrada."
-      history_limit_last_x_calls: "Últimas %{number} chamadas."
     links:
       home: "Home"
-      random_phone: "Telefone aleatório"
-      my_territories: "Meus territórios"
-      territories: "Territórios"
-      call_history: "Histórico de chamadas"
       users: "Usuários"
       logout: "Sair"
       google_login: "Entrar com minha conta do Gmail"
-      call_number: "Ligar"
-      add: "Adicionar"
-      remove_phone: "Excluir telefone"
-      remove: "Excluir"
-      edit: "Alterar"
-      previous: "<< Anterior"
-      next: "Próximo >>"
-      previous_random: "<< Aleatório"
-      next_random: "Aleatório >>"
-      other_carrier: 'Outra operadora'
-      without_area_code: 'Sem DDD'
-      export_contacts: 'Importar lista de contatos'
-    genders:
-      male: "Masculino"
-      female: "Feminino"
-
-    outcomes:
-      not_home: "Não em casa"
-      contacted: "Contatado"
-      disconnected: "Fora da Área de cobertura ou desligado"
-      unreachable: "Telefone inválido"
-
-    titles:
-      call_history: 'Histórico de Chamadas'
-      history: 'Histórico'
-      phones: 'Telefones'
-      my_return_visits: 'Minhas Revisitas'
-
-    phone_action:
-      call: "Ligar"
-      return_visit: "Revisitar"
-      forget: "Esquecer"
-      verify: "Verificar"
-      error: "Erro"
-    vcard:
-      notes: 'Testemunho por telefone. %{notes}'
-      name_prefix: 'jwtel -'
