@@ -1,15 +1,15 @@
-# Territory
+# Kingdom Hall Tools
 
-Simple app for managing the congregation territories.
+A few utilities for Kingdom Hall users.
 
-[![Build Status](https://travis-ci.com/mjacobus/territory.svg?branch=master)](https://travis-ci.com/mjacobus/territory)
-[![Maintainability](https://api.codeclimate.com/v1/badges/17449aaca20504da468f/maintainability)](https://codeclimate.com/github/mjacobus/territory/maintainability)
-[![Coverage Status](https://coveralls.io/repos/github/mjacobus/territory/badge.svg)](https://coveralls.io/github/mjacobus/territory)
+[![Build Status](https://travis-ci.com/mjacobus/khtools.svg?branch=master)](https://travis-ci.com/mjacobus/khtools)
+[![Maintainability](https://api.codeclimate.com/v1/badges/17449aaca20504da468f/maintainability)](https://codeclimate.com/github/mjacobus/khtools/maintainability)
+[![Coverage Status](https://coveralls.io/repos/github/mjacobus/khtools/badge.svg)](https://coveralls.io/github/mjacobus/khtools)
 
 
 ### How to run/install the app:
 
-After installing the ruby version displayed in [this file](https://github.com/mjacobus/territory/blob/master/.ruby-version).
+After installing the ruby version displayed in [this file](https://github.com/mjacobus/khtools/blob/master/.ruby-version).
 Also install `nodejs` and `yarn`.
 
 ```bash
@@ -17,8 +17,8 @@ Also install `nodejs` and `yarn`.
 gem install bundler
 mkdir ~/Projects
 cd projects
-git clone https://github.com/mjacobus/territory.git
-cd territory
+git clone https://github.com/mjacobus/khtools.git
+cd khtools
 bundle install # after you installed ruby version
 cp .env.sample .env
 
@@ -26,7 +26,7 @@ yarn install
 
 # every time you update your project
 
-cd ~/Projects/territory
+cd ~/Projects/khtools
 docker-compose up     # start docker. Make sure your local postgress is not running
 bundle install
 ./bin/rake db:create  # create database
@@ -50,10 +50,6 @@ RAILS_ENV=test ./bin/rake db:migrate # create test tables
 bundle exec rubocop -a
 ```
 
-
-
-
-
 ### Installing OS dependencies
 
 - If you are on [Ubuntu 18.04 LTS](https://github.com/mjacobus/installers/tree/master/ubuntu/18.04)
@@ -62,12 +58,12 @@ bundle exec rubocop -a
 
 ## Heroku
 
-- [DB Backups](https://data.heroku.com/datastores/6d47c6e8-812a-4559-9fbe-42ac5ebbd428#durability)
+- [DB Backups](https://data.heroku.com/datastores/{TODO}#durability)
 
 ### Restoring a backup
 
 Download a backup from the above link and then:
 
 ```bash
-pg_restore -U pguser -W --no-owner --no-privileges -h localhost -d territory_manager_development -1 tmp/bkp/jw-territory-backup-21-01-14
+pg_restore -U pguser -W --no-owner --no-privileges -h localhost -d territory_manager_development -1 tmp/bkp/jw-khtools-backup-21-01-14
 ```
