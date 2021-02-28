@@ -3,6 +3,5 @@
 class HomeController < ApplicationController
   skip_before_action :require_enabled_user
 
-  def index
-  end
+  def index; end
 end
