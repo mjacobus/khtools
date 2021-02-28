@@ -2,9 +2,6 @@
 pt-BR:
   activerecord:
     models:
-      call_attempt: Ligação
-      territory: Território
-      phone: Telefone
     attributes:
   'true': 'Sim'
   'false': 'Não'
