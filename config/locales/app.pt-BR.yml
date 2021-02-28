@@ -8,10 +8,13 @@ pt-BR:
 
   app:
     title: "KH Tools"
+    titles:
+      meeting_attendance: "Contagem de Assistência"
     messages:
       contact_admin: "Se você já logou mas não tem acesso, contate o admin de sua congregação."
     links:
       home: "Home"
       users: "Usuários"
       logout: "Sair"
+      meeting_attendance: "Contagem de Assistência"
       google_login: "Entrar com minha conta do Gmail"
