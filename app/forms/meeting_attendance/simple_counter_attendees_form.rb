@@ -2,17 +2,17 @@
 
 class MeetingAttendance::SimpleCounterAttendeesForm < BaseForm
   attr_reader :names
-  attr_accessor :amount
+  attr_accessor :quantity
 
   def initialize(meeting)
     super(Db::MeetingAttendance::SimpleCounterAttendee.new)
     @meeting = meeting
     @names = []
-    @amount = 1
+    @quantity = 1
   end
 
   def params=(params)
-    self.attributes = params.require(:attendee).permit(:names, :amount)
+    self.attributes = params.require(:attendee).permit(:names, :quantity)
   end
 
   def names=(names)
@@ -23,7 +23,7 @@ class MeetingAttendance::SimpleCounterAttendeesForm < BaseForm
 
   def save
     names.each do |name|
-      @meeting.attendees.create(name: name, amount: amount)
+      @meeting.attendees.create(name: name, quantity: quantity)
     end
   end
 
