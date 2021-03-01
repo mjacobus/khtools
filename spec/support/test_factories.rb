@@ -9,6 +9,10 @@ class TestFactories
     @meetings ||= Db::MeetingAttendance::MeetingFactory.new(self)
   end
 
+  def attendees
+    @attendees ||= Db::MeetingAttendance::SimpleCounterAttendeeFactory.new(self)
+  end
+
   class Factory
     attr_reader :factories
 
@@ -49,6 +53,15 @@ class TestFactories
   class Db::MeetingAttendance::MeetingFactory < Factory
     def attributes(overrides = {})
       { title: "Meeting-#{seq}" }.merge(overrides)
+    end
+  end
+
+  class Db::MeetingAttendance::SimpleCounterAttendeeFactory < Factory
+    def attributes(overrides = {})
+      {
+        name: "Attendee-#{seq}",
+        meeting: overrides[:meeting] || factories.meetings.create
+      }.merge(overrides)
     end
   end
 end
