@@ -18,6 +18,10 @@ class BaseForm
     @record.destroy
   end
 
+  # TODO: Fix the following issue
+  #
+  # This hack is not working very well with simple_form i18n file.
+  # AR attributes i18n is also not working well.
   def model_name
     @model_name ||= ActiveModel::Name.new(@record.class, nil, singular_route_key).tap do |name|
       name.param_key = param_key
