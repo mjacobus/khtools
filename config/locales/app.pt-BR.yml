@@ -1,10 +1,15 @@
 ---
 pt-BR:
-  activerecord:
-    models:
-    attributes:
   'true': 'Sim'
   'false': 'Não'
+
+  activerecord:
+    models:
+      db/meeting_attendance/meeting: Reunião
+    attributes:
+      meeting_attendance/meeting:
+        title: Título
+
 
   app:
     title: "KH Tools"
@@ -12,9 +17,13 @@ pt-BR:
       meeting_attendance: "Contagem de Assistência"
     messages:
       contact_admin: "Se você já logou mas não tem acesso, contate o admin de sua congregação."
+      confirm_delete: 'Tem certeza que quer excluir este registro?'
     links:
       home: "Home"
       users: "Usuários"
       logout: "Sair"
+      delete: "Excluir"
+      edit: "Editar"
+      new: "Adicionar"
       meeting_attendance: "Contagem de Assistência"
       google_login: "Entrar com minha conta do Gmail"
