@@ -12,6 +12,7 @@ pt-BR:
       default_message: "Corrija os problemas abaixo:"
     hints:
       defaults:
+        notes: "- Ficou feliz de receber a ligação?<br>- Que textos foram lidos?<br>- Como a pessoa regiu?<br>- Fiquei de mandar alguma publicação?<br>- Qual a minha idéia de revisita?"
     # Examples
     # labels:
     #   defaults:
@@ -32,3 +33,5 @@ pt-BR:
     #   defaults:
     #     age: 'Select your age'
     labels:
+      defaults:
+        title: 'Título'

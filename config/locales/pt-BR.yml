@@ -107,7 +107,7 @@ pt-BR:
       month: Mês
       year: Ano
   errors:
-    format: "%{attribute} %{message}"
+    format: "%{message}"
     messages:
       accepted: deve ser aceito
       blank: não pode ficar em branco
