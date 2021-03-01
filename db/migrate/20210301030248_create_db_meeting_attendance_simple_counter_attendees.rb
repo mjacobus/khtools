@@ -10,6 +10,6 @@ class CreateDbMeetingAttendanceSimpleCounterAttendees < ActiveRecord::Migration[
       t.timestamps
     end
 
-    add_foreign_key :ma_simple_counter_attendees, :ma_meetings, column: :id
+    add_foreign_key :ma_simple_counter_attendees, :ma_meetings, column: :meeting_id
   end
 end
