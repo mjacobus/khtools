@@ -26,7 +26,7 @@ RSpec.describe MeetingAttendance::SimpleCounterController, type: :request do
   describe 'POST #create' do
     let(:perform_request) do
       post meeting_attendance_meeting_simple_counter_attendees_url(meeting),
-           params: { attendee: { name: "foo, bar baz , , \nfizbuz" } }
+           params: { attendee: { names: "foo, bar baz , , \nfizbuz" } }
     end
 
     it 'adds attendees' do

@@ -11,26 +11,14 @@ pt-BR:
     error_notification:
       default_message: "Corrija os problemas abaixo:"
     hints:
-    # Examples
-    # labels:
+      defaults:
+        names: 'Pode digitar vários nomes, separados por vírgula'
+    # placeholders:
     #   defaults:
-    #     password: 'Password'
-    #   user:
-    #     new:
-    #       email: 'E-mail to sign in.'
-    #     edit:
-    #       email: 'E-mail.'
-    # hints:
-    #   defaults:
-    #     username: 'User name to sign in.'
-    #     password: 'No special characters, please.'
-    # include_blanks:
-    #   defaults:
-    #     age: 'Rather not say'
-    # prompts:
-    #   defaults:
-    #     age: 'Select your age'
+    #     names: 'José da Silva, Joana de Jesus'
     labels:
       defaults:
         title: 'Título'
         name: 'Nome'
+        names: 'Nomes'
+        amount: 'Quantidade'

@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe MeetingAttendance::SimpleCounterAttendeeForm do
+RSpec.describe MeetingAttendance::SimpleCounterAttendeesForm do
   let(:form) { described_class.new(model) }
-  let(:model) { Db::MeetingAttendance::SimpleCounterAttendee.new }
+  let(:model) { Db::MeetingAttendance::Meeting.new }
 
   describe '#model_name' do
     it 'return the correct model name' do

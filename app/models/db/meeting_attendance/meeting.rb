@@ -10,6 +10,6 @@ class Db::MeetingAttendance::Meeting < ApplicationRecord
   scope :by_creation_date, -> { order(created_at: :desc) }
 
   def number_of_attendees
-    attendees.count
+    attendees.sum(:amount)
   end
 end

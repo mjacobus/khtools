@@ -7,18 +7,15 @@ class MeetingAttendance::SimpleCounterController < ApplicationController
   end
 
   def create
-    names.each do |name|
-      attendee = meeting.attendees.build
-      form = form_class.new(attendee)
-      form.name = name
-      form.save
-    end
+    form = form_class.new(meeting)
+    form.params = params
+    form.save
     redirect_to action: :index
   end
 
   def destroy
     attendee = meeting.attendees.find(params[:id])
-    form_class.new(attendee).destroy
+    attendee.destroy
     redirect_to action: :index
   end
 
@@ -29,7 +26,7 @@ class MeetingAttendance::SimpleCounterController < ApplicationController
   end
 
   def form_class
-    MeetingAttendance::SimpleCounterAttendeeForm
+    MeetingAttendance::SimpleCounterAttendeesForm
   end
 
   def names
