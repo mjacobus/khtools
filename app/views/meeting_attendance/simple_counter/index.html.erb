@@ -1,0 +1,32 @@
+<%= simple_form_for(@form, class: 'form-inline') do |f|  %>
+  <%= f.input :name, autofocus: true %>
+  <%= f.submit(t('app.links.new'), class: 'btn btn-success') %>
+<% end %>
+
+<hr>
+
+<div class="alert alert-primary" role="alert">
+  <%= t('app.messages.number_of_attendees', attendees: @meeting.number_of_attendees) %>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <%= @meeting.title %>
+  </div>
+
+  <ul class="list-group list-group-flush">
+    <% @attendees.each do |attendee| %>
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-sm-6 col-md-10">
+            <%= attendee.name %>
+          </div>
+
+          <div class="col-sm-6 col-md-2">
+            <%= link_to t('app.links.delete'), meeting_attendance_meeting_simple_counter_attendee_url(@meeting, attendee), data: { method: :delete, confirm: t('app.messages.confirm_delete') }, class: 'btn text-danger' %>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+</div>

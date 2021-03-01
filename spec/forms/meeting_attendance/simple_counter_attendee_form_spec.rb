@@ -9,7 +9,8 @@ RSpec.describe MeetingAttendance::SimpleCounterAttendeeForm do
   describe '#model_name' do
     it 'return the correct model name' do
       expect(form.model_name.param_key).to eq('attendee')
-      expect(form.model_name.singular_route_key).to eq('meeting_attendance_simple_counter_attendee')
+      expect(form.model_name.singular_route_key)
+        .to eq('meeting_attendance_meeting_simple_counter_attendee')
     end
   end
 end

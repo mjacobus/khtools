@@ -25,7 +25,7 @@ class BaseForm
   def model_name
     @model_name ||= ActiveModel::Name.new(model_class, nil, singular_route_key).tap do |name|
       name.param_key = param_key
-      name.i18n_key = @record.model_name.i18n_key
+      name.i18n_key = i18n_key
     end
   end
 
@@ -41,5 +41,9 @@ class BaseForm
 
   def model_class
     @record.class
+  end
+
+  def i18n_key
+    @record.model_name.i18n_key
   end
 end

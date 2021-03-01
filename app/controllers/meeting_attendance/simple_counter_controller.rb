@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class MeetingAttendance::SimpleCounterController < ApplicationController
+  def index
+    @form = form_class.new(meeting.attendees.build)
+    @attendees = meeting.attendees.order(:name)
+  end
+
   def create
     names.each do |name|
       attendee = meeting.attendees.build
