@@ -8,4 +8,8 @@ class Db::MeetingAttendance::Meeting < ApplicationRecord
   validates :title, presence: true
 
   scope :by_creation_date, -> { order(created_at: :desc) }
+
+  def number_of_attendees
+    attendees.count
+  end
 end

@@ -18,12 +18,14 @@ pt-BR:
     messages:
       contact_admin: "Se você já logou mas não tem acesso, contate o admin de sua congregação."
       confirm_delete: 'Tem certeza que quer excluir este registro?'
+      number_of_attendees: 'Assistência total: %{attendees} '
     links:
-      home: "Home"
-      users: "Usuários"
-      logout: "Sair"
       delete: "Excluir"
       edit: "Editar"
-      new: "Adicionar"
-      meeting_attendance: "Contagem de Assistência"
       google_login: "Entrar com minha conta do Gmail"
+      home: "Home"
+      logout: "Sair"
+      meeting_attendance: "Contagem de Assistência"
+      new: "Adicionar"
+      simple_counter: "Contador"
+      users: "Usuários"

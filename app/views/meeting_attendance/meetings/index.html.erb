@@ -19,6 +19,7 @@
           <div class="col-sm-12 col-md-4">
             <%= link_to t('app.links.edit'), edit_meeting_attendance_meeting_url(meeting), class: 'btn' %>
             <%= link_to t('app.links.delete'), meeting_attendance_meeting_url(meeting), data: { method: :delete, confirm: t('app.messages.confirm_delete') }, class: 'btn text-danger' %>
+            <%= link_to t('app.links.simple_counter'), meeting_attendance_meeting_simple_counter_attendees_url(meeting), class: 'btn' %>
           </div>
         </div>
       </li>

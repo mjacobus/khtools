@@ -13,4 +13,8 @@ class MeetingAttendance::SimpleCounterAttendeeForm < BaseForm
   def param_key
     'attendee'
   end
+
+  def singular_route_key
+    'meeting_attendance_meeting_simple_counter_attendee'
+  end
 end
