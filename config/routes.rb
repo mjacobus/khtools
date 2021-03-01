@@ -8,7 +8,9 @@ Rails.application.routes.draw do
   end
 
   namespace :meeting_attendance do
-    resources :meetings
+    resources :meetings do
+      resources :simple_counter_attendees, controller: :simple_counter
+    end
   end
 
   resources :users, only: %i[index] do

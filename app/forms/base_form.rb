@@ -10,7 +10,7 @@ class BaseForm
 
   def save
     if valid?
-      @record.save
+      @record.save!
     end
   end
 
