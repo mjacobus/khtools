@@ -1,0 +1,110 @@
+@import "bootstrap";
+
+.avatar-25 {
+  max-width: 25px;
+  max-height: 25px;
+}
+
+.avatar-50 {
+  max-width: 50px;
+  max-height: 50px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.container {
+  margin-top: 2em;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  clear: both;
+}
+
+.text-muted {
+  display: block;
+  clear: both;
+}
+
+.input[type="checkbox"] {
+  margin-right: 20px !important;
+}
+
+.form-check-label {
+  margin-left: 5px;
+}
+
+.inline-check-boxes .form-check {
+  display: block;
+  float: left;
+  margin-right: 20px;
+}
+
+.soft-labels label {
+  font-weight: normal;
+  font-size: 14px;
+}
+
+.special-legends legend {
+  font-size: 14px;
+  border: 0;
+  margin-bottom: 10px;
+}
+
+.google-login {
+  font-weight: bold;
+  height: 100px;
+  line-height: 100px;
+  vertical-align: middle;
+}
+
+.vertical-timeline {
+  margin-left: 5px;
+  border-left: 1px solid #ddd;
+  padding: 0 0 0 10px;
+}
+
+.timeline-header {
+  line-height: 30px;
+  text-align: middle;
+}
+
+.timeline-bullet {
+  background: blue;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-left: -16px;
+  width: 10px;
+  height: 10px;
+  display: block;
+  float: left;
+
+  &.not-home {
+    background: gold;
+  }
+
+  &.contacted {
+    background: green;
+  }
+
+  &.unreachable {
+    background: gray;
+  }
+
+  &.disconnected {
+    background: red;
+  }
+}
+
+.time { color: #aaa; }
+
+.timeline-text {
+  padding-left: 10px;
+  margin-bottom: 10px;
+}
