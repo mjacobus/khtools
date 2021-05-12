@@ -2,10 +2,13 @@
   "name": "khtools",
   "private": true,
   "dependencies": {
+    "@popperjs/core": "^2.9.2",
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "4.2.2",
+    "bootstrap": "^5.0.0",
+    "jquery": "^3.6.0",
     "minimist": "^1.2.5",
     "turbolinks": "^5.2.0"
   },

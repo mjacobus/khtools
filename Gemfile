@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.0.0'
+ruby '~> 3.0.0'
 
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'dotenv-rails'
@@ -14,11 +14,11 @@ gem 'puma', '~> 5.1'
 gem 'rails', '~> 6.1'
 
 # frontend
-gem 'bootstrap', '~> 4.4'
-gem 'jquery-rails'
+# gem 'bootstrap', '~> 4.4'
+# gem 'jquery-rails'
 gem 'sass-rails', '>= 6'
 gem 'simple_form'
-gem 'turbolinks', '~> 5'
+# gem 'turbolinks', '~> 5'
 gem 'webpacker', '~> 4.0'
 
 group :development, :test do
