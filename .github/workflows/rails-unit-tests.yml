@@ -18,9 +18,10 @@ jobs:
           ALLOW_IP_RANGE: 0.0.0.0/0
     steps:
     - uses: actions/checkout@v2
-    - uses: borales/actions-yarn@v2.0.0
+    - name: "Yarn install"
+      uses: borales/actions-yarn@v2.0.0
       with:
-      cmd: install # will run `yarn install` command
+        cmd: install # will run `yarn install` command
     - name: Set up Ruby 3.0
       uses: actions/setup-ruby@v1
       with:
