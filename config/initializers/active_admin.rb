@@ -152,7 +152,13 @@ ActiveAdmin.setup do |config|
   # You can add before, after and around filters to all of your
   # Active Admin resources and pages from here.
   #
-  # config.before_action :do_something_awesome
+  #
+  require_relative '../../app/admin/authorization'
+  config.before_action do
+    unless admin::authorization.new(request).authorized?(current_user)
+      redirect_to('/')
+    end
+  end
 
   # == Attribute Filters
   #
