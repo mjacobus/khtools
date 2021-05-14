@@ -6,9 +6,17 @@ pt-BR:
   activerecord:
     models:
       db/meeting_attendance/meeting: Reunião
+      db/publisher: Publicador
     attributes:
       meeting_attendance/meeting:
         title: Título
+      db/publisher:
+        name: Nome
+        email: Email
+        phone: Telefone
+        gender: Sexo
+        created_at: Criado em
+        updated_at: Atualizado em
 
 
   app:
