@@ -20,7 +20,7 @@ RSpec.describe Admin::DbPublishersController, type: :request do
       it 'redirects to login page' do
         get admin_db_publishers_url
 
-        expect(response).to redirect_to('/admin')
+        expect(response).to redirect_to('/')
       end
     end
 
