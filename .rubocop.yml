@@ -6,6 +6,7 @@ require:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
+    - 'app/admin/*'
 
 Metrics/MethodLength:
   Exclude:
