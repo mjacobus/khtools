@@ -153,10 +153,11 @@ ActiveAdmin.setup do |config|
   # Active Admin resources and pages from here.
   #
   #
-  require_relative '../../app/admin/authorization'
-  config.before_action do
-    unless admin::authorization.new(request).authorized?(current_user)
-      redirect_to('/')
+  Rails.application.reloader.to_prepare do
+    config.before_action do
+      unless Admin::Authorization.new(request).authorized?(current_user)
+        redirect_to('/')
+      end
     end
   end
 
