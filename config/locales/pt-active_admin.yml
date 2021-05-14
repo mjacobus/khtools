@@ -1,0 +1,9 @@
+---
+pt-BR:
+  active_admin:
+    resources:
+      db/publisher: # Registered resource
+        new_model: 'Novo Publicador' # new action item
+        edit_model: 'Editar Publicador' # edit action item
+        delete_model: 'Remover Publicador' # delete action item
+        menu_entry: 'Publicadores'
