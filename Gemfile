@@ -13,6 +13,8 @@ gem 'pg'
 gem 'puma', '~> 5.1'
 gem 'rails', '~> 6.1'
 
+gem 'activeadmin'
+
 # frontend
 # gem 'bootstrap', '~> 4.4'
 # gem 'jquery-rails'
