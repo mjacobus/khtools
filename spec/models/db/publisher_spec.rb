@@ -6,7 +6,7 @@ RSpec.describe Db::Publisher do
   let(:klass) { described_class }
 
   it 'persists' do
-    klass.create!(name: 'John Doe')
+    klass.create!(name: 'John Doe', gender: 'm')
 
     expect(klass.count).to be 1
   end
