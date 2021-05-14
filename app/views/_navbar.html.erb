@@ -16,6 +16,9 @@
         </li>
         <% if current_user.master? %>
           <li class="nav-item">
+            <a class="nav-link" href="<%= admin_dashboard_url %>">Admin</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="<%= users_path %>"><%= t('app.links.users') %></a>
           </li>
         <% end %>
