@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 ActiveAdmin.register Db::RegularTerritory do
+  menu parent: ['Territórios']
   permit_params :name, :assignee_id
   config.sort_order = 'name_asc'
 
@@ -11,6 +12,15 @@ ActiveAdmin.register Db::RegularTerritory do
     column :assigned_at
     column :returned_at
     actions
+  end
+
+  show do
+    attributes_table do
+      row :name
+      row :assignee
+      row :assigned_at
+      row :returned_at
+    end
   end
 
   form do |f|
