@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Db::Territory, type: :model do
   let(:factory) { factories.territories }
 
-  it 'persists a territory' do
+  it 'persists' do
     expect { factory.create }.to change(described_class, :count).by(1)
   end
 

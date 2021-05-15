@@ -21,6 +21,10 @@ class TestFactories
     @territories ||= Db::RegularTerritoryFactory.new(self)
   end
 
+  def phone_list_territories
+    @phone_list_territories ||= Db::PhoneListTerritoryFactory.new(self)
+  end
+
   def field_service_groups
     @field_service_groups ||= Db::FieldServiceGroupFactory.new(self)
   end
@@ -72,6 +76,14 @@ class TestFactories
         name: "User-#{seq}",
         gender: 'm',
         group: overrides[:group] || factories.field_service_groups.create
+      }.merge(overrides)
+    end
+  end
+
+  class Db::PhoneListTerritoryFactory < Factory
+    def attributes(overrides = {})
+      {
+        name: "PhoneList-#{seq}"
       }.merge(overrides)
     end
   end
