@@ -10,6 +10,7 @@ pt-BR:
       db/field_service_group: Grupo de Campo
       db/territory: Território
       db/regular_territory: Território Normal
+      db/phone_provider: Operadora de Telefone
     attributes:
       meeting_attendance/meeting:
         title: Título
@@ -28,6 +29,10 @@ pt-BR:
         gender: Sexo
         group: Grupo
         publishers: Publicadores
+        created_at: Criado em
+        updated_at: Atualizado em
+      db/phone_provider:
+        name: Nome
         created_at: Criado em
         updated_at: Atualizado em
       db/territory:

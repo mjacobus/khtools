@@ -108,7 +108,7 @@ class TestFactories
   class Db::PhoneProviderFactory < Factory
     def attributes(overrides = {})
       {
-        name: "Provider-#{seq}",
+        name: "Provider-#{seq}"
       }.merge(overrides)
     end
   end
