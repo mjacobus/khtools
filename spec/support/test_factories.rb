@@ -13,6 +13,14 @@ class TestFactories
     @attendees ||= Db::MeetingAttendance::SimpleCounterAttendeeFactory.new(self)
   end
 
+  def publishers
+    @publishers ||= Db::PublisherFactory.new(self)
+  end
+
+  def field_service_groups
+    @field_service_groups ||= Db::FieldServiceGroupFactory.new(self)
+  end
+
   class Factory
     attr_reader :factories
 
@@ -47,6 +55,22 @@ class TestFactories
   class UserFactory < Factory
     def attributes(overrides = {})
       { name: "User-#{seq}" }.merge(overrides)
+    end
+  end
+
+  class Db::PublisherFactory < Factory
+    def attributes(overrides = {})
+      {
+        name: "User-#{seq}",
+        gender: 'm',
+        group: overrides[:group] || factories.field_service_groups.create
+      }.merge(overrides)
+    end
+  end
+
+  class Db::FieldServiceGroupFactory < Factory
+    def attributes(overrides = {})
+      { name: "group-#{seq}" }.merge(overrides)
     end
   end
 
