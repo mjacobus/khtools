@@ -3,6 +3,7 @@
 class Db::PhoneListTerritory < Db::Territory
   validates :initial_phone_number, presence: true
   validates :final_phone_number, presence: true
+  belongs_to :phone_provider
 
   def phone_numbers
     if initial_phone_number.present? && final_phone_number.present?
