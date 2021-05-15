@@ -7,6 +7,7 @@ pt-BR:
     models:
       db/meeting_attendance/meeting: Reunião
       db/publisher: Publicador
+      db/field_service_group: Grupo de Campo
     attributes:
       meeting_attendance/meeting:
         title: Título
@@ -15,6 +16,16 @@ pt-BR:
         email: Email
         phone: Telefone
         gender: Sexo
+        group: Grupo
+        created_at: Criado em
+        updated_at: Atualizado em
+      db/field_service_group:
+        name: Nome
+        email: Email
+        phone: Telefone
+        gender: Sexo
+        group: Grupo
+        publishers: Publicadores
         created_at: Criado em
         updated_at: Atualizado em
 
