@@ -18,10 +18,12 @@ RSpec.describe Db::FieldServiceGroup, type: :model do
     expect(publisher.group.publishers).to eq([publisher])
   end
 
-  it 'cannot be removed when has publishers' do
-    group = publisher_group
+  describe '#destroy' do
+    it 'is restricted when group publishers' do
+      group = publisher_group
 
-    expect { group.destroy }.to raise_error(ActiveRecord::DeleteRestrictionError)
+      expect { group.destroy }.to raise_error(ActiveRecord::DeleteRestrictionError)
+    end
   end
 
   it 'can be distroyed if group is empty' do

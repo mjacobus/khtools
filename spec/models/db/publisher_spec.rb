@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe Db::Publisher, type: :model do
-  let(:factories) { TestFactories.new }
   let(:publisher) { factories.publishers.create }
 
   it 'persists' do
@@ -18,5 +17,13 @@ RSpec.describe Db::Publisher, type: :model do
     factories.publishers.create(group: group)
 
     expect(described_class.last.group).to eq(group)
+  end
+
+  describe '#destroy' do
+    it 'is restricted when has territories' do
+      factories.territories.create(assignee: publisher)
+
+      expect { publisher.destroy }.to raise_error(ActiveRecord::DeleteRestrictionError)
+    end
   end
 end
