@@ -85,7 +85,8 @@ class TestFactories
       {
         name: "PhoneList-#{seq}",
         initial_phone_number: 5_199_990_000 + seq,
-        final_phone_number: 5_199_990_000 + seq
+        final_phone_number: 5_199_990_000 + seq,
+        phone_provider: overrides[:phone_provider] || factories.phone_providers.create
       }.merge(overrides)
     end
   end

@@ -33,4 +33,8 @@ RSpec.describe Db::PhoneListTerritory, type: :model do
       .to change(territory, :valid?)
       .from(true).to(false)
   end
+
+  it 'belongs to #phone_provider' do
+    expect(territory.phone_provider).to be_a(Db::PhoneProvider)
+  end
 end
