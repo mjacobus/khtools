@@ -15,11 +15,20 @@ RSpec.describe Db::Territory, type: :model do
     expect { territory.name = nil }.to change(territory, :valid?).from(true).to(false)
   end
 
-  it 'validates uniqueness of name' do
-    factory.create(name: 'SomeName')
-    territory = factory.build
+  describe '#name uniqueness' do
+    it 'is scopped to type' do
+      factory.create(name: 'SomeName')
+      territory = factory.build
 
-    expect { territory.name = 'Somename' }.to change(territory, :valid?).from(true).to(false)
+      expect { territory.name = 'Somename' }.to change(territory, :valid?).from(true).to(false)
+    end
+
+    it 'accepts the same name if types are different' do
+      factory.create(name: 'SomeName')
+      territory = described_class.new(name: 'Somename')
+
+      expect { territory.save! }.to change(described_class, :count).by(1)
+    end
   end
 
   it 'has an assignee' do
