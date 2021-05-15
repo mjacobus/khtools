@@ -25,6 +25,10 @@ class TestFactories
     @field_service_groups ||= Db::FieldServiceGroupFactory.new(self)
   end
 
+  def phone_providers
+    @phone_providers ||= Db::PhoneProviderFactory.new(self)
+  end
+
   class Factory
     attr_reader :factories
 
@@ -97,6 +101,14 @@ class TestFactories
       {
         name: "Attendee-#{seq}",
         meeting: overrides[:meeting] || factories.meetings.create
+      }.merge(overrides)
+    end
+  end
+
+  class Db::PhoneProviderFactory < Factory
+    def attributes(overrides = {})
+      {
+        name: "Provider-#{seq}",
       }.merge(overrides)
     end
   end
