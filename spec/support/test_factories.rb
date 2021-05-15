@@ -83,7 +83,9 @@ class TestFactories
   class Db::PhoneListTerritoryFactory < Factory
     def attributes(overrides = {})
       {
-        name: "PhoneList-#{seq}"
+        name: "PhoneList-#{seq}",
+        initial_phone_number: 5_199_990_000 + seq,
+        final_phone_number: 5_199_990_000 + seq
       }.merge(overrides)
     end
   end
