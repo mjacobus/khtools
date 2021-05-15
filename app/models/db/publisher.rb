@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module Db
-  class Publisher < ApplicationRecord
-    validates :name, presence: true
-    validates :gender, presence: true
-  end
+class Db::Publisher < ApplicationRecord
+  belongs_to :group, class_name: 'FieldServiceGroup'
+
+  validates :name, presence: true
+  validates :gender, presence: true
 end
