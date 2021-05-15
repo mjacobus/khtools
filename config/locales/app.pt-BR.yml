@@ -46,6 +46,8 @@ pt-BR:
         final_phone_number: Número Final
         created_at: Criado em
         updated_at: Atualizado em
+        phone_provider: Operadora Telefônica
+        numbers: Números
 
 
   app:
