@@ -18,12 +18,22 @@ module Admin
       authorized_controller_action(user)
     end
 
+    def self.controller_actions_for_acl
+      Rails.application.routes.routes.map(&:defaults)
+        .map { |item| [item[:controller], item[:action]].join('#') }
+        .sort
+        .uniq
+        .reject do |item|
+          item.strip == '#' || item.starts_with?(/rails|active_storage|action/)
+        end
+    end
+
     private
 
     def authorized_controller_action(user)
       allowed_items = [
-        "#{@request.params[:controller]}|#{@request.params[:action]}",
-        "#{@request.params[:controller]}|*"
+        "#{@request.params[:controller]}##{@request.params[:action]}",
+        "#{@request.params[:controller]}#*"
       ]
       (user.permissions['controllers'] & allowed_items).any?
     end

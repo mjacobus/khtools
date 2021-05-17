@@ -38,4 +38,16 @@ RSpec.describe Admin::Authorization do
       end
     end
   end
+
+  describe '.controller_actions_for_acl' do
+    let(:list) { list = described_class.controller_actions_for_acl }
+
+    it 'returns a list of all controller and actions' do
+      expect(list).to include('admin/users#index')
+    end
+
+    it 'does not include garbage' do
+      expect(list).not_to include('#')
+    end
+  end
 end
