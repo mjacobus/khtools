@@ -16,6 +16,20 @@ class User < ApplicationRecord
     self.permissions_config = permissions.to_json
   end
 
+  # that is for active admin form
+  def controller_accesses=(items)
+    permissions['controllers'] = []
+    Array.wrap(items).compact.reject { |i| i == '#' }.each do |item|
+      parts = item.split('#')
+      grant_controller_access(parts[0], action: parts[1])
+    end
+  end
+
+  # that is for active admin form
+  def controller_accesses
+    permissions['controllers']
+  end
+
   private
 
   def default_permissions_config

@@ -37,4 +37,18 @@ RSpec.describe User, type: :model do
       expect(user.reload.permissions).to eq(expected)
     end
   end
+
+  describe '#controller_accesses' do
+    it 'can be assigned by #controller_accesses=' do
+      user.controller_accesses = (['foo#bar'])
+      user.controller_accesses = (['foo#bar', '#'])
+      user.save!
+
+      expected = { 'controllers' => ['foo#bar'] }
+
+      expect(user.permissions).to eq(expected)
+      expect(user.reload.permissions).to eq(expected)
+      expect(user.controller_accesses).to eq(['foo#bar'])
+    end
+  end
 end

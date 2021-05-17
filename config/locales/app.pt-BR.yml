@@ -5,6 +5,7 @@ pt-BR:
 
   activerecord:
     models:
+      user: Usuário
       db/meeting_attendance/meeting: Reunião
       db/publisher: Publicador
       db/field_service_group: Grupo de Campo
@@ -13,6 +14,15 @@ pt-BR:
       db/phone_provider: Operadora de Telefone
       db/phone_list_territory: Lista Telefônica
     attributes:
+      user:
+        name: Nome
+        email: Email
+        avatar: Foto
+        created_at: Criado em
+        updated_at: Atualizado em
+        controller_accesses: Acessos
+        master: Administrador
+        enabled: Ativo
       meeting_attendance/meeting:
         title: Título
       db/publisher:
