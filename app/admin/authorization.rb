@@ -15,7 +15,17 @@ module Admin
         return true
       end
 
-      false
+      authorized_controller_action(user)
+    end
+
+    private
+
+    def authorized_controller_action(user)
+      allowed_items = [
+        "#{@request.params[:controller]}|#{@request.params[:action]}",
+        "#{@request.params[:controller]}|*"
+      ]
+      (user.permissions['controllers'] & allowed_items).any?
     end
   end
 end

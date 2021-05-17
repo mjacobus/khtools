@@ -24,6 +24,36 @@ RSpec.describe Admin::DbPublishersController, type: :request do
       end
     end
 
+    context 'when user is not admin but has access to that particular resource' do
+      let(:current_user) { regular_user }
+
+      before do
+        current_user.grant_controller_access('admin/db_publishers', action: 'index')
+        current_user.save!
+      end
+
+      it 'loads the page' do
+        get admin_db_publishers_url
+
+        expect(response).to be_successful
+      end
+    end
+
+    context 'when user is not admin but has access to that particular controller' do
+      let(:current_user) { regular_user }
+
+      before do
+        current_user.grant_controller_access('admin/db_publishers')
+        current_user.save!
+      end
+
+      it 'loads the page' do
+        get admin_db_publishers_url
+
+        expect(response).to be_successful
+      end
+    end
+
     context 'when user is an admin' do
       let(:current_user) { admin_user }
 
