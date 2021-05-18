@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
-  skip_before_action :require_enabled_user
+  skip_before_action :require_authorization
 
   def create
     session_service.create_from_oauth(request.env['omniauth.auth'])

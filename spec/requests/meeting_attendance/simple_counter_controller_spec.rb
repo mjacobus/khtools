@@ -6,6 +6,10 @@ RSpec.describe MeetingAttendance::SimpleCounterController, type: :request do
   let(:factories) { TestFactories.new }
   let(:meeting) { factories.meetings.create }
 
+  before do
+    grant_access(current_user)
+  end
+
   describe 'GET #index' do
     before do
       attendee

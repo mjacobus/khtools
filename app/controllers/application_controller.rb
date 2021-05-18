@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-  before_action :require_enabled_user
+  before_action :require_authorization
   helper_method :current_user
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_page404
 
   private
 
-  def require_enabled_user
-    unless current_user
-      redirect_to '/'
+  def require_authorization
+    unless ControllerAcl.new(request).authorized?(current_user)
+      redirect_to('/', flash: { error: t('app.messages.access_denied') })
     end
   end
 
