@@ -69,6 +69,7 @@ RSpec/VerifiedDoubles:
 AllCops:
   NewCops: enable
   Exclude:
+    - 'tmp/**/*'
     - 'node_modules/**/*'
     - 'script/**/*'
     - 'log/**/*'
