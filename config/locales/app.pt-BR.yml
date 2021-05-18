@@ -68,6 +68,7 @@ pt-BR:
       contact_admin: "Se você já logou mas não tem acesso, contate o admin de sua congregação."
       confirm_delete: 'Tem certeza que quer excluir este registro?'
       number_of_attendees: 'Assistência total: %{attendees} '
+      access_denied: 'Acesso negado'
     links:
       delete: "Excluir"
       edit: "Editar"

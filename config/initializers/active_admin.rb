@@ -153,13 +153,13 @@ ActiveAdmin.setup do |config|
   # Active Admin resources and pages from here.
   #
   #
-  Rails.application.reloader.to_prepare do
-    config.before_action do
-      unless Admin::Authorization.new(request).authorized?(current_user)
-        redirect_to('/')
-      end
-    end
-  end
+  # Rails.application.reloader.to_prepare do
+  #   config.before_action do
+  #     unless ControllerAcl.new(request).authorized?(current_user)
+  #       redirect_to('/')
+  #     end
+  #   end
+  # end
 
   # == Attribute Filters
   #

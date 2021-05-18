@@ -10,9 +10,14 @@
     <%= stylesheet_pack_tag 'application', media: 'all' %>
   </head>
   <body>
-
     <% if current_user %>
       <%= render partial: '/navbar' %>
+    <% end %>
+
+    <% if flash[:error] %>
+      <div class="alert alert-danger" role="alert">
+        <%= flash[:error] %>
+      </div>
     <% end %>
 
     <% unless current_user %>

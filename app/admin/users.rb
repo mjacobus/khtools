@@ -21,7 +21,7 @@ ActiveAdmin.register User do
       f.input :master
       f.input :enabled
       f.input :controller_accesses, as: :check_boxes,
-                                    collection: Admin::Authorization.controller_actions_for_acl
+                                    collection: ControllerAcl.controller_actions_for_acl
     end
     f.actions
   end

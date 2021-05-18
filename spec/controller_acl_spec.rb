@@ -2,12 +2,11 @@
 
 require 'rails_helper'
 
-RSpec.describe Admin::Authorization do
+RSpec.describe ControllerAcl do
   subject(:acl) { described_class.new(request) }
 
   let(:user) { User.new }
-  let(:params) { { controller: controller, action: action } }
-  let(:request) { Struct.new(:params).new(params) }
+  let(:request) { Struct.new(:params).new(controller: controller, action: action) }
   let(:controller) { 'foo_bar/baz' }
   let(:action) { 'index' }
 
@@ -40,7 +39,7 @@ RSpec.describe Admin::Authorization do
   end
 
   describe '.controller_actions_for_acl' do
-    let(:list) { list = described_class.controller_actions_for_acl }
+    let(:list) {  described_class.controller_actions_for_acl }
 
     it 'returns a list of all controller and actions' do
       expect(list).to include('admin/users#index')

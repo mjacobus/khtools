@@ -26,4 +26,11 @@ module RequestSpecHelper
     allow_any_instance_of(described_class).to receive(:current_user).and_return(user)
     # rubocop:enable RSpec/AnyInstance
   end
+
+  def grant_access(user, actions: ['*'])
+    controller = described_class.to_s.underscore.sub('_controller', '')
+    actions.each do |action|
+      user.grant_controller_access(controller, action: action)
+    end
+  end
 end

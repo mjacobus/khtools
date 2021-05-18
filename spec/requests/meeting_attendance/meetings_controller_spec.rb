@@ -6,6 +6,10 @@ RSpec.describe MeetingAttendance::MeetingsController, type: :request do
   let(:model) { Db::MeetingAttendance::Meeting }
   let(:meeting) { TestFactories.new.meetings.create }
 
+  before do
+    grant_access(current_user)
+  end
+
   describe 'GET #index' do
     let(:perform_request) { get meeting_attendance_meetings_url }
 
