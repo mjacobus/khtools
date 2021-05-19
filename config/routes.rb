@@ -14,6 +14,14 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :territories do
+    resources :phone_lists do
+      member do
+        get :xls
+      end
+    end
+  end
+
   resources :users, only: %i[index] do
     member do
       patch :enable

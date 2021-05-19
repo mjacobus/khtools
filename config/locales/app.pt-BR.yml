@@ -79,3 +79,10 @@ pt-BR:
       new: "Adicionar"
       simple_counter: "Contador"
       users: "Usuários"
+    phone_list_spreadsheet:
+      territory_description: "Território %{name}"
+      phone_number: "Número telefônico"
+      date_of_first_attempt: "1º Tentativa (data)"
+      date_of_second_attempt: "2º Tentativa (data)"
+      date_of_third_attempt: "3º Tentativa (data)"
+      notes: "Observações"

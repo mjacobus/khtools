@@ -2,6 +2,7 @@
 
 module RequestSpecHelper
   # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
   def self.included(base)
     base.class_eval do
       let(:avatar) do
@@ -11,6 +12,7 @@ module RequestSpecHelper
       let(:current_user) { regular_user }
       let(:admin_user) { User.new(id: 2, enabled: true, master: true, avatar: avatar) }
       let(:skip_login) { false }
+      let(:factories) { TestFactories.new }
 
       before do
         unless skip_login
@@ -20,6 +22,7 @@ module RequestSpecHelper
     end
   end
   # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize
 
   def login_user(user)
     # rubocop:disable RSpec/AnyInstance
