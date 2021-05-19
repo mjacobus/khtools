@@ -25,7 +25,7 @@ class PhoneListTerritoryService
     ])
 
     territory.phone_numbers.each do |number|
-      sheet.add_row [number]
+      sheet.add_row [PhoneNumber.new(number)]
     end
 
     sheet.merge_cells('A1:E1')
