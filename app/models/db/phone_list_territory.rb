@@ -7,7 +7,9 @@ class Db::PhoneListTerritory < Db::Territory
 
   def phone_numbers
     if initial_phone_number.present? && final_phone_number.present?
-      return (initial_phone_number..final_phone_number).to_a
+      return (initial_phone_number..final_phone_number).to_a.map do |num|
+        PhoneNumber.new(num)
+      end
     end
 
     []
