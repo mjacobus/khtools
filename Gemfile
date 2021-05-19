@@ -14,6 +14,7 @@ gem 'puma', '~> 5.1'
 gem 'rails', '~> 6.1'
 
 gem 'activeadmin'
+gem 'caxlsx'
 
 # frontend
 # gem 'bootstrap', '~> 4.4'
