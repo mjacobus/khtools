@@ -58,6 +58,7 @@ pt-BR:
         updated_at: Atualizado em
         phone_provider: Operadora Telefônica
         numbers: Números
+        download_as: "Baixar"
 
 
   app:
