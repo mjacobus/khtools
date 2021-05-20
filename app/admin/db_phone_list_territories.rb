@@ -2,6 +2,7 @@
 
 ActiveAdmin.register Db::PhoneListTerritory do
   menu parent: 'Territórios'
+  config.sort_order = 'name_asc'
   permit_params :name,
                 :assigned_at,
                 :returned_at,
