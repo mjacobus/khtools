@@ -15,11 +15,18 @@ ActiveAdmin.register Db::PhoneListTerritory do
     selectable_column
     column :name
     column :phone_provider
-    column :initial_phone_number
-    column :final_phone_number
+    column :initial_phone_number do |territory|
+      PhoneNumber.new(territory.initial_phone_number)
+    end
+    column :final_phone_number do |territory|
+      PhoneNumber.new(territory.final_phone_number)
+    end
     column :assignee
     column :assigned_at
     column :returned_at
+    column :download_as do |territory|
+      link_to :xls, xls_territories_phone_list_path(territory)
+    end
     actions
   end
 
@@ -30,14 +37,21 @@ ActiveAdmin.register Db::PhoneListTerritory do
       row :assigned_at
       row :returned_at
       row :assignee
-      row :initial_phone_number
-      row :final_phone_number
+      row :initial_phone_number do |territory|
+        PhoneNumber.new(territory.initial_phone_number)
+      end
+      row :final_phone_number do |territory|
+        PhoneNumber.new(territory.final_phone_number)
+      end
       row :numbers do |record|
         ul do
           record.phone_numbers.each do |number|
             li number
           end
         end
+      end
+      row :download_as do |territory|
+        link_to :xls, xls_territories_phone_list_path(territory)
       end
     end
   end
