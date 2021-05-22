@@ -25,6 +25,10 @@ class TestFactories
     @phone_list_territories ||= Db::PhoneListTerritoryFactory.new(self)
   end
 
+  def apartment_building_territories
+    @apartment_building_territories ||= Db::ApartmentBuildingTerritoryFactory.new(self)
+  end
+
   def field_service_groups
     @field_service_groups ||= Db::FieldServiceGroupFactory.new(self)
   end
@@ -87,6 +91,14 @@ class TestFactories
         initial_phone_number: 5_199_990_000 + seq,
         final_phone_number: 5_199_990_000 + seq,
         phone_provider: overrides[:phone_provider] || factories.phone_providers.create
+      }.merge(overrides)
+    end
+  end
+
+  class Db::ApartmentBuildingTerritoryFactory < Factory
+    def attributes(overrides = {})
+      {
+        name: "PhoneList-#{seq}"
       }.merge(overrides)
     end
   end
