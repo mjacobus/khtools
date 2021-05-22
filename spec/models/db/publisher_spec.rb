@@ -26,4 +26,6 @@ RSpec.describe Db::Publisher, type: :model do
       expect { publisher.destroy }.to raise_error(ActiveRecord::DeleteRestrictionError)
     end
   end
+
+  describe '.identify'
 end
