@@ -17,6 +17,10 @@ class TestFactories
     @publishers ||= Db::PublisherFactory.new(self)
   end
 
+  def territory_areas
+    @territory_areas ||= Db::TerritoryAreaFactory.new(self)
+  end
+
   def territories
     @territories ||= Db::RegularTerritoryFactory.new(self)
   end
@@ -128,6 +132,14 @@ class TestFactories
       {
         name: "Attendee-#{seq}",
         meeting: overrides[:meeting] || factories.meetings.create
+      }.merge(overrides)
+    end
+  end
+
+  class Db::TerritoryAreaFactory < Factory
+    def attributes(overrides = {})
+      {
+        name: "Area-#{seq}"
       }.merge(overrides)
     end
   end
