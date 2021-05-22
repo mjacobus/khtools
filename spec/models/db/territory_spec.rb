@@ -37,4 +37,6 @@ RSpec.describe Db::Territory, type: :model do
 
     expect(territory.assignee).to eq(publisher)
   end
+
+  describe '.identify'
 end

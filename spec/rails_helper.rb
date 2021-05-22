@@ -65,7 +65,7 @@ RSpec.configure do |config|
 
   config.include ControllerSpecHelper, type: :controller
   config.include RequestSpecHelper, type: :request
-  config.include TestFactorySpecHelper, type: :model
+  config.include TestFactorySpecHelper
 end
 
 Shoulda::Matchers.configure do |config|

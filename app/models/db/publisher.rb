@@ -11,4 +11,8 @@ class Db::Publisher < ApplicationRecord
 
   validates :name, presence: true
   validates :gender, presence: true
+
+  def self.identify(term)
+    find_by(name: term)
+  end
 end
