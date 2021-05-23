@@ -2,6 +2,8 @@
 
 class Db::Publisher < ApplicationRecord
   default_scope { order(:name) }
+  identifiable_by :name
+
   belongs_to :group, class_name: 'FieldServiceGroup'
 
   has_many :territories,
@@ -11,8 +13,4 @@ class Db::Publisher < ApplicationRecord
 
   validates :name, presence: true
   validates :gender, presence: true
-
-  def self.identify(term)
-    find_by(name: term)
-  end
 end
