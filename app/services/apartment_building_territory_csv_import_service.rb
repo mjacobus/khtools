@@ -11,6 +11,7 @@ class ApartmentBuildingTerritoryCsvImportService
 
   private
 
+  # rubocop:disable Metrics/MethodLength
   def import_row(row)
     parent = row.delete(:territory)
 
@@ -33,4 +34,5 @@ class ApartmentBuildingTerritoryCsvImportService
 
     territory.save!
   end
+  # rubocop:enable Metrics/MethodLength
 end
