@@ -3,6 +3,9 @@ require:
   - rubocop-rails
   - rubocop-rspec
 
+Metrics/AbcSize:
+  Exclude:
+    - "db/migrate/**/*"
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
