@@ -25,6 +25,10 @@ RSpec.describe ApartmentBuildingTerritoryCsvImportService, type: :service do
     it_imports(:name)
   end
 
+  it 'imports building_name' do
+    it_imports(:building_name)
+  end
+
   it 'imports address' do
     it_imports(:address)
   end
