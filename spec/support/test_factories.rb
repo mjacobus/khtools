@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+n# frozen_string_literal: true
 
 class TestFactories
   def users
@@ -19,6 +19,10 @@ class TestFactories
 
   def territory_areas
     @territory_areas ||= Db::TerritoryAreaFactory.new(self)
+  end
+
+  def intercom_types
+    @intercom_types ||= Db::IntercomTypeFactory.new(self)
   end
 
   def territories
@@ -140,6 +144,14 @@ class TestFactories
     def attributes(overrides = {})
       {
         name: "Area-#{seq}"
+      }.merge(overrides)
+    end
+  end
+
+  class Db::IntercomTypeFactory < Factory
+    def attributes(overrides = {})
+      {
+        name: "IntercomType-#{seq}"
       }.merge(overrides)
     end
   end
