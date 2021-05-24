@@ -131,7 +131,7 @@ RSpec.describe ApartmentBuildingTerritoryCsvImportService, type: :service do
   end
 
   def import(overrides = {})
-    data = { name: 't-name', address: 'some address' }.merge(overrides)
+    data = { name: 't-name', address: 'some address', something_else: 'nope' }.merge(overrides)
 
     array = [data.keys.map(&:to_s).to_csv, data.values.to_csv]
     contents = array.join
