@@ -28,12 +28,12 @@ RSpec.describe Db::Identifiable, type: :model do
 
     expect { model.identify('judas') }
       .to raise_error(Db::Identifiable::AmbiguousRecordError,
-                      "More than one record matches 'judas'")
+                      "More than one Db::Publisher matches 'judas'")
   end
 
   it 'raises error when nothing is found' do
     expect { model.identify('judas') }
       .to raise_error(ActiveRecord::RecordNotFound,
-                      "No record matches 'judas'")
+                      "No Db::Publisher matches 'judas'")
   end
 end

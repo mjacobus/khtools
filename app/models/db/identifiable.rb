@@ -26,7 +26,7 @@ module Db::Identifiable
         count = query.count
 
         if count > 1
-          raise AmbiguousRecordError, "More than one record matches '#{term}'"
+          raise AmbiguousRecordError, "More than one #{self} matches '#{term}'"
         end
 
         if count.positive?
@@ -34,7 +34,7 @@ module Db::Identifiable
         end
       end
 
-      raise NotFoundError, "No record matches '#{term}'"
+      raise NotFoundError, "No #{self} matches '#{term}'"
     end
     # rubocop:enable Metrics/MethodLength
   end
