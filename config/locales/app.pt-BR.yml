@@ -15,6 +15,7 @@ pt-BR:
       db/phone_list_territory: Lista Telefônica
       db/apartment_building_territory: Prédios
       db/territory_area: Área
+      db/intercom_type: Tipo de Interfone
     attributes:
       user:
         name: Nome
@@ -31,7 +32,11 @@ pt-BR:
         name: Nome
         created_at: Criado em
         updated_at: Atualizado em
-
+      db/intercom_type:
+        name: Nome
+        description: Descrição
+        created_at: Criado em
+        updated_at: Atualizado em
       db/publisher:
         name: Nome
         email: Email
