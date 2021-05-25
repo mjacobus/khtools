@@ -3,7 +3,7 @@
 class ApartmentBuildingTerritoryCsvImportService
   ACCEPTED_HEADERS = %i[
     name
-    publisher
+    assignee
     building_name
     address
     area
@@ -35,6 +35,9 @@ class ApartmentBuildingTerritoryCsvImportService
     parent = row.delete(:territory)
     area = row.delete(:area)
     assignee = row.delete(:assignee)
+    primary_preaching_method = row.delete(:primary_preaching_method)
+    secondary_preaching_method = row.delete(:secondary_preaching_method)
+    tertiary_preaching_method = row.delete(:tertiary_preaching_method)
 
     territory = Db::ApartmentBuildingTerritory.new(row)
 
@@ -48,6 +51,18 @@ class ApartmentBuildingTerritoryCsvImportService
 
     if parent
       territory.territory = Db::Territory.identify(parent)
+    end
+
+    if primary_preaching_method
+      territory.primary_preaching_method = Db::PreachingMethod.find_or_create_by(name: primary_preaching_method)
+    end
+
+    if secondary_preaching_method
+      territory.secondary_preaching_method = Db::PreachingMethod.find_or_create_by(name: secondary_preaching_method)
+    end
+
+    if tertiary_preaching_method
+      territory.tertiary_preaching_method = Db::PreachingMethod.find_or_create_by(name: tertiary_preaching_method)
     end
 
     territory.save!
