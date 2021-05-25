@@ -17,6 +17,7 @@ pt-BR:
       db/territory_area: Área
       db/intercom_type: Tipo de Interfone
       db/letter_box_type: Tipo de Caixa de Correio
+      db/preaching_method: Método de Pregação
     attributes:
       user:
         name: Nome
@@ -31,6 +32,11 @@ pt-BR:
         title: Título
       db/territory_area:
         name: Nome
+        created_at: Criado em
+        updated_at: Atualizado em
+      db/preaching_method:
+        name: Nome
+        description: Descrição
         created_at: Criado em
         updated_at: Atualizado em
       db/intercom_type:
