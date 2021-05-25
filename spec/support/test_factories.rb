@@ -1,4 +1,4 @@
-n# frozen_string_literal: true
+# frozen_string_literal: true
 
 class TestFactories
   def users
@@ -15,6 +15,10 @@ class TestFactories
 
   def publishers
     @publishers ||= Db::PublisherFactory.new(self)
+  end
+
+  def preaching_methods
+    @preaching_methods ||= Db::PreachingMethodFactory.new(self)
   end
 
   def territory_areas
@@ -136,6 +140,14 @@ class TestFactories
       {
         name: "Attendee-#{seq}",
         meeting: overrides[:meeting] || factories.meetings.create
+      }.merge(overrides)
+    end
+  end
+
+  class Db::PreachingMethodFactory < Factory
+    def attributes(overrides = {})
+      {
+        name: "PrechingMethod-#{seq}"
       }.merge(overrides)
     end
   end
