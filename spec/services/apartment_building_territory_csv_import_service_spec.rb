@@ -37,23 +37,11 @@ RSpec.describe ApartmentBuildingTerritoryCsvImportService, type: :service do
     it_imports(:number_of_apartments, 10)
   end
 
-  it 'imports primary_preaching_method' do
-    it_imports(:primary_preaching_method, db_class::PREACHING_METHODS.sample)
-  end
-
-  it 'imports secondary_preaching_method' do
-    it_imports(:secondary_preaching_method, db_class::PREACHING_METHODS.sample)
-  end
-
-  it 'imports tertiary_preaching_method' do
-    it_imports(:tertiary_preaching_method, db_class::PREACHING_METHODS.sample)
-  end
-
-  it 'imports letter_box_type' do
+  xit 'imports letter_box_type' do
     it_imports(:letter_box_type, db_class::LETTER_BOX_TYPES.sample)
   end
 
-  it 'imports intercom_type' do
+  xit 'imports intercom_type' do
     it_imports(:intercom_type, db_class::INTERCOM_TYPES_TYPES.sample)
   end
 
@@ -109,6 +97,66 @@ RSpec.describe ApartmentBuildingTerritoryCsvImportService, type: :service do
         import(assignee: publisher.name)
 
         expect(imported.assignee_id).to eq(publisher.id)
+      end
+    end
+  end
+
+  describe 'primary_preaching_method' do
+    context 'when it exists' do
+      it 'assigns it' do
+        method = factories.preaching_methods.create
+
+        import(primary_preaching_method: method.name)
+
+        expect(imported.primary_preaching_method.id).to eq(method.id)
+      end
+    end
+
+    context 'when it does not exists' do
+      it 'assigns it' do
+        import(primary_preaching_method: 'some name')
+
+        expect(imported.primary_preaching_method.name).to eq('some name')
+      end
+    end
+  end
+
+  describe 'secondary_preaching_method' do
+    context 'when it exists' do
+      it 'assigns it' do
+        method = factories.preaching_methods.create
+
+        import(secondary_preaching_method: method.name)
+
+        expect(imported.secondary_preaching_method.id).to eq(method.id)
+      end
+    end
+
+    context 'when it does not exists' do
+      it 'assigns it' do
+        import(secondary_preaching_method: 'some name')
+
+        expect(imported.secondary_preaching_method.name).to eq('some name')
+      end
+    end
+  end
+
+  describe 'tertiary_preaching_method' do
+    context 'when it exists' do
+      it 'assigns it' do
+        method = factories.preaching_methods.create
+
+        import(tertiary_preaching_method: method.name)
+
+        expect(imported.tertiary_preaching_method.id).to eq(method.id)
+      end
+    end
+
+    context 'when it does not exists' do
+      it 'assigns it' do
+        import(tertiary_preaching_method: 'some name')
+
+        expect(imported.tertiary_preaching_method.name).to eq('some name')
       end
     end
   end
