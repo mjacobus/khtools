@@ -14,6 +14,7 @@ pt-BR:
       db/phone_provider: Operadora de Telefone
       db/phone_list_territory: Lista Telefônica
       db/apartment_building_territory: Prédios
+      db/territory_area: Área
     attributes:
       user:
         name: Nome
@@ -26,6 +27,11 @@ pt-BR:
         enabled: Ativo
       meeting_attendance/meeting:
         title: Título
+      db/territory_area:
+        name: Nome
+        created_at: Criado em
+        updated_at: Atualizado em
+
       db/publisher:
         name: Nome
         email: Email
