@@ -13,6 +13,7 @@ pt-BR:
       db/regular_territory: Território Normal
       db/phone_provider: Operadora de Telefone
       db/phone_list_territory: Lista Telefônica
+      db/apartment_building_territory: Prédios
     attributes:
       user:
         name: Nome
@@ -48,12 +49,25 @@ pt-BR:
         updated_at: Atualizado em
       db/territory:
         name: Nome
+        building_name: Condomínio
+        address: Endereço
+        has_a_roof: Coberto
+        number_of_apartments: Número de Apartamentos
+        apartments: Apartamentos
+        territory: Território
+        notes: Observações
+        intercom_type: Tipo de Interfone
+        letter_box_type: Tipo de Caixa de Corrêio
+        area: Área
         type: Tipo
         assignee: Designado Para
         assigned_at: Designado em
         returned_at: Devolvido em
         initial_phone_number: Número Inicial
         final_phone_number: Número Final
+        primary_preaching_method: Método Principal
+        secondary_preaching_method: Método Secundário
+        tertiary_preaching_method: Método Alternativo
         created_at: Criado em
         updated_at: Atualizado em
         phone_provider: Operadora Telefônica
