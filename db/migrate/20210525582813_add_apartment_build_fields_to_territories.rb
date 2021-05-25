@@ -4,7 +4,6 @@ class AddApartmentBuildFieldsToTerritories < ActiveRecord::Migration[6.1]
   def change
     add_column :territories, :address, :string
     add_column :territories, :building_name, :string
-    add_reference :territories, :territory_area, foreign_key: true
     add_column :territories, :number_of_apartments, :integer
     add_column :territories, :has_a_roof, :boolean, index: true, null: true
     add_column :territories, :intercom_type, :string, index: true
