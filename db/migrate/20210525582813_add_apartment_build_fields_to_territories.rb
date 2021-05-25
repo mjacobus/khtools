@@ -8,7 +8,6 @@ class AddApartmentBuildFieldsToTerritories < ActiveRecord::Migration[6.1]
     add_column :territories, :number_of_apartments, :integer
     add_column :territories, :has_a_roof, :boolean, index: true, null: true
     add_column :territories, :intercom_type, :string, index: true
-    add_column :territories, :letter_box_type, :string, index: true
     add_column :territories, :apartments, :text
     add_column :territories, :notes, :text
 
@@ -17,6 +16,9 @@ class AddApartmentBuildFieldsToTerritories < ActiveRecord::Migration[6.1]
 
     add_reference :territories, :intercom_type,
                   foreign_key: { to_table: :intercom_types }
+
+    add_reference :territories, :letter_box_type,
+                  foreign_key: { to_table: :letter_box_types }
 
     add_reference :territories, :primary_preaching_method,
                   foreign_key: { to_table: :preaching_methods }

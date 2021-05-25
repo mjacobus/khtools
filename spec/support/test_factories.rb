@@ -25,6 +25,10 @@ class TestFactories
     @territory_areas ||= Db::TerritoryAreaFactory.new(self)
   end
 
+  def letter_box_types
+    @letter_box_types ||= Db::LetterBoxTypeFactory.new(self)
+  end
+
   def intercom_types
     @intercom_types ||= Db::IntercomTypeFactory.new(self)
   end
@@ -164,6 +168,14 @@ class TestFactories
     def attributes(overrides = {})
       {
         name: "IntercomType-#{seq}"
+      }.merge(overrides)
+    end
+  end
+
+  class Db::LetterBoxTypeFactory < Factory
+    def attributes(overrides = {})
+      {
+        name: "LetterBoxType-#{seq}"
       }.merge(overrides)
     end
   end
