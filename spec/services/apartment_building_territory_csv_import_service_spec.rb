@@ -37,14 +37,6 @@ RSpec.describe ApartmentBuildingTerritoryCsvImportService, type: :service do
     it_imports(:number_of_apartments, 10)
   end
 
-  xit 'imports letter_box_type' do
-    it_imports(:letter_box_type, db_class::LETTER_BOX_TYPES.sample)
-  end
-
-  xit 'imports intercom_type' do
-    it_imports(:intercom_type, db_class::INTERCOM_TYPES_TYPES.sample)
-  end
-
   it 'imports has_a_roof as true' do
     it_imports(:has_a_roof, true)
   end
@@ -97,6 +89,46 @@ RSpec.describe ApartmentBuildingTerritoryCsvImportService, type: :service do
         import(assignee: publisher.name)
 
         expect(imported.assignee_id).to eq(publisher.id)
+      end
+    end
+  end
+
+  describe 'letter_box_type' do
+    context 'when it exists' do
+      it 'assigns it' do
+        type = factories.letter_box_types.create
+
+        import(letter_box_type: type.name)
+
+        expect(imported.letter_box_type.id).to eq(type.id)
+      end
+    end
+
+    context 'when it does not exists' do
+      it 'assigns it' do
+        import(letter_box_type: 'some name')
+
+        expect(imported.letter_box_type.name).to eq('some name')
+      end
+    end
+  end
+
+  describe 'intercom_type' do
+    context 'when it exists' do
+      it 'assigns it' do
+        type = factories.intercom_types.create
+
+        import(intercom_type: type.name)
+
+        expect(imported.intercom_type.id).to eq(type.id)
+      end
+    end
+
+    context 'when it does not exists' do
+      it 'assigns it' do
+        import(intercom_type: 'some name')
+
+        expect(imported.intercom_type.name).to eq('some name')
       end
     end
   end
