@@ -2,13 +2,6 @@
 
 class AddApartmentBuildFieldsToTerritories < ActiveRecord::Migration[6.1]
   def change
-    create_table :territory_areas do |t|
-      t.string :name, unique: true
-      t.string :type
-
-      t.timestamps
-    end
-
     add_column :territories, :address, :string
     add_column :territories, :building_name, :string
     add_reference :territories, :territory_area, foreign_key: true
