@@ -24,4 +24,14 @@ RSpec.describe Db::ApartmentBuildingTerritory, type: :model do
     expect(territory).to belong_to(:tertiary_preaching_method)
       .class_name('Db::PreachingMethod').optional
   }
+
+  it {
+    expect(territory).to belong_to(:intercom_type)
+      .class_name('Db::IntercomType').optional
+  }
+
+  it {
+    expect(territory).to belong_to(:letter_box_type)
+      .class_name('Db::LetterBoxType').optional
+  }
 end
