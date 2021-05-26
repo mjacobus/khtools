@@ -35,25 +35,24 @@ ActiveAdmin.register Db::PhoneListTerritory do
     attributes_table do
       row :name
       row :phone_provider
-      row :assigned_at
-      row :returned_at
-      row :assignee
       row :initial_phone_number do |territory|
         PhoneNumber.new(territory.initial_phone_number)
       end
       row :final_phone_number do |territory|
         PhoneNumber.new(territory.final_phone_number)
       end
-      row :numbers do |record|
-        ul do
-          record.phone_numbers.each do |number|
-            li number
-          end
-        end
-      end
+    end
+
+    attributes_table title: t('active_admin.resources.db/territories.sections.files') do
       row :download_as do |territory|
         link_to :xls, xls_territories_phone_list_path(territory)
       end
+    end
+
+    attributes_table title: t('active_admin.resources.db/territories.sections.assignment') do
+      row :assignee
+      row :assigned_at
+      row :returned_at
     end
   end
 
@@ -64,9 +63,11 @@ ActiveAdmin.register Db::PhoneListTerritory do
       f.input :phone_provider
       f.input :initial_phone_number
       f.input :final_phone_number
-      f.input :assigned_at
-      f.input :returned_at
-      f.input :assignee
+    end
+    inputs t('active_admin.resources.db/territories.sections.assignment') do
+      input :assignee
+      input :assigned_at
+      input :returned_at
     end
     f.actions
   end
