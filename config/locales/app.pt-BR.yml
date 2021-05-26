@@ -107,6 +107,7 @@ pt-BR:
       confirm_delete: 'Tem certeza que quer excluir este registro?'
       number_of_attendees: 'Assistência total: %{attendees} '
       access_denied: 'Acesso negado'
+      cannot_delete_record: 'Registro não pode ser excluído'
     links:
       delete: "Excluir"
       edit: "Editar"
