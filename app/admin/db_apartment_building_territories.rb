@@ -38,7 +38,7 @@ ActiveAdmin.register Db::ApartmentBuildingTerritory do
   end
 
   show do
-    attributes_table title: t('active_admin.resources.db/apartment_building_territory.sections.building_inputs') do
+    attributes_table title: t('active_admin.resources.db/territories.sections.building_inputs') do
       row :name
       row :building_name
       row :address
@@ -52,7 +52,7 @@ ActiveAdmin.register Db::ApartmentBuildingTerritory do
     end
 
     attributes_table title: t(
-      'active_admin.resources.db/apartment_building_territory.sections.preaching_methods'
+      'active_admin.resources.db/territories.sections.preaching_methods'
     ) do
       row :territory, as: :select,
                       collection: Db::RegularTerritory.order(:name).pluck(:name, :id)
@@ -61,7 +61,7 @@ ActiveAdmin.register Db::ApartmentBuildingTerritory do
       row :tertiary_preaching_method
     end
 
-    attributes_table title: t('active_admin.resources.db/apartment_building_territory.sections.assignment') do
+    attributes_table title: t('active_admin.resources.db/territories.sections.assignment') do
       row :assignee
       row :assigned_at
       row :returned_at
@@ -70,35 +70,33 @@ ActiveAdmin.register Db::ApartmentBuildingTerritory do
 
   form do |_f|
     semantic_errors
-    inputs do
-      inputs t('active_admin.resources.db/apartment_building_territory.sections.building_inputs') do
-        input :name
-        input :building_name
-        input :address
-        input :area
-        input :has_a_roof
-        input :number_of_apartments
-        input :intercom_type
-        input :letter_box_type
-        input :apartments
-        input :notes
-      end
+    inputs t('active_admin.resources.db/territories.sections.building_inputs') do
+      input :name
+      input :building_name
+      input :address
+      input :area
+      input :has_a_roof
+      input :number_of_apartments
+      input :intercom_type
+      input :letter_box_type
+      input :apartments
+      input :notes
+    end
 
-      inputs t(
-        'active_admin.resources.db/apartment_building_territory.sections.preaching_methods'
-      ) do
-        input :territory, as: :select,
-                          collection: Db::RegularTerritory.order(:name).pluck(:name, :id)
-        input :primary_preaching_method
-        input :secondary_preaching_method
-        input :tertiary_preaching_method
-      end
+    inputs t(
+      'active_admin.resources.db/territories.sections.preaching_methods'
+    ) do
+      input :territory, as: :select,
+        collection: Db::RegularTerritory.order(:name).pluck(:name, :id)
+      input :primary_preaching_method
+      input :secondary_preaching_method
+      input :tertiary_preaching_method
+    end
 
-      inputs t('active_admin.resources.db/apartment_building_territory.sections.assignment') do
-        input :assignee
-        input :assigned_at
-        input :returned_at
-      end
+    inputs t('active_admin.resources.db/territories.sections.assignment') do
+      input :assignee
+      input :assigned_at
+      input :returned_at
     end
     actions
   end
