@@ -87,7 +87,7 @@ ActiveAdmin.register Db::ApartmentBuildingTerritory do
       'active_admin.resources.db/territories.sections.preaching_methods'
     ) do
       input :territory, as: :select,
-        collection: Db::RegularTerritory.order(:name).pluck(:name, :id)
+                        collection: Db::RegularTerritory.order(:name).pluck(:name, :id)
       input :primary_preaching_method
       input :secondary_preaching_method
       input :tertiary_preaching_method

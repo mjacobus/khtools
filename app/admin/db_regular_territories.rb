@@ -17,20 +17,25 @@ ActiveAdmin.register Db::RegularTerritory do
   show do
     attributes_table do
       row :name
+    end
+
+    attributes_table title: t('active_admin.resources.db/territories.sections.assignment') do
       row :assignee
       row :assigned_at
       row :returned_at
     end
   end
 
-  form do |f|
-    f.semantic_errors
-    f.inputs do
-      f.input :name
-      f.input :assigned_at
-      f.input :returned_at
-      f.input :assignee
+  form do |_f|
+    semantic_errors
+    inputs do
+      input :name
     end
-    f.actions
+    inputs t('active_admin.resources.db/territories.sections.assignment') do
+      input :assignee
+      input :assigned_at
+      input :returned_at
+    end
+    actions
   end
 end
