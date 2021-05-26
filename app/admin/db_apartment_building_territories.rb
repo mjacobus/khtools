@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 ActiveAdmin.register Db::ApartmentBuildingTerritory do
-  menu parent: 'Territórios'
+  menu parent: I18n.t('views.menu.territories')
   config.sort_order = 'name_asc'
   permit_params :name,
                 :assigned_at,
@@ -38,30 +38,33 @@ ActiveAdmin.register Db::ApartmentBuildingTerritory do
   end
 
   show do
-    attributes_table do
+    attributes_table title: t('active_admin.resources.db/apartment_building_territory.sections.building_inputs') do
       row :name
       row :building_name
       row :address
       row :area
-      row :territory
       row :has_a_roof
       row :number_of_apartments
-      row :apartments
-
       row :intercom_type
       row :letter_box_type
+      row :apartments
+      row :notes
+    end
 
+    attributes_table title: t(
+      'active_admin.resources.db/apartment_building_territory.sections.preaching_methods'
+    ) do
+      row :territory, as: :select,
+                      collection: Db::RegularTerritory.order(:name).pluck(:name, :id)
       row :primary_preaching_method
       row :secondary_preaching_method
       row :tertiary_preaching_method
-      row :notes
+    end
 
+    attributes_table title: t('active_admin.resources.db/apartment_building_territory.sections.assignment') do
       row :assignee
       row :assigned_at
       row :returned_at
-
-      row :created_at
-      row :updated_at
     end
   end
 
@@ -69,8 +72,6 @@ ActiveAdmin.register Db::ApartmentBuildingTerritory do
     semantic_errors
     inputs do
       inputs t('active_admin.resources.db/apartment_building_territory.sections.building_inputs') do
-        input :territory, as: :select,
-                          collection: Db::RegularTerritory.order(:name).pluck(:name, :id)
         input :name
         input :building_name
         input :address
@@ -86,6 +87,8 @@ ActiveAdmin.register Db::ApartmentBuildingTerritory do
       inputs t(
         'active_admin.resources.db/apartment_building_territory.sections.preaching_methods'
       ) do
+        input :territory, as: :select,
+                          collection: Db::RegularTerritory.order(:name).pluck(:name, :id)
         input :primary_preaching_method
         input :secondary_preaching_method
         input :tertiary_preaching_method

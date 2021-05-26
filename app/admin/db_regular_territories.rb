@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 ActiveAdmin.register Db::RegularTerritory do
-  menu parent: ['Territórios']
+  menu parent: I18n.t('views.menu.territories')
   permit_params :name, :assignee_id
   config.sort_order = 'name_asc'
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 ActiveAdmin.register Db::PhoneListTerritory do
-  menu parent: 'Territórios'
+  menu parent: I18n.t('views.menu.territories')
   config.sort_order = 'name_asc'
   permit_params :name,
                 :assigned_at,
