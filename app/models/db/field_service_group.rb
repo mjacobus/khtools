@@ -5,4 +5,6 @@ class Db::FieldServiceGroup < ApplicationRecord
            foreign_key: :group_id,
            inverse_of: :group,
            dependent: :restrict_with_exception
+
+  scope :active, -> { where("name NOT LIKE '\\_%'") }
 end

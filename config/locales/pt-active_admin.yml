@@ -24,3 +24,8 @@ pt-BR:
     menu:
       territories: "Territórios"
       others: "Outros"
+    dashboard:
+      territories: "Territórios"
+      overview: "Resumo"
+      number_of_publishers: "Número de Publicadores"
+      total_apartment_building_territories: "Regular %{total}"
