@@ -6,6 +6,15 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_page404
 
+  rescue_from ActiveRecord::DeleteRestrictionError do |exception|
+    if respond_to?(:show)
+      flash.now[:error] = t('app.messages.cannot_delete_record')
+      next render(:show)
+    end
+
+    raise exception
+  end
+
   private
 
   def require_authorization
