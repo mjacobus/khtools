@@ -7,3 +7,14 @@ pt-BR:
         edit_model: 'Editar Publicador' # edit action item
         delete_model: 'Remover Publicador' # delete action item
         menu_entry: 'Publicadores'
+      db/apartment_building_territory:
+        sections:
+          building_inputs: "Dados do Prédio"
+          assignment: "Designação"
+          preaching_methods: "Pregação"
+  views:
+    pagination:
+      previous: "Anterior"
+      next: "Próxima"
+      last: "Última"
+      first: "Primeira"

@@ -65,32 +65,38 @@ ActiveAdmin.register Db::ApartmentBuildingTerritory do
     end
   end
 
-  form do |f|
-    f.semantic_errors
-    f.inputs do
-      f.input :name
-      f.input :building_name
-      f.input :address
-      f.input :area
-
-      f.input :assignee
-      f.input :assigned_at
-      f.input :returned_at
-
-      f.input :territory, as: :select,
+  form do |_f|
+    semantic_errors
+    inputs do
+      inputs t('active_admin.resources.db/apartment_building_territory.sections.building_inputs') do
+        input :territory, as: :select,
                           collection: Db::RegularTerritory.order(:name).pluck(:name, :id)
-      f.input :has_a_roof
-      f.input :number_of_apartments
-      f.input :intercom_type
-      f.input :letter_box_type
+        input :name
+        input :building_name
+        input :address
+        input :area
+        input :has_a_roof
+        input :number_of_apartments
+        input :intercom_type
+        input :letter_box_type
+        input :apartments
+        input :notes
+      end
 
-      f.input :primary_preaching_method
-      f.input :secondary_preaching_method
-      f.input :tertiary_preaching_method
+      inputs t(
+        'active_admin.resources.db/apartment_building_territory.sections.preaching_methods'
+      ) do
+        input :primary_preaching_method
+        input :secondary_preaching_method
+        input :tertiary_preaching_method
+      end
 
-      f.input :notes
-      f.input :apartments
+      inputs t('active_admin.resources.db/apartment_building_territory.sections.assignment') do
+        input :assignee
+        input :assigned_at
+        input :returned_at
+      end
     end
-    f.actions
+    actions
   end
 end

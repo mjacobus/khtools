@@ -124,3 +124,8 @@ pt-BR:
       date_of_second_attempt: "2º Tentativa (data)"
       date_of_third_attempt: "3º Tentativa (data)"
       notes: "Observações"
+    forms:
+      admin:
+        apartment_building_territory:
+          section:
+            building:
