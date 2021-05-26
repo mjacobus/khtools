@@ -245,7 +245,7 @@ ActiveAdmin.setup do |config|
     end
 
     admin.build_menu :default do |menu|
-      menu.add label: 'Home', url: '/'
+      menu.add label: 'Home', url: '/', priority: 0
     end
   end
   #
