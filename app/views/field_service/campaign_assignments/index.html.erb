@@ -1,0 +1,30 @@
+<% model = Db::PreachingCampaignAssignment %>
+
+<h1><%= model_name(model) %></h1>
+
+<%= @campaign.name %>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col"><%= attribute_name(:territory, model: model) %></th>
+      <th scope="col"><%= attribute_name(:assignee, model: model) %></th>
+      <th scope="col"><%= attribute_name(:assigned_at, model: model) %></th>
+      <th scope="col"><%= attribute_name(:returned_at, model: model) %></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @campaign.each_assignment do |assignemnt| %>
+      <tr>
+        <td><%= assignemnt.territory.name %></td>
+        <td><%= assignemnt.assignee&.name %></td>
+        <td><%= assignemnt.assigned_at %></td>
+        <td><%= assignemnt.returned_at %></td>
+        <td>
+          <%= link_to(t('app.links.edit'), edit_field_service_campaign_assignment_path(@campaign, assignemnt)) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

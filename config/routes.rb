@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   namespace :field_service do
     resources :campaigns, only: [:index] do
-      resources :assignments, controller: :campagin_assignments
+      resources :assignments, controller: :campaign_assignments
     end
   end
 

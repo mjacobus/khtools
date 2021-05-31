@@ -47,6 +47,8 @@ pt-BR:
         description: Descrição
         created_at: Criado em
         updated_at: Atualizado em
+        territories: Territórios
+        assignments: Designações
       db/preaching_campaign_assignment:
         campaign: Campanha
         territory: Território
@@ -128,6 +130,7 @@ pt-BR:
     links:
       delete: "Excluir"
       edit: "Editar"
+      edit: "Editar"
       google_login: "Entrar com minha conta do Gmail"
       home: "Home"
       logout: "Sair"
@@ -136,6 +139,7 @@ pt-BR:
       simple_counter: "Contador"
       users: "Usuários"
       preaching_campaigns: "Campanhas de Pregação"
+      assignments: "Designações"
     phone_list_spreadsheet:
       territory_description: "Território %{name}"
       phone_number: "Número telefônico"
