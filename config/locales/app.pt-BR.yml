@@ -135,6 +135,7 @@ pt-BR:
       new: "Adicionar"
       simple_counter: "Contador"
       users: "Usuários"
+      preaching_campaigns: "Campanhas de Pregação"
     phone_list_spreadsheet:
       territory_description: "Território %{name}"
       phone_number: "Número telefônico"

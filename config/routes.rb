@@ -8,6 +8,12 @@ Rails.application.routes.draw do
     get '/dev/login', to: 'development#login'
   end
 
+  namespace :field_service do
+    resources :campaigns, only: [:index] do
+      resources :assignments, controller: :campagin_assignments
+    end
+  end
+
   namespace :meeting_attendance do
     resources :meetings do
       resources :simple_counter_attendees, controller: :simple_counter
