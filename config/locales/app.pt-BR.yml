@@ -18,6 +18,7 @@ pt-BR:
       db/intercom_type: Tipo de Interfone
       db/letter_box_type: Tipo de Caixa de Correio
       db/preaching_method: Método de Pregação
+      db/preaching_campaign: Campanha de Pregação
     attributes:
       user:
         name: Nome
@@ -35,6 +36,12 @@ pt-BR:
         created_at: Criado em
         updated_at: Atualizado em
       db/preaching_method:
+        name: Nome
+        description: Descrição
+        created_at: Criado em
+        updated_at: Atualizado em
+      db/preaching_campaign:
+        code: Código
         name: Nome
         description: Descrição
         created_at: Criado em
