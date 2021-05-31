@@ -21,6 +21,10 @@ class TestFactories
     @preaching_methods ||= Db::PreachingMethodFactory.new(self)
   end
 
+  def preaching_campaigns
+    @preaching_campaigns ||= Db::PreachingCampaignFactory.new(self)
+  end
+
   def territory_areas
     @territory_areas ||= Db::TerritoryAreaFactory.new(self)
   end
@@ -144,6 +148,15 @@ class TestFactories
       {
         name: "Attendee-#{seq}",
         meeting: overrides[:meeting] || factories.meetings.create
+      }.merge(overrides)
+    end
+  end
+
+  class Db::PreachingCampaignFactory < Factory
+    def attributes(overrides = {})
+      {
+        code: "code-#{seq}",
+        name: "Campaign-#{seq}"
       }.merge(overrides)
     end
   end
