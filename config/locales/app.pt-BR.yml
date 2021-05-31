@@ -19,6 +19,7 @@ pt-BR:
       db/letter_box_type: Tipo de Caixa de Correio
       db/preaching_method: Método de Pregação
       db/preaching_campaign: Campanha de Pregação
+      db/preaching_campaign_assignment: Designação por Campanha
     attributes:
       user:
         name: Nome
@@ -44,6 +45,14 @@ pt-BR:
         code: Código
         name: Nome
         description: Descrição
+        created_at: Criado em
+        updated_at: Atualizado em
+      db/preaching_campaign_assignment:
+        campaign: Campanha
+        territory: Território
+        assignee: Designado para
+        assigned_at: Designado em
+        returned_at: Devolvido em
         created_at: Criado em
         updated_at: Atualizado em
       db/intercom_type:
