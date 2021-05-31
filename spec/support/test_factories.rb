@@ -25,6 +25,10 @@ class TestFactories
     @preaching_campaigns ||= Db::PreachingCampaignFactory.new(self)
   end
 
+  def preaching_campaign_assignments
+    @preaching_campaign_assignments ||= Db::PreachingCampaignAssignmentFactory.new(self)
+  end
+
   def territory_areas
     @territory_areas ||= Db::TerritoryAreaFactory.new(self)
   end
@@ -157,6 +161,17 @@ class TestFactories
       {
         code: "code-#{seq}",
         name: "Campaign-#{seq}"
+      }.merge(overrides)
+    end
+  end
+
+  class Db::PreachingCampaignAssignmentFactory < Factory
+    def attributes(overrides = {})
+      {
+        campaign: overrides[:campaign] || factories.preaching_campaigns.create,
+        territory: overrides[:territory] || factories.territories.create,
+        assignee: overrides[:assignee] || factories.publishers.create,
+        assigned_at: Time.zone.today
       }.merge(overrides)
     end
   end

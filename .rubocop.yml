@@ -6,6 +6,7 @@ require:
 Metrics/AbcSize:
   Exclude:
     - "db/migrate/**/*"
+    - "spec/support/test_factories.rb"
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
