@@ -9,6 +9,7 @@ Metrics/AbcSize:
     - "spec/support/test_factories.rb"
 Metrics/BlockLength:
   Exclude:
+    - 'config/routes.rb'
     - 'spec/**/*'
     - 'app/admin/*'
 
