@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     end
   end
 
+  # TODO: Move to field service namespace
   namespace :territories do
     resources :phone_lists do
       member do
