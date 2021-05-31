@@ -122,7 +122,8 @@ class TestFactories
   class Db::ApartmentBuildingTerritoryFactory < Factory
     def attributes(overrides = {})
       {
-        name: "PhoneList-#{seq}"
+        name: "PhoneList-#{seq}",
+        address: "Some address #{seq}"
       }.merge(overrides)
     end
   end
