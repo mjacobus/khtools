@@ -16,6 +16,6 @@ class CreateDbPreachingCampaignAssignments < ActiveRecord::Migration[6.1]
     add_index :preaching_campaign_assignments,
               %i[territory_id campaign_id],
               unique: true,
-              name: ['preaching_campaign_assignments_uk']
+              name: 'preaching_campaign_assignments_uk'
   end
 end
