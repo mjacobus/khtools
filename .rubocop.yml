@@ -47,6 +47,9 @@ Layout/MultilineOperationIndentation:
 Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 
+Lint/MissingSuper:
+  Enabled: false
+
 Naming/RescuedExceptionsVariableName:
   PreferredName: 'exception'
 
