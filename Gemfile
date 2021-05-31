@@ -22,6 +22,7 @@ gem 'caxlsx'
 gem 'sass-rails', '>= 6'
 gem 'simple_form'
 # gem 'turbolinks', '~> 5'
+gem 'view_component', require: 'view_component/engine'
 gem 'webpacker', '~> 4.0'
 
 group :development, :test do
