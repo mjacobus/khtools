@@ -78,11 +78,11 @@ class TestFactories
     end
 
     def create(overrides = {})
-      model_class.create!(attributes.merge(overrides))
+      model_class.create!(attributes(overrides))
     end
 
     def build(overrides = {})
-      model_class.new(attributes.merge(overrides))
+      model_class.new(attributes(overrides))
     end
 
     private
