@@ -119,6 +119,7 @@ pt-BR:
     titles:
       meeting_attendance: "Contagem de Assistência"
     messages:
+      page_not_found: "Página não encontrada"
       contact_admin: "Se você já logou mas não tem acesso, contate o admin de sua congregação."
       confirm_delete: 'Tem certeza que quer excluir este registro?'
       number_of_attendees: 'Assistência total: %{attendees} '
