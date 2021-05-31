@@ -11,6 +11,14 @@ module FieldService
       end
     end
 
+    def exist?(campaign_id:, territory_type:)
+      Db::PreachingCampaignAssignment.joins(:territory)
+        .where(territory: { type: territory_class_for(territory_type).to_s })
+        .where(campaign_id: campaign_id)
+        .limit(1)
+        .count.positive?
+    end
+
     private
 
     def territory_class_for(type)
