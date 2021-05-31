@@ -1,0 +1,7 @@
+<p> <%= t('app.messages.assign_campaigns_to_territories') %> </p>
+
+<% territory_types.each do |type| %>
+  <% unless exist?(territory_type: type) %>
+    <%= link_to button_label(type), create_link(type), method: :post, class: 'btn btn-block btn-dark', data: { confirm: confirm_message(type) } %>
+  <% end %>
+<% end %>

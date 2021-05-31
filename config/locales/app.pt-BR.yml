@@ -124,6 +124,8 @@ pt-BR:
       page_not_found: "Página não encontrada"
       contact_admin: "Se você já logou mas não tem acesso, contate o admin de sua congregação."
       confirm_delete: 'Tem certeza que quer excluir este registro?'
+      assign_campaigns_to_territories: 'Vincular campanha ao o(s) território(s)'
+      confirm_campaign_assignment: 'Tem certeza que quer vincular esta campanha a todos os territórios do tipo "%{territory_type}"?'
       number_of_attendees: 'Assistência total: %{attendees} '
       access_denied: 'Acesso negado'
       cannot_delete_record: 'Registro não pode ser excluído'
@@ -140,6 +142,9 @@ pt-BR:
       users: "Usuários"
       preaching_campaigns: "Campanhas de Pregação"
       assignments: "Designações"
+      create_regular_territory_assignment: "Vincular aos Territórios Normais"
+      create_apartment_building_territory_assignment: "Vincular aos Territórios de Apartamentos"
+      create_phone_list_territory_assignment: "Vincular aos territórios de lista telefonicas"
     phone_list_spreadsheet:
       territory_description: "Território %{name}"
       phone_number: "Número telefônico"
