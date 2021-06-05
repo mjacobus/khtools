@@ -16,6 +16,9 @@ gem 'rails', '~> 6.1'
 gem 'activeadmin'
 gem 'caxlsx'
 
+gem 'sentry-rails'
+gem 'sentry-ruby'
+
 # frontend
 # gem 'bootstrap', '~> 4.4'
 # gem 'jquery-rails'
