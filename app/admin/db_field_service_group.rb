@@ -16,11 +16,15 @@ ActiveAdmin.register Db::FieldServiceGroup do
   show do
     attributes_table do
       row :name
-      row :publishers do |group|
-        group.publishers.count
-      end
       row :created_at
       row :updated_at
+      row :publishers do |group|
+        div do
+          group.publishers.each do |publisher|
+            div link_to(publisher.name, admin_db_publisher_path(publisher))
+          end
+        end
+      end
     end
   end
 end
