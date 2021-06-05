@@ -14,7 +14,8 @@ ApplicationRecord.extend(DevRandomModule)
   Db::PreachingCampaign,
   Db::Publisher,
   Db::Territory,
-  Db::FieldServiceGroup
+  Db::FieldServiceGroup,
+  Db::PhoneProvider
 ].map(&:delete_all)
 
 1.upto(10) do |num|
