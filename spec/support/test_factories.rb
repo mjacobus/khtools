@@ -73,6 +73,14 @@ class TestFactories
       @sequency += 1
     end
 
+    def random
+      model_class.order('RANDOM()').first
+    end
+
+    def random_or_create(overrides = {})
+      random || create(overrides)
+    end
+
     def seq
       sequency
     end
@@ -103,7 +111,7 @@ class TestFactories
       {
         name: "User-#{seq}",
         gender: 'm',
-        group: overrides[:group] || factories.field_service_groups.create
+        group: overrides[:group] || factories.field_service_groups.random_or_create
       }.merge(overrides)
     end
   end
@@ -114,7 +122,7 @@ class TestFactories
         name: "PhoneList-#{seq}",
         initial_phone_number: 5_199_990_000 + seq,
         final_phone_number: 5_199_990_000 + seq,
-        phone_provider: overrides[:phone_provider] || factories.phone_providers.create
+        phone_provider: overrides[:phone_provider] || factories.phone_providers.random_or_create
       }.merge(overrides)
     end
   end
@@ -152,7 +160,7 @@ class TestFactories
     def attributes(overrides = {})
       {
         name: "Attendee-#{seq}",
-        meeting: overrides[:meeting] || factories.meetings.create
+        meeting: overrides[:meeting] || factories.meetings.random_or_create
       }.merge(overrides)
     end
   end
@@ -169,9 +177,9 @@ class TestFactories
   class Db::PreachingCampaignAssignmentFactory < Factory
     def attributes(overrides = {})
       {
-        campaign: overrides[:campaign] || factories.preaching_campaigns.create,
-        territory: overrides[:territory] || factories.territories.create,
-        assignee: overrides[:assignee] || factories.publishers.create,
+        campaign: overrides[:campaign] || factories.preaching_campaigns.random_or_create,
+        territory: overrides[:territory] || factories.territories.random_or_create,
+        assignee: overrides[:assignee] || factories.publishers.random_or_create,
         assigned_at: Time.zone.today
       }.merge(overrides)
     end
