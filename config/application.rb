@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'boot'
 
 require 'rails/all'
@@ -24,7 +26,7 @@ module KhTools
       end
     end
 
-    config.i18n.available_locales = ["pt-BR"]
+    config.i18n.available_locales = ['pt-BR']
     config.i18n.default_locale = 'pt-BR'
     config.time_zone = 'America/Sao_Paulo'
 
@@ -34,6 +36,20 @@ module KhTools
       generate.view_specs false
     end
 
-    config.autoload_paths << "#{Rails.root}/lib"
+    config.autoload_paths << Rails.root.join('lib')
+
+    Dir[Rails.root.join('packages/*')].each do |package_path|
+      package = File.basename(package_path)
+      private_path = Rails.root.join("packages/#{package}/private").to_s
+      public_path = Rails.root.join("packages/#{package}/public").to_s
+      test_support = Rails.root.join("packages/#{package}/test/support/lib/").to_s
+      Rails.autoloaders.main.push_dir(private_path) if Dir.exist?(private_path)
+      Rails.autoloaders.main.push_dir(public_path) if Dir.exist?(public_path)
+      Rails.autoloaders.main.push_dir(test_support) if Dir.exist?(test_support)
+      # Autoload all subdirs of the app directory within a package.
+      Dir["#{package_path}/app/*"].each do |package_app_subdir|
+        Rails.autoloaders.main.push_dir(package_app_subdir)
+      end
+    end
   end
 end
