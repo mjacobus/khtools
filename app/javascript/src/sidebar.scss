@@ -17,10 +17,10 @@
   height: 100vh;
   z-index: 999;
   background: #4a6da7;
-  // background: #373433;
   color: #fff;
   transition: all 0.3s;
 }
+
 #sidebar-button-container {
   z-index: 998;
   width: 56px;
@@ -65,7 +65,6 @@ a[data-toggle="collapse"] {
 #content {
   padding: 0 20px;
   margin-left: 250px;
-  // transition: all 0.3s;
 }
 
 #content.sidebar-hidden {

@@ -17,7 +17,6 @@ require("bootstrap") // not enough to enable toggle
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
 
-
 on('click', '[data-toggle-sidebar]', () => {
   const content = document.getElementById('content')
   const sidebar = document.getElementById('sidebar')
