@@ -5,8 +5,6 @@
 
 require("@rails/ujs").start()
 
-import {on} from 'delegated-events'
-
 import "../src/application.scss"
 import "../components"
 
@@ -19,10 +17,3 @@ require("bootstrap") // not enough to enable toggle
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
 
-on('click', '[data-toggle-sidebar]', () => {
-  const content = document.getElementById('content')
-  const sidebar = document.getElementById('sidebar')
-
-  content.classList.toggle('sidebar-hidden')
-  sidebar.classList.toggle('hidden')
-})

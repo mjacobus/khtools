@@ -3,6 +3,8 @@
 class ApplicationComponent < ViewComponent::Base
   MissingArgument = Class.new(StandardError)
 
+  delegate :current_user, to: :helpers
+
   def self.has(field, public: false)
     define_method field do
       get(field) || raise(MissingArgument, "Missing argument: #{field}")
