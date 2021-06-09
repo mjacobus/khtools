@@ -83,4 +83,13 @@
       margin-left: 0;
     }
   }
+
+  details summary {
+    // background: #395c96;
+    list-style: none;
+  }
+
+  details .sub-item {
+    margin-left: 20px;
+  }
 }

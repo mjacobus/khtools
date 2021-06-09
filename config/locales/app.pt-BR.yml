@@ -137,6 +137,8 @@ pt-BR:
       google_login: "Entrar com minha conta do Gmail"
       home: "Home"
       logout: "Sair"
+      admin: "Admin"
+      field_service: "Serviço de Campo"
       meeting_attendance: "Contagem de Assistência"
       new: "Adicionar"
       simple_counter: "Contador"

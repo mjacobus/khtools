@@ -11,9 +11,8 @@ class Sidebar::SidebarComponent < ApplicationComponent
     [
       home_link,
       meeting_attendance,
-      field_service_campaigns,
-      admin_dashboard,
-      users,
+      field_service_section,
+      admin_section,
       logout
     ].compact
   end
@@ -28,9 +27,15 @@ class Sidebar::SidebarComponent < ApplicationComponent
     entry(t('app.links.meeting_attendance'), meeting_attendance_meetings_url)
   end
 
+  def field_service_section
+    entry(t('app.links.field_service'), '#').tap do |section|
+      section.append_child(field_service_campaigns)
+    end
+  end
+
   def admin_dashboard
     if current_user.master?
-      entry('Admin', admin_dashboard_url)
+      entry('Dashboard', admin_dashboard_url)
     end
   end
 
@@ -40,6 +45,15 @@ class Sidebar::SidebarComponent < ApplicationComponent
 
   def field_service_campaigns
     entry(t('app.links.preaching_campaigns'), field_service_campaigns_url)
+  end
+
+  def admin_section
+    if current_user.master?
+      entry('Admin', '#').tap do |section|
+        section.append_child(admin_dashboard)
+        section.append_child(users)
+      end
+    end
   end
 
   def logout
