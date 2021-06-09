@@ -14,24 +14,9 @@
       </div>
 
       <ul class="list-unstyled mt-3">
-        <li class="my-2"><a href="<%= root_path %>">Home</a></li>
-        <li class="my-2">
-          <a href="<%= meeting_attendance_meetings_url %>"><%= t('app.links.meeting_attendance') %></a>
-        </li>
-        <li class="my-2">
-          <a href="<%= field_service_campaigns_url %>"><%= t('app.links.preaching_campaigns') %></a>
-        </li class="my-2">
-        <% if current_user.master? %>
-          <li class="my-2">
-            <a href="<%= admin_dashboard_url %>">Admin</a>
-          </li>
-          <li class="my-2">
-            <a href="<%= users_path %>"><%= t('app.links.users') %></a>
-          </li>
+        <% menu_entries.each do |entry| %>
+          <li class="my-2"><%= link_to(entry.text, entry.url) %> </li>
         <% end %>
-        <li class="my-2">
-          <a href="/logout"><%= t('app.links.logout') %></a>
-        </li>
       </ul>
     </div>
   </nav>
