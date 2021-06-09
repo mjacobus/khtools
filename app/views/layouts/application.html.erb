@@ -11,10 +11,6 @@
     <%= stylesheet_pack_tag 'application', media: 'all' %>
   </head>
   <body>
-    <% if current_user %>
-      <%= render partial: '/navbar' %>
-    <% end %>
-
     <% if flash[:error] %>
       <div class="alert alert-danger" role="alert">
         <%= flash[:error] %>
@@ -28,10 +24,10 @@
     <% end %>
 
     <div class="wrapper">
-      <!-- Sidebar -->
-      <%= render partial: '/sidebar' %>
+      <% if current_user %>
+        <%= render partial: '/sidebar' %>
+      <% end %>
 
-      <!-- Page Content -->
       <div id="content" class="mt-5 pt-2 container-fluid">
         <%= yield %>
       </div>
