@@ -9,7 +9,7 @@
   align-items: stretch;
 }
 
-#sidebar {
+#sidebar, #sidebar-button-container {
   width: 250px;
   position: fixed;
   top: 0;
@@ -20,6 +20,24 @@
   // background: #373433;
   color: #fff;
   transition: all 0.3s;
+}
+#sidebar-button-container {
+  z-index: 998;
+  width: 56px;
+  padding: 0;
+  height: 40px;
+  margin: 0
+}
+
+[data-toggle-sidebar] {
+  width: 100%;
+  color: white;
+  background: #395c96;
+  font-size: 30px
+}
+
+[data-toggle-sidebar]:hover {
+  color: #ddd;
 }
 
 #sidebar a {
@@ -47,18 +65,16 @@ a[data-toggle="collapse"] {
 #content {
   padding: 0 20px;
   margin-left: 250px;
-  transition: all 0.3s;
+  // transition: all 0.3s;
 }
 
 #content.sidebar-hidden {
-  margin-left: 0;
+  margin-left: 0px;
 }
-
-
 
 @media (max-width: 768px) {
   #content {
-    margin-left: 0;
+    margin-left: 0px;
   }
   #sidebar {
     margin-left: -250px;
