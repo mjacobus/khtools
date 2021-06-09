@@ -26,8 +26,16 @@
       </div>
     <% end %>
 
-    <div class="container">
-      <%= yield %>
-    </div>
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <%= render partial: '/sidebar' %>
+
+      <!-- Page Content -->
+      <div id="content">
+        <button data-toggle-sidebar>Menu</button>
+        <%= yield %>
+      </div>
+
+    </div> 
   </body>
 </html>

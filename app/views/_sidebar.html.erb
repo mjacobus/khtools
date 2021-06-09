@@ -1,0 +1,31 @@
+<nav id="sidebar" class="p-3">
+  <button data-toggle-sidebar>Hide</button>
+  <div class="sidebar-user">
+    <%= image_tag("#{current_user.avatar}?sz=25", class: 'avatar-25') %> <%= current_user.name %>
+  </div>
+
+  <div class="sidebar-header mb-2 mt-4">
+    <b>KH Tools</b>
+  </div>
+
+  <ul class="list-unstyled mt-3">
+    <li class="my-2"><a href="<%= root_path %>">Home</a></li>
+    <li class="my-2">
+      <a href="<%= meeting_attendance_meetings_url %>"><%= t('app.links.meeting_attendance') %></a>
+    </li>
+    <li class="my-2">
+      <a href="<%= field_service_campaigns_url %>"><%= t('app.links.preaching_campaigns') %></a>
+    </li class="my-2">
+    <% if current_user.master? %>
+      <li class="my-2">
+        <a href="<%= admin_dashboard_url %>">Admin</a>
+      </li>
+      <li class="my-2">
+        <a href="<%= users_path %>"><%= t('app.links.users') %></a>
+      </li>
+    <% end %>
+    <li class="my-2">
+      <a href="/logout"><%= t('app.links.logout') %></a>
+    </li>
+  </ul>
+</nav>
