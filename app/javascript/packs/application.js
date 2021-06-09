@@ -5,8 +5,10 @@
 
 require("@rails/ujs").start()
 
-import "../src/application.scss"
 import {on} from 'delegated-events'
+
+import "../src/application.scss"
+import "../components"
 
 require("bootstrap") // not enough to enable toggle
 
