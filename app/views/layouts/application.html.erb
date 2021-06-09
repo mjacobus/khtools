@@ -23,14 +23,11 @@
       </div>
     <% end %>
 
-    <div class="wrapper">
-      <% if current_user %>
-        <%= render partial: '/sidebar' %>
-      <% end %>
-
-      <div id="content" class="mt-5 pt-2 container-fluid">
+    <%= render Sidebar::SidebarComponent.new do |component|%>
+      <% component.main_container do %>
         <%= yield %>
-      </div>
+      <% end %>
+    <% end %>
 
     </div> 
   </body>

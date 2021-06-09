@@ -1,0 +1,46 @@
+<div class="wrapper" id="sidebar-component">
+  <nav id="sidebar">
+    <div class="position-relative text-center">
+      <button data-toggle-sidebar class="btn"><i class="bi bi-arrow-left-circle-fill"></i></button>
+    </div>
+
+    <div class="px-3">
+      <div class="sidebar-user mt-3">
+        <%= image_tag("#{current_user.avatar}?sz=25", class: 'avatar-25') %> <%= current_user.name %>
+      </div>
+
+      <div class="sidebar-header mb-2 mt-4">
+        <b>KH Tools</b>
+      </div>
+
+      <ul class="list-unstyled mt-3">
+        <li class="my-2"><a href="<%= root_path %>">Home</a></li>
+        <li class="my-2">
+          <a href="<%= meeting_attendance_meetings_url %>"><%= t('app.links.meeting_attendance') %></a>
+        </li>
+        <li class="my-2">
+          <a href="<%= field_service_campaigns_url %>"><%= t('app.links.preaching_campaigns') %></a>
+        </li class="my-2">
+        <% if current_user.master? %>
+          <li class="my-2">
+            <a href="<%= admin_dashboard_url %>">Admin</a>
+          </li>
+          <li class="my-2">
+            <a href="<%= users_path %>"><%= t('app.links.users') %></a>
+          </li>
+        <% end %>
+        <li class="my-2">
+          <a href="/logout"><%= t('app.links.logout') %></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div id="sidebar-button-container">
+    <button data-toggle-sidebar class="btn"><i class="bi bi-arrow-right-circle-fill"></i></button>
+  </div>
+
+  <div id="content" class="mt-5 pt-2 container-fluid">
+    <%= main_container %>
+  </div>
+</div>
