@@ -4,9 +4,9 @@
       <button data-toggle-sidebar class="btn"><i class="bi bi-arrow-left-circle-fill"></i></button>
     </div>
 
-    <div class="px-3">
+    <div class="px-3 fs-6">
       <div class="sidebar-user mt-3">
-        <%= image_tag("#{current_user.avatar}?sz=25", class: 'avatar-25') %> <%= current_user.name %>
+        <%= image_tag("#{current_user.avatar}?sz=32", class: 'avatar-32') %> <%= current_user.name %>
       </div>
 
       <div class="sidebar-header mb-2 mt-4">
@@ -15,12 +15,22 @@
 
       <% menu_entries.each do |entry| %>
         <% if entry.children.empty? %>
-          <div class="my-2"><%= link_to(entry.text, entry.url) %> </div>
+          <div class="top-level p-2 my-2">
+            <a href="<%= entry.url %>">
+              <% if entry.icon %><i class="bi bi-<%= entry.icon %>"></i><% end %> <%= entry.text %>
+            </a>
+          </div>
         <% else %>
-          <details open>
-            <summary class="p-2"><%= entry.text %></summary>
+          <details>
+            <summary class="p-2 top-level my-2">
+              <% if entry.icon %><i class="bi bi-<%= entry.icon %>"></i><% end %> <%= entry.text %> <i class="bi bi-arrows-collapse"></i>
+            </summary>
             <% entry.children.each do |child| %>
-              <div class="sub-item p-2 pl-5"><%= link_to(child.text, child.url) %> </div>
+              <div class="sub-item py-2">
+                <a href="<%= child.url %>">
+                  <% if child.icon %><i class="bi bi-<%= child.icon %>"></i><% end %> <%= child.text %>
+                </a>
+              </div>
             <% end %>
           </details>
         <% end %>
@@ -32,7 +42,7 @@
     <button data-toggle-sidebar class="btn"><i class="bi bi-arrow-right-circle-fill"></i></button>
   </div>
 
-  <div id="content" class="mt-5 pt-2 container-fluid">
+  <div id="content" class="mt-5 pt-2 container-fluid width-auto">
     <%= main_container %>
   </div>
 </div>
