@@ -38,6 +38,7 @@ class Sidebar::SidebarComponent < ApplicationComponent
       section.append_child(apartment_building_territories)
       section.append_child(phone_list_territories)
       section.append_child(regular_territories)
+      section.append_child(commercial_territories)
     end
   end
 
@@ -86,6 +87,14 @@ class Sidebar::SidebarComponent < ApplicationComponent
 
   def regular_territories
     entry(Db::RegularTerritory.model_name.human, admin_db_regular_territories_path, icon: 'map')
+  end
+
+  def commercial_territories
+    entry(
+      Db::CommercialTerritory.model_name.human,
+      admin_db_regular_territories_path,
+      icon: 'cart4'
+    )
   end
 
   def phone_list_territories
