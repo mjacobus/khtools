@@ -11,6 +11,7 @@ pt-BR:
       db/field_service_group: Grupo de Campo
       db/territory: Território
       db/regular_territory: Território Normal
+      db/commercial_territory: Território Comercial
       db/phone_provider: Operadora de Telefone
       db/phone_list_territory: Lista Telefônica
       db/apartment_building_territory: Prédios
