@@ -1,5 +1,9 @@
 @import './boostrap_overrides';
 
+.pull-right {
+  text-align: right;
+}
+
 .btn {
   transition: none;
 }

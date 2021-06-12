@@ -74,6 +74,10 @@ RSpec/MultipleExpectations:
 RSpec/VerifiedDoubles:
   Enabled: false
 
+RSpec/FilePath:
+  Exclude:
+    - 'spec/requests/**/*'
+
 AllCops:
   NewCops: enable
   Exclude:
