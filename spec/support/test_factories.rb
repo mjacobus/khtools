@@ -127,6 +127,7 @@ class TestFactories
         email: "email#{seq}@example.com",
         address: "Some street #{seq}",
         phone: "(51) 1234-123#{seq}",
+        phone2: "(51) 1234-123#{seq + 1}",
         notes: "Some notes for Contact-#{seq}"
       }.merge(overrides)
     end

@@ -1,0 +1,11 @@
+<h1><%= page_title %></h1>
+
+<%= simple_form_for(contact, url: target_url, as: 'contact') do |f| %>
+  <%= f.input :name %>
+  <%= f.input :email %>
+  <%= f.input :address %>
+  <%= f.input :phone %>
+  <%= f.input :phone2 %>
+  <%= f.input :notes %>
+  <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>
+<% end %>
