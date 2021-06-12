@@ -1,5 +1,8 @@
-// https://getbootstrap.com/docs/5.0/getting-started/webpack/
-@import "~bootstrap/scss/bootstrap";
+@import './boostrap_overrides';
+
+.btn {
+  transition: none;
+}
 
 .avatar-25 {
   max-width: 25px;

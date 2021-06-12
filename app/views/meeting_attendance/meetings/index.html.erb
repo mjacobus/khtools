@@ -1,5 +1,4 @@
 <%= link_to t('app.links.new'), new_meeting_attendance_meeting_url, class: 'btn btn-light' %>
-
 <div class="card">
   <div class="card-header">
     <%= t('app.titles.meeting_attendance') %>
@@ -19,9 +18,17 @@
             <%= meeting.number_of_attendees %> participantes
           </div>
           <div class="col-sm-12 col-md-3">
-            <%= link_to t('app.links.edit'), edit_meeting_attendance_meeting_url(meeting), class: 'btn' %>
-            <%= link_to t('app.links.delete'), meeting_attendance_meeting_url(meeting), data: { method: :delete, confirm: t('app.messages.confirm_delete') }, class: 'btn text-danger' %>
-            <%= link_to t('app.links.simple_counter'), meeting_attendance_meeting_simple_counter_attendees_url(meeting), class: 'btn' %>
+            <%= render DropdownMenuComponent.new(t('app.links.actions')) do |component| %>
+              <% component.item(type: :foo) do %>
+                <%= link_to t('app.links.edit'), edit_meeting_attendance_meeting_url(meeting), class: 'btn' %>
+              <% end %>
+              <% component.item do %>
+                <%= link_to t('app.links.delete'), meeting_attendance_meeting_url(meeting), data: { method: :delete, confirm: t('app.messages.confirm_delete') }, class: 'btn text-danger' %>
+              <% end %>
+              <% component.item do %>
+                <%= link_to t('app.links.simple_counter'), meeting_attendance_meeting_simple_counter_attendees_url(meeting), class: 'btn' %>
+              <% end %>
+            <% end %>
           </div>
         </div>
       </li>

@@ -1,0 +1,10 @@
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+    <%= title %>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+    <% items.each do |item| %>
+      <li class="dropdown-item"> <%= item %></li>
+    <% end %>
+  </ul>
+</div>
