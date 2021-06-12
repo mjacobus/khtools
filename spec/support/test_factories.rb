@@ -49,6 +49,10 @@ class TestFactories
     @territories ||= Db::RegularTerritoryFactory.new(self)
   end
 
+  def commercial_territories
+    @commercial_territories ||= Db::CommercialTerritoryFactory.new(self)
+  end
+
   def phone_list_territories
     @phone_list_territories ||= Db::PhoneListTerritoryFactory.new(self)
   end
@@ -162,6 +166,14 @@ class TestFactories
     def attributes(overrides = {})
       {
         name: "Territory-#{seq}"
+      }.merge(overrides)
+    end
+  end
+
+  class Db::CommercialTerritoryFactory < Factory
+    def attributes(overrides = {})
+      {
+        name: "C-#{seq}"
       }.merge(overrides)
     end
   end
