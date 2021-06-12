@@ -10,6 +10,10 @@ class Territories::ContactsController < ApplicationController
     render form_for(contact)
   end
 
+  def edit
+    render form_for(contact)
+  end
+
   def create
     contact = territory.contacts.build
     contact.attributes = contact_params
@@ -23,7 +27,25 @@ class Territories::ContactsController < ApplicationController
     render form_for(contact), status: :unprocessable_entity
   end
 
+  def update
+    if contact.update(contact_params)
+      redirect_to(action: :index)
+      return
+    end
+
+    render form_for(contact), status: :unprocessable_entity
+  end
+
+  def destroy
+    contact.destroy
+    redirect_to(action: :index)
+  end
+
   private
+
+  def contact
+    @contact ||= territory.contacts.find(params[:id])
+  end
 
   def territory
     @territory ||= Db::CommercialTerritory.find(params[:commercial_territory_id])
