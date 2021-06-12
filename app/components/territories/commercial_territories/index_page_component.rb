@@ -10,4 +10,8 @@ class Territories::CommercialTerritories::IndexPageComponent < ApplicationCompon
   def title
     Db::CommercialTerritory.model_name.human
   end
+
+  def contacts_text(territory)
+    I18n.t('app.messages.x_contacts', count: territory.contacts.count)
+  end
 end

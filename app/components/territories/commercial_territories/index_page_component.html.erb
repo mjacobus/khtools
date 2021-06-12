@@ -15,9 +15,18 @@
     <div class="col-sm-12 col-lg-4">
       <%= territory.assignee %>
     </div>
-    <div class="col-sm-12 col-lg-4 pull-right">
+    <div class="col-sm-12 col-lg-2">
+      <%= contacts_text(territory) %>
+    </div>
+    <div class="col-sm-12 col-lg-2 pull-right">
       <%= render DropdownMenuComponent.new do |component| %>
-        <% component.item(type: :foo) do %>
+        <% component.item do %>
+          <%= link_to t('app.links.contacts'), territories_commercial_territory_contacts_path(territory), class: 'btn' %>
+        <% end %>
+        <% component.item do %>
+          <%= link_to t('app.links.new_contact'), new_territories_commercial_territory_contact_path(territory), class: 'btn' %>
+        <% end %>
+        <% component.item do %>
           <%= link_to t('app.links.edit'), edit_admin_db_commercial_territory_path(territory), class: 'btn' %>
         <% end %>
         <% component.item do %>

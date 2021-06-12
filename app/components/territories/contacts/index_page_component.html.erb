@@ -1,0 +1,38 @@
+<h1><%= title %></h1>
+<p><%= territory.name %></p>
+
+<%= render DropdownMenuComponent.new do |component| %>
+  <% component.item do %>
+    <%= link_to t('app.links.new'), new_territories_commercial_territory_contact_path, class: 'btn' %>
+  <% end %>
+<% end %>
+
+
+<% contacts.each do |contact| %>
+  <hr>
+  <div class="row">
+    <div class="col-sm-12 col-lg-2">
+      <%= contact.name %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+      <p><%= contact.address %></p>
+      <div><%= contact.email %></div>
+      <% phones(contact).each do |phone| %>
+        <div><%= phone %></div>
+      <% end %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+      <p><%= contact.notes %></p>
+    </div>
+    <div class="col-sm-12 col-lg-2 pull-right">
+      <%= render DropdownMenuComponent.new do |component| %>
+        <% component.item do %>
+          <%= link_to t('app.links.edit'), edit_path(contact), class: 'btn' %>
+        <% end %>
+        <% component.item do %>
+          <%= link_to t('app.links.delete'), contact_path(contact), data: { method: :delete, confirm: t('app.messages.confirm_delete') }, class: 'btn' %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

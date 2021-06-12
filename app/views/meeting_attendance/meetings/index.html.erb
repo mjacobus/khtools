@@ -24,7 +24,7 @@
           </div>
           <div class="col-sm-12 col-md-3 pull-right">
             <%= render DropdownMenuComponent.new do |component| %>
-              <% component.item(type: :foo) do %>
+              <% component.item do %>
                 <%= link_to t('app.links.edit'), edit_meeting_attendance_meeting_url(meeting), class: 'btn' %>
               <% end %>
               <% component.item do %>
