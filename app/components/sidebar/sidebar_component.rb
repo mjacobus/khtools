@@ -2,7 +2,6 @@
 
 # Icons: https://icons.getbootstrap.com/
 
-# rubocop:disable Metrics/AbcSize
 # rubocop:disable Metrics/ClassLength
 class Sidebar::SidebarComponent < ApplicationComponent
   renders_one :main_container
@@ -143,5 +142,4 @@ class Sidebar::SidebarComponent < ApplicationComponent
     Sidebar::MenuEntry.new(text, url, **args)
   end
 end
-# rubocop:enable Metrics/AbcSize
 # rubocop:enable Metrics/ClassLength

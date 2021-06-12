@@ -1,0 +1,13 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <% items.each_with_index do |item, index| %>
+      <li class="breadcrumb-item <%= active_class_for_index(index) %>" <%= aria_current(index) %>>
+        <% if item.url %>
+          <%= link_to(item.text, item.url) %>
+        <% else %>
+          <%= item.text %>
+        <% end %>
+      </li>
+    <% end %>
+  </ol>
+</nav>

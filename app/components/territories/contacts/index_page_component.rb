@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
-class Territories::Contacts::IndexPageComponent < ApplicationComponent
+class Territories::Contacts::IndexPageComponent < PageComponent
   attr_reader :territory
   attr_reader :contacts
 
   def initialize(territory:)
     @territory = territory
     @contacts = territory.contacts
+    setup_breadcrumb
   end
 
   def title
@@ -25,5 +26,21 @@ class Territories::Contacts::IndexPageComponent < ApplicationComponent
     [contact.phone, contact.phone2].map(&:presence).compact.map do |phone|
       PhoneNumber.new(phone)
     end
+  end
+
+  private
+
+  def setup_breadcrumb
+    breadcrumb.add_item(
+      t('app.links.commercial_territories'),
+      urls.territories_commercial_territories_path
+    )
+
+    breadcrumb.add_item(
+      territory.name
+      # urls.territories_commercial_territory_path(@territory) # no action yet
+    )
+
+    breadcrumb.add_item(t('app.links.contacts'))
   end
 end
