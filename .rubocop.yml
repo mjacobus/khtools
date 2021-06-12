@@ -67,16 +67,19 @@ RSpec:
 RSpec/ExampleLength:
   Max: 10
 
+RSpec/ExpectChange:
+  Enabled: false
+
+RSpec/FilePath:
+  Exclude:
+    - 'spec/requests/**/*'
+
 RSpec/MultipleExpectations:
   Enabled: false
 
 # while that is a good rule, AR objects can't be properly instance_double'd
 RSpec/VerifiedDoubles:
   Enabled: false
-
-RSpec/FilePath:
-  Exclude:
-    - 'spec/requests/**/*'
 
 AllCops:
   NewCops: enable
