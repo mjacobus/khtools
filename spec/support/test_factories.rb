@@ -5,6 +5,10 @@ class TestFactories
     @users ||= UserFactory.new(self)
   end
 
+  def contacts
+    @contacts ||= Db::ContactFactory.new(self)
+  end
+
   def meetings
     @meetings ||= Db::MeetingAttendance::MeetingFactory.new(self)
   end
@@ -69,8 +73,12 @@ class TestFactories
       @sequency = 0
     end
 
-    def sequency
+    def next_sequency
       @sequency += 1
+    end
+
+    def sequency
+      @sequency ||= 0
     end
 
     def random
@@ -86,10 +94,12 @@ class TestFactories
     end
 
     def create(overrides = {})
+      next_sequency
       model_class.create!(attributes(overrides))
     end
 
     def build(overrides = {})
+      next_sequency
       model_class.new(attributes(overrides))
     end
 
@@ -103,6 +113,18 @@ class TestFactories
   class UserFactory < Factory
     def attributes(overrides = {})
       { name: "User-#{seq}" }.merge(overrides)
+    end
+  end
+
+  class Db::ContactFactory < Factory
+    def attributes(overrides = {})
+      {
+        name: "Contact-#{seq}",
+        email: "email#{seq}@example.com",
+        address: "Some street #{seq}",
+        phone: "(51) 1234-123#{seq}",
+        notes: "Some notes for Contact-#{seq}"
+      }.merge(overrides)
     end
   end
 
