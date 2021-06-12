@@ -13,4 +13,8 @@ class Db::Publisher < ApplicationRecord
 
   validates :name, presence: true
   validates :gender, presence: true
+
+  def to_s
+    name
+  end
 end

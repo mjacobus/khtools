@@ -92,7 +92,7 @@ class Sidebar::SidebarComponent < ApplicationComponent
   def commercial_territories
     entry(
       Db::CommercialTerritory.model_name.human,
-      admin_db_regular_territories_path,
+      territories_commercial_territories_path,
       icon: 'cart4'
     )
   end

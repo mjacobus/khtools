@@ -1,4 +1,9 @@
-<%= link_to t('app.links.new'), new_meeting_attendance_meeting_url, class: 'btn btn-light' %>
+<%= render DropdownMenuComponent.new(classes: 'pull-right') do |component| %>
+  <% component.item do %>
+    <%= link_to t('app.links.new'), new_meeting_attendance_meeting_url, class: 'btn' %>
+  <% end %>
+<% end %>
+
 <div class="card">
   <div class="card-header">
     <%= t('app.titles.meeting_attendance') %>
@@ -17,8 +22,8 @@
           <div class="col-sm-12 col-md-3">
             <%= meeting.number_of_attendees %> participantes
           </div>
-          <div class="col-sm-12 col-md-3">
-            <%= render DropdownMenuComponent.new(t('app.links.actions')) do |component| %>
+          <div class="col-sm-12 col-md-3 pull-right">
+            <%= render DropdownMenuComponent.new do |component| %>
               <% component.item(type: :foo) do %>
                 <%= link_to t('app.links.edit'), edit_meeting_attendance_meeting_url(meeting), class: 'btn' %>
               <% end %>

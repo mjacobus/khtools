@@ -20,8 +20,8 @@
         <td><%= assignemnt.assignee&.name %></td>
         <td><%= assignemnt.assigned_at %></td>
         <td><%= assignemnt.returned_at %></td>
-        <td>
-          <%= render DropdownMenuComponent.new(t('app.links.actions')) do |component| %>
+        <td class="pull-right">
+          <%= render DropdownMenuComponent.new do |component| %>
             <% component.item(type: :foo) do %>
               <%= link_to(t('app.links.edit'), edit_field_service_campaign_assignment_path(@campaign, assignemnt)) %>
             <% end %>
