@@ -16,17 +16,19 @@ module Sidebar
     end
 
     def active?(url)
-      if children.find { |child| child.active?(url) }
-        return true
-      end
-
-      if url.include?(@url)
-        return true
+      if children.any?
+        return children.any? { |child| child.active?(url) }
       end
 
       url_controller = Rails.application.routes.recognize_path(url)[:controller]
       controller = Rails.application.routes.recognize_path(@url)[:controller]
-      url_controller == controller
+
+      if url_controller == controller
+        Rails.logger.debug([url_controller, controller].inspect)
+        return true
+      end
+
+      controller != 'home' && url.include?(@url)
     rescue ActionController::RoutingError
       false
     end

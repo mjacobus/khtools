@@ -22,7 +22,6 @@ RSpec.describe Sidebar::MenuEntry do
 
     it 'returns true when any of its children is active' do
       child_url = '/users'
-
       child = described_class.new('Users', child_url)
 
       expect { entry.append_child(child) }
@@ -33,6 +32,26 @@ RSpec.describe Sidebar::MenuEntry do
       entry = described_class.new('Something', '/territories/commercial_territories')
 
       expect(entry).to be_active('http://localhost:3001/territories/commercial_territories/634/contacts')
+    end
+
+    it 'returns false for /' do
+      entry = described_class.new('Something', '/')
+
+      expect(entry).not_to be_active('http://localhost:3001/territories/commercial_territories/634/contacts')
+    end
+
+    it 'returns false for http://localhost:3001' do
+      entry = described_class.new('Something', 'http://localhost:3001')
+
+      expect(entry).not_to be_active('http://localhost:3001/territories/commercial_territories/634/contacts')
+    end
+
+    it 'returns false when no child is active' do
+      entry = described_class.new('Something', '').tap do |e|
+        e.append_child(described_class.new('Users', '/users'))
+      end
+
+      expect(entry).not_to be_active('/')
     end
   end
 end
