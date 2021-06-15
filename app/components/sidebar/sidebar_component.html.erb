@@ -16,18 +16,18 @@
       <% menu_entries.each do |entry| %>
         <% if entry.children.empty? %>
           <div class="top-level p-2 my-2">
-            <a href="<%= entry.url %>">
+            <a href="<%= entry.url %>" class="<%= 'active' if entry.active?(request.url) %>">
               <% if entry.icon %><i class="bi bi-<%= entry.icon %>"></i><% end %> <%= entry.text %>
             </a>
           </div>
         <% else %>
-          <details>
+          <details <%= 'open' if entry.active?(request.url) %>>
             <summary class="p-2 top-level my-2">
               <% if entry.icon %><i class="bi bi-<%= entry.icon %>"></i><% end %> <%= entry.text %> <i class="bi bi-arrows-collapse"></i>
             </summary>
             <% entry.children.each do |child| %>
               <div class="sub-item py-2">
-                <a href="<%= child.url %>">
+                <a href="<%= child.url %>" class="<%= 'active' if child.active?(request.url) %>">
                   <% if child.icon %><i class="bi bi-<%= child.icon %>"></i><% end %> <%= child.text %>
                 </a>
               </div>

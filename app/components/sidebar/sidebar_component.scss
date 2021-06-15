@@ -2,14 +2,10 @@
   .width-auto {
     width: auto;
   }
-  .wrapper {
-    display: flex;
-    width: 100%;
-    align-items: stretch;
-  }
 
   .wrapper {
     display: flex;
+    width: 100%;
     align-items: stretch;
   }
 
@@ -50,6 +46,10 @@
     text-decoration: none;
   }
 
+  #sidebar a.active {
+    font-weight: bold;
+  }
+
   #sidebar.hidden {
     margin-left: -250px;
     transition: all 0.3s;
@@ -83,10 +83,12 @@
   a {
     font-size: 12px;
   }
+
   .top-level {
     background: #395c96;
     font-size: 12px;
   }
+
   details summary {
     list-style: none;
   }
