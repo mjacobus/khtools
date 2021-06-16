@@ -97,7 +97,7 @@ class Sidebar::SidebarComponent < ApplicationComponent
   end
 
   def phone_list_territories
-    entry(Db::PhoneListTerritory.model_name.human, admin_db_phone_list_territories_path,
+    entry(Db::PhoneListTerritory.model_name.human, territories_phone_list_territories_path,
           icon: 'phone')
   end
 
