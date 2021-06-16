@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   namespace :territories do
     resources :regular_territories
     resources :phone_list_territories
+    resources :apartment_building_territories
     resources :commercial_territories do
       resources :contacts
     end
