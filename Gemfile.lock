@@ -370,6 +370,7 @@ DEPENDENCIES
   capybara (>= 2.15)
   caxlsx
   dotenv-rails
+  kaminari
   listen (~> 3.4)
   omniauth (~> 1.9.1)
   omniauth-google-oauth2

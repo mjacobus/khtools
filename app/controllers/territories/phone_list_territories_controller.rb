@@ -2,7 +2,7 @@
 
 class Territories::PhoneListTerritoriesController < ApplicationController
   def index
-    territories = Db::PhoneListTerritory.all.limit(5)
+    territories = paginate(Db::PhoneListTerritory.all)
     page = Territories::PhoneListTerritories::IndexPageComponent.new(territories)
     render page
   end
