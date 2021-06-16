@@ -15,7 +15,7 @@ pt-BR:
       db/commercial_territory: Território Comercial
       db/phone_provider: Operadora de Telefone
       db/phone_list_territory: Lista Telefônica
-      db/apartment_building_territory: Prédios
+      db/apartment_building_territory: Prédio
       db/territory_area: Área
       db/intercom_type: Tipo de Interfone
       db/letter_box_type: Tipo de Caixa de Correio
@@ -145,6 +145,7 @@ pt-BR:
       actions: "Ações"
       edit: "Edit"
       new: "Novo"
+      apartment_building_territories: "Listas Telefônicas"
       phone_list_territories: "Listas Telefônicas"
       commercial_territories: "Territórios Comerciais"
       regular_territories: "Territórios Tradicionais"
