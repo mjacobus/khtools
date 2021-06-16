@@ -2,7 +2,6 @@
 
 class PaginationComponent < ApplicationComponent
   attr_reader :items
-  attr_reader :position
 
   def initialize(items, position: :bottom)
     @items = items
