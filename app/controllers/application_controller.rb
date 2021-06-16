@@ -30,4 +30,8 @@ class ApplicationController < ActionController::Base
   def render_page404(_error)
     render 'application/404', status: :not_found
   end
+
+  def paginate(scope)
+    scope.page(params[:page]).per(params[:per_page])
+  end
 end
