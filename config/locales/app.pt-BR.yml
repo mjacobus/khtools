@@ -146,6 +146,7 @@ pt-BR:
       edit: "Edit"
       new: "Novo"
       commercial_territories: "Territórios Comerciais"
+      regular_territories: "Territórios Tradicionais"
       new_contact: "Novo Contato"
       contacts: "Contatos"
       delete: "Excluir"
@@ -165,7 +166,7 @@ pt-BR:
       publishers: "Publicadores"
       field_service_groups: "Grupos de Campo"
       assignments: "Designações"
-      create_regular_territory_assignment: "Vincular aos Territórios Normais"
+      create_regular_territory_assignment: "Vincular aos Territórios Tradicionais"
       create_apartment_building_territory_assignment: "Vincular aos Territórios de Apartamentos"
       create_phone_list_territory_assignment: "Vincular aos territórios de lista telefonicas"
     phone_list_spreadsheet:

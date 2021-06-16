@@ -26,6 +26,7 @@ Rails.application.routes.draw do
 
   # TODO: Move to field service namespace
   namespace :territories do
+    resources :regular_territories
     resources :commercial_territories do
       resources :contacts
     end
