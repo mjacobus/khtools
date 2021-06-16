@@ -2,7 +2,7 @@
 
 class Territories::CommercialTerritoriesController < ApplicationController
   def index
-    territories = Db::CommercialTerritory.all
+    territories = paginate(Db::CommercialTerritory.all)
     page = Territories::CommercialTerritories::IndexPageComponent.new(territories)
     render page
   end
