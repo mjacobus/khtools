@@ -17,14 +17,19 @@ Metrics/BlockLength:
 
 Metrics/MethodLength:
   Exclude:
-   - 'db/migrate/**.rb'
-   - "app/components/**/*"
+    - 'db/migrate/**.rb'
+    - "app/components/**/*"
+
+Metrics/ParameterLists:
+  Exclude:
+    - "app/components/**/*"
 
 Layout/LineLength:
   Max: 100
   Exclude:
-   - 'db/seeds.rb'
-
+    - 'db/seeds.rb'
+    - 'app/components/**/*'
+   
 Style/AccessorGrouping:
   Enabled: false
 

@@ -4,7 +4,11 @@
 
 <%= render DropdownMenuComponent.new do |component| %>
   <% component.item do %>
-    <%= link_to t('app.links.new'), new_admin_db_commercial_territory_path, class: 'btn' %>
+    <% list_actions.each do |action| %>
+      <% component.item do %>
+        <%= action %>
+      <% end %>
+    <% end %>
   <% end %>
 <% end %>
 
@@ -21,11 +25,10 @@
     </div>
     <div class="col-sm-12 col-lg-2 pull-right">
       <%= render DropdownMenuComponent.new do |component| %>
-        <% component.item do %>
-          <%= link_to t('app.links.edit'), edit_admin_db_regular_territory_path(territory), class: 'btn' %>
-        <% end %>
-        <% component.item do %>
-          <%= link_to t('app.links.delete'), admin_db_regular_territory_path(territory), data: { method: :delete, confirm: t('app.messages.confirm_delete') }, class: 'btn' %>
+        <% territory_actions.each do |action| %>
+          <% component.item do %>
+            <%= action.call(territory) %>
+          <% end %>
         <% end %>
       <% end %>
     </div>
