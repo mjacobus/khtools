@@ -103,7 +103,7 @@ class Sidebar::SidebarComponent < ApplicationComponent
 
   def apartment_building_territories
     entry(Db::ApartmentBuildingTerritory.model_name.human,
-          admin_db_apartment_building_territories_path, icon: 'building')
+          territories_apartment_building_territories_path, icon: 'building')
   end
 
   def admin_dashboard
