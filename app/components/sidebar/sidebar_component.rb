@@ -85,7 +85,7 @@ class Sidebar::SidebarComponent < ApplicationComponent
   end
 
   def regular_territories
-    entry(Db::RegularTerritory.model_name.human, admin_db_regular_territories_path, icon: 'map')
+    entry(Db::RegularTerritory.model_name.human, territories_regular_territories_path, icon: 'map')
   end
 
   def commercial_territories
