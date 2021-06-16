@@ -34,10 +34,10 @@ class Sidebar::SidebarComponent < ApplicationComponent
 
   def territories_section
     entry(t('app.links.territories'), '#', icon: 'map').tap do |section|
-      section.append_child(apartment_building_territories)
-      section.append_child(phone_list_territories)
       section.append_child(regular_territories)
       section.append_child(commercial_territories)
+      section.append_child(apartment_building_territories)
+      section.append_child(phone_list_territories)
     end
   end
 
