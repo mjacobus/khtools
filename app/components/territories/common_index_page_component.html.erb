@@ -1,38 +1,46 @@
-<%= render breadcrumb %>
+<div id="territories-common-index-component">
+  <%= render breadcrumb %>
 
-
-<%= render DropdownMenuComponent.new(
-  classes: ['btn-primary my-4'],
-  pull: :right
-) do |component| %>
-  <% list_actions.each do |action| %>
-    <% component.item do %>
-      <%= action %>
+  <%= render DropdownMenuComponent.new(
+    classes: ['btn-primary my-4'],
+    pull: :right
+  ) do |component| %>
+    <% list_actions.each do |action| %>
+      <% component.item do %>
+        <%= action %>
+      <% end %>
     <% end %>
   <% end %>
-<% end %>
 
-<% territories.each do |territory| %>
-  <hr>
-  <div class="row">
-    <div class="col-sm-12 col-lg-4">
-      <%= territory.name %>
-    </div>
-    <div class="col-sm-12 col-lg-4">
-      <%= territory.assignee %>
-    </div>
-    <div class="col-sm-12 col-lg-2">
-    </div>
-    <div class="col-sm-12 col-lg-2 pull-right">
-      <%= render DropdownMenuComponent.new do |component| %>
-        <% territory_actions.each do |action| %>
-          <% component.item do %>
-            <%= action.call(territory) %>
+  <% territories.each do |territory| %>
+    <div class="territory">
+      <div class="row item">
+        <div class="col-sm-10 col-lg-10 territory-name">
+          <%= territory.name %>
+        </div>
+        <div class="col-sm-2 col-lg-2 pull-right">
+          <%= render DropdownMenuComponent.new do |component| %>
+            <% territory_actions.each do |action| %>
+              <% component.item do %>
+                <%= action.call(territory) %>
+              <% end %>
+            <% end %>
           <% end %>
-        <% end %>
-      <% end %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-lg-4">
+        </div>
+        <div class="col-sm-12 col-lg-4">
+        </div>
+        <div class="col-sm-12 col-lg-4">
+          <% if territory.assignee %>
+            <i class="bi bi-person"></i>&nbsp;<span class="small"><%= territory.assignee %></span>
+          <% end %>
+        </div>
+      </div>
     </div>
-  </div>
-<% end %>
+  <% end %>
 
-<%= render PaginationComponent.new(territories, position: :bottom) %>
+  <%= render PaginationComponent.new(territories, position: :bottom) %>
+</div>
