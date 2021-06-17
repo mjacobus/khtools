@@ -1,13 +1,13 @@
 <%= render breadcrumb %>
 
-<h1><%= title %></h1>
 
-<%= render DropdownMenuComponent.new do |component| %>
-  <% component.item do %>
-    <% list_actions.each do |action| %>
-      <% component.item do %>
-        <%= action %>
-      <% end %>
+<%= render DropdownMenuComponent.new(
+  classes: ['btn-primary my-4'],
+  pull: :right
+) do |component| %>
+  <% list_actions.each do |action| %>
+    <% component.item do %>
+      <%= action %>
     <% end %>
   <% end %>
 <% end %>
