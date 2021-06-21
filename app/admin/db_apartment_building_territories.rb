@@ -75,7 +75,7 @@ ActiveAdmin.register Db::ApartmentBuildingTerritory do
       input :building_name
       input :address
       input :area
-      input :has_a_roof
+      input :has_a_roof, as: :select, collection: [[I18n.t('true'), 1], [I18n.t('false'), 0]]
       input :number_of_apartments
       input :intercom_type
       input :letter_box_type
