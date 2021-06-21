@@ -15,10 +15,8 @@
   <% territories.each do |territory| %>
     <div class="territory">
       <div class="row item">
-        <div class="col-sm-10 col-lg-10 territory-name">
+        <div class="col-sm-12 col-lg-12 territory-name">
           <%= territory.name %>
-        </div>
-        <div class="col-sm-2 col-lg-2 pull-right">
           <%= render DropdownMenuComponent.new do |component| %>
             <% territory_actions.each do |action| %>
               <% component.item do %>
