@@ -49,6 +49,15 @@
       </div>
       <div class="row">
         <div class="col-sm-6 col-lg-6">
+          <% if territory.respond_to?(:contacts) %>
+            <span title="<%= attribute_name(territory, :contacts) %>">
+              <i class="bi bi-people"></i>&nbsp;<span class="small"><%= contacts_text(territory) %></span>
+            </span>
+          <% end %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-lg-6">
           <% if territory.address %>
             <span title="<%= attribute_name(territory, :address) %>">
               <i class="bi bi-pin-map"></i>&nbsp;<span class="small"><%= territory.address %></span>

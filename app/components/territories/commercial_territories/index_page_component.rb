@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class Territories::CommercialTerritories::IndexPageComponent < Territories::RegularTerritories::IndexPageComponent
-  def contacts_text(territory)
-    I18n.t('app.messages.x_contacts', count: territory.contacts.count)
-  end
-
   private
 
   def model
