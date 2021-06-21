@@ -24,4 +24,17 @@ class Db::Territory < ApplicationRecord
   identifiable_by :name
 
   validates :name, presence: true, uniqueness: { case_sensitive: false, scope: :type }
+
+  def area_name
+    if area
+      return area.name
+    end
+
+    territory&.area_name
+  end
+
+  def preaching_method_names
+    [primary_preaching_method, secondary_preaching_method,
+     tertiary_preaching_method].compact.map(&:name)
+  end
 end
