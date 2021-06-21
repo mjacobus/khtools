@@ -33,6 +33,10 @@ class Territories::CommonIndexPageComponent < PageComponent
     }.fetch(type)
   end
 
+  def contacts_text(territory)
+    I18n.t('app.messages.x_contacts', count: territory.contacts.count)
+  end
+
   def attribute_name(territory, attribute)
     territory.class.human_attribute_name(attribute)
   end
