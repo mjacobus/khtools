@@ -15,8 +15,8 @@
   <% territories.each do |territory| %>
     <div class="territory">
       <div class="row item">
-        <div class="col-sm-12 col-lg-12 territory-name">
-          <%= territory.name %>
+        <div class="col-sm-12 col-lg-12 territory-name mb-2">
+          <i class="bi bi-<%= icon %>"></i>&nbsp;<%= territory.name %> 
           <%= render DropdownMenuComponent.new do |component| %>
             <% territory_actions.each do |action| %>
               <% component.item do %>
@@ -27,13 +27,101 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 col-lg-4">
-        </div>
-        <div class="col-sm-12 col-lg-4">
-        </div>
-        <div class="col-sm-12 col-lg-4">
+        <div class="col-sm-6 col-lg-6">
           <% if territory.assignee %>
-            <i class="bi bi-person"></i>&nbsp;<span class="small"><%= territory.assignee %></span>
+            <span title="<%= attribute_name(territory, :assignee) %>">
+              <i class="bi bi-person"></i>&nbsp;<span class="small"><%= territory.assignee %></span>
+            </span>
+          <% end %>
+        </div>
+        <div class="col-sm-6 col-lg-6">
+          <% if territory.assigned_at %>
+            <span title="<%= attribute_name(territory, :assigned_at) %>">
+              <i class="bi bi-calendar-date"></i>&nbsp;<span class="small"><%= l territory.assigned_at.to_date %></span>
+            </span>
+          <% end %>
+          <% if territory.returned_at %>
+            <span title="<%= attribute_name(territory, :returned_at) %>">
+              / <i class="bi bi-calendar-date"></i>&nbsp;<span class="small"><%= l territory.returned_at.to_date %></span>
+            </span>
+          <% end %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-lg-6">
+          <% if territory.address %>
+            <span title="<%= attribute_name(territory, :address) %>">
+              <i class="bi bi-pin-map"></i>&nbsp;<span class="small"><%= territory.address %></span>
+            </span>
+          <% end %>
+        </div>
+        <div class="col-sm-3 col-lg-3">
+          <% if territory.area_name %>
+            <span title="<%= attribute_name(territory, :area) %>">
+              <i class="bi bi-pin-map"></i>&nbsp;<span class="small"><%= territory.area_name %></span>
+            </span>
+          <% end %>
+        </div>
+        <div class="col-sm-3 col-lg-3">
+          <% if territory.number_of_apartments %>
+            <span title="<%= attribute_name(territory, :number_of_apartments) %>">
+              <i class="bi bi-door-closed"></i>&nbsp;<span class="small"><%= territory.number_of_apartments %></span>
+            </span>
+          <% end %>
+        </div>
+        <div class="col-sm-6 col-lg-6">
+          <% if territory.intercom_type %>
+            <span title="<%= attribute_name(territory, :intercom_type) %>">
+              <i class="bi bi-soundwave"></i>&nbsp;<span class="small"><%= territory.intercom_type.name %></span>
+            </span>
+          <% end %>
+        </div>
+        <div class="col-sm-3 col-lg-3">
+          <% if territory.letter_box_type %>
+            <span title="<%= attribute_name(territory, :letter_box_type) %>">
+              <i class="bi bi-mailbox2"></i>&nbsp;<span class="small"><%= territory.letter_box_type.name %></span>
+            </span>
+          <% end %>
+        </div>
+        <div class="col-sm-3 col-lg-3" alt="foobar">
+          <% unless territory.has_a_roof.nil? %>
+            <span title="<%= attribute_name(territory, :has_a_roof) %>">
+              <i class="bi bi-umbrella"></i>&nbsp;<span class="small"><%= t(territory.has_a_roof.to_s) %></span>
+            </span>
+          <% end %>
+        </div>
+        <div class="col-sm-6 col-lg-6">
+          <% if territory.preaching_method_names.any? %>
+            <span title="<%= attribute_name(territory, :preaching_methods) %>">
+              <i class="bi bi-briefcase"></i>&nbsp;<span class="small"><%= territory.preaching_method_names.join(', ') %></span>
+            </span>
+          <% end %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-lg-6">
+          <% if territory.initial_phone_number %>
+            <span title="<%= attribute_name(territory, :phone_numbers) %>">
+              <i class="bi bi-telephone"></i>&nbsp;<span class="small"><%= PhoneNumber.new(territory.initial_phone_number) %>&nbsp;/&nbsp;<%= PhoneNumber.new(territory.final_phone_number) %></span>
+            </span>
+          <% end %>
+        </div>
+        <div class="col-sm-6 col-lg-6">
+          <% if territory.respond_to?(:phone_provider) %>
+            <span title="<%= attribute_name(territory, :phone_provider) %>">
+              <i class="bi bi-phone"></i>&nbsp;<span class="small"><%= territory.phone_provider.name %></span>
+            </span>
+          <% end %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-lg-12">
+          <% if territory.notes %>
+            <span title="<%= attribute_name(territory, :notes) %>">
+              <div class="mt-3">
+                <i class="bi bi-pencil-square"></i>&nbsp;<span class="small"><%= territory.notes %></span>
+              </div>
+            </span>
           <% end %>
         </div>
       </div>

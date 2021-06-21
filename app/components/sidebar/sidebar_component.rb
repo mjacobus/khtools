@@ -60,7 +60,7 @@ class Sidebar::SidebarComponent < ApplicationComponent
   end
 
   def preaching_methods
-    entry(Db::PreachingMethod.model_name.human, admin_db_preaching_methods_path, icon: 'whatsapp')
+    entry(Db::PreachingMethod.model_name.human, admin_db_preaching_methods_path, icon: 'briefcase')
   end
 
   def field_service_groups

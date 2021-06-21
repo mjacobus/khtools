@@ -23,4 +23,17 @@ class Territories::CommonIndexPageComponent < PageComponent
     @list_actions = list_actions
     @type = type
   end
+
+  def icon
+    {
+      phone_list: :phone,
+      commercial: :cart4,
+      regular: :map,
+      apartment_building: :building
+    }.fetch(type)
+  end
+
+  def attribute_name(territory, attribute)
+    territory.class.human_attribute_name(attribute)
+  end
 end

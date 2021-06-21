@@ -115,9 +115,11 @@ pt-BR:
         returned_at: Devolvido em
         initial_phone_number: Número Inicial
         final_phone_number: Número Final
+        phone_numbers: Telefones
         primary_preaching_method: Método Principal
         secondary_preaching_method: Método Secundário
         tertiary_preaching_method: Método Alternativo
+        preaching_methods: Métodos de Pregação
         created_at: Criado em
         updated_at: Atualizado em
         phone_provider: Operadora Telefônica
