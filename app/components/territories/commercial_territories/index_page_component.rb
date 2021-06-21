@@ -1,24 +1,33 @@
 # frozen_string_literal: true
 
-class Territories::CommercialTerritories::IndexPageComponent < PageComponent
-  attr_reader :territories
-
-  def initialize(territories)
-    @territories = territories
-    setup_breadcrumb
-  end
-
-  def title
-    Db::CommercialTerritory.model_name.human
-  end
-
+class Territories::CommercialTerritories::IndexPageComponent < Territories::RegularTerritories::IndexPageComponent
   def contacts_text(territory)
     I18n.t('app.messages.x_contacts', count: territory.contacts.count)
   end
 
   private
 
-  def setup_breadcrumb
-    breadcrumb.add_item(t('app.links.commercial_territories'))
+  def model
+    Db::ApartmentBuildingTerritory
+  end
+
+  def type
+    :apartment_building
+  end
+
+  def territory_actions
+    [contacts_action, new_contact_action, super].flatten
+  end
+
+  def contacts_action
+    proc do |territory|
+      link_to t('app.links.contacts'), territories_commercial_territory_contacts_path(territory), class: 'btn'
+    end
+  end
+
+  def new_contact_action
+    proc do |territory|
+      link_to t('app.links.new_contact'), new_territories_commercial_territory_contact_path(territory), class: 'btn'
+    end
   end
 end
