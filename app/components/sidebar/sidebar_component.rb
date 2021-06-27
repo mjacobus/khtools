@@ -14,6 +14,7 @@ class Sidebar::SidebarComponent < ApplicationComponent
     [
       home_link,
       meeting_attendance,
+      public_talks,
       territories_section,
       field_service_section,
       admin_section,
@@ -30,6 +31,12 @@ class Sidebar::SidebarComponent < ApplicationComponent
   def meeting_attendance
     entry(t('app.links.meeting_attendance'), meeting_attendance_meetings_url,
           icon: 'sort-numeric-up')
+  end
+
+  def public_talks
+    entry(t('app.links.public_talks'), '#', icon: 'mic').tap do |section|
+      section.append_child(congregations)
+    end
   end
 
   def territories_section
@@ -122,6 +129,10 @@ class Sidebar::SidebarComponent < ApplicationComponent
 
   def publishers
     entry(Db::Publisher.model_name.human, admin_db_publishers_path, icon: 'person-circle')
+  end
+
+  def congregations
+    entry(Db::Congregation.model_name.human, public_talks_congregations_path, icon: 'shop')
   end
 
   def admin_section

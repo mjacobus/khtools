@@ -160,6 +160,7 @@ pt-BR:
       home: "Home"
       logout: "Sair"
       admin: "Admin"
+      public_talks: "Discursos Públicos"
       field_service: "Serviço de Campo"
       territories: "Territórios"
       others: "Outros"
