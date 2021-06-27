@@ -1,0 +1,17 @@
+<h1>Congregações</h1>
+
+<table class="table table-striped">
+  <tr>
+    <th>Nome</th>
+    <th>Responsável</th>
+    <th>Telefone</th>
+  </tr>
+
+  <% @congregations.each do |congregation| %> 
+    <tr>
+      <td> <%= congregation.name %></td>
+      <td> <%= congregation.primary_contact_person %></td>
+      <td> <%= congregation.primary_contact_phone %></td>
+    </tr>
+  <% end %>
+</table>

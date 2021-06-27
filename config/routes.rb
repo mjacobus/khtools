@@ -18,6 +18,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :public_talks do
+    resources :congregations
+  end
+
   namespace :meeting_attendance do
     resources :meetings do
       resources :simple_counter_attendees, controller: :simple_counter
