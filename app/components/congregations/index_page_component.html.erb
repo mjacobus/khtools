@@ -1,0 +1,61 @@
+<%= render breadcrumb %>
+
+<%= render DropdownMenuComponent.new(
+  classes: ['btn-primary'],
+  pull: :right
+) do |component| %>
+  <% component.item do %>
+    <%= new_link %>
+  <% end %>
+<% end %>
+
+<div class="index-list">
+  <% congregations.each do |congregation| %>
+    <div class="item">
+      <div class="row">
+        <div class="col-sm-12 col-lg-12 title mb-2">
+          <%= icon('shop') { congregation.name } %>
+          <%= render DropdownMenuComponent.new do |component| %>
+            <% component.item do %>
+              <%= edit_link(congregation) %>
+            <% end %>
+            <% component.item do %>
+              <%= destroy_link(congregation) %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+      <div class="row small">
+        <div class="col-sm-12 col-lg-4">
+          <% if congregation.primary_contact_person %>
+            <%= icon('person') { congregation.primary_contact_person } %>
+          <% end %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+          <% if congregation.primary_contact_phone %>
+            <%= icon('phone') { PhoneNumber.new(congregation.primary_contact_phone).to_s } %>
+          <% end %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+          <% if congregation.primary_contact_email %>
+            <%= icon('pencil') { congregation.primary_contact_email } %>
+          <% end %>
+        </div>
+      </div>
+      <div class="row small">
+        <div class="col-sm-12">
+          <% if congregation.address %>
+            <%= icon('signpost') { congregation.address } %>
+          <% end %>
+        </div>
+      </div>
+      <div class="row small">
+        <div class="col-sm-12">
+          <% if congregation.weekend_meeting_time %>
+            <%= icon('clock') { congregation.weekend_meeting_time } %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

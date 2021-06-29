@@ -135,6 +135,7 @@ pt-BR:
       page_not_found: "Página não encontrada"
       contact_admin: "Se você já logou mas não tem acesso, contate o admin de sua congregação."
       confirm_delete: 'Tem certeza que quer excluir este registro?'
+      confirm_delete_x: 'Tem certeza que quer excluir "%{record}"?'
       assign_campaigns_to_territories: 'Vincular campanha ao o(s) território(s)'
       confirm_campaign_assignment: 'Tem certeza que quer vincular esta campanha a todos os territórios do tipo "%{territory_type}"?'
       number_of_attendees: 'Assistência total: %{attendees} '
@@ -151,6 +152,7 @@ pt-BR:
       phone_list_territories: "Listas Telefônicas"
       commercial_territories: "Territórios Comerciais"
       regular_territories: "Territórios Tradicionais"
+      congregations: "Congregações"
       new_contact: "Novo Contato"
       contacts: "Contatos"
       delete: "Excluir"
