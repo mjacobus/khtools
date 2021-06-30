@@ -7,6 +7,7 @@ pt-BR:
     models:
       user: Usuário
       db/congregation: Congregação
+      db/public_talk: Discurso
       db/contact: Contato
       db/public_speaker: Orador
       db/meeting_attendance/meeting: Reunião
