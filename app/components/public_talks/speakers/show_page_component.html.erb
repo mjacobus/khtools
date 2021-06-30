@@ -1,1 +1,47 @@
-<div>Add PublicTalks::Speakers::ShowPage template here</div>
+<%= render breadcrumb %>
+
+<%= render DropdownMenuComponent.new(
+  classes: ['btn-primary'],
+  pull: :right
+) do |component| %>
+  <% component.item do %>
+    <%= edit_link %>
+  <% end %>
+  <% component.item do %>
+    <%= destroy_link %>
+  <% end %>
+<% end %>
+
+<div class="show-page">
+  <div class="row">
+    <div class="col-sm-12 title mb-2">
+      <%= icon('person') { speaker.name } %>
+    </div>
+    <div class="col-sm-12 mb-2">
+      <% if speaker.congregation.present? %>
+        <%= icon('shop') { speaker.congregation.name } %>
+      <% end %>
+    </div>
+  </div>
+
+  <% if has_contact_information? %>
+    <div class="row">
+      <% if speaker.phone.present? %>
+        <div class="col-sm-4 mb-2">
+          <%= icon('phone') { PhoneNumber.new(speaker.phone).to_s } %>
+        </div>
+        <div class="col-sm-4 mb-2">
+          <%= icon('whatsapp') { whatsapp_api_link  } %>
+        </div>
+        <div class="col-sm-4 mb-2">
+          <%= icon('whatsapp') { whatsapp_web_link  } %>
+        </div>
+      <% end %>
+      <div class="col-sm-12 mb-2">
+        <% if speaker.email.present? %>
+          <%= icon('pencil') { speaker.email } %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

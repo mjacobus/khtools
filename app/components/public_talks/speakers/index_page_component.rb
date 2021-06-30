@@ -23,6 +23,10 @@ class PublicTalks::Speakers::IndexPageComponent < PageComponent
     )
   end
 
+  def show_link(speaker)
+    link_to(t('app.links.view'), public_talks_speaker_path(speaker))
+  end
+
   private
 
   def delete_confirmation(speaker)

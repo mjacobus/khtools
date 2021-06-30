@@ -17,6 +17,9 @@
           <%= icon('person') { speaker.name } %>
           <%= render DropdownMenuComponent.new do |component| %>
             <% component.item do %>
+              <%= show_link(speaker) %>
+            <% end %>
+            <% component.item do %>
               <%= edit_link(speaker) %>
             <% end %>
             <% component.item do %>

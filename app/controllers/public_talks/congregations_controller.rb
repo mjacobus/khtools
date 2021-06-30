@@ -2,7 +2,7 @@
 
 class PublicTalks::CongregationsController < ApplicationController
   def index
-    congregations = paginate(Db::Congregation.all)
+    congregations = paginate(Db::Congregation.all.order(:name))
     render Congregations::IndexPageComponent.new(congregations)
   end
 
