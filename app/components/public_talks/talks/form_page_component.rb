@@ -38,7 +38,7 @@ class PublicTalks::Talks::FormPageComponent < PageComponent
     end
   end
 
-  def collection_for_talk
+  def collection_for_theme
     1.upto(200).map { |n| [n, n] }
   end
 end

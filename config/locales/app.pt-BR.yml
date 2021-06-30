@@ -41,7 +41,7 @@ pt-BR:
         congregation: Congregação
         speaker: Orador
         date: Data
-        talk: Discurso
+        theme: Tema
       db/congregation:
         name: Nome
         address: Endereço
