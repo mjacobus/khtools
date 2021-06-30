@@ -21,7 +21,7 @@ class PublicTalks::Speakers::FormPageComponent < PageComponent
 
   def target_url
     if speaker.id
-      return public_talks_congregation_path(speaker)
+      return public_talks_speaker_path(speaker)
     end
 
     public_talks_speakers_path
