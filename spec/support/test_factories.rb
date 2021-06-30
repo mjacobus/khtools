@@ -9,6 +9,10 @@ class TestFactories
     @contacts ||= Db::ContactFactory.new(self)
   end
 
+  def congregations
+    @congregations ||= Db::CongregationFactory.new(self)
+  end
+
   def meetings
     @meetings ||= Db::MeetingAttendance::MeetingFactory.new(self)
   end
@@ -117,6 +121,20 @@ class TestFactories
   class UserFactory < Factory
     def attributes(overrides = {})
       { name: "User-#{seq}" }.merge(overrides)
+    end
+  end
+
+  class Db::CongregationFactory < Factory
+    def attributes(overrides = {})
+      {
+        name: "Contact-#{seq}",
+        address: "Some street #{seq}",
+        primary_contact_person: "Br. John #{seq}",
+        primary_contact_phone: "(51) 1234-123#{seq}",
+        primary_contact_email: "person#{seq}@email.com",
+        weekend_meeting_time: "Saturday seq o'clock",
+        local: false
+      }.merge(overrides)
     end
   end
 
