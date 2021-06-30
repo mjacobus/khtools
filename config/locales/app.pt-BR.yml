@@ -6,6 +6,7 @@ pt-BR:
   activerecord:
     models:
       user: Usuário
+      db/congregation: Congregação
       db/contact: Contato
       db/meeting_attendance/meeting: Reunião
       db/publisher: Publicador
@@ -34,6 +35,14 @@ pt-BR:
         enabled: Ativo
       meeting_attendance/meeting:
         title: Título
+      db/congregation:
+        name: Nome
+        address: Endereço
+        primary_contact_person: Nome do contato
+        primary_contact_phone: Telefone
+        primary_contact_email: Email
+        weekend_meeting_time: Horário da reunião de final de semana
+        local: Local
       db/contact:
         name: Nome
         address: Endereço
