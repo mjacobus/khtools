@@ -61,6 +61,9 @@ Lint/MissingSuper:
 Naming/RescuedExceptionsVariableName:
   PreferredName: 'exception'
 
+Naming/PredicateName:
+  Enabled: false
+
 Style/FormatStringToken:
   EnforcedStyle: template
 
