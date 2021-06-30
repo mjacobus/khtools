@@ -19,5 +19,14 @@ RSpec.describe PublicTalks::CongregationsController, type: :request do
 
       expect(response).to be_successful
     end
+
+    it 'renders the correct component' do
+      mock_renderer
+
+      perform_request
+
+      expected_component = Congregations::IndexPageComponent.new(Db::Congregation.all)
+      expect(renderer).to have_rendered_component(expected_component)
+    end
   end
 end
