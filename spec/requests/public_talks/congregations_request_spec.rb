@@ -50,6 +50,43 @@ RSpec.describe PublicTalks::CongregationsController, type: :request do
     end
   end
 
+  describe 'POST #create' do
+    let(:perform_request) { post('/public_talks/congregations', params: params) }
+
+    context 'when payload is valid' do
+      let(:params) { { congregation: factories.congregations.attributes } }
+
+      it 'returns with success' do
+        perform_request
+
+        expect(response).to redirect_to('/public_talks/congregations')
+      end
+
+      it 'creates record' do
+        expect { perform_request }.to change(Db::Congregation, :count).by(1)
+      end
+    end
+
+    context 'when payload is invalid' do
+      let(:params) { { congregation: { name: '' } } }
+
+      it 'responds with 422' do
+        perform_request
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it 're-renders form' do
+        mock_renderer
+
+        perform_request
+
+        expected_component = Congregations::FormPageComponent.new(Db::Congregation.new(name: ''))
+        expect(renderer).to have_rendered_component(expected_component)
+      end
+    end
+  end
+
   describe 'GET #edit' do
     let(:perform_request) { get("/public_talks/congregations/#{congregation.id}/edit") }
 
@@ -69,6 +106,46 @@ RSpec.describe PublicTalks::CongregationsController, type: :request do
     end
   end
 
+  describe 'PATCH #update' do
+    let(:perform_request) do
+      patch("/public_talks/congregations/#{congregation.id}", params: params)
+    end
+
+    context 'when payload is valid' do
+      let(:params) { { congregation: factories.congregations.attributes.merge(name: 'new name') } }
+
+      it 'responds with 422' do
+        perform_request
+
+        expect(response).to redirect_to('/public_talks/congregations')
+      end
+
+      it 'creates record' do
+        expect { perform_request }.to change { congregation.reload.name }.to('new name')
+      end
+    end
+
+    context 'when payload is invalid' do
+      let(:params) { { congregation: { name: '' } } }
+
+      it 'returns with success' do
+        perform_request
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it 're-renders form' do
+        mock_renderer
+
+        perform_request
+
+        congregation.name = ''
+        expected_component = Congregations::FormPageComponent.new(congregation)
+        expect(renderer).to have_rendered_component(expected_component)
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     let(:perform_request) { delete("/public_talks/congregations/#{congregation.id}") }
 
@@ -78,7 +155,7 @@ RSpec.describe PublicTalks::CongregationsController, type: :request do
       expect(response).to redirect_to('/public_talks/congregations')
     end
 
-    it 'renders the correct component' do
+    it 'deletes record' do
       expect { perform_request }.to change(Db::Congregation, :count).by(-1)
     end
   end
