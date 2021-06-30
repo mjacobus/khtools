@@ -37,6 +37,10 @@ pt-BR:
         enabled: Ativo
       meeting_attendance/meeting:
         title: Título
+      db/public_talk:
+        congregation: Congregação
+        speaker: Orador
+        date: Data
       db/congregation:
         name: Nome
         address: Endereço

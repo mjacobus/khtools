@@ -1,1 +1,16 @@
-<div>Add PublicTalks::Talks::FormPage template here</div>
+<%= render breadcrumb %>
+
+<%= simple_form_for(talk, url: target_url, as: :talk) do |f| %>
+  <%= input_wrapper do %>
+    <%= f.input :date %>
+  <% end %>
+  <%= input_wrapper do %>
+    <%= f.association :speaker, as: :select, collection: collection_for_speaker %>
+  <% end %>
+  <%= input_wrapper do %>
+    <%= f.association :congregation, as: :select, collection: collection_for_congregation %>
+  <% end %>
+  <%= input_wrapper do %>
+    <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>
+  <% end %>
+<% end %>
