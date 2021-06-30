@@ -15,4 +15,10 @@ class PublicTalks::CongregationsController < ApplicationController
     congregation = Db::Congregation.find(params[:id])
     render Congregations::FormPageComponent.new(congregation)
   end
+
+  def destroy
+    congregation = Db::Congregation.find(params[:id])
+    congregation.destroy
+    redirect_to(action: :index)
+  end
 end

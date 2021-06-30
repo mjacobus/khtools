@@ -68,4 +68,18 @@ RSpec.describe PublicTalks::CongregationsController, type: :request do
       expect(renderer).to have_rendered_component(expected_component)
     end
   end
+
+  describe 'DELETE #destroy' do
+    let(:perform_request) { delete("/public_talks/congregations/#{congregation.id}") }
+
+    it 'redirects to index' do
+      perform_request
+
+      expect(response).to redirect_to('/public_talks/congregations')
+    end
+
+    it 'renders the correct component' do
+      expect { perform_request }.to change(Db::Congregation, :count).by(-1)
+    end
+  end
 end
