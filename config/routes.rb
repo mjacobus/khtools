@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
   namespace :public_talks do
     resources :congregations
+    resources :speakers
   end
 
   namespace :meeting_attendance do

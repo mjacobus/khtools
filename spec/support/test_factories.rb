@@ -134,7 +134,9 @@ class TestFactories
         name: "Br. John #{seq}",
         phone: "(51) 1234-123#{seq}",
         email: "person#{seq}@email.com",
-        congregation: overrides[:congregation] || factories.congregations.random_or_create
+        congregation_id: overrides[:congregation]&.id ||
+          overrides[:congregation_id] ||
+          factories.congregations.random_or_create.id
       }.merge(overrides)
     end
   end
