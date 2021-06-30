@@ -16,7 +16,7 @@ class Congregations::FormPageComponent < PageComponent
       return
     end
 
-    breadcrumb.add_item(t('app.links.create'))
+    breadcrumb.add_item(t('app.links.new'))
   end
 
   def target_url
