@@ -8,6 +8,7 @@ pt-BR:
       user: Usuário
       db/congregation: Congregação
       db/contact: Contato
+      db/public_speaker: Orador
       db/meeting_attendance/meeting: Reunião
       db/publisher: Publicador
       db/field_service_group: Grupo de Campo
@@ -49,6 +50,12 @@ pt-BR:
         phone: Telefone
         phone2: Telefone
         notes: Observações
+      db/public_speaker:
+        name: Nome
+        phone: Telefone
+        email: Email
+        congregation_id: Congregação
+        congregation: Congregação
       db/territory_area:
         name: Nome
         created_at: Criado em
@@ -164,6 +171,7 @@ pt-BR:
       congregations: "Congregações"
       new_contact: "Novo Contato"
       contacts: "Contatos"
+      public_speakers: "Oradores"
       delete: "Excluir"
       edit: "Editar"
       edit: "Editar"

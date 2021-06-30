@@ -36,6 +36,7 @@ class Sidebar::SidebarComponent < ApplicationComponent
   def public_talks
     entry(t('app.links.public_talks'), '#', icon: 'mic').tap do |section|
       section.append_child(congregations)
+      section.append_child(public_speakers)
     end
   end
 
@@ -133,6 +134,10 @@ class Sidebar::SidebarComponent < ApplicationComponent
 
   def congregations
     entry(Db::Congregation.model_name.human, public_talks_congregations_path, icon: 'shop')
+  end
+
+  def public_speakers
+    entry(Db::PublicSpeaker.model_name.human, public_talks_speakers_path, icon: 'person')
   end
 
   def admin_section
