@@ -8,6 +8,7 @@ RSpec.describe Db::PublicTalk, type: :model do
   it { is_expected.to validate_presence_of(:congregation) }
   it { is_expected.to validate_presence_of(:speaker) }
   it { is_expected.to validate_presence_of(:date) }
+  it { is_expected.to validate_presence_of(:talk) }
 
   context 'when legacy is true' do
     before { talk.legacy = true }

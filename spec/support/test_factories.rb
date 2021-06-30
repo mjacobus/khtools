@@ -148,6 +148,7 @@ class TestFactories
   class Db::PublicTalkFactory < Factory
     def attributes(overrides = {})
       {
+        talk: seq,
         date: seq.days.from_now,
         speaker_id: overrides[:speaker]&.id ||
           overrides[:speaker_id] ||

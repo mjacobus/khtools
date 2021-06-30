@@ -53,7 +53,8 @@ class PublicTalks::TalksController < ApplicationController
     params.require(:talk).permit(
       :congregation_id,
       :speaker_id,
-      :date
+      :date,
+      :talk,
     )
   end
 end
