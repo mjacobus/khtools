@@ -1,1 +1,19 @@
-<div>Add PublicTalks::Speakers::FormPage template here</div>
+<%= render breadcrumb %>
+
+<%= simple_form_for(speaker, url: target_url, as: :speaker) do |f| %>
+  <%= input_wrapper do %>
+    <%= f.input :name %>
+  <% end %>
+  <%= input_wrapper do %>
+    <%= f.input :phone %>
+  <% end %>
+  <%= input_wrapper do %>
+    <%= f.input :email %>
+  <% end %>
+  <%= input_wrapper do %>
+    <%= f.association :congregation, as: :select, collection: collection_for_congregation %>
+  <% end %>
+  <%= input_wrapper do %>
+    <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>
+  <% end %>
+<% end %>
