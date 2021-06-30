@@ -32,6 +32,13 @@ class PublicTalks::Talks::FormPageComponent < PageComponent
   end
 
   def collection_for_speaker
-    Db::PublicSpeaker.order(:name).pluck(:name, :id)
+    query = Db::PublicSpeaker.order(:name).includes(:congregation)
+    query.pluck(:id, :name, 'congregations.name').map do |fields|
+      ["#{fields[1]} (#{fields[2]})", fields[0]]
+    end
+  end
+
+  def collection_for_talk
+    1.upto(200).map { |n| [n, n] }
   end
 end
