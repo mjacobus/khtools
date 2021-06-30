@@ -30,6 +30,26 @@ RSpec.describe PublicTalks::CongregationsController, type: :request do
     end
   end
 
+  describe 'GET #new' do
+    let(:perform_request) { get('/public_talks/congregations/new') }
+    let(:congregation) { Db::Congregation.new }
+
+    it 'returns with success' do
+      perform_request
+
+      expect(response).to be_successful
+    end
+
+    it 'renders the correct component' do
+      mock_renderer
+
+      perform_request
+
+      expected_component = Congregations::FormPageComponent.new(congregation)
+      expect(renderer).to have_rendered_component(expected_component)
+    end
+  end
+
   describe 'GET #edit' do
     let(:perform_request) { get("/public_talks/congregations/#{congregation.id}/edit") }
 
