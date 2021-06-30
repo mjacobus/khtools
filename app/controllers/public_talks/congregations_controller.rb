@@ -11,14 +11,48 @@ class PublicTalks::CongregationsController < ApplicationController
     render Congregations::FormPageComponent.new(congregation)
   end
 
+  def create
+    congregation = Db::Congregation.new(congregation_params)
+
+    if congregation.save
+      return redirect_to(action: :index)
+    end
+
+    render Congregations::FormPageComponent.new(congregation), status: :unprocessable_entity
+  end
+
   def edit
     congregation = Db::Congregation.find(params[:id])
     render Congregations::FormPageComponent.new(congregation)
+  end
+
+  def update
+    congregation = Db::Congregation.find(params[:id])
+
+    if congregation.update(congregation_params)
+      return redirect_to(action: :index)
+    end
+
+    render Congregations::FormPageComponent.new(congregation), status: :unprocessable_entity
   end
 
   def destroy
     congregation = Db::Congregation.find(params[:id])
     congregation.destroy
     redirect_to(action: :index)
+  end
+
+  private
+
+  def congregation_params
+    params.require(:congregation).permit(
+      :name,
+      :address,
+      :primary_contact_person,
+      :primary_contact_phone,
+      :primary_contact_email,
+      :weekend_meeting_time,
+      :local
+    )
   end
 end
