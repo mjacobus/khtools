@@ -11,7 +11,7 @@
     <%= f.association :congregation, as: :select, collection: collection_for_congregation %>
   <% end %>
   <%= input_wrapper do %>
-    <%= f.input :talk, as: :select, collection: collection_for_talk %>
+    <%= f.input :theme, as: :select, collection: collection_for_theme %>
   <% end %>
   <%= input_wrapper do %>
     <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>

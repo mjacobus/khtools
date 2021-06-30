@@ -5,7 +5,7 @@ class CreateDbPublicTalks < ActiveRecord::Migration[6.1]
     create_table :public_talks do |t|
       t.references :congregation, null: true, foreign_key: true
       t.integer :speaker_id, null: true
-      t.string :talk
+      t.string :theme
       t.boolean :legacy, default: false
       t.timestamp :date
 

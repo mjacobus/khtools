@@ -7,5 +7,5 @@ class Db::PublicTalk < ApplicationRecord
   validates :congregation, presence: { unless: :legacy? }
   validates :speaker, presence: { unless: :legacy? }
   validates :date, presence: true
-  validates :talk, presence: true
+  validates :theme, presence: true
 end
