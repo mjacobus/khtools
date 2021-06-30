@@ -16,4 +16,8 @@ class PageComponent < ApplicationComponent
 
     icon + '&nbsp;'.html_safe + yield
   end
+
+  def input_wrapper(&block)
+    tag.div(class: 'form-wrapper my-3', &block)
+  end
 end

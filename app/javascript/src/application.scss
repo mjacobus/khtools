@@ -1,6 +1,11 @@
 @import './boostrap_overrides';
 @import './index_pages';
 
+.form-wrapper label {
+  color: gray;
+  font-size: 0.8em;
+}
+
 .pull-right {
   text-align: right;
 }

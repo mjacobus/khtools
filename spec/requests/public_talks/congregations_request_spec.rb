@@ -11,7 +11,7 @@ RSpec.describe PublicTalks::CongregationsController, type: :request do
     congregation
   end
 
-  describe 'GET /index' do
+  describe 'GET #index' do
     let(:perform_request) { get('/public_talks/congregations') }
 
     it 'returns with success' do
@@ -26,6 +26,25 @@ RSpec.describe PublicTalks::CongregationsController, type: :request do
       perform_request
 
       expected_component = Congregations::IndexPageComponent.new(Db::Congregation.all)
+      expect(renderer).to have_rendered_component(expected_component)
+    end
+  end
+
+  describe 'GET #edit' do
+    let(:perform_request) { get("/public_talks/congregations/#{congregation.id}/edit") }
+
+    it 'returns with success' do
+      perform_request
+
+      expect(response).to be_successful
+    end
+
+    it 'renders the correct component' do
+      mock_renderer
+
+      perform_request
+
+      expected_component = Congregations::FormPageComponent.new(congregation)
       expect(renderer).to have_rendered_component(expected_component)
     end
   end
