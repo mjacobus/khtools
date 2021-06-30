@@ -6,6 +6,17 @@ class Congregations::FormPageComponent < PageComponent
   def initialize(congregation)
     @congregation = congregation
     breadcrumb.add_item(t('app.links.congregations'), urls.public_talks_congregations_path)
+
+    if congregation.id
+      breadcrumb.add_item(
+        congregation.name,
+        urls.public_talks_congregation_path(congregation)
+      )
+      breadcrumb.add_item(t('app.links.edit'))
+      return
+    end
+
+    breadcrumb.add_item(t('app.links.create'))
   end
 
   def target_url
