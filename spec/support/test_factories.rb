@@ -13,6 +13,10 @@ class TestFactories
     @congregations ||= Db::CongregationFactory.new(self)
   end
 
+  def public_talks
+    @public_talks ||= Db::PublicTalkFactory.new(self)
+  end
+
   def public_speakers
     @public_speakers ||= Db::PublicSpeakerFactory.new(self)
   end
@@ -134,6 +138,20 @@ class TestFactories
         name: "Br. John #{seq}",
         phone: "(51) 1234-123#{seq}",
         email: "person#{seq}@email.com",
+        congregation_id: overrides[:congregation]&.id ||
+          overrides[:congregation_id] ||
+          factories.congregations.random_or_create.id
+      }.merge(overrides)
+    end
+  end
+
+  class Db::PublicTalkFactory < Factory
+    def attributes(overrides = {})
+      {
+        date: seq.days.from_now,
+        speaker_id: overrides[:speaker]&.id ||
+          overrides[:speaker_id] ||
+          factories.public_speakers.random_or_create.id,
         congregation_id: overrides[:congregation]&.id ||
           overrides[:congregation_id] ||
           factories.congregations.random_or_create.id
