@@ -32,7 +32,7 @@ class PublicTalks::Talks::IndexPageComponent < PageComponent
   end
 
   def theme(talk)
-    talk.theme
+    talk.theme_object
   end
 
   private

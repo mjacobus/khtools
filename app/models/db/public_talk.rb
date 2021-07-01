@@ -8,4 +8,8 @@ class Db::PublicTalk < ApplicationRecord
   validates :speaker, presence: { unless: :legacy? }
   validates :date, presence: true
   validates :theme, presence: true
+
+  def theme_object
+    @theme_object ||= PublicTalks::Themes.new.find(theme)
+  end
 end
