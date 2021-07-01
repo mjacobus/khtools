@@ -1,1 +1,34 @@
-<div>Add PublicTalks::Talks::ShowPage template here</div>
+<%= render breadcrumb %>
+
+<%= render DropdownMenuComponent.new(
+  classes: ['btn-primary'],
+  pull: :right
+) do |component| %>
+  <% component.item do %>
+    <%= edit_link %>
+  <% end %>
+  <% component.item do %>
+    <%= destroy_link %>
+  <% end %>
+<% end %>
+
+<div class="show-page">
+  <div class="row">
+    <div class="col-sm-12 title mb-2">
+      <%= theme(talk) %>
+    </div>
+    <div class="col-sm-12 mb-2">
+      <% if talk.congregation.present? %>
+        <%= icon('shop') { talk.congregation.name } %>
+      <% end %>
+    </div>
+    <div class="col-sm-12 mb-2">
+      <%= icon(:calendar) { l(talk.date) } %>
+    </div>
+    <div class="col-sm-12 mb-2">
+      <% if talk.speaker.present? %>
+        <%= icon('person') { speaker_name(talk) } %>
+      <% end %>
+    </div>
+  </div>
+</div>

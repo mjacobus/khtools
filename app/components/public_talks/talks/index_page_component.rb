@@ -38,8 +38,7 @@ class PublicTalks::Talks::IndexPageComponent < PageComponent
   private
 
   def delete_confirmation(talk)
-    description = "#{theme(talk)} / #{l(talk.date)}"
-    t('app.messages.confirm_delete_x', record: description)
+    t('app.messages.confirm_delete_x', record: talk.summary)
   end
 
   def setup_breadcrumb

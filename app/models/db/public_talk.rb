@@ -12,4 +12,8 @@ class Db::PublicTalk < ApplicationRecord
   def theme_object
     @theme_object ||= PublicTalks::Themes.new.find(theme)
   end
+
+  def summary
+    "#{theme_object} / #{I18n.l(date)}"
+  end
 end
