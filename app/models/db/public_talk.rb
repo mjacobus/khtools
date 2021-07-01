@@ -14,6 +14,6 @@ class Db::PublicTalk < ApplicationRecord
   end
 
   def summary
-    "#{theme_object} / #{I18n.l(date)}"
+    "#{I18n.l(date.to_date)} - #{theme_object}"
   end
 end
