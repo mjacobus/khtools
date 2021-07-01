@@ -138,7 +138,7 @@ class Sidebar::SidebarComponent < ApplicationComponent
   end
 
   def talks
-    entry(Db::PublicTalk.model_name.human, public_talks_talks_path, icon: 'calendar')
+    entry(Db::PublicTalk.model_name.human, public_talks_talks_path, icon: 'calendar-date')
   end
 
   def public_speakers
