@@ -149,7 +149,7 @@ class TestFactories
     def attributes(overrides = {})
       {
         theme: seq,
-        date: seq.days.from_now,
+        date: seq.days.from_now.round,
         speaker_id: overrides[:speaker]&.id ||
           overrides[:speaker_id] ||
           factories.public_speakers.random_or_create.id,
