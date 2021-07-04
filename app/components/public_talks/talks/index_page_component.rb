@@ -6,6 +6,7 @@ class PublicTalks::Talks::IndexPageComponent < PageComponent
   def initialize(talks)
     @talks = talks
     setup_breadcrumb
+    @week = MeetingWeek.new
   end
 
   def new_link
@@ -33,6 +34,20 @@ class PublicTalks::Talks::IndexPageComponent < PageComponent
 
   def theme(talk)
     talk.theme_object
+  end
+
+  def classes(talk)
+    classes = []
+
+    if talk.congregation.present?
+      classes << talk.congregation.local? ? 'local' : 'outcoing'
+    end
+
+    if @week.cover?(talk.date)
+      classes << 'current'
+    end
+
+    classes.join(' ')
   end
 
   private
