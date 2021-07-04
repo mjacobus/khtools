@@ -11,7 +11,7 @@
 
 <div class="index-list">
   <% talks.each do |talk| %>
-    <div class="item">
+    <div class="item <%= classes(talk) %>">
       <div class="row">
         <div class="col-sm-12 col-lg-12 title mb-2">
           <%= theme(talk) %>
