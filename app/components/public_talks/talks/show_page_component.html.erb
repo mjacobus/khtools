@@ -23,7 +23,7 @@
       <% end %>
     </div>
     <div class="col-sm-12 mb-2">
-      <%= icon('calendar-date') { l(talk.date) } %>
+      <%= icon('calendar-date') { l(talk.date, format: :short) } %>
     </div>
     <div class="col-sm-12 mb-2">
       <% if talk.speaker.present? %>
