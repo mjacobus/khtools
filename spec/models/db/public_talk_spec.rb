@@ -64,5 +64,25 @@ RSpec.describe Db::PublicTalk, type: :model do
 
       expect(result_ids).to eq([talk2.id])
     end
+
+    it 'does not apply any filter if none is passed' do
+      talk1 = factories.public_talks.create
+      talk2 = factories.public_talks.create
+
+      result = described_class.filter({})
+      result_ids = result.map(&:id)
+
+      expect(result_ids).to eq([talk1.id, talk2.id])
+    end
+
+    it 'returns all records when filters are not present' do
+      talk1 = factories.public_talks.create
+      talk2 = factories.public_talks.create
+
+      result = described_class.filter(speaker_id: '')
+      result_ids = result.map(&:id)
+
+      expect(result_ids).to eq([talk1.id, talk2.id])
+    end
   end
 end

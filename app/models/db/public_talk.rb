@@ -23,7 +23,7 @@ class Db::PublicTalk < ApplicationRecord
   def self.filter(params)
     query = all
 
-    if params[:speaker_id]
+    if params[:speaker_id].present?
       query = query.where(speaker_id: params[:speaker_id])
     end
 
