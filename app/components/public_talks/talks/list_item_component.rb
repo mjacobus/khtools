@@ -31,11 +31,11 @@ class PublicTalks::Talks::ListItemComponent < PageComponent
     talk.theme_object
   end
 
-  def classes(talk)
+  def classes
     classes = []
 
     if talk.congregation.present?
-      classes << talk.congregation.local? ? 'local' : 'outcoing'
+      classes << talk.congregation.local? ? 'local' : 'non-local'
     end
 
     if @week.cover?(talk.date)

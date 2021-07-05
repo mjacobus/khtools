@@ -4,6 +4,9 @@ require 'rails_helper'
 
 RSpec.describe PublicTalks::TalksController, type: :request do
   let(:talk) { factories.public_talks.create }
+  let(:index_page) do
+    public_talks_talks_path(since: MeetingWeek.new.first_day.to_s(:db))
+  end
 
   before do
     login_user(admin_user)
@@ -90,7 +93,7 @@ RSpec.describe PublicTalks::TalksController, type: :request do
       it 'returns with success' do
         perform_request
 
-        expect(response).to redirect_to('/public_talks/talks')
+        expect(response).to redirect_to(index_page)
       end
 
       it 'creates record' do
@@ -150,7 +153,7 @@ RSpec.describe PublicTalks::TalksController, type: :request do
       it 'responds with 422' do
         perform_request
 
-        expect(response).to redirect_to('/public_talks/talks')
+        expect(response).to redirect_to(index_page)
       end
 
       it 'creates record' do
@@ -185,7 +188,7 @@ RSpec.describe PublicTalks::TalksController, type: :request do
     it 'redirects to index' do
       perform_request
 
-      expect(response).to redirect_to('/public_talks/talks')
+      expect(response).to redirect_to(index_page)
     end
 
     it 'deletes record' do

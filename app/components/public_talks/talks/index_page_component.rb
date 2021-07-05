@@ -19,7 +19,21 @@ class PublicTalks::Talks::IndexPageComponent < PageComponent
     link_to(t('app.links.new'), new_public_talks_talk_path)
   end
 
+  def grouped_by_week
+    @talks.group_by do |talk|
+      MeetingWeek.new(talk.date).first_day
+    end
+  end
+
+  def segregate(talks)
+    yield(talks.select { |t| local?(t) }, talks.reject { |t| local?(t) })
+  end
+
   private
+
+  def local?(talk)
+    talk&.congregation&.local?
+  end
 
   def since
     if defined?(@since)

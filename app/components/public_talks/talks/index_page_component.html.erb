@@ -16,8 +16,24 @@
 <% end %>
 
 <div class="index-list">
-  <% talks.each do |talk| %>
-    <%= render PublicTalks::Talks::ListItemComponent.new(talk) %>
+  <% grouped_by_week.each do |week, group| %>
+    <div class="row">
+      <% segregate(group) do |local, non_local| %>
+        <% local.each do |talk| %>
+          <div class="col-lg-6">
+            <%= render PublicTalks::Talks::ListItemComponent.new(talk) %>
+          </div>
+        <% end %>
+
+        <% non_local.each do |talk| %>
+          <div class="col-lg-6">
+            <%= render PublicTalks::Talks::ListItemComponent.new(talk) %>
+          </div>
+        <% end %>
+      <% end %>
+    <% group.each do |talk| %>
+    <% end %>
+    </div>
   <% end %>
 
   <%= render PaginationComponent.new(talks, position: :bottom) %>
