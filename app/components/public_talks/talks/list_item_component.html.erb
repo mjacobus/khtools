@@ -1,6 +1,8 @@
 <div class="item <%= classes %>">
-  <div class="title">
-    <%= theme(talk) %>
+  <div>
+    <div class="small">
+      <%= icon('calendar-date') { l(talk.date, format: :short) } %>
+    </div>
     <%= render DropdownMenuComponent.new do |component| %>
       <% component.item do %>
         <%= show_link %>
@@ -13,6 +15,9 @@
       <% end %>
     <% end %>
   </div>
+  <div class="title">
+    <%= icon(:book) { theme(talk) } %>
+  </div>
   <div class="small">
     <div>
       <% if talk.speaker.present? %>
@@ -23,9 +28,6 @@
       <% if talk.congregation.present? %>
         <%= icon('shop') { talk.congregation.name } %>
       <% end %>
-    </div>
-    <div>
-      <%= icon('calendar-date') { l(talk.date, format: :short) } %>
     </div>
   </div>
 </div>
