@@ -51,4 +51,18 @@ RSpec.describe Db::PublicTalk, type: :model do
       expect(result.pluck(:id)).to eq([a.id, b.id])
     end
   end
+
+  describe '.filter' do
+    it 'filters by speaker_id' do
+      factories.public_talks.create
+
+      speaker = factories.public_speakers.create
+      talk2 = factories.public_talks.create(speaker_id: speaker.id)
+
+      result = described_class.filter(speaker_id: speaker.id)
+      result_ids = result.map(&:id)
+
+      expect(result_ids).to eq([talk2.id])
+    end
+  end
 end
