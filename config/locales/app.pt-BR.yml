@@ -38,7 +38,7 @@ pt-BR:
       meeting_attendance/meeting:
         title: Título
       db/public_talk:
-        congregation: Congregação
+        congregation: Onde
         speaker: Orador
         date: Data
         theme: Tema
