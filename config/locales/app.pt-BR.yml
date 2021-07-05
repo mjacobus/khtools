@@ -168,6 +168,7 @@ pt-BR:
         one: "%{count} contato"
         other: "%{count} contatos"
     links:
+      contact_speaker: 'Contatar orador'
       see_all: 'Ver todos'
       actions: "Ações"
       edit: "Edit"
