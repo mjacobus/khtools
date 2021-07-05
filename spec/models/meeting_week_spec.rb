@@ -34,8 +34,8 @@ RSpec.describe MeetingWeek do
     end
 
     it 'returns false when includes' do
-      expect(week).not_to cover(7.days.ago)
-      expect(week).not_to cover(7.days.from_now)
+      expect(week).not_to cover(8.days.ago)
+      expect(week).not_to cover(8.days.from_now)
     end
   end
 end
