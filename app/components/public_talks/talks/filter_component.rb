@@ -23,6 +23,10 @@ class PublicTalks::Talks::FilterComponent < ApplicationComponent
     Db::Congregation.model_name.human
   end
 
+  def label_for_theme
+    attribute_name(Db::PublicTalk, :theme)
+  end
+
   def speaker_selected?(speaker)
     speaker.id.to_s == params[:speaker_id]
   end
@@ -35,12 +39,20 @@ class PublicTalks::Talks::FilterComponent < ApplicationComponent
     since.to_s == params[:since]
   end
 
+  def theme_selected?(theme)
+    theme.number.to_s == params[:theme]
+  end
+
   def options_for_speaker
     Db::PublicSpeaker.all.order(:name)
   end
 
   def options_for_congregation
     Db::Congregation.all.order(:name)
+  end
+
+  def options_for_theme
+    PublicTalks::Themes.new.all
   end
 
   def options_for_since

@@ -21,6 +21,7 @@ class Db::PublicTalk < ApplicationRecord
   end
 
   # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
   def self.filter(params)
     query = all
 
@@ -36,7 +37,12 @@ class Db::PublicTalk < ApplicationRecord
       query = query.since(params[:since])
     end
 
+    if params[:theme].present?
+      query = query.where(theme: params[:theme])
+    end
+
     query
   end
   # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize
 end
