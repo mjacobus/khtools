@@ -35,7 +35,7 @@ class PublicTalks::Talks::ListItemComponent < PageComponent
     classes = []
 
     if talk.congregation.present?
-      classes << talk.congregation.local? ? 'local' : 'non-local'
+      classes << (talk.congregation.local? ? 'local' : 'non-local')
     end
 
     if @week.cover?(talk.date)

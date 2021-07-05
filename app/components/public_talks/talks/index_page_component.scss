@@ -1,3 +1,19 @@
-.current {
-  background: #eee;
+@import "../../../javascript/src/variables.scss";
+
+.item.current {
+  border: 1px solid $primary !important;
 }
+
+.item.local {
+  border-left: 10px solid $primary !important;
+}
+
+.item.current.non-local {
+  border: 1px solid $jw-orange !important;
+  border-left: 10px solid $jw-orange !important;
+}
+
+.item.non-local {
+  border-left: 10px solid $jw-orange !important;
+}
+
