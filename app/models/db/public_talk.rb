@@ -19,4 +19,14 @@ class Db::PublicTalk < ApplicationRecord
   def summary
     "#{I18n.l(date.to_date)} - #{theme_object}"
   end
+
+  def self.filter(params)
+    query = all
+
+    if params[:speaker_id]
+      query = query.where(speaker_id: params[:speaker_id])
+    end
+
+    query
+  end
 end
