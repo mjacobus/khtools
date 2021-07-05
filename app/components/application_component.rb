@@ -35,4 +35,8 @@ class ApplicationComponent < ViewComponent::Base
   def model_name(model_or_model_class)
     model_or_model_class.model_name.human
   end
+
+  def attribute_name(klass, attribute)
+    klass.human_attribute_name(attribute)
+  end
 end

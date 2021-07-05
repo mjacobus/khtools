@@ -11,6 +11,10 @@ class PublicTalks::Talks::FilterComponent < ApplicationComponent
     public_talks_talks_path
   end
 
+  def label_for_since
+    attribute_name(Db::PublicTalk, :since)
+  end
+
   def label_for_speaker
     Db::PublicSpeaker.model_name.human
   end
@@ -27,11 +31,23 @@ class PublicTalks::Talks::FilterComponent < ApplicationComponent
     congregation.id.to_s == params[:congregation_id]
   end
 
+  def since_selected?(since)
+    since.to_s == params[:since]
+  end
+
   def options_for_speaker
     Db::PublicSpeaker.all.order(:name)
   end
 
   def options_for_congregation
     Db::Congregation.all.order(:name)
+  end
+
+  def options_for_since
+    options = [MeetingWeek.new.first_day]
+    0.upto(5).each do |num|
+      options.push(num.years.ago.beginning_of_year.to_date)
+    end
+    options
   end
 end
