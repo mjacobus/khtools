@@ -168,6 +168,7 @@ pt-BR:
         one: "%{count} contato"
         other: "%{count} contatos"
     links:
+      see_all: 'Ver todos'
       actions: "Ações"
       edit: "Edit"
       new: "Novo"

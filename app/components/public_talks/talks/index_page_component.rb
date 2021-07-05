@@ -15,6 +15,14 @@ class PublicTalks::Talks::IndexPageComponent < PageComponent
     end
   end
 
+  def see_all_link
+    link_to(
+      t('app.links.see_all'),
+      public_talks_talks_path,
+      class: 'btn btn-primary float-right'
+    )
+  end
+
   def new_link
     link_to(t('app.links.new'), new_public_talks_talk_path)
   end

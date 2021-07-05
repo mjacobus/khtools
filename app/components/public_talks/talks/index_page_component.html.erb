@@ -1,7 +1,7 @@
 <%= render breadcrumb %>
 
 <%= render DropdownMenuComponent.new(
-  classes: ['btn-primary'],
+  classes: ['btn-primary mb-2'],
   pull: :right
 ) do |component| %>
   <% component.item do %>
@@ -10,8 +10,8 @@
 <% end %>
 
 <% if showing_talks_since %>
-  <div class="alert alert-warning" role="alert">
-    <%= showing_talks_since %>
+  <div class="alert alert-primary" role="alert">
+    <%= showing_talks_since %> <%= see_all_link %>
   </div>
 <% end %>
 
