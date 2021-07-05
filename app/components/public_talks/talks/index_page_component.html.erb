@@ -11,12 +11,6 @@
 
 <%= render PublicTalks::Talks::FilterComponent.new(params) %>
 
-<% if showing_talks_since %>
-  <div class="alert alert-primary" role="alert">
-    <%= showing_talks_since %> <%= see_all_link %>
-  </div>
-<% end %>
-
 <div class="index-list">
   <% grouped_by_week.each do |week, group| %>
     <div class="row">

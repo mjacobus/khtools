@@ -9,12 +9,6 @@ class PublicTalks::Talks::IndexPageComponent < PageComponent
     setup_breadcrumb
   end
 
-  def showing_talks_since
-    if since
-      t('app.messages.showing_public_talks_since', date: l(since))
-    end
-  end
-
   def see_all_link
     link_to(
       t('app.links.see_all'),
