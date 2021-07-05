@@ -5,6 +5,8 @@ require 'rails_helper'
 RSpec.describe Db::PublicTalk, type: :model do
   subject(:talk) { factories.public_talks.build }
 
+  let(:talks) { factories.public_talks }
+
   it { is_expected.to validate_presence_of(:congregation) }
   it { is_expected.to validate_presence_of(:speaker) }
   it { is_expected.to validate_presence_of(:date) }
@@ -24,5 +26,29 @@ RSpec.describe Db::PublicTalk, type: :model do
 
     expect(talk.speaker).to be_a(Db::PublicSpeaker)
     expect(talk.congregation).to be_a(Db::Congregation)
+  end
+
+  describe '.since' do
+    let(:a) { talks.create(date: Time.zone.now) }
+    let(:b) {  talks.create(date: 1.week.from_now) }
+    let(:c) {  talks.create(date: 1.week.ago) }
+
+    before do
+      a
+      b
+      c
+    end
+
+    it 'only returns data from since argument' do
+      result = described_class.since(a.date.strftime('%Y-%m-%d'))
+
+      expect(result.pluck(:id)).to eq([a.id, b.id])
+    end
+
+    it 'takes date objects' do
+      result = described_class.since(a.date)
+
+      expect(result.pluck(:id)).to eq([a.id, b.id])
+    end
   end
 end

@@ -4,9 +4,16 @@ class PublicTalks::Talks::IndexPageComponent < PageComponent
   attr_reader :talks
 
   def initialize(talks)
+    @sql = talks.to_sql # for testing purposes
     @talks = talks
     setup_breadcrumb
     @week = MeetingWeek.new
+  end
+
+  def showing_talks_since
+    if since
+      t('app.messages.showing_public_talks_since', date: l(since))
+    end
   end
 
   def new_link
@@ -51,6 +58,18 @@ class PublicTalks::Talks::IndexPageComponent < PageComponent
   end
 
   private
+
+  def since
+    if defined?(@since)
+      return @since
+    end
+
+    @since = begin
+      Date.parse(params[:since])
+    rescue StandardError
+      nil
+    end
+  end
 
   def delete_confirmation(talk)
     t('app.messages.confirm_delete_x', record: talk.summary)

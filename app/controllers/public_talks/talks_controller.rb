@@ -2,7 +2,12 @@
 
 class PublicTalks::TalksController < ApplicationController
   def index
-    talks = paginate(Db::PublicTalk.order(:date))
+    talks = paginate(Db::PublicTalk.all)
+
+    if params[:since]
+      talks = talks.since(params[:since])
+    end
+
     render PublicTalks::Talks::IndexPageComponent.new(talks)
   end
 

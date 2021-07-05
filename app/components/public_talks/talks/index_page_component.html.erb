@@ -9,6 +9,12 @@
   <% end %>
 <% end %>
 
+<% if showing_talks_since %>
+  <div class="alert alert-warning" role="alert">
+    <%= showing_talks_since %>
+  </div>
+<% end %>
+
 <div class="index-list">
   <% talks.each do |talk| %>
     <div class="item <%= classes(talk) %>">

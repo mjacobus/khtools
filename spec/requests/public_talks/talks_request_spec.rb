@@ -25,7 +25,19 @@ RSpec.describe PublicTalks::TalksController, type: :request do
 
       perform_request
 
-      expected_component = PublicTalks::Talks::IndexPageComponent.new(Db::PublicTalk.all)
+      scope = Db::PublicTalk.order(:date).limit(100).offset(0)
+      expected_component = PublicTalks::Talks::IndexPageComponent.new(scope)
+      expect(renderer).to have_rendered_component(expected_component)
+    end
+
+    it 'takes since params' do
+      mock_renderer
+
+      get('/public_talks/talks', params: { since: '2021-02-01' })
+
+      scope = Db::PublicTalk.order(:date).limit(100).offset(0).since('2021-02-01')
+      expected_component = PublicTalks::Talks::IndexPageComponent.new(scope)
+
       expect(renderer).to have_rendered_component(expected_component)
     end
   end

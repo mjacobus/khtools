@@ -34,6 +34,10 @@ rescue ActiveRecord::PendingMigrationError => exception
   puts exception.to_s.strip
   exit 1
 end
+
+require 'view_component/test_helpers'
+require 'capybara/rspec'
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -66,6 +70,9 @@ RSpec.configure do |config|
   config.include ControllerSpecHelper, type: :controller
   config.include RequestSpecHelper, type: :request
   config.include TestFactorySpecHelper
+
+  config.include ViewComponent::TestHelpers, type: :component
+  config.include Capybara::RSpecMatchers, type: :component
 end
 
 Shoulda::Matchers.configure do |config|
