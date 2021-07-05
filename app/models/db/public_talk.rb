@@ -27,6 +27,10 @@ class Db::PublicTalk < ApplicationRecord
       query = query.where(speaker_id: params[:speaker_id])
     end
 
+    if params[:since].present?
+      query = query.since(params[:since])
+    end
+
     query
   end
 end

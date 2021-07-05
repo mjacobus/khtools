@@ -84,5 +84,29 @@ RSpec.describe Db::PublicTalk, type: :model do
 
       expect(result_ids).to eq([talk1.id, talk2.id])
     end
+
+    context 'when since: param is passed' do
+      let(:a) { talks.create(date: Time.zone.now) }
+      let(:b) {  talks.create(date: 1.week.from_now) }
+      let(:c) {  talks.create(date: 1.week.ago) }
+
+      before do
+        a
+        b
+        c
+      end
+
+      it 'only returns data from since argument' do
+        result = described_class.filter(since: a.date.strftime('%Y-%m-%d'))
+
+        expect(result.pluck(:id)).to eq([a.id, b.id])
+      end
+
+      it 'takes date objects' do
+        result = described_class.filter(since: a.date)
+
+        expect(result.pluck(:id)).to eq([a.id, b.id])
+      end
+    end
   end
 end
