@@ -17,39 +17,7 @@
 
 <div class="index-list">
   <% talks.each do |talk| %>
-    <div class="item <%= classes(talk) %>">
-      <div class="row">
-        <div class="col-sm-12 col-lg-12 title mb-2">
-          <%= theme(talk) %>
-          <%= render DropdownMenuComponent.new do |component| %>
-            <% component.item do %>
-              <%= show_link(talk) %>
-            <% end %>
-            <% component.item do %>
-              <%= edit_link(talk) %>
-            <% end %>
-            <% component.item do %>
-              <%= destroy_link(talk) %>
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-      <div class="row small">
-        <div class="col-sm-12 col-lg-4">
-          <% if talk.speaker.present? %>
-            <%= icon('person') { speaker_name(talk) } %>
-          <% end %>
-        </div>
-        <div class="col-sm-12 col-lg-4">
-          <% if talk.congregation.present? %>
-            <%= icon('shop') { talk.congregation.name } %>
-          <% end %>
-        </div>
-        <div class="col-sm-12 col-lg-4">
-          <%= icon('calendar-date') { l(talk.date, format: :short) } %>
-        </div>
-      </div>
-    </div>
+    <%= render PublicTalks::Talks::ListItemComponent.new(talk) %>
   <% end %>
 
   <%= render PaginationComponent.new(talks, position: :bottom) %>
