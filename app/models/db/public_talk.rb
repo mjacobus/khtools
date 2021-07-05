@@ -20,11 +20,16 @@ class Db::PublicTalk < ApplicationRecord
     "#{I18n.l(date.to_date)} - #{theme_object}"
   end
 
+  # rubocop:disable Metrics/MethodLength
   def self.filter(params)
     query = all
 
     if params[:speaker_id].present?
       query = query.where(speaker_id: params[:speaker_id])
+    end
+
+    if params[:congregation_id].present?
+      query = query.where(congregation_id: params[:congregation_id])
     end
 
     if params[:since].present?
@@ -33,4 +38,5 @@ class Db::PublicTalk < ApplicationRecord
 
     query
   end
+  # rubocop:enable Metrics/MethodLength
 end
