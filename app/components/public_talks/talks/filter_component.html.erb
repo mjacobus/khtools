@@ -2,11 +2,27 @@
   <div class="row">
     <div class="col-sm-12 col-lg-4">
       <div class="form-wrapper">
-        <label for="">Orador</label>
+
+        <label for=""><%= label_for_speaker %></label>
         <select name="speaker_id" class="form-control">
           <option value=""></option>
           <% options_for_speaker.each do |speaker| %>
             <option value="<%= speaker.id %>" <%= 'selected' if speaker_selected?(speaker) %>><%= speaker.name %> (<%= speaker.congregation.name  %> )</option>
+          <% end %>
+        </select>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-lg-4">
+      <div class="form-wrapper">
+        <label><%= label_for_congregation %></label>
+        <select name="congregation_id" class="form-select">
+          <option value=""></option>
+          <% options_for_congregation.each do |congregation| %>
+            <option value="<%= congregation.id %>" <%= 'selected' if congregation_selected?(congregation) %>><%= congregation.name %></option>
           <% end %>
         </select>
       </div>
