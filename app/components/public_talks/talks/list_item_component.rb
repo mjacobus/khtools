@@ -23,6 +23,16 @@ class PublicTalks::Talks::ListItemComponent < PageComponent
     link_to(t('app.links.view'), public_talks_talk_path(talk))
   end
 
+  def has_a_speaker?
+    talk.speaker.present?
+  end
+
+  def speaker_link
+    if has_a_speaker?
+      link_to(t('app.links.contact_speaker'), public_talks_speaker_path(talk.speaker))
+    end
+  end
+
   def speaker_name(talk)
     "#{talk&.speaker&.name} (#{talk&.speaker&.congregation&.name})"
   end
