@@ -38,7 +38,7 @@ pt-BR:
       meeting_attendance/meeting:
         title: Título
       db/public_talk:
-        since: Desde
+        since: Data de início
         congregation: Onde
         speaker: Orador
         date: Data
