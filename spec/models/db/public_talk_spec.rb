@@ -53,6 +53,28 @@ RSpec.describe Db::PublicTalk, type: :model do
   end
 
   describe '.filter' do
+    it 'filters by theme' do
+      factories.public_talks.create
+      talk2 = factories.public_talks.create(theme: 'the-theme')
+
+      result = described_class.filter(theme: 'the-theme')
+      result_ids = result.map(&:id)
+
+      expect(result_ids).to eq([talk2.id])
+    end
+
+    it 'filters by congregation_id' do
+      factories.public_talks.create
+
+      congregation = factories.congregations.create
+      talk2 = factories.public_talks.create(congregation_id: congregation.id)
+
+      result = described_class.filter(congregation_id: congregation.id)
+      result_ids = result.map(&:id)
+
+      expect(result_ids).to eq([talk2.id])
+    end
+
     it 'filters by speaker_id' do
       factories.public_talks.create
 
