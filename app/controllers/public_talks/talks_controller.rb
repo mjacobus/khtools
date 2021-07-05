@@ -2,7 +2,7 @@
 
 class PublicTalks::TalksController < ApplicationController
   def index
-    talks = paginate(Db::PublicTalk.all)
+    talks = paginate(Db::PublicTalk.filter(params))
 
     if params[:since]
       talks = talks.since(params[:since])
