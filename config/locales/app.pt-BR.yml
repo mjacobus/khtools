@@ -163,10 +163,12 @@ pt-BR:
       number_of_attendees: 'Assistência total: %{attendees} '
       access_denied: 'Acesso negado'
       cannot_delete_record: 'Registro não pode ser excluído'
+      showing_public_talks_since: 'Exibindo disursos a partir de %{date}'
       x_contacts:
         one: "%{count} contato"
         other: "%{count} contatos"
     links:
+      see_all: 'Ver todos'
       actions: "Ações"
       edit: "Edit"
       new: "Novo"

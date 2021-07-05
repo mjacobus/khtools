@@ -4,6 +4,9 @@ require 'rails_helper'
 
 RSpec.describe PublicTalks::TalksController, type: :request do
   let(:talk) { factories.public_talks.create }
+  let(:index_page) do
+    public_talks_talks_path(since: MeetingWeek.new.first_day.to_s(:db))
+  end
 
   before do
     login_user(admin_user)
@@ -25,7 +28,19 @@ RSpec.describe PublicTalks::TalksController, type: :request do
 
       perform_request
 
-      expected_component = PublicTalks::Talks::IndexPageComponent.new(Db::PublicTalk.all)
+      scope = Db::PublicTalk.order(:date).limit(100).offset(0)
+      expected_component = PublicTalks::Talks::IndexPageComponent.new(scope)
+      expect(renderer).to have_rendered_component(expected_component)
+    end
+
+    it 'takes since params' do
+      mock_renderer
+
+      get('/public_talks/talks', params: { since: '2021-02-01' })
+
+      scope = Db::PublicTalk.order(:date).limit(100).offset(0).since('2021-02-01')
+      expected_component = PublicTalks::Talks::IndexPageComponent.new(scope)
+
       expect(renderer).to have_rendered_component(expected_component)
     end
   end
@@ -78,7 +93,7 @@ RSpec.describe PublicTalks::TalksController, type: :request do
       it 'returns with success' do
         perform_request
 
-        expect(response).to redirect_to('/public_talks/talks')
+        expect(response).to redirect_to(index_page)
       end
 
       it 'creates record' do
@@ -138,7 +153,7 @@ RSpec.describe PublicTalks::TalksController, type: :request do
       it 'responds with 422' do
         perform_request
 
-        expect(response).to redirect_to('/public_talks/talks')
+        expect(response).to redirect_to(index_page)
       end
 
       it 'creates record' do
@@ -173,7 +188,7 @@ RSpec.describe PublicTalks::TalksController, type: :request do
     it 'redirects to index' do
       perform_request
 
-      expect(response).to redirect_to('/public_talks/talks')
+      expect(response).to redirect_to(index_page)
     end
 
     it 'deletes record' do

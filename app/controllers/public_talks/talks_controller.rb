@@ -2,7 +2,12 @@
 
 class PublicTalks::TalksController < ApplicationController
   def index
-    talks = paginate(Db::PublicTalk.order(:date))
+    talks = paginate(Db::PublicTalk.all)
+
+    if params[:since]
+      talks = talks.since(params[:since])
+    end
+
     render PublicTalks::Talks::IndexPageComponent.new(talks)
   end
 
@@ -20,7 +25,7 @@ class PublicTalks::TalksController < ApplicationController
     talk = Db::PublicTalk.new(attributes)
 
     if talk.save
-      return redirect_to(action: :index)
+      return redirect_to(action: :index, since: since_filter)
     end
 
     render PublicTalks::Talks::FormPageComponent.new(talk), status: :unprocessable_entity
@@ -35,7 +40,7 @@ class PublicTalks::TalksController < ApplicationController
     talk = Db::PublicTalk.find(params[:id])
 
     if talk.update(attributes)
-      return redirect_to(action: :index)
+      return redirect_to(action: :index, since: since_filter)
     end
 
     render PublicTalks::Talks::FormPageComponent.new(talk), status: :unprocessable_entity
@@ -44,7 +49,7 @@ class PublicTalks::TalksController < ApplicationController
   def destroy
     talk = Db::PublicTalk.find(params[:id])
     talk.destroy
-    redirect_to(action: :index)
+    redirect_to(action: :index, since: since_filter)
   end
 
   private
@@ -56,5 +61,9 @@ class PublicTalks::TalksController < ApplicationController
       :date,
       :theme
     )
+  end
+
+  def since_filter
+    MeetingWeek.new.first_day
   end
 end
