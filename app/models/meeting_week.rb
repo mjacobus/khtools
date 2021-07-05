@@ -2,8 +2,8 @@
 
 class MeetingWeek < Range
   def initialize(date = Time.zone.today)
-    monday = date - date.days_to_week_start.days
-    sunday = monday + 6.days
+    monday = date.beginning_of_week.to_date
+    sunday = date.end_of_week.to_date
     super(monday, sunday)
   end
 
@@ -13,5 +13,13 @@ class MeetingWeek < Range
 
   def last_day
     self.end
+  end
+
+  def cover?(time)
+    super(time.to_date)
+  end
+
+  def include?(time)
+    super(time.to_date)
   end
 end
