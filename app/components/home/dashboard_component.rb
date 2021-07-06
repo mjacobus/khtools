@@ -9,8 +9,16 @@ class Home::DashboardComponent < PageComponent
     t('app.titles.week_talks')
   end
 
+  def publishers_title
+    t('app.links.publishers')
+  end
+
   def display_week_talks?
     week_talks.any?
+  end
+
+  def field_service_groups
+    Db::FieldServiceGroup.active.order(:name)
   end
 
   private
