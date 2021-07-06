@@ -18,6 +18,7 @@ RSpec.describe Db::PublicTalk, type: :model do
 
     it { is_expected.not_to validate_presence_of(:congregation) }
     it { is_expected.not_to validate_presence_of(:speaker) }
+    it { is_expected.to validate_presence_of(:theme) }
   end
 
   context 'when draft is true' do
@@ -25,6 +26,7 @@ RSpec.describe Db::PublicTalk, type: :model do
 
     it { is_expected.not_to validate_presence_of(:congregation) }
     it { is_expected.not_to validate_presence_of(:speaker) }
+    it { is_expected.not_to validate_presence_of(:theme) }
   end
 
   it 'persists' do
