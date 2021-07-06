@@ -54,8 +54,8 @@ RSpec.describe Db::PublicTalk, type: :model do
 
   describe '.filter' do
     it 'filters by theme' do
-      factories.public_talks.create
-      talk2 = factories.public_talks.create(theme: 'the-theme')
+      talks.create
+      talk2 = talks.create(theme: 'the-theme')
 
       result = described_class.filter(theme: 'the-theme')
       result_ids = result.map(&:id)
@@ -64,10 +64,10 @@ RSpec.describe Db::PublicTalk, type: :model do
     end
 
     it 'filters by congregation_id' do
-      factories.public_talks.create
+      talks.create
 
       congregation = factories.congregations.create
-      talk2 = factories.public_talks.create(congregation_id: congregation.id)
+      talk2 = talks.create(congregation_id: congregation.id)
 
       result = described_class.filter(congregation_id: congregation.id)
       result_ids = result.map(&:id)
@@ -76,10 +76,10 @@ RSpec.describe Db::PublicTalk, type: :model do
     end
 
     it 'filters by speaker_id' do
-      factories.public_talks.create
+      talks.create
 
       speaker = factories.public_speakers.create
-      talk2 = factories.public_talks.create(speaker_id: speaker.id)
+      talk2 = talks.create(speaker_id: speaker.id)
 
       result = described_class.filter(speaker_id: speaker.id)
       result_ids = result.map(&:id)
@@ -88,8 +88,8 @@ RSpec.describe Db::PublicTalk, type: :model do
     end
 
     it 'does not apply any filter if none is passed' do
-      talk1 = factories.public_talks.create
-      talk2 = factories.public_talks.create
+      talk1 = talks.create
+      talk2 = talks.create
 
       result = described_class.filter({})
       result_ids = result.map(&:id)
@@ -98,8 +98,8 @@ RSpec.describe Db::PublicTalk, type: :model do
     end
 
     it 'returns all records when filters are not present' do
-      talk1 = factories.public_talks.create
-      talk2 = factories.public_talks.create
+      talk1 = talks.create
+      talk2 = talks.create
 
       result = described_class.filter(speaker_id: '')
       result_ids = result.map(&:id)
@@ -129,6 +129,21 @@ RSpec.describe Db::PublicTalk, type: :model do
 
         expect(result.pluck(:id)).to eq([a.id, b.id])
       end
+    end
+  end
+
+  describe '.within_week' do
+    let(:week) { MeetingWeek.new }
+
+    it 'returns only talks form that week' do
+      talks.create(date: 8.days.ago)
+      talks.create(date: 8.days.from_now)
+      a = talks.create(date: week.last_day)
+      b = talks.create(date: week.first_day)
+
+      result = described_class.within_week(week)
+
+      expect(result.pluck(:id)).to eq([b.id, a.id])
     end
   end
 end

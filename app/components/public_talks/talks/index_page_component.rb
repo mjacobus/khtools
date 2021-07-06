@@ -28,14 +28,10 @@ class PublicTalks::Talks::IndexPageComponent < PageComponent
   end
 
   def segregate(talks)
-    yield(talks.select { |t| local?(t) }, talks.reject { |t| local?(t) })
+    yield(talks.select(&:local?), talks.reject(&:local?))
   end
 
   private
-
-  def local?(talk)
-    talk&.congregation&.local?
-  end
 
   def since
     if defined?(@since)

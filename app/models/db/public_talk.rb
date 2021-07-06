@@ -20,6 +20,10 @@ class Db::PublicTalk < ApplicationRecord
     "#{I18n.l(date.to_date)} - #{theme_object}"
   end
 
+  def local?
+    congregation&.local?
+  end
+
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/AbcSize
   def self.filter(params)
@@ -45,4 +49,9 @@ class Db::PublicTalk < ApplicationRecord
   end
   # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/AbcSize
+
+  def self.within_week(week = MeetingWeek.new)
+    range = (week.first_day.beginning_of_day..week.last_day.end_of_day)
+    where(date: range)
+  end
 end

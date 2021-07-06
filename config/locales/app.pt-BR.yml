@@ -148,12 +148,11 @@ pt-BR:
         phone_provider: Operadora Telefônica
         numbers: Números
         download_as: "Baixar"
-
-
   app:
     title: "KH Tools"
     titles:
       meeting_attendance: "Contagem de Assistência"
+      week_talks: "Discursos da semana"
     messages:
       page_not_found: "Página não encontrada"
       contact_admin: "Se você já logou mas não tem acesso, contate o admin de sua congregação."
