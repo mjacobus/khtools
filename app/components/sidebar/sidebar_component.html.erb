@@ -9,10 +9,6 @@
         <%= image_tag("#{current_user.avatar}?sz=32", class: 'avatar-32') %> <%= current_user.name %>
       </div>
 
-      <div class="sidebar-header mb-2 mt-4">
-        <b>KH Tools</b>
-      </div>
-
       <% menu_entries.each do |entry| %>
         <% if entry.children.empty? %>
           <div class="top-level p-2 my-2">
