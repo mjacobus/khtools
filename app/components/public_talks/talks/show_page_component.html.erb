@@ -14,21 +14,33 @@
 
 <div class="show-page">
   <div class="row">
-    <div class="col-sm-12 title mb-2">
-      <%= theme(talk) %>
-    </div>
-    <div class="col-sm-12 mb-2">
-      <% if talk.congregation.present? %>
-        <%= icon('shop') { talk.congregation.name } %>
-      <% end %>
-    </div>
     <div class="col-sm-12 mb-2">
       <%= icon('calendar-date') { l(talk.date, format: :short) } %>
+    </div>
+    <div class="col-sm-12 title mb-2">
+      <%= icon(:book) { theme(talk) } %>
+      <% if talk.confirmed? %>
+        <%= icon('check green') %>
+      <% end %>
     </div>
     <div class="col-sm-12 mb-2">
       <% if talk.speaker.present? %>
         <%= icon('person') { speaker_name(talk) } %>
       <% end %>
     </div>
+    <div class="col-sm-12 mb-2">
+      <% if talk.congregation.present? %>
+        <%= icon('shop') { talk.congregation.name } %>
+      <% end %>
+    </div>
+    <% if talk.notes.present? %>
+      <div class="small mt-2">
+        <%= icon('pencil') { content_tag(:em) { talk.notes } } %>
+      </div>
+    <% end %>
   </div>
 </div>
+
+<hr>
+
+<%= render PublicTalks::ContactSpeakerMessageComponent.new(talk) %>
