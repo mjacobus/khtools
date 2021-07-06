@@ -11,8 +11,8 @@ class Db::PublicTalk < ApplicationRecord
 
   validates :congregation, presence: { if: :all_fields_required? }
   validates :speaker, presence: { if: :all_fields_required? }
+  validates :theme, presence: { unless: :draft? }
   validates :date, presence: true
-  validates :theme, presence: true
   validates :status, { inclusion: { in: STATUSES } }
 
   def theme_object

@@ -21,7 +21,9 @@
     <% end %>
   </div>
   <div class="title">
-    <%= icon(:book) { theme(talk) } %>
+    <% if talk.theme.present? %>
+      <%= icon(:book) { theme(talk) } %>
+    <% end %>
     <% if talk.confirmed? %>
       <%= icon('check green') %>
     <% end %>
