@@ -9,7 +9,7 @@ class PublicTalks::Talks::FormPageComponent < PageComponent
 
     if talk.id
       breadcrumb.add_item(
-        l(talk.date, format: :short),
+        talk.summary,
         urls.public_talks_talk_path(talk)
       )
       breadcrumb.add_item(t('app.links.edit'))

@@ -20,7 +20,11 @@ class Db::PublicTalk < ApplicationRecord
   end
 
   def summary
-    "#{I18n.l(date.to_date)} - #{theme_object}"
+    if date
+      return "#{I18n.l(date.to_date)} - #{theme_object.number}"
+    end
+
+    theme_object.number
   end
 
   def local?
