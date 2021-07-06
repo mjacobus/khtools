@@ -41,6 +41,8 @@
   </div>
 </div>
 
-<hr>
 
-<%= render PublicTalks::ContactSpeakerMessageComponent.new(talk) %>
+<details class="mt-3">
+  <summary class="btn full-width btn-primary mb-4"><%= t('app.links.contact_speaker') %></summary>
+  <%= render PublicTalks::ContactSpeakerMessageComponent.new(talk) %>
+</details>

@@ -24,24 +24,5 @@
     </div>
   </div>
 
-  <% if has_contact_information? %>
-    <div class="row">
-      <% if speaker.phone.present? %>
-        <div class="col-sm-4 mb-2">
-          <%= icon('phone') { PhoneNumber.new(speaker.phone).to_s } %>
-        </div>
-        <div class="col-sm-4 mb-2">
-          <%= icon('whatsapp') { whatsapp_api_link  } %>
-        </div>
-        <div class="col-sm-4 mb-2">
-          <%= icon('whatsapp') { whatsapp_web_link  } %>
-        </div>
-      <% end %>
-      <div class="col-sm-12 mb-2">
-        <% if speaker.email.present? %>
-          <%= icon('pencil') { speaker.email } %>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
+  <%= render ContactInfoComponent.new(phone: speaker.phone, email: speaker.email) %>
 </div>

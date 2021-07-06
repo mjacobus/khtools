@@ -8,11 +8,15 @@ class PublicTalks::ContactSpeakerMessageComponent < ApplicationComponent
   end
 
   def render?
-    message.present?
+    message.present? && talk.congregation.present? && talk.speaker.present?
   end
 
   def formatted_message
     simple_format replace(message, variables)
+  end
+
+  def contact_info
+    ContactInfoComponent.new(phone: talk&.speaker&.phone, email: talk&.speaker&.email)
   end
 
   private
