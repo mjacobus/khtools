@@ -1,0 +1,13 @@
+<h1><%= t('app.titles.public_talks') %></h1>
+
+<div class="index-list mt-5">
+  <% talks.each do |talk| %>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="kh-gray-"><%= l(talk.date, format: :short) %></div>
+        <div class="h4 kh-blue"><%= talk.theme_object.theme %></div>
+      </div>
+    </div>
+    <hr class="my-3">
+  <% end %>
+</div>

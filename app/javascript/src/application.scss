@@ -1,6 +1,14 @@
 @import './boostrap_overrides';
 @import './index_pages';
 
+.kh-gray {
+  color: $soft-gray;
+}
+
+.kh-blue {
+  color: $jw-blue;
+}
+
 .form-wrapper label {
   color: gray;
   font-size: 0.8em;

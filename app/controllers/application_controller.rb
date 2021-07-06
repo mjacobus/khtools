@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   before_action :require_authorization
   helper_method :current_user
 
+  layout :layout
+
   rescue_from ActiveRecord::RecordNotFound, with: :render_page404
 
   rescue_from ActiveRecord::DeleteRestrictionError do |exception|
@@ -33,5 +35,9 @@ class ApplicationController < ActionController::Base
 
   def paginate(scope)
     scope.page(params[:page]).per(params[:per_page])
+  end
+
+  def layout
+    current_user ? 'application' : 'public'
   end
 end

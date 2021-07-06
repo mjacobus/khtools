@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     get '/dev/login', to: 'development#login'
   end
 
+  get '/discursos', to: 'public#public_talks'
+
   namespace :field_service do
     resources :campaigns, only: [:index] do
       resources :assignments, controller: :campaign_assignments, only: %i[index edit update] do
