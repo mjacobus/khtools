@@ -3,7 +3,7 @@
 class PageComponent < ApplicationComponent
   def breadcrumb
     @breadcrumb ||= BreadcrumbComponent.new.tap do |b|
-      b.add_item('Home', urls.root_path)
+      b.add_item(t('app.links.home'), urls.root_path)
     end
   end
 
