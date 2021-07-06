@@ -43,6 +43,7 @@ pt-BR:
         speaker: Orador
         date: Data
         theme: Tema
+        draft: Rascunho
       db/congregation:
         name: Nome
         address: Endereço
