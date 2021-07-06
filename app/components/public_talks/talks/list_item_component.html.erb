@@ -22,6 +22,9 @@
   </div>
   <div class="title">
     <%= icon(:book) { theme(talk) } %>
+    <% if talk.confirmed? %>
+      <%= icon('check green') %>
+    <% end %>
   </div>
   <div class="small">
     <div>

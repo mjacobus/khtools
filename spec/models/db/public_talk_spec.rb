@@ -11,6 +11,7 @@ RSpec.describe Db::PublicTalk, type: :model do
   it { is_expected.to validate_presence_of(:speaker) }
   it { is_expected.to validate_presence_of(:date) }
   it { is_expected.to validate_presence_of(:theme) }
+  it { is_expected.to validate_inclusion_of(:status).in_array(described_class::STATUSES) }
 
   context 'when legacy is true' do
     before { talk.legacy = true }
@@ -20,7 +21,7 @@ RSpec.describe Db::PublicTalk, type: :model do
   end
 
   context 'when draft is true' do
-    before { talk.draft = true }
+    before { talk.status = 'draft' }
 
     it { is_expected.not_to validate_presence_of(:congregation) }
     it { is_expected.not_to validate_presence_of(:speaker) }

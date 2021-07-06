@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Db::PublicTalk < ApplicationRecord
+  STATUSES = %w[scheduled confirmed draft].freeze
+
   belongs_to :congregation, class_name: 'Congregation', optional: true
   belongs_to :speaker, class_name: 'Db::PublicSpeaker', optional: true
 
@@ -11,6 +13,7 @@ class Db::PublicTalk < ApplicationRecord
   validates :speaker, presence: { if: :all_fields_required? }
   validates :date, presence: true
   validates :theme, presence: true
+  validates :status, { inclusion: { in: STATUSES } }
 
   def theme_object
     @theme_object ||= PublicTalks::Themes.new.find(theme)
@@ -22,6 +25,14 @@ class Db::PublicTalk < ApplicationRecord
 
   def local?
     congregation&.local?
+  end
+
+  def draft?
+    status == 'draft'
+  end
+
+  def confirmed?
+    status == 'confirmed'
   end
 
   # rubocop:disable Metrics/MethodLength
@@ -58,6 +69,6 @@ class Db::PublicTalk < ApplicationRecord
   private
 
   def all_fields_required?
-    !draft && !legacy
+    !draft? && !legacy?
   end
 end

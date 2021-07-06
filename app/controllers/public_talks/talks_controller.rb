@@ -55,7 +55,7 @@ class PublicTalks::TalksController < ApplicationController
       :speaker_id,
       :date,
       :theme,
-      :draft,
+      :status,
       :notes
     )
   end
