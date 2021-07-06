@@ -14,7 +14,7 @@
     <%= f.input :theme, as: :select, collection: collection_for_theme %>
   <% end %>
   <%= input_wrapper do %>
-    <%= f.input :draft %>
+    <%= f.input :status, as: :select, collection: collection_for_status %>
   <% end %>
   <%= input_wrapper do %>
     <%= f.input :notes %>

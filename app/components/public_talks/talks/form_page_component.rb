@@ -43,4 +43,10 @@ class PublicTalks::Talks::FormPageComponent < PageComponent
       [theme.to_s, theme.number.to_s]
     end
   end
+
+  def collection_for_status
+    Db::PublicTalk::STATUSES.map do |status|
+      [t("app.public_talks.status.#{status}"), status]
+    end
+  end
 end

@@ -44,7 +44,7 @@ pt-BR:
         date: Data
         theme: Tema
         notes: Observações
-        draft: Rascunho
+        status: Situação
       db/congregation:
         name: Nome
         address: Endereço
@@ -217,6 +217,10 @@ pt-BR:
           section:
             building:
     public_talks:
+      status:
+        scheduled: "Agendada"
+        draft: "Rascunho"
+        confirmed: "Confirmada com o Orador"
       themes:
         theme_1: "Você conhece bem a Deus?"
         theme_2: "Você vai sobreviver aos últimos dias?"
