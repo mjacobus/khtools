@@ -1,19 +1,21 @@
 <%= render breadcrumb %>
 
-<div class="index-list mt-3">
-  <h2 class="h6"> <%= talks_title %> </h2>
-  <div class="row">
-    <% talks do |local, non_local| %>
-      <% local.each do |talk| %>
-        <div class="col-lg-6">
-          <%= render PublicTalks::Talks::ListItemComponent.new(talk) %>
-        </div>
+<% if display_week_talks? %>
+  <div class="index-list mt-3">
+    <h2 class="h6"> <%= talks_title %> </h2>
+    <div class="row">
+      <% talks do |local, non_local| %>
+        <% local.each do |talk| %>
+          <div class="col-lg-6">
+            <%= render PublicTalks::Talks::ListItemComponent.new(talk) %>
+          </div>
+        <% end %>
+        <% non_local.each do |talk| %>
+          <div class="col-lg-6">
+            <%= render PublicTalks::Talks::ListItemComponent.new(talk) %>
+          </div>
+        <% end %>
       <% end %>
-      <% non_local.each do |talk| %>
-        <div class="col-lg-6">
-          <%= render PublicTalks::Talks::ListItemComponent.new(talk) %>
-        </div>
-      <% end %>
-    <% end %>
+    </div>
   </div>
-</div>
+<% end %>
