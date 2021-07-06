@@ -8,6 +8,7 @@ class Db::PublicTalk < ApplicationRecord
 
   default_scope -> { order(:date) }
   scope :since, ->(date) { where('date >= ?', date) }
+  scope :scheduled, -> { where(status: 'scheduled') }
 
   validates :congregation, presence: { if: :all_fields_required? }
   validates :speaker, presence: { if: :all_fields_required? }
