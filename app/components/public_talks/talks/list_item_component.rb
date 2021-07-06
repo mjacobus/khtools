@@ -52,6 +52,10 @@ class PublicTalks::Talks::ListItemComponent < PageComponent
       classes << 'current'
     end
 
+    if talk.draft?
+      classes << 'draft'
+    end
+
     classes.join(' ')
   end
 

@@ -19,6 +19,13 @@ RSpec.describe Db::PublicTalk, type: :model do
     it { is_expected.not_to validate_presence_of(:speaker) }
   end
 
+  context 'when draft is true' do
+    before { talk.draft = true }
+
+    it { is_expected.not_to validate_presence_of(:congregation) }
+    it { is_expected.not_to validate_presence_of(:speaker) }
+  end
+
   it 'persists' do
     expect { talk.save }.to change(described_class, :count).by(1)
 

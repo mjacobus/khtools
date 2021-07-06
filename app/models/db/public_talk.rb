@@ -7,8 +7,8 @@ class Db::PublicTalk < ApplicationRecord
   default_scope -> { order(:date) }
   scope :since, ->(date) { where('date >= ?', date) }
 
-  validates :congregation, presence: { unless: :legacy? }
-  validates :speaker, presence: { unless: :legacy? }
+  validates :congregation, presence: { if: :all_fields_required? }
+  validates :speaker, presence: { if: :all_fields_required? }
   validates :date, presence: true
   validates :theme, presence: true
 
@@ -53,5 +53,11 @@ class Db::PublicTalk < ApplicationRecord
   def self.within_week(week = MeetingWeek.new)
     range = (week.first_day.beginning_of_day..week.last_day.end_of_day)
     where(date: range)
+  end
+
+  private
+
+  def all_fields_required?
+    !draft && !legacy
   end
 end
