@@ -6,6 +6,7 @@ pt-BR:
   activerecord:
     models:
       user: Usuário
+      db/app_config: Configuração
       db/congregation: Congregação
       db/public_talk: Discurso
       db/contact: Contato
@@ -45,6 +46,11 @@ pt-BR:
         theme: Tema
         notes: Observações
         status: Situação
+      db/app_config:
+        key: Configuração
+        value: Conteúdo
+        created_at: Criado em
+        updated_at: Atualizado em
       db/congregation:
         name: Nome
         address: Endereço
@@ -169,6 +175,7 @@ pt-BR:
         one: "%{count} contato"
         other: "%{count} contatos"
     links:
+      copy: "Copiar"
       contact_speaker: 'Contatar orador'
       see_all: 'Ver todos'
       actions: "Ações"
