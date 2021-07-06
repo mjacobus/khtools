@@ -4,11 +4,6 @@
       <%= icon('calendar-date') { l(talk.date, format: :short) } %>
     </div>
     <%= render DropdownMenuComponent.new do |component| %>
-      <% if has_a_speaker? %>
-        <% component.item do %>
-          <%= speaker_link %>
-        <% end %>
-      <% end %>
       <% component.item do %>
         <%= show_link %>
       <% end %>
