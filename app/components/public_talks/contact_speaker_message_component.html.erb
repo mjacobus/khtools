@@ -1,9 +1,12 @@
-<%= render contact_info %>
+<details class="mt-3">
+  <summary class="btn full-width btn-primary mb-4"><%= t('app.links.contact_speaker') %></summary>
+  <%= render contact_info %>
 
-<%= render CopyToClipboardComponent.new(selector: '#contact-message-text') %>
+  <%= render CopyToClipboardComponent.new(selector: '#contact-message-text') %>
 
-<div id="contact-message-container">
-  <div id="contact-message-text">
-    <%= formatted_message %>
+  <div id="contact-message-container">
+    <div id="contact-message-text">
+      <%= formatted_message %>
+    </div>
   </div>
-</div>
+</details>
