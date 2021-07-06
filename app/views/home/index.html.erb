@@ -2,4 +2,6 @@
   <div class="alert alert-warning" role="alert">
     <%= t('app.messages.contact_admin') %>
   </div>
+<% else %>
+  <%= render Home::DashboardComponent.new %>
 <% end %>
