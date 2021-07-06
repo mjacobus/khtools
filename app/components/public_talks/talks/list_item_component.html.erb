@@ -34,5 +34,10 @@
         <%= icon('shop') { talk.congregation.name } %>
       <% end %>
     </div>
+    <% if talk.notes.present? %>
+      <div class="extra-small mt-2">
+        <%= icon('pencil') { content_tag(:em) { talk.notes } } %>
+      </div>
+    <% end %>
   </div>
 </div>
