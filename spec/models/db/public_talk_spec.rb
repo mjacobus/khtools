@@ -156,4 +156,12 @@ RSpec.describe Db::PublicTalk, type: :model do
       expect(result.pluck(:id)).to eq([b.id, a.id])
     end
   end
+
+  describe '#summary' do
+    it 'does not raise when theme is absent' do
+      talk.theme = ''
+
+      expect(talk.summary).not_to be_nil
+    end
+  end
 end
