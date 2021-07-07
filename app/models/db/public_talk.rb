@@ -17,7 +17,7 @@ class Db::PublicTalk < ApplicationRecord
   validates :status, { inclusion: { in: STATUSES } }
 
   def theme_object
-    @theme_object ||= PublicTalks::Themes.new.find(theme)
+    @theme_object ||= PublicTalks::Themes.new.find(theme) || PublicTalks::Theme.new('')
   end
 
   def summary
