@@ -23,7 +23,7 @@ class PublicTalks::ContactSpeakerMessageComponent < ApplicationComponent
 
   def variables
     {
-      'congregation.name' => talk.congregation.name,
+      'congregation.name' => local_congregation_name,
       'speaker.congregation' => talk.speaker.congregation.name,
       'speaker.first_name' => talk.speaker.name.split.first,
       'speaker.name' => talk.speaker.name,
@@ -32,6 +32,10 @@ class PublicTalks::ContactSpeakerMessageComponent < ApplicationComponent
       'talk.theme' => PublicTalks::Theme.new(talk.theme).to_s,
       'user.name' => current_user.name
     }
+  end
+
+  def local_congregation_name
+    Db::Congregation.local.first&.name
   end
 
   def replace(message, values)
