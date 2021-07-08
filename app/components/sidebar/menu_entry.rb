@@ -15,6 +15,14 @@ module Sidebar
       @children << child
     end
 
+    def visible?(user)
+      if children.any?
+        return children.any? { |child| child.visible?(user) }
+      end
+
+      UrlAcl.new(url).authorized?(user)
+    end
+
     def active?(url)
       if children.any?
         return children.any? { |child| child.active?(url) }
