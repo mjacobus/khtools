@@ -30,6 +30,7 @@ gem 'view_component', require: 'view_component/engine'
 gem 'webpacker', '~> 4.0'
 
 group :development, :test do
+  gem 'bullet'
   gem 'awesome_print'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'rails-controller-testing'
