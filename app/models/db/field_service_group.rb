@@ -7,4 +7,5 @@ class Db::FieldServiceGroup < ApplicationRecord
            dependent: :restrict_with_exception
 
   scope :active, -> { where("name NOT LIKE '\\_%'") }
+  scope :with_dependencies, -> { includes([:publishers]) }
 end

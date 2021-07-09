@@ -18,7 +18,7 @@ class Home::DashboardComponent < PageComponent
   end
 
   def field_service_groups
-    Db::FieldServiceGroup.active.order(:name)
+    Db::FieldServiceGroup.with_dependencies.active.order(:name)
   end
 
   private
