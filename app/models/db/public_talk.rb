@@ -7,7 +7,7 @@ class Db::PublicTalk < ApplicationRecord
   belongs_to :speaker, class_name: 'Db::PublicSpeaker', optional: true
 
   default_scope -> { order(:date) }
-  scope :with_dependencies, -> { includes([:congregation, speaker: [:congregation]]) }
+  scope :with_dependencies, -> { includes([:congregation, { speaker: [:congregation] }]) }
   scope :since, ->(date) { where('date >= ?', date) }
   scope :scheduled, -> { where(status: 'scheduled') }
 
