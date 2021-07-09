@@ -21,6 +21,19 @@ class Db::Territory < ApplicationRecord
              optional: true
 
   default_scope { order(:name) }
+  scope :with_dependencies, lambda {
+    includes([
+      :assignee,
+      :area,
+      :intercom_type,
+      :letter_box_type,
+      :primary_preaching_method,
+      :secondary_preaching_method,
+      :tertiary_preaching_method,
+      { territory: %i[area territory] }
+    ])
+  }
+
   identifiable_by :name
 
   validates :name, presence: true, uniqueness: { case_sensitive: false, scope: :type }

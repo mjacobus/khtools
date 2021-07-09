@@ -14,4 +14,8 @@ class Db::PhoneListTerritory < Db::Territory
 
     []
   end
+
+  def self.with_dependencies
+    super.includes(:phone_provider)
+  end
 end
