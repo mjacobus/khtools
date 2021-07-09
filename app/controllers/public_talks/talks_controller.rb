@@ -2,7 +2,7 @@
 
 class PublicTalks::TalksController < ApplicationController
   def index
-    talks = paginate(Db::PublicTalk.filter(params))
+    talks = paginate(Db::PublicTalk.filter(params).with_dependencies)
     render PublicTalks::Talks::IndexPageComponent.new(talks)
   end
 
