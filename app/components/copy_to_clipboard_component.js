@@ -3,7 +3,7 @@ import { on } from "delegated-events";
 on("click", "[data-clipboard-selector]", async (event) => {
   event.preventDefault();
   let button = event.target;
-  if (button.tagName !== 'BUTTON') {
+  if (button.tagName !== "BUTTON") {
     button = button.parentElement;
   }
   const confirmation = button.querySelector(

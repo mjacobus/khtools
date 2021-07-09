@@ -1,1 +1,1 @@
-import "./common_index_page_component.scss"
+import "./common_index_page_component.scss";
