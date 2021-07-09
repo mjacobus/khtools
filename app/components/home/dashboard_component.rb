@@ -24,7 +24,7 @@ class Home::DashboardComponent < PageComponent
   private
 
   def week_talks
-    @week_talks ||= Db::PublicTalk.within_week
+    @week_talks ||= Db::PublicTalk.within_week.with_dependencies
   end
 
   def segregate_talks(talks)
