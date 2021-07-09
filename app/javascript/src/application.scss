@@ -1,5 +1,5 @@
-@import './boostrap_overrides';
-@import './index_pages';
+@import "./boostrap_overrides";
+@import "./index_pages";
 
 .kh-gray {
   color: $soft-gray;
@@ -7,6 +7,10 @@
 
 .kh-blue {
   color: $jw-blue;
+}
+
+.width-auto {
+  width: auto;
 }
 
 .form-wrapper label {
@@ -133,10 +137,19 @@
   }
 }
 
-.time { color: #aaa; }
+.time {
+  color: #aaa;
+}
 
 .timeline-text {
   padding-left: 10px;
   margin-bottom: 10px;
 }
 
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

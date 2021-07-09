@@ -1,3 +1,12 @@
 [data-component="dropdown-menu"] .dropdown-toggle:after {
   content: none;
 }
+
+[data-component="dropdown-menu"] li.dropdown-item {
+  padding: 0;
+}
+
+[data-component="dropdown-menu"] a {
+  display: block;
+  padding: 0.25rem 1rem;
+}
