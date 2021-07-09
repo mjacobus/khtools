@@ -26,10 +26,17 @@
     margin-top: -43px;
   }
 
-  [data-component="dropdown-menu"] i { color: black; }
+  [data-component="dropdown-menu"] i {
+    color: black;
+  }
 }
 
-.index-list, .show-page {
-  i { color: #ccc; }
-  i.green { color: green; }
+.index-list,
+.show-page {
+  i {
+    color: #ccc;
+  }
+  i.green {
+    color: green;
+  }
 }

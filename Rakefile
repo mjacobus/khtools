@@ -7,6 +7,11 @@ require_relative 'config/application'
 
 Rails.application.load_tasks
 
+desc 'Run prettier'
+task lint: :environment do
+  `./node_modules/.bin/prettier --write app/components app/assets app/javascript`
+end
+
 namespace :db do
   desc 'Make migration with output'
   task(migrate_with_sql: :environment) do

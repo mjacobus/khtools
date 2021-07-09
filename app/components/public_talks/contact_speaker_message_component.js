@@ -1,1 +1,1 @@
-import "./contact_speaker_message_component.scss"
+import "./contact_speaker_message_component.scss";

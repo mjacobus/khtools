@@ -51,6 +51,7 @@
 // // scss-docs-end import-stack
 //
 
-.was-validated .form-control:valid, .form-control.is-valid {
+.was-validated .form-control:valid,
+.form-control.is-valid {
   border-color: #ced4da;
 }
