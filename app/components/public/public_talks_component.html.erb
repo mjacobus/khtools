@@ -4,7 +4,7 @@
   <% talks.each do |talk| %>
     <div class="row">
       <div class="col-sm-12">
-        <div class="kh-gray-"><%= l(talk.date, format: :short) %></div>
+        <div class="kh-gray kh-upcase"><%= l(talk.date, format: :long) %></div>
         <div class="h4 kh-blue"><%= talk.theme_object.theme %></div>
       </div>
     </div>

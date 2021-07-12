@@ -1,7 +1,7 @@
 <div class="item <%= classes %>">
   <div>
     <div class="small">
-      <%= icon('calendar-date') { l(talk.date, format: :short) } %>
+      <%= icon('calendar-date') { l(talk.date) } %>
     </div>
     <%= render DropdownMenuComponent.new do |component| %>
       <% component.item do %>
