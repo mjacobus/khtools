@@ -171,5 +171,11 @@ RSpec.describe Db::PublicTalk, type: :model do
 
       expect(talk.summary).not_to be_nil
     end
+
+    it 'does not raise when theme is is special' do
+      talk.theme = 'Special theme'
+
+      expect(talk.summary).not_to be_nil
+    end
   end
 end

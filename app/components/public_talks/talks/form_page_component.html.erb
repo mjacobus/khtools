@@ -1,28 +1,41 @@
-<%= render breadcrumb %>
+<div data-component="<%= bem %>" class="<%= bem %>">
+  <%= render breadcrumb %>
 
-<%= simple_form_for(talk, url: target_url, as: :talk) do |f| %>
-  <%= input_wrapper do %>
-    <%= f.input :date %>
+  <%= simple_form_for(talk, url: target_url, as: :talk) do |f| %>
+    <%= input_wrapper do %>
+      <%= f.input :date %>
+    <% end %>
+    <%= input_wrapper do %>
+      <%= f.association :speaker, as: :select, collection: collection_for_speaker %>
+    <% end %>
+    <%= input_wrapper do %>
+      <%= f.association :congregation, as: :select, collection: collection_for_congregation %>
+    <% end %>
+
+    <%= input_wrapper do %>
+      <%= f.input :special, input_html: { class: bem('special_flag') } %>
+    <% end %>
+
+    <div class="<%= bem('theme_select_container') %>" <%= 'hidden' if theme_select_disabled? %>>
+      <%= input_wrapper do %>
+        <%= f.input :theme, as: :select, collection: collection_for_theme, input_html: { disabled: theme_select_disabled? } %>
+      <% end %>
+    </div>
+
+    <div class="<%= bem('theme_text_container') %>" <%= 'hidden' if theme_text_disabled? %>>
+      <%= input_wrapper do %>
+        <%= f.input :theme, as: :string, input_html: { disabled: theme_text_disabled? } %>
+      <% end %>
+    </div>
+
+    <%= input_wrapper do %>
+      <%= f.input :status, as: :select, collection: collection_for_status %>
+    <% end %>
+    <%= input_wrapper do %>
+      <%= f.input :notes %>
+    <% end %>
+    <%= input_wrapper do %>
+      <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>
+    <% end %>
   <% end %>
-  <%= input_wrapper do %>
-    <%= f.input :special %>
-  <% end %>
-  <%= input_wrapper do %>
-    <%= f.association :speaker, as: :select, collection: collection_for_speaker %>
-  <% end %>
-  <%= input_wrapper do %>
-    <%= f.association :congregation, as: :select, collection: collection_for_congregation %>
-  <% end %>
-  <%= input_wrapper do %>
-    <%= f.input :theme, as: :select, collection: collection_for_theme %>
-  <% end %>
-  <%= input_wrapper do %>
-    <%= f.input :status, as: :select, collection: collection_for_status %>
-  <% end %>
-  <%= input_wrapper do %>
-    <%= f.input :notes %>
-  <% end %>
-  <%= input_wrapper do %>
-    <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>
-  <% end %>
-<% end %>
+</div>
