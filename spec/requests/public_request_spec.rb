@@ -23,7 +23,7 @@ RSpec.describe PublicController, type: :request do
 
       perform_request
 
-      scope = Db::PublicTalk.within_week
+      scope = Db::PublicTalk.upcoming.local.since(MeetingWeek.new.first_day)
       expected_component = Public::PublicTalksComponent.new(scope)
       expect(renderer).to have_rendered_component(expected_component)
     end
