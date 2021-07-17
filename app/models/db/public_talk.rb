@@ -13,9 +13,9 @@ class Db::PublicTalk < ApplicationRecord
   scope :upcoming, -> { where.not(status: 'draft') }
   scope :local, -> { joins(:congregation).where(congregation: { local: true }) }
 
-  validates :congregation, presence: { if: :all_fields_required? }
-  validates :speaker, presence: { if: :all_fields_required? }
-  validates :theme, presence: { unless: :draft? }
+  validates :congregation, presence: { if: :congregation_required? }
+  validates :speaker, presence: { if: :speaker_required? }
+  validates :theme, presence: { if: :theme_required? }
   validates :date, presence: true
   validates :status, { inclusion: { in: STATUSES } }
 
@@ -76,7 +76,15 @@ class Db::PublicTalk < ApplicationRecord
 
   private
 
-  def all_fields_required?
-    !draft? && !legacy?
+  def speaker_required?
+    !(legacy? || draft? || special?)
+  end
+
+  def congregation_required?
+    !(legacy? || draft?)
+  end
+
+  def theme_required?
+    !draft?
   end
 end

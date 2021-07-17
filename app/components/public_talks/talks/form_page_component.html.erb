@@ -5,6 +5,9 @@
     <%= f.input :date %>
   <% end %>
   <%= input_wrapper do %>
+    <%= f.input :special %>
+  <% end %>
+  <%= input_wrapper do %>
     <%= f.association :speaker, as: :select, collection: collection_for_speaker %>
   <% end %>
   <%= input_wrapper do %>

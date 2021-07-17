@@ -29,6 +29,14 @@ RSpec.describe Db::PublicTalk, type: :model do
     it { is_expected.not_to validate_presence_of(:theme) }
   end
 
+  context 'when special is true' do
+    before { talk.special = true }
+
+    it { is_expected.to validate_presence_of(:congregation) }
+    it { is_expected.not_to validate_presence_of(:speaker) }
+    it { is_expected.to validate_presence_of(:theme) }
+  end
+
   it 'persists' do
     expect { talk.save }.to change(described_class, :count).by(1)
 

@@ -41,6 +41,7 @@ pt-BR:
       db/public_talk:
         since: Data de início
         congregation: Onde
+        special: Especial
         speaker: Orador
         date: Data
         theme: Tema

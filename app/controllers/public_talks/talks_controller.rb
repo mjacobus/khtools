@@ -56,6 +56,7 @@ class PublicTalks::TalksController < ApplicationController
       :date,
       :theme,
       :status,
+      :special,
       :notes
     )
   end
