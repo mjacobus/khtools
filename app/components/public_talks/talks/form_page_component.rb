@@ -49,4 +49,12 @@ class PublicTalks::Talks::FormPageComponent < PageComponent
       [t("app.public_talks.status.#{status}"), status]
     end
   end
+
+  def theme_select_disabled?
+    @talk.special?
+  end
+
+  def theme_text_disabled?
+    !@talk.special?
+  end
 end

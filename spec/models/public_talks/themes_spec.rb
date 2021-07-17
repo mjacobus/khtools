@@ -14,4 +14,12 @@ RSpec.describe PublicTalks::Themes do
 
     expect(theme.to_s).to eq('36 - Será que a vida é só isso?')
   end
+
+  it 'returns a special theme when theme cannot be found by number' do
+    theme = PublicTalks::SpecialTheme.new('Some name')
+
+    found = themes.find(theme.theme)
+
+    expect(found).to be_equal_to(theme)
+  end
 end

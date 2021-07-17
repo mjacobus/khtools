@@ -13,8 +13,7 @@ module PublicTalks
     end
 
     def find(number)
-      number = number.to_i
-      all.find { |theme| theme.number == number }
+      all.find { |theme| theme.number == number.to_i } || SpecialTheme.new(number)
     end
   end
 end

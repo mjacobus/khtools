@@ -20,15 +20,15 @@ class Db::PublicTalk < ApplicationRecord
   validates :status, { inclusion: { in: STATUSES } }
 
   def theme_object
-    @theme_object ||= PublicTalks::Themes.new.find(theme) || PublicTalks::Theme.new('')
+    @theme_object ||= PublicTalks::Themes.new.find(theme)
   end
 
   def summary
     if date
-      return "#{I18n.l(date.to_date)} - #{theme_object.number}"
+      return "#{I18n.l(date.to_date)} - #{theme_object}"
     end
 
-    theme_object.number
+    theme_object.to_s
   end
 
   def local?
