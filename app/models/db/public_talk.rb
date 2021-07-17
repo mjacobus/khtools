@@ -10,6 +10,7 @@ class Db::PublicTalk < ApplicationRecord
   scope :with_dependencies, -> { includes([:congregation, { speaker: [:congregation] }]) }
   scope :since, ->(date) { where('date >= ?', date) }
   scope :scheduled, -> { where(status: 'scheduled') }
+  scope :upcoming, -> { where.not(status: 'draft') }
 
   validates :congregation, presence: { if: :all_fields_required? }
   validates :speaker, presence: { if: :all_fields_required? }
