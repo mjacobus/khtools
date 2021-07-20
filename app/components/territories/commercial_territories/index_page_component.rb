@@ -8,7 +8,7 @@ class Territories::CommercialTerritories::IndexPageComponent < Territories::Regu
   end
 
   def type
-    :apartment_building
+    :commercial
   end
 
   def territory_actions
