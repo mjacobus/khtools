@@ -41,6 +41,17 @@ ActiveAdmin.register Db::PhoneListTerritory do
       row :final_phone_number do |territory|
         PhoneNumber.new(territory.final_phone_number)
       end
+
+      row :numbers do |record|
+        details do
+          summary t("views.links.show")
+          ul do
+            record.phone_numbers.each do |number|
+              li number
+            end
+          end
+        end
+      end
     end
 
     attributes_table title: t('active_admin.resources.db/territories.sections.files') do
