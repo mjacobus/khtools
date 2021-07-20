@@ -44,7 +44,7 @@ ActiveAdmin.register Db::PhoneListTerritory do
 
       row :numbers do |record|
         details do
-          summary t("views.links.show")
+          summary t('views.links.show')
           ul do
             record.phone_numbers.each do |number|
               li number
