@@ -7,6 +7,15 @@ class Territories::PhoneListTerritoriesController < Territories::TerritoriesCont
     render page
   end
 
+  def new
+    render form(Db::PhoneListTerritory.new)
+  end
+
+  def create
+    @territory = Db::PhoneListTerritory.new
+    save_territory
+  end
+
   def edit
     render Territories::FormPageComponent.new(
       territory: territory
@@ -14,19 +23,26 @@ class Territories::PhoneListTerritoriesController < Territories::TerritoriesCont
   end
 
   def update
-    if territory.update(territory_attributes)
+    save_territory
+  end
+
+  def destroy
+    territory.destroy
+    redirect_to action: :index
+  end
+
+  private
+
+  def save_territory
+    territory.attributes = territory_attributes
+
+    if territory.save
       redirect_to action: :index
       return
     end
 
     render form(territory), status: :unprocessable_entity
   end
-
-  def new
-    render form(Db::PhoneListTerritory.new)
-  end
-
-  private
 
   def form(territory)
     Territories::FormPageComponent.new(territory: territory)
@@ -37,6 +53,7 @@ class Territories::PhoneListTerritoriesController < Territories::TerritoriesCont
       :name,
       :initial_phone_number,
       :final_phone_number,
+      :phone_provider_id,
       :assignee_id,
       :assigned_at
     )

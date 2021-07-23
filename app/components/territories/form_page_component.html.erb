@@ -4,18 +4,26 @@
   <%= input_wrapper do %>
     <%= f.input :name %>
   <% end %>
-  <%= input_wrapper do %>
-    <%= f.input :initial_phone_number %>
-  <% end %>
-  <%= input_wrapper do %>
-    <%= f.input :final_phone_number %>
+
+  <% if type == 'phone_list'  %>
+    <%= input_wrapper do %>
+      <%= f.input :initial_phone_number %>
+    <% end %>
+
+    <%= input_wrapper do %>
+      <%= f.input :final_phone_number %>
+    <% end %>
+
+    <%= input_wrapper do %>
+      <%= f.input :phone_provider_id, as: :select, collection: phone_providers %>
+    <% end %>
   <% end %>
 
   <%= input_wrapper do %>
     <%= f.input :assignee_id, as: :select, collection: publishers %>
   <% end %>
   <%= input_wrapper do %>
-    <%= f.input :assigned_at %>
+    <%= f.input :assigned_at, as: :date, include_blank: true %>
   <% end %>
 
   <%= input_wrapper do %>

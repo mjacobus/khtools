@@ -90,7 +90,7 @@ RSpec.describe PublicTalks::TalksController, type: :request do
     context 'when payload is valid' do
       let(:params) { { talk: factories.public_talks.attributes } }
 
-      it 'returns with success' do
+      it 'redirects to index' do
         perform_request
 
         expect(response).to redirect_to(index_page)
@@ -126,7 +126,7 @@ RSpec.describe PublicTalks::TalksController, type: :request do
   describe 'GET #edit' do
     let(:perform_request) { get("/public_talks/talks/#{talk.id}/edit") }
 
-    it 'returns with success' do
+    it 'responds with 200' do
       perform_request
 
       expect(response).to be_successful
@@ -164,7 +164,7 @@ RSpec.describe PublicTalks::TalksController, type: :request do
     context 'when payload is invalid' do
       let(:params) { { talk: { date: '' } } }
 
-      it 'returns with success' do
+      it 'returns status 422' do
         perform_request
 
         expect(response).to have_http_status(:unprocessable_entity)

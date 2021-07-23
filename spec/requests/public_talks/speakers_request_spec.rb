@@ -135,7 +135,7 @@ RSpec.describe PublicTalks::SpeakersController, type: :request do
     context 'when payload is valid' do
       let(:params) { { speaker: factories.public_speakers.attributes.merge(name: 'new name') } }
 
-      it 'responds with 422' do
+      it 'redirects to index' do
         perform_request
 
         expect(response).to redirect_to('/public_talks/speakers')

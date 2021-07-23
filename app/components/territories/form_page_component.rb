@@ -28,7 +28,9 @@ class Territories::FormPageComponent < PageComponent
     Db::Publisher.all.pluck(:name, :id)
   end
 
-  private
+  def phone_providers
+    Db::PhoneProvider.all.pluck(:name, :id)
+  end
 
   def type
     @type ||= @territory.class.to_s.underscore.split('/').last.sub('_territory', '')

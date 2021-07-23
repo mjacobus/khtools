@@ -16,4 +16,8 @@ class Territories::PhoneListTerritories::IndexPageComponent < Territories::Regul
       link_to(t('app.links.edit'), edit_territories_phone_list_territory_path(territory), class: 'btn')
     end
   end
+
+  def new_action
+    link_to(t('app.links.new'), send("new_territories_#{type}_territory_path"), class: 'btn')
+  end
 end

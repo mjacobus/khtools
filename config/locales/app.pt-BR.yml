@@ -156,6 +156,7 @@ pt-BR:
         created_at: Criado em
         updated_at: Atualizado em
         phone_provider: Operadora Telefônica
+        phone_provider_id: Operadora Telefônica
         numbers: Números
         download_as: "Baixar"
   app:
