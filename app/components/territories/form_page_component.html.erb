@@ -10,6 +10,14 @@
   <%= input_wrapper do %>
     <%= f.input :final_phone_number %>
   <% end %>
+
+  <%= input_wrapper do %>
+    <%= f.input :assignee_id, as: :select, collection: publishers %>
+  <% end %>
+  <%= input_wrapper do %>
+    <%= f.input :assigned_at %>
+  <% end %>
+
   <%= input_wrapper do %>
     <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>
   <% end %>

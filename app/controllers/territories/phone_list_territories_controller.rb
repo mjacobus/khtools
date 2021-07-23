@@ -36,7 +36,9 @@ class Territories::PhoneListTerritoriesController < Territories::TerritoriesCont
     params.require(:territory).permit(
       :name,
       :initial_phone_number,
-      :final_phone_number
+      :final_phone_number,
+      :assignee_id,
+      :assigned_at
     )
   end
 end

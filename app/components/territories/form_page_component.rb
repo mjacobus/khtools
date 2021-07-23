@@ -24,6 +24,10 @@ class Territories::FormPageComponent < PageComponent
     urls.send("territories_#{type}_territories_path")
   end
 
+  def publishers
+    Db::Publisher.all.pluck(:name, :id)
+  end
+
   private
 
   def type
