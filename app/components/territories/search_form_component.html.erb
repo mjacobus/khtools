@@ -1,0 +1,9 @@
+<%= form_with url: action, method: :get, data: { remote: false } do |f| %>
+  <% if type.phone_list? %>
+    <%= f.select(:phone_provider_id, phone_providers, selected: params[:phone_provider_id], include_blank: true) %>
+  <% end %>
+
+  <%= f.select(:publisher_id, publishers, selected: params[:publisher_id], include_blank: true) %>
+
+  <button type="submit">Yeah</button>
+<% end %>

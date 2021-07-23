@@ -40,4 +40,8 @@ class Territories::CommonIndexPageComponent < PageComponent
   def attribute_name(territory, attribute)
     territory.class.human_attribute_name(attribute)
   end
+
+  def search_form
+    Territories::SearchFormComponent.new(type: type, params: params)
+  end
 end
