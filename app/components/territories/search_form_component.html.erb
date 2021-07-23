@@ -3,25 +3,33 @@
 
   <%= form_with url: action, method: :get, data: { remote: false } do |form| %>
     <div class="row">
+      <div class="col-sm-12 col-md-4">
+        <div class="form-wrapper">
+          <label><%= name_label %></label>
+          <%= name_input(form) %>
+        </div>
+      </div>
+
       <% if type.phone_list? %>
         <div class="col-sm-12 col-md-4">
           <div class="form-wrapper">
-            <label><%= phone_providers_label %></label>
-            <%= phone_providers_select(form) %>
+            <label><%= phone_provider_label %></label>
+            <%= phone_provider_input(form) %>
           </div>
         </div>
       <% end %>
 
       <div class="col-sm-12 col-md-4">
         <div class="form-wrapper">
-          <label><%= publishers_label %></label>
-          <%= publishers_select(form) %>
+          <label><%= publisher_label %></label>
+          <%= publisher_input(form) %>
         </div>
       </div>
     </div>
 
     <div>
-      <button class="my-2 btn btn-primary" type="submit"><%= t('app.links.filter') %></button>
+      <button class="my-2 btn btn-primary" type="submit"><%= icon(:search) { t('app.links.search') } %></button>
+      <%= link_to t('app.links.reset'), reset_url, class: 'btn btn-primary' %>
     </div>
   <% end %>
 </details>

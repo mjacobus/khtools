@@ -1,47 +1,57 @@
 # frozen_string_literal: true
-# frozen_string_literal: tru
 
 class Territories::SearchFormComponent < ApplicationComponent
   def initialize(type:, params:)
     @type = type
     @search = SearchParams.new(params)
-    @params = params
   end
 
   def action
     url_for
   end
 
+  def reset_url
+    url_for(publiser_id: nil, name: nil, phone_provider_id: nil)
+  end
+
   def type
     ActiveSupport::StringInquirer.new(@type.to_s)
   end
 
-  def phone_providers_select(form)
+  def name_input(form)
+    form.text_field(:name, input_options.merge(value: @search[:name]))
+  end
+
+  def phone_provider_input(form)
     phone_providers = Db::PhoneProvider.pluck(:name, :id)
     select_input(form, phone_providers, :phone_provider_id)
   end
 
-  def publishers_select(form)
+  def publisher_input(form)
     publishers = Db::Publisher.pluck(:name, :id)
     select_input(form, publishers, :publisher_id)
   end
 
-  def publishers_label
+  def name_label
+    attribute_name(Db::Territory, :name)
+  end
+
+  def publisher_label
     attribute_name(Db::Territory, :assignee)
   end
 
-  def phone_providers_label
+  def phone_provider_label
     attribute_name(Db::Territory, :phone_provider)
   end
 
   def open_attribute
-    @search.any?(:publisher_id, :phone_provider_id) ? 'open' : ''
+    @search.any?(:name, :publisher_id, :phone_provider_id) ? 'open' : ''
   end
 
   private
 
   def select_input(form, options, key)
-    form.select(key, options, { selected: params[key], include_blank: true }, input_options)
+    form.select(key, options, { selected: @search[key], include_blank: true }, input_options)
   end
 
   def input_options

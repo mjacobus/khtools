@@ -177,6 +177,7 @@ pt-BR:
         one: "%{count} contato"
         other: "%{count} contatos"
     links:
+      reset: "Resetar"
       filter: "Filtrar"
       search: "Buscar"
       copy: "Copiar"

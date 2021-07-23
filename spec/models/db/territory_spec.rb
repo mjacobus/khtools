@@ -38,5 +38,30 @@ RSpec.describe Db::Territory, type: :model do
     expect(territory.assignee).to eq(publisher)
   end
 
-  describe '.identify'
+  describe '#search' do
+    let(:banana) { factory.create(name: 'A Banana Territory') }
+    let(:apple) { factory.create(name: 'An apple Territory') }
+    let(:pineapple) { factory.create(name: 'A Pineapple Territory') }
+
+    before do
+      [banana, apple, pineapple]
+    end
+
+    it 'searches by name' do
+      found = described_class.search(name: 'apple')
+
+      expect(found.pluck(:name)).to eq([
+        'An apple Territory',
+        'A Pineapple Territory'
+      ])
+    end
+
+    it 'search by name is sqli safe' do
+      found = described_class.search(name: 'apple " or 1=1 --')
+      expect(found.count).to be_zero
+
+      found = described_class.search(name: "apple ' or 1=1 --")
+      expect(found.count).to be_zero
+    end
+  end
 end
