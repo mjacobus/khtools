@@ -52,14 +52,17 @@ class Db::Territory < ApplicationRecord
   end
 
   def self.search(params = {})
+    params = SearchParams.new(params)
     query = all
-    if params[:publisher_id].present?
-      query = query.where(assignee_id: params[:publisher_id])
+
+    params.if(:publisher_id) do |value|
+      query = query.where(assignee_id: value)
     end
 
-    if params[:phone_provider_id].present?
-      query = query.where(phone_provider_id: params[:phone_provider_id])
+    params.if(:phone_provider_id) do |value|
+      query = query.where(phone_provider_id: value)
     end
+
     query
   end
 end

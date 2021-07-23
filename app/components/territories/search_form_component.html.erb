@@ -1,9 +1,27 @@
-<%= form_with url: action, method: :get, data: { remote: false } do |f| %>
-  <% if type.phone_list? %>
-    <%= f.select(:phone_provider_id, phone_providers, selected: params[:phone_provider_id], include_blank: true) %>
+<details <%= open_attribute %>>
+  <summary class="btn"> <%= icon(:search) %></summary>
+
+  <%= form_with url: action, method: :get, data: { remote: false } do |form| %>
+    <div class="row">
+      <% if type.phone_list? %>
+        <div class="col-sm-12 col-md-4">
+          <div class="form-wrapper">
+            <label><%= phone_providers_label %></label>
+            <%= phone_providers_select(form) %>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="col-sm-12 col-md-4">
+        <div class="form-wrapper">
+          <label><%= publishers_label %></label>
+          <%= publishers_select(form) %>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <button class="my-2 btn btn-primary" type="submit"><%= t('app.links.filter') %></button>
+    </div>
   <% end %>
-
-  <%= f.select(:publisher_id, publishers, selected: params[:publisher_id], include_blank: true) %>
-
-  <button type="submit">Yeah</button>
-<% end %>
+</details>
