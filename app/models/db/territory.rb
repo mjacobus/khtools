@@ -51,9 +51,15 @@ class Db::Territory < ApplicationRecord
      tertiary_preaching_method].compact.map(&:name)
   end
 
+  # rubocop:disable Metrics/MethodLength
   def self.search(params = {})
     params = SearchParams.new(params)
+    arel = arel_table
     query = all
+
+    params.if(:name) do |value|
+      query = query.where(arel[:name].matches("%#{value}%"))
+    end
 
     params.if(:publisher_id) do |value|
       query = query.where(assignee_id: value)
@@ -65,4 +71,5 @@ class Db::Territory < ApplicationRecord
 
     query
   end
+  # rubocop:enable Metrics/MethodLength
 end
