@@ -50,4 +50,19 @@ class Db::Territory < ApplicationRecord
     [primary_preaching_method, secondary_preaching_method,
      tertiary_preaching_method].compact.map(&:name)
   end
+
+  def self.search(params = {})
+    params = SearchParams.new(params)
+    query = all
+
+    params.if(:publisher_id) do |value|
+      query = query.where(assignee_id: value)
+    end
+
+    params.if(:phone_provider_id) do |value|
+      query = query.where(phone_provider_id: value)
+    end
+
+    query
+  end
 end

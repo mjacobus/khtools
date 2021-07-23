@@ -177,6 +177,8 @@ pt-BR:
         one: "%{count} contato"
         other: "%{count} contatos"
     links:
+      filter: "Filtrar"
+      search: "Buscar"
       copy: "Copiar"
       contact_speaker: 'Contatar orador'
       see_all: 'Ver todos'

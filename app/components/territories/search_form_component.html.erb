@@ -1,0 +1,27 @@
+<details <%= open_attribute %>>
+  <summary class="btn"> <%= icon(:search) %></summary>
+
+  <%= form_with url: action, method: :get, data: { remote: false } do |form| %>
+    <div class="row">
+      <% if type.phone_list? %>
+        <div class="col-sm-12 col-md-4">
+          <div class="form-wrapper">
+            <label><%= phone_providers_label %></label>
+            <%= phone_providers_select(form) %>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="col-sm-12 col-md-4">
+        <div class="form-wrapper">
+          <label><%= publishers_label %></label>
+          <%= publishers_select(form) %>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <button class="my-2 btn btn-primary" type="submit"><%= t('app.links.filter') %></button>
+    </div>
+  <% end %>
+</details>
