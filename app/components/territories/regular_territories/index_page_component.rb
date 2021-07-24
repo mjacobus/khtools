@@ -34,9 +34,11 @@ class Territories::RegularTerritories::IndexPageComponent < PageComponent
   end
 
   def list_actions
-    [
-      link_to(t('app.links.new'), send("new_admin_db_#{type}_territory_path"), class: 'btn')
-    ]
+    [new_action]
+  end
+
+  def new_action
+    link_to(t('app.links.new'), send("new_admin_db_#{type}_territory_path"), class: 'btn')
   end
 
   def territory_actions

@@ -143,6 +143,7 @@ pt-BR:
         area: Área
         type: Tipo
         assignee: Designado para
+        assignee_id: Designado para
         assigned_at: Designado em
         returned_at: Devolvido em
         initial_phone_number: Número Inicial
@@ -155,6 +156,7 @@ pt-BR:
         created_at: Criado em
         updated_at: Atualizado em
         phone_provider: Operadora Telefônica
+        phone_provider_id: Operadora Telefônica
         numbers: Números
         download_as: "Baixar"
   app:

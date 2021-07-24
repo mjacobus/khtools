@@ -133,7 +133,7 @@ RSpec.describe PublicTalks::CongregationsController, type: :request do
     context 'when payload is valid' do
       let(:params) { { congregation: factories.congregations.attributes.merge(name: 'new name') } }
 
-      it 'responds with 422' do
+      it 'redirects to index' do
         perform_request
 
         expect(response).to redirect_to('/public_talks/congregations')
