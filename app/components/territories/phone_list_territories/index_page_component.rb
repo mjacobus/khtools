@@ -20,4 +20,15 @@ class Territories::PhoneListTerritories::IndexPageComponent < Territories::Regul
   def new_action
     link_to(t('app.links.new'), send("new_territories_#{type}_territory_path"), class: 'btn')
   end
+
+  def delete_action
+    proc do |territory|
+      link_to(
+        t('app.links.delete'),
+        territories_phone_list_territory_path(territory),
+        data: { method: :delete, confirm: t('app.messages.confirm_delete') },
+        class: 'btn'
+      )
+    end
+  end
 end
