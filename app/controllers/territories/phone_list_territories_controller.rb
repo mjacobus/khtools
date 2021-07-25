@@ -10,15 +10,4 @@ class Territories::PhoneListTerritoriesController < Territories::TerritoriesCont
   def model_class
     Db::PhoneListTerritory
   end
-
-  def attributes
-    %i[
-      name
-      initial_phone_number
-      final_phone_number
-      phone_provider_id
-      assignee_id
-      assigned_at
-    ]
-  end
 end

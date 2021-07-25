@@ -56,4 +56,8 @@ class Territories::TerritoriesController < ApplicationController
   def territory_attributes
     params.require(:territory).permit(*attributes)
   end
+
+  def attributes
+    model_class.new.editable_attributes
+  end
 end
