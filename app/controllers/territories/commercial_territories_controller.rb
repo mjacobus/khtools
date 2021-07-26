@@ -10,8 +10,4 @@ class Territories::CommercialTerritoriesController < Territories::TerritoriesCon
   def model_class
     Db::CommercialTerritory
   end
-
-  def attributes
-    %i[name assignee_id assigned_at]
-  end
 end

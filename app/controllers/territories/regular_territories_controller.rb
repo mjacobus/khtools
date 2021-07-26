@@ -10,8 +10,4 @@ class Territories::RegularTerritoriesController < Territories::TerritoriesContro
   def model_class
     Db::RegularTerritory
   end
-
-  def attributes
-    %i[name assignee_id assigned_at]
-  end
 end
