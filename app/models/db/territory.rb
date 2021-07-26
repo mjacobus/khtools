@@ -72,4 +72,13 @@ class Db::Territory < ApplicationRecord
     query
   end
   # rubocop:enable Metrics/MethodLength
+
+  def editable_attributes
+    %i[
+      name
+      assigned_at
+      returned_at
+      assignee_id
+    ]
+  end
 end

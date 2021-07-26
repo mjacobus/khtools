@@ -5,13 +5,7 @@ class Db::ApartmentBuildingTerritory < Db::Territory
 
   # rubocop:disable Metrics/MethodLength
   def editable_attributes
-    %i[
-      name
-      assigned_at
-      returned_at
-      created_at
-      updated_at
-      assignee_id
+    super + %i[
       address
       building_name
       number_of_apartments
