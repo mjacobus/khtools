@@ -35,4 +35,28 @@ class Territories::FormPageComponent < PageComponent
   def type
     @type ||= @territory.class.to_s.underscore.split('/').last.sub('_territory', '')
   end
+
+  def territory_collection
+    Db::RegularTerritory.order(:name).pluck(:name, :id)
+  end
+
+  def area_collection
+    Db::TerritoryArea.pluck(:name, :id)
+  end
+
+  def intercom_type_collection
+    Db::IntercomType.pluck(:name, :id)
+  end
+
+  def letter_box_type_collection
+    Db::LetterBoxType.pluck(:name, :id)
+  end
+
+  def preaching_method_collection
+    Db::PreachingMethod.pluck(:name, :id)
+  end
+
+  def boolean_collection
+    [[I18n.t('true'), true], [I18n.t('false'), false]]
+  end
 end

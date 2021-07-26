@@ -137,10 +137,14 @@ pt-BR:
         number_of_apartments: Número de Apartamentos
         apartments: Apartamentos
         territory: Território
+        territory_id: Território
         notes: Observações
         intercom_type: Tipo de Interfone
+        intercom_type_id: Tipo de Interfone
         letter_box_type: Tipo de Caixa de Corrêio
+        letter_box_type_id: Tipo de Caixa de Corrêio
         area: Área
+        area_id: Área
         type: Tipo
         assignee: Designado para
         assignee_id: Designado para
@@ -150,7 +154,10 @@ pt-BR:
         final_phone_number: Número Final
         phone_numbers: Telefones
         primary_preaching_method: Método Principal
+        primary_preaching_method_id: Método Principal
         secondary_preaching_method: Método Secundário
+        secondary_preaching_method_id: Método Secundário
+        tertiary_preaching_method_id: Método Alternativo
         tertiary_preaching_method: Método Alternativo
         preaching_methods: Métodos de Pregação
         created_at: Criado em

@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
-class Territories::RegularTerritoriesController < ApplicationController
-  def index
-    territories = paginate(Db::RegularTerritory.all.with_dependencies)
-    page = Territories::RegularTerritories::IndexPageComponent.new(territories)
-    render page
+class Territories::RegularTerritoriesController < Territories::TerritoriesController
+  private
+
+  def index_page_class
+    Territories::RegularTerritories::IndexPageComponent
+  end
+
+  def model_class
+    Db::RegularTerritory
   end
 end

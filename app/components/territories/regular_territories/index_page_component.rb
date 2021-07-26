@@ -38,7 +38,7 @@ class Territories::RegularTerritories::IndexPageComponent < PageComponent
   end
 
   def new_action
-    link_to(t('app.links.new'), send("new_admin_db_#{type}_territory_path"), class: 'btn')
+    link_to(t('app.links.new'), send("new_territories_#{type}_territory_path"), class: 'btn')
   end
 
   def territory_actions
@@ -50,7 +50,7 @@ class Territories::RegularTerritories::IndexPageComponent < PageComponent
 
   def edit_action
     proc do |territory|
-      link_to(t('app.links.edit'), [:edit, :admin, territory], class: 'btn')
+      link_to(t('app.links.edit'), send("edit_territories_#{type}_territory_path", territory), class: 'btn')
     end
   end
 
@@ -58,7 +58,7 @@ class Territories::RegularTerritories::IndexPageComponent < PageComponent
     proc do |territory|
       link_to(
         t('app.links.delete'),
-        admin_db_regular_territory_path(territory),
+        send("territories_#{type}_territory_path", territory),
         data: { method: :delete, confirm: t('app.messages.confirm_delete') },
         class: 'btn'
       )
