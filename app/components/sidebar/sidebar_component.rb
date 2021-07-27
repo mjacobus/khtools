@@ -94,25 +94,31 @@ class Sidebar::SidebarComponent < ApplicationComponent
   end
 
   def regular_territories
-    entry(Db::RegularTerritory.model_name.human, territories_regular_territories_path, icon: 'map')
+    entry(Db::RegularTerritory.model_name.human, urls.territories_path(:regular), icon: 'map')
   end
 
   def commercial_territories
     entry(
       Db::CommercialTerritory.model_name.human,
-      territories_commercial_territories_path,
+      urls.territories_path(:commercial),
       icon: 'cart4'
     )
   end
 
   def phone_list_territories
-    entry(Db::PhoneListTerritory.model_name.human, territories_phone_list_territories_path,
-          icon: 'phone')
+    entry(
+      Db::PhoneListTerritory.model_name.human,
+      urls.territories_path(:phone_list),
+      icon: 'phone'
+    )
   end
 
   def apartment_building_territories
-    entry(Db::ApartmentBuildingTerritory.model_name.human,
-          territories_apartment_building_territories_path, icon: 'building')
+    entry(
+      Db::ApartmentBuildingTerritory.model_name.human,
+      urls.territories_path(:apartment_building),
+      icon: 'building'
+    )
   end
 
   def admin_dashboard
