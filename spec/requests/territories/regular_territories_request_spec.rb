@@ -27,6 +27,26 @@ RSpec.describe Territories::RegularTerritoriesController, type: :request do
     end
   end
 
+  describe 'GET #show' do
+    let(:territory) { factories.territories.create }
+    let(:perform_request) { get "/territories/regular_territories/#{territory.id}" }
+
+    it 'returns http success' do
+      perform_request
+
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'renders the correct component' do
+      mock_renderer
+
+      perform_request
+
+      expected_component = Territories::ShowPageComponent.new(territory: territory)
+      expect(renderer).to have_rendered_component(expected_component)
+    end
+  end
+
   describe 'POST #create' do
     let(:params) { { territory: territory_params } }
 

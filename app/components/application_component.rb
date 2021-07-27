@@ -65,6 +65,9 @@ class ApplicationComponent < ViewComponent::Base
   end
 
   def attribute_name(klass, attribute)
+    if klass.is_a?(ApplicationRecord)
+      klass = klass.class
+    end
     klass.human_attribute_name(attribute)
   end
 end
