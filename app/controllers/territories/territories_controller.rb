@@ -6,6 +6,10 @@ class Territories::TerritoriesController < ApplicationController
     render index_page_class.new(territories)
   end
 
+  def show
+    render Territories::ShowPageComponent.new(territory: territory)
+  end
+
   def new
     render form(model_class.new)
   end

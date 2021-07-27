@@ -11,8 +11,8 @@ class Routes
   end
 
   def territory_path(territory, *args)
-    method = "territories_#{territory.type_key}_territories_path"
-    @helpers.send(method, *args)
+    method = "territories_#{territory.type_key}_territory_path"
+    @helpers.send(method, territory, *args)
   end
 
   def territories_path(type, *args)

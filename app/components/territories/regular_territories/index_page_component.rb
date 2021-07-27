@@ -44,6 +44,7 @@ class Territories::RegularTerritories::IndexPageComponent < PageComponent
   def territory_actions
     [
       edit_action,
+      show_action,
       delete_action
     ]
   end
@@ -54,11 +55,21 @@ class Territories::RegularTerritories::IndexPageComponent < PageComponent
     end
   end
 
+  def show_action
+    proc do |territory|
+      link_to(
+        t('app.links.view'),
+        urls.territory_path(territory),
+        class: 'btn'
+      )
+    end
+  end
+
   def delete_action
     proc do |territory|
       link_to(
         t('app.links.delete'),
-        send("territories_#{type}_territory_path", territory),
+        urls.territory_path(territory),
         data: { method: :delete, confirm: t('app.messages.confirm_delete') },
         class: 'btn'
       )
