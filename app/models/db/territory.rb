@@ -81,4 +81,8 @@ class Db::Territory < ApplicationRecord
       assignee_id
     ]
   end
+
+  def type_key
+    @type_key ||= self.class.to_s.underscore.split('/').last.sub('_territory', '')
+  end
 end

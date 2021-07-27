@@ -11,19 +11,13 @@ class Routes
   end
 
   def territory_path(territory, *args)
-    method = "territories_#{territory_type(territory)}_territories_path"
+    method = "territories_#{territory.type_key}_territories_path"
     @helpers.send(method, *args)
   end
 
   def territories_path(type, *args)
     method = "territories_#{type}_territories_path"
     @helpers.send(method, *args)
-  end
-
-  private
-
-  def territory_type(territory)
-    territory.class.to_s.underscore.split('/').last.sub('_territory', '')
   end
 end
 # rubocop:enable Style/MissingRespondToMissing
