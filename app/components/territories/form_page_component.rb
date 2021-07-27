@@ -36,7 +36,7 @@ class Territories::FormPageComponent < PageComponent
   end
 
   def type
-    @type ||= @territory.class.to_s.underscore.split('/').last.sub('_territory', '')
+    @territory.type_key
   end
 
   def territory_collection
