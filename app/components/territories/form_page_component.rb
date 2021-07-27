@@ -5,7 +5,10 @@ class Territories::FormPageComponent < PageComponent
 
   def initialize(territory:)
     @territory = territory
-    breadcrumb.add_item(t("app.links.#{type}_territories"))
+    breadcrumb.add_item(
+      t("app.links.#{type}_territories"),
+      urls.territories_path(type)
+    )
 
     if territory.id
       breadcrumb.add_item(territory.name)
