@@ -1,117 +1,114 @@
 <%= render breadcrumb %>
 
-<div class="territory">
-  <div class="row item">
-    <div class="col-sm-12 col-lg-12 territory-name mb-2">
-      <i class="bi bi-<%= territory_icon %>"></i>&nbsp;<%= territory.name %> 
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-6 col-lg-6">
-      <% if territory.assignee %>
-        <span title="<%= attribute_name(territory, :assignee) %>">
-          <i class="bi bi-person"></i>&nbsp;<span class="small"><%= territory.assignee %></span>
-        </span>
-      <% end %>
-    </div>
-    <div class="col-sm-6 col-lg-6">
-      <% if territory.assigned_at %>
-        <span title="<%= attribute_name(territory, :assigned_at) %>">
-          <i class="bi bi-calendar-date"></i>&nbsp;<span class="small"><%= l territory.assigned_at.to_date %></span>
-        </span>
-      <% end %>
-      <% if territory.returned_at %>
-        <span title="<%= attribute_name(territory, :returned_at) %>">
-          / <i class="bi bi-calendar-date"></i>&nbsp;<span class="small"><%= l territory.returned_at.to_date %></span>
-        </span>
-      <% end %>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-6 col-lg-6">
-      <% if territory.respond_to?(:contacts) %>
-        <span title="<%= attribute_name(territory, :contacts) %>">
-          <i class="bi bi-people"></i>&nbsp;<span class="small"><%= contacts_text(territory) %></span>
-        </span>
-      <% end %>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-6 col-lg-6">
-      <% if territory.address %>
-        <span title="<%= attribute_name(territory, :address) %>">
-          <i class="bi bi-pin-map"></i>&nbsp;<span class="small"><%= territory.address %></span>
-        </span>
-      <% end %>
-    </div>
-    <div class="col-sm-3 col-lg-3">
-      <% if territory.area_name %>
-        <span title="<%= attribute_name(territory, :area) %>">
-          <i class="bi bi-pin-map"></i>&nbsp;<span class="small"><%= territory.area_name %></span>
-        </span>
-      <% end %>
-    </div>
-    <div class="col-sm-3 col-lg-3">
-      <% if territory.number_of_apartments %>
-        <span title="<%= attribute_name(territory, :number_of_apartments) %>">
-          <i class="bi bi-door-closed"></i>&nbsp;<span class="small"><%= territory.number_of_apartments %></span>
-        </span>
-      <% end %>
-    </div>
-    <div class="col-sm-6 col-lg-6">
-      <% if territory.intercom_type %>
-        <span title="<%= attribute_name(territory, :intercom_type) %>">
-          <i class="bi bi-soundwave"></i>&nbsp;<span class="small"><%= territory.intercom_type.name %></span>
-        </span>
-      <% end %>
-    </div>
-    <div class="col-sm-3 col-lg-3">
-      <% if territory.letter_box_type %>
-        <span title="<%= attribute_name(territory, :letter_box_type) %>">
-          <i class="bi bi-mailbox2"></i>&nbsp;<span class="small"><%= territory.letter_box_type.name %></span>
-        </span>
-      <% end %>
-    </div>
-    <div class="col-sm-3 col-lg-3" alt="foobar">
-      <% unless territory.has_a_roof.nil? %>
-        <span title="<%= attribute_name(territory, :has_a_roof) %>">
-          <i class="bi bi-umbrella"></i>&nbsp;<span class="small"><%= t(territory.has_a_roof.to_s) %></span>
-        </span>
-      <% end %>
-    </div>
-    <div class="col-sm-6 col-lg-6">
-      <% if territory.preaching_method_names.any? %>
-        <span title="<%= attribute_name(territory, :preaching_methods) %>">
-          <i class="bi bi-briefcase"></i>&nbsp;<span class="small"><%= territory.preaching_method_names.join(', ') %></span>
-        </span>
-      <% end %>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-6 col-lg-6">
-      <% if territory.initial_phone_number %>
-        <span title="<%= attribute_name(territory, :phone_numbers) %>">
-          <i class="bi bi-telephone"></i>&nbsp;<span class="small"><%= PhoneNumber.new(territory.initial_phone_number) %>&nbsp;/&nbsp;<%= PhoneNumber.new(territory.final_phone_number) %></span>
-        </span>
-      <% end %>
-    </div>
-    <div class="col-sm-6 col-lg-6">
-      <% if territory.respond_to?(:phone_provider) %>
-        <span title="<%= attribute_name(territory, :phone_provider) %>">
-          <i class="bi bi-phone"></i>&nbsp;<span class="small"><%= territory.phone_provider.name %></span>
-        </span>
-      <% end %>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-12 col-lg-12">
-      <% if territory.notes %>
-        <span title="<%= attribute_name(territory, :notes) %>">
-          <div class="mt-3">
-            <i class="bi bi-pencil-square"></i>&nbsp;<span class="small"><%= territory.notes %></span>
-          </div>
-        </span>
-      <% end %>
-    </div>
-  </div>
+<div>
+  <%= icon(territory_icon) { territory.name } %>
+</div>
+
+
+<div>
+  <% if territory.building_name %>
+    <%= icon(:star) { territory.building_name } %>
+  <% end %>
+</div>
+
+
+<div>
+  <% if territory.respond_to?(:contacts) %>
+    <%= icon(:people) { contacts_text(territory) } %>
+  <% end %>
+</div>
+
+<div>
+  <% if territory.address %>
+    <%= icon('pin-map') { territory.address } %>
+  <% end %>
+</div>
+
+<div>
+  <% if territory.area_name %>
+    <%= icon('pin-map') { territory.area_name } %>
+  <% end %>
+</div>
+
+<div>
+  <% if territory.number_of_apartments %>
+    <%= icon('door-closed') { territory.number_of_apartments.to_s } %>
+  <% end %>
+</div>
+
+<div>
+  <% if territory.intercom_type %>
+    <%= icon('soundwave') { territory.intercom_type.name } %>
+  <% end %>
+</div>
+
+<div>
+  <% if territory.letter_box_type %>
+    <%= icon(:mailbox2) { territory.letter_box_type.name } %>
+  <% end %>
+</div>
+
+<div>
+  <% unless territory.has_a_roof.nil? %>
+    <%= icon('umbrella') { t(territory.has_a_roof.to_s) } %>
+  <% end %>
+</div>
+
+<div>
+  <% if territory.preaching_method_names.any? %>
+    <%= icon('briefcase') { territory.preaching_method_names.join(', ') } %>
+  <% end %>
+</div>
+
+<div>
+  <% if territory.initial_phone_number %>
+    <%= icon(:telephone) {
+      [
+        PhoneNumber.new(territory.initial_phone_number), 
+        PhoneNumber.new(territory.final_phone_number)
+      ].map(&:to_s).join(' - ')
+    } %>
+  <% end %>
+</div>
+
+<div>
+  <% if territory.territory %>
+    <%= icon(:map) { territory.name } %>
+  <% end %>
+</div>
+
+<div>
+  <% if territory.respond_to?(:phone_provider) %>
+    <%= icon('phone') { territory.phone_provider.name } %>
+  <% end %>
+</div>
+
+<div>
+  <% if territory.apartments %>
+    <pre>
+      <%= icon('door-closed') { territory.apartments } %>
+    </pre>
+  <% end %>
+</div>
+
+<% if territory.notes %>
+  <%= icon('pencil-square') { territory.notes } %>
+<% end %>
+
+<div>
+  <% if territory.assignee %>
+    <%= icon(:person) { territory.assignee } %>
+  <% end %>
+</div>
+
+<div>
+  <% if territory.assigned_at %>
+    <%= icon('calendar-date') { l(territory.assigned_at.to_date) } %>
+  <% end %>
+</div>
+
+<div>
+  <% if territory.returned_at %>
+    <%= icon('calendar-date') { l(territory.returned_at.to_date) } %>
+  <% end %>
 </div>
