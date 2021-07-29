@@ -14,7 +14,6 @@ class Territories::RegularTerritories::IndexPageComponent < PageComponent
       breadcrumb: breadcrumb,
       title: model.model_name.human,
       list_actions: list_actions,
-      territory_actions: territory_actions,
       type: type
     )
   end
@@ -33,46 +32,4 @@ class Territories::RegularTerritories::IndexPageComponent < PageComponent
     :regular
   end
 
-  def list_actions
-    [new_action]
-  end
-
-  def new_action
-    link_to(t('app.links.new'), send("new_territories_#{type}_territory_path"), class: 'btn')
-  end
-
-  def territory_actions
-    [
-      edit_action,
-      show_action,
-      delete_action
-    ]
-  end
-
-  def edit_action
-    proc do |territory|
-      link_to(t('app.links.edit'), send("edit_territories_#{type}_territory_path", territory), class: 'btn')
-    end
-  end
-
-  def show_action
-    proc do |territory|
-      link_to(
-        t('app.links.view'),
-        urls.territory_path(territory),
-        class: 'btn'
-      )
-    end
-  end
-
-  def delete_action
-    proc do |territory|
-      link_to(
-        t('app.links.delete'),
-        urls.territory_path(territory),
-        data: { method: :delete, confirm: t('app.messages.confirm_delete') },
-        class: 'btn'
-      )
-    end
-  end
 end
