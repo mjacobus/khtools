@@ -1,114 +1,19 @@
 <%= render breadcrumb %>
 
-<div>
-  <%= icon(territory_icon) { territory.name } %>
-</div>
-
-
-<div>
-  <% if territory.building_name %>
-    <%= icon(:star) { territory.building_name } %>
-  <% end %>
-</div>
-
-
-<div>
-  <% if territory.respond_to?(:contacts) %>
-    <%= icon(:people) { contacts_text(territory) } %>
-  <% end %>
-</div>
-
-<div>
-  <% if territory.address %>
-    <%= icon('pin-map') { territory.address } %>
-  <% end %>
-</div>
-
-<div>
-  <% if territory.area_name %>
-    <%= icon('pin-map') { territory.area_name } %>
-  <% end %>
-</div>
-
-<div>
-  <% if territory.number_of_apartments %>
-    <%= icon('door-closed') { territory.number_of_apartments.to_s } %>
-  <% end %>
-</div>
-
-<div>
-  <% if territory.intercom_type %>
-    <%= icon('soundwave') { territory.intercom_type.name } %>
-  <% end %>
-</div>
-
-<div>
-  <% if territory.letter_box_type %>
-    <%= icon(:mailbox2) { territory.letter_box_type.name } %>
-  <% end %>
-</div>
-
-<div>
-  <% unless territory.has_a_roof.nil? %>
-    <%= icon('umbrella') { t(territory.has_a_roof.to_s) } %>
-  <% end %>
-</div>
-
-<div>
-  <% if territory.preaching_method_names.any? %>
-    <%= icon('briefcase') { territory.preaching_method_names.join(', ') } %>
-  <% end %>
-</div>
-
-<div>
-  <% if territory.initial_phone_number %>
-    <%= icon(:telephone) {
-      [
-        PhoneNumber.new(territory.initial_phone_number), 
-        PhoneNumber.new(territory.final_phone_number)
-      ].map(&:to_s).join(' - ')
-    } %>
-  <% end %>
-</div>
-
-<div>
-  <% if territory.territory %>
-    <%= icon(:map) { territory.name } %>
-  <% end %>
-</div>
-
-<div>
-  <% if territory.respond_to?(:phone_provider) %>
-    <%= icon('phone') { territory.phone_provider.name } %>
-  <% end %>
-</div>
-
-<div>
-  <% if territory.apartments %>
-    <pre>
-      <%= icon('door-closed') { territory.apartments } %>
-    </pre>
-  <% end %>
-</div>
-
-<% if territory.notes %>
-  <%= icon('pencil-square') { territory.notes } %>
-<% end %>
-
-<div>
-  <% if territory.assignee %>
-    <%= icon(:person) { territory.assignee } %>
-  <% end %>
-</div>
-
-<div>
-  <% if territory.assigned_at %>
-    <%= icon('calendar-date') { l(territory.assigned_at.to_date) } %>
-  <% end %>
-</div>
-
-<div>
-  <% if territory.returned_at %>
-    <%= icon('calendar-date') { l(territory.returned_at.to_date) } %>
-  <% end %>
-</div>
+<div><%= render attribute(:name) %></div>
+<div><%= render attribute(:building_name) %></div>
+<div><%= render attribute(:address) %></div>
+<div><%= render attribute(:area) %></div>
+<div><%= render attribute(:number_of_apartments) %></div>
+<div><%= render attribute(:intercom_type) %></div>
+<div><%= render attribute(:letter_box_type) %></div>
+<div><%= render attribute(:has_a_roof) %></div>
+<div><%= render attribute(:preaching_methods) %></div>
+<div><%= render attribute(:phone_numbers) %></div>
+<div><%= render attribute(:territory) %></div>
+<div><%= render attribute(:phone_provider) %></div>
+<div><%= render attribute(:apartments) %></div>
+<div><%= render attribute(:notes) %></div>
+<div><%= render attribute(:contacts_summary) %></div>
+<div><%= render attribute(:assignee) %></div>
+<div><%= render attribute(:assignment_dates) %></div>

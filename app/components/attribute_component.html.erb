@@ -1,0 +1,5 @@
+<% if icon_name %>
+  <span class="<%= class_names(classes) %>"><%= icon(icon_name) { content } %></span>
+<% else %>
+  <span class="<%= class_names(classes) %>"><%= content %></span>
+<% end %>

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Territories::ShowPageComponent < PageComponent
+  include TerritoryAttributesConcern
+
   attr_reader :territory
 
   def initialize(territory:)
@@ -12,18 +14,5 @@ class Territories::ShowPageComponent < PageComponent
     )
 
     breadcrumb.add_item(territory.name)
-  end
-
-  def territory_icon
-    {
-      phone_list: :phone,
-      commercial: :cart4,
-      regular: :map,
-      apartment_building: :building
-    }.fetch(territory.type_key.to_sym)
-  end
-
-  def contacts_text(territory)
-    I18n.t('app.messages.x_contacts', count: territory.contacts.count)
   end
 end
