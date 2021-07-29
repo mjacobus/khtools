@@ -3,7 +3,7 @@
 class Territories::TerritoriesController < ApplicationController
   def index
     territories = paginate(model_class.all.with_dependencies.search(params))
-    render index_page_class.new(territories)
+    render index_page_component(territories)
   end
 
   def show
@@ -63,5 +63,13 @@ class Territories::TerritoriesController < ApplicationController
 
   def attributes
     model_class.new.editable_attributes
+  end
+
+  def index_page_component(territories)
+    Territories::CommonIndexPageComponent.new(
+      territories: territories,
+      title: model_class.model_name.human,
+      type: model_class.new.type_key.to_sym
+    )
   end
 end

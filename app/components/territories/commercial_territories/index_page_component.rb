@@ -10,20 +10,4 @@ class Territories::CommercialTerritories::IndexPageComponent < Territories::Regu
   def type
     :commercial
   end
-
-  def territory_actions
-    [contacts_action, new_contact_action, super].flatten
-  end
-
-  def contacts_action
-    proc do |territory|
-      link_to t('app.links.contacts'), territories_commercial_territory_contacts_path(territory), class: 'btn'
-    end
-  end
-
-  def new_contact_action
-    proc do |territory|
-      link_to t('app.links.new_contact'), new_territories_commercial_territory_contact_path(territory), class: 'btn'
-    end
-  end
 end

@@ -2,29 +2,31 @@
 
 class Territories::CommonIndexPageComponent < PageComponent
   attr_reader :territories
-  attr_reader :breadcrumb
   attr_reader :title
-  attr_reader :territory_actions
-  attr_reader :list_actions
   attr_reader :type
 
   def initialize(
     territories:,
-    breadcrumb:,
     title:,
-    territory_actions: [],
-    list_actions: [],
     type: :regular
   )
     @territories = territories
-    @breadcrumb = breadcrumb
     @title = title
-    @territory_actions = territory_actions
-    @list_actions = list_actions
     @type = type
+    breadcrumb.add_item(t("app.links.#{type}_territories"))
   end
 
   def search_form
     Territories::SearchFormComponent.new(type: type, params: params)
+  end
+
+  def list_actions
+    [new_action]
+  end
+
+  private
+
+  def new_action
+    link_to(t('app.links.new'), send("new_territories_#{type}_territory_path"), class: 'btn')
   end
 end
