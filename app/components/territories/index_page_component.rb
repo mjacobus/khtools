@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Territories::CommonIndexPageComponent < PageComponent
+class Territories::IndexPageComponent < PageComponent
   attr_reader :territories
   attr_reader :title
   attr_reader :type
