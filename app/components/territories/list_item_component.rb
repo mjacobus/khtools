@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Territories::ListItemComponent < PageComponent
+class Territories::ListItemComponent < ApplicationComponent
   attr_reader :territory
 
   def initialize(territory)
