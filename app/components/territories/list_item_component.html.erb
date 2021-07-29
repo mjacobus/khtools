@@ -1,7 +1,7 @@
     <div class="territory">
       <div class="row item">
         <div class="col-sm-12 col-lg-12 territory-name mb-2">
-          <i class="bi bi-<%= territory_icon %>"></i>&nbsp;<%= territory.name %> 
+          <%= render attribute(:name) %>
           <%= render DropdownMenuComponent.new do |component| %>
             <% actions.each do |action| %>
               <% component.item do %>
