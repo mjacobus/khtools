@@ -22,4 +22,8 @@ class Territories::ShowPageComponent < PageComponent
       apartment_building: :building
     }.fetch(territory.type_key.to_sym)
   end
+
+  def contacts_text(territory)
+    I18n.t('app.messages.x_contacts', count: territory.contacts.count)
+  end
 end
