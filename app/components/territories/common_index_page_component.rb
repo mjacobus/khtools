@@ -24,23 +24,6 @@ class Territories::CommonIndexPageComponent < PageComponent
     @type = type
   end
 
-  def icon
-    {
-      phone_list: :phone,
-      commercial: :cart4,
-      regular: :map,
-      apartment_building: :building
-    }.fetch(type)
-  end
-
-  def contacts_text(territory)
-    I18n.t('app.messages.x_contacts', count: territory.contacts.count)
-  end
-
-  def attribute_name(territory, attribute)
-    territory.class.human_attribute_name(attribute)
-  end
-
   def search_form
     Territories::SearchFormComponent.new(type: type, params: params)
   end
