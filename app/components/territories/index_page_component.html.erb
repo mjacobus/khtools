@@ -1,18 +1,14 @@
 <div id="territories-common-index-component">
   <%= render breadcrumb %>
-
-  <%= render search_form %>
-
-  <%= render DropdownMenuComponent.new(
-    classes: ['btn-primary'],
-    pull: :right
-  ) do |component| %>
+  <%= render DropdownMenuComponent.new(classes: ['btn-primary'], type: :list_options) do |component| %>
     <% list_actions.each do |action| %>
       <% component.item do %>
         <%= action %>
       <% end %>
     <% end %>
   <% end %>
+
+  <%= render search_form %>
 
   <% territories.each do |territory| %>
     <%= render Territories::ListItemComponent.new(territory) %>

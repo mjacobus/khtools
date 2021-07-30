@@ -1,4 +1,4 @@
-<details <%= open_attribute %>>
+<details class="<%= bem %>" <%= open_attribute %>>
   <summary class="btn"> <%= icon(:search) %></summary>
 
   <%= form_with url: action, method: :get, data: { remote: false } do |form| %>

@@ -1,10 +1,10 @@
-<%= render DropdownMenuComponent.new(classes: 'pull-right') do |component| %>
+<%= render DropdownMenuComponent.new(type: :list_options) do |component| %>
   <% component.item do %>
     <%= link_to t('app.links.new'), new_meeting_attendance_meeting_url, class: 'btn' %>
   <% end %>
 <% end %>
 
-<div class="card">
+<div class="card mt-5">
   <div class="card-header">
     <%= t('app.titles.meeting_attendance') %>
   </div>

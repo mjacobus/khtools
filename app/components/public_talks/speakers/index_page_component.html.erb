@@ -1,9 +1,6 @@
 <%= render breadcrumb %>
 
-<%= render DropdownMenuComponent.new(
-  classes: ['btn-primary'],
-  pull: :right
-) do |component| %>
+<%= render DropdownMenuComponent.new(classes: ['btn-primary'], type: :list_options) do |component| %>
   <% component.item do %>
     <%= new_link %>
   <% end %>
@@ -11,21 +8,21 @@
 
 <div class="index-list">
   <% speakers.each do |speaker| %>
-    <div class="item">
+    <div class="item position-relative">
+      <%= render DropdownMenuComponent.new(type: :item_options) do |component| %>
+        <% component.item do %>
+          <%= show_link(speaker) %>
+        <% end %>
+        <% component.item do %>
+          <%= edit_link(speaker) %>
+        <% end %>
+        <% component.item do %>
+          <%= destroy_link(speaker) %>
+        <% end %>
+      <% end %>
       <div class="row">
         <div class="col-sm-12 col-lg-12 title mb-2">
           <%= icon('person') { speaker.name } %>
-          <%= render DropdownMenuComponent.new do |component| %>
-            <% component.item do %>
-              <%= show_link(speaker) %>
-            <% end %>
-            <% component.item do %>
-              <%= edit_link(speaker) %>
-            <% end %>
-            <% component.item do %>
-              <%= destroy_link(speaker) %>
-            <% end %>
-          <% end %>
         </div>
       </div>
       <div class="row small">

@@ -1,19 +1,19 @@
-<div class="item <%= classes %>">
+<div class="item <%= classes %> position-relative">
+  <%= render DropdownMenuComponent.new(type: :item_options) do |component| %>
+    <% component.item do %>
+      <%= show_link %>
+    <% end %>
+    <% component.item do %>
+      <%= edit_link %>
+    <% end %>
+    <% component.item do %>
+      <%= destroy_link %>
+    <% end %>
+  <% end %>
   <div>
     <div class="small">
       <%= icon('calendar-date') { l(talk.date) } %>
     </div>
-    <%= render DropdownMenuComponent.new do |component| %>
-      <% component.item do %>
-        <%= show_link %>
-      <% end %>
-      <% component.item do %>
-        <%= edit_link %>
-      <% end %>
-      <% component.item do %>
-        <%= destroy_link %>
-      <% end %>
-    <% end %>
   </div>
   <div class="title">
     <% if talk.theme.present? %>
