@@ -6,7 +6,7 @@
 <% if show_details? %>
     <%= render CopyToClipboardComponent.new(selector: ".#{bem('phones')}") %>
     </summary>
-    <div class="<%= bem('phones') %>"><%= record.phone_numbers.join("\n") %></div>
+    <div hidden class="<%= bem('phones') %>"><%= record.phone_numbers.join("\n") %></div>
     
     <% record.phone_numbers.each do |phone| %>
       <div><%= phone %></div>
