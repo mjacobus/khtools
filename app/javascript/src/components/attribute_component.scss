@@ -1,0 +1,15 @@
+.AttributeComponent {
+  margin-bottom: 1.4rem;
+  display: inline-block;
+
+  &__label {
+    text-transform: uppercase;
+    color: gray;
+    display: block;
+    font-size: 0.7rem;
+  }
+
+  &__text {
+    color: $dark;
+  }
+}

@@ -1,5 +1,6 @@
-<% if icon_name %>
-  <span class="<%= class_names(classes) %>"><%= icon(icon_name) { content } %></span>
-<% else %>
-  <span class="<%= class_names(classes) %>"><%= content %></span>
-<% end %>
+<span class="<%= bem %> <%= class_names(classes) %>" title="<%= label %>" alt="<%= label %>">
+  <% if show_label %>
+    <span class="<%= bem('label') %> <%= class_names(classes) %>--label"><%= label_content %></span>
+  <% end %>
+  <span class="<%= bem('text') %>"><%= icon_name ? icon(icon_name, class: 'icon-soft') { content } : content %></span>
+</span>

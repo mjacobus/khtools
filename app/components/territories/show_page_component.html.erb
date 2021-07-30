@@ -1,19 +1,16 @@
 <%= render breadcrumb %>
 
-<div><%= render attribute(:name) %></div>
-<div><%= render attribute(:building_name) %></div>
-<div><%= render attribute(:address) %></div>
-<div><%= render attribute(:area) %></div>
-<div><%= render attribute(:number_of_apartments) %></div>
-<div><%= render attribute(:intercom_type) %></div>
-<div><%= render attribute(:letter_box_type) %></div>
-<div><%= render attribute(:has_a_roof) %></div>
-<div><%= render attribute(:preaching_methods) %></div>
-<div><%= render attribute(:phone_numbers) %></div>
-<div><%= render attribute(:territory) %></div>
-<div><%= render attribute(:phone_provider) %></div>
-<div><%= render attribute(:apartments) %></div>
-<div><%= render attribute(:notes) %></div>
-<div><%= render attribute(:contacts_summary) %></div>
-<div><%= render attribute(:assignee) %></div>
-<div><%= render attribute(:assignment_dates) %></div>
+<%= render DropdownMenuComponent.new(
+  classes: ['btn-primary'],
+  pull: :right
+) do |component| %>
+  <% territory_actions.each do |action| %>
+    <% component.item do %>
+      <%= action %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% attributes.each do |attribute_name| %>
+  <div><%= render attribute(attribute_name).with_label.without_icon %></div>
+<% end %>
