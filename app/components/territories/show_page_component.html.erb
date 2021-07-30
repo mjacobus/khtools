@@ -28,14 +28,12 @@
 
 <div><%= render territory_attribute(:contacts_summary) %></div>
 <div><%= render territory_attribute(:phone_provider) %></div>
-<div><%= render territory_attribute(:phone_numbers) %></div>
+<div><%= render territory_attribute(:phone_numbers).show_details %></div>
 
 <% if territory.notes.present? %>
   <div class="alert alert-warning" role="alert"><%= render territory_attribute(:notes) %></div>
 <% end %>
 
-<% if territory.assigned? %>
-  <h2 class="h5 my-3"><%= t('active_admin.resources.db/territories.sections.assignment') %></h2>
-  <div><%= render territory_attribute(:assignee) %></div>
-  <div><%= render territory_attribute(:assignment_dates) %></div>
-<% end %>
+<h2 class="h5 my-3"><%= t('active_admin.resources.db/territories.sections.assignment') %></h2>
+<div><%= render territory_attribute(:assignee) %></div>
+<div><%= render territory_attribute(:assignment_dates) %></div>
