@@ -13,6 +13,27 @@ module TerritoryAttributesConcern
 
   private
 
+  def assignment_action
+    if territory.assigned?
+      return unassign_action
+    end
+
+    assign_action
+  end
+
+  def assign_action
+    link_to t('app.links.assign_territory'), urls.new_territory_assignment_path(territory), class: 'btn'
+  end
+
+  def unassign_action
+    link_to(
+      t('app.links.unassign_territory'),
+      urls.return_territory_path(territory),
+      data: { method: :delete, confirm: t('app.messages.confirm_unassignment') },
+      class: 'btn'
+    )
+  end
+
   def contacts_action
     if type == :commercial
       link_to t('app.links.contacts'), territories_commercial_territory_contacts_path(territory), class: 'btn'

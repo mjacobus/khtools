@@ -23,5 +23,17 @@ class Routes
   def territory_download_xls_path(territory)
     @helpers.xls_territories_phone_list_territory_path(territory)
   end
+
+  def new_territory_assignment_path(territory)
+    @helpers.new_territories_territory_assignment_path(territory)
+  end
+
+  def territory_assignments_path(territory)
+    @helpers.territories_territory_assignments_path(territory)
+  end
+
+  def return_territory_path(territory)
+    @helpers.territories_territory_assignment_path(territory, 'unassign')
+  end
 end
 # rubocop:enable Style/MissingRespondToMissing

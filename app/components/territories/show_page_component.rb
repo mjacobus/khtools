@@ -18,6 +18,7 @@ class Territories::ShowPageComponent < PageComponent
 
   def territory_actions
     [
+      assignment_action,
       xls_action,
       edit_action,
       delete_action

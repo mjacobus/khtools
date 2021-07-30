@@ -177,6 +177,7 @@ pt-BR:
       page_not_found: "Página não encontrada"
       contact_admin: "Se você já logou mas não tem acesso, contate o admin de sua congregação."
       confirm_delete: 'Tem certeza que quer excluir este registro?'
+      confirm_unassignment: 'Tem certeza que este território foi devolvido?'
       confirm_delete_x: 'Tem certeza que quer excluir "%{record}"?'
       assign_campaigns_to_territories: 'Vincular campanha ao o(s) território(s)'
       confirm_campaign_assignment: 'Tem certeza que quer vincular esta campanha a todos os territórios do tipo "%{territory_type}"?'
@@ -191,6 +192,8 @@ pt-BR:
       reset: "Resetar"
       filter: "Filtrar"
       search: "Buscar"
+      assign_territory: "Designar"
+      unassign_territory: "Devolver"
       copy: "Copiar"
       contact_speaker: 'Contatar orador'
       see_all: 'Ver todos'

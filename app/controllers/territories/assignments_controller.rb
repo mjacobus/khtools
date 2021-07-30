@@ -11,6 +11,10 @@ class Territories::AssignmentsController < ApplicationController
     show_territory
   end
 
+  def new
+    render Territories::Assignments::NewPageComponent.new(territory: territory)
+  end
+
   private
 
   def show_territory
