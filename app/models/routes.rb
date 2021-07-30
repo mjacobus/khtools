@@ -21,7 +21,7 @@ class Routes
   end
 
   def territory_download_xls_path(territory)
-    @helpers.xls_territories_phone_list_path(territory)
+    @helpers.xls_territories_phone_list_territory_path(territory)
   end
 end
 # rubocop:enable Style/MissingRespondToMissing
