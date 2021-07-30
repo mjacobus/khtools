@@ -27,27 +27,4 @@ class Territories::ShowPageComponent < PageComponent
   def territory_attribute(name)
     attribute(name).with_label.without_icon
   end
-
-  def attributes
-    %i[
-      name
-      building_name
-      address
-      area
-      number_of_apartments
-      has_a_roof
-
-      intercom_type
-      letter_box_type
-      preaching_methods
-      phone_numbers
-      territory
-      phone_provider
-      apartments
-      notes
-      contacts_summary
-      assignee
-      assignment_dates
-    ]
-  end
 end
