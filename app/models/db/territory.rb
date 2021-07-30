@@ -85,4 +85,22 @@ class Db::Territory < ApplicationRecord
   def type_key
     @type_key ||= self.class.to_s.underscore.split('/').last.sub('_territory', '')
   end
+
+  def assign_to(publisher)
+    unless publisher.is_a?(Db::Publisher)
+      publisher = Db::Publisher.find(publisher)
+    end
+
+    self.assignee_id = publisher.id
+    self.assigned_at = Time.zone.now
+    self.returned_at = nil
+    save!
+  end
+
+  def return
+    self.assignee_id = nil
+    self.assigned_at = nil
+    self.returned_at = nil
+    save!
+  end
 end

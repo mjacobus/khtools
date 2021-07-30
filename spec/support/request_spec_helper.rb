@@ -14,6 +14,7 @@ module RequestSpecHelper
       let(:admin_user) { User.new(id: 2, enabled: true, master: true, avatar: avatar) }
       let(:skip_login) { false }
       let(:factories) { TestFactories.new }
+      let(:routes) { Routes.new }
 
       before do
         unless skip_login

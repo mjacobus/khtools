@@ -40,4 +40,8 @@ class ApplicationController < ActionController::Base
   def layout
     current_user ? 'application' : 'public'
   end
+
+  def routes
+    @routes ||= Routes.new
+  end
 end
