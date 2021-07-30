@@ -1,14 +1,15 @@
-<div class="territory">
+<div class="territory position-relative">
+  <%= render DropdownMenuComponent.new(type: :item_options) do |component| %>
+    <% territory_actions.each do |action| %>
+      <% component.item do %>
+        <%= action %>
+      <% end %>
+    <% end %>
+  <% end %>
+
   <div class="row">
     <div class="col-sm-12 col-lg-12 territory-name mb-2 h5">
       <%= render attribute(:name) %>
-      <%= render DropdownMenuComponent.new do |component| %>
-        <% territory_actions.each do |action| %>
-          <% component.item do %>
-            <%= action %>
-          <% end %>
-        <% end %>
-      <% end %>
     </div>
     <div class="col-sm-6 col-lg-6 small"><%= render attribute(:building_name) %></div>
   </div>

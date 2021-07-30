@@ -1,9 +1,6 @@
 <%= render breadcrumb %>
 
-<%= render DropdownMenuComponent.new(
-  classes: ['btn-primary mb-2'],
-  pull: :right
-) do |component| %>
+<%= render DropdownMenuComponent.new(classes: ['btn-primary mb-2'], type: :list_options) do |component| %>
   <% component.item do %>
     <%= new_link %>
   <% end %>
