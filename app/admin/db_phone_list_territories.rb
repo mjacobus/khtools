@@ -26,7 +26,7 @@ ActiveAdmin.register Db::PhoneListTerritory do
     column :assigned_at
     column :returned_at
     column :download_as do |territory|
-      link_to :xls, xls_territories_phone_list_path(territory)
+      link_to :xls, Routes.new.territory_download_xls_path(territory)
     end
     actions
   end

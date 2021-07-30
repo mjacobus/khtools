@@ -15,6 +15,18 @@ RSpec.describe Territories::PhoneListTerritoriesController, type: :request do
     login_user(admin_user)
   end
 
+  describe 'GET /xls' do
+    it 'returns http success' do
+      territory = factory.create
+      get "/territories/phone_list_territories/#{territory.id}/xls"
+
+      expect(response).to have_http_status(:success)
+      expect(response.headers['Content-Type']).to eq('application/octet-stream')
+      expect(response.headers['Content-Disposition']).to match(/^attachment/)
+      expect(response.headers['Content-Disposition']).to match(/filename="#{territory.name}.xls"/)
+    end
+  end
+
   describe 'GET #index' do
     it 'returns http success' do
       territory = factory.create
