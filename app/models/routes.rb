@@ -19,5 +19,9 @@ class Routes
     method = "territories_#{type}_territories_path"
     @helpers.send(method, *args)
   end
+
+  def territory_download_xls_path(territory)
+    @helpers.xls_territories_phone_list_path(territory)
+  end
 end
 # rubocop:enable Style/MissingRespondToMissing

@@ -15,4 +15,34 @@ class Territories::ShowPageComponent < PageComponent
 
     breadcrumb.add_item(territory.name)
   end
+
+  def territory_actions
+    [
+      xls_action,
+      edit_action,
+      delete_action
+    ].compact
+  end
+
+  def attributes
+    %i[
+      name
+      building_name
+      address
+      area
+      number_of_apartments
+      intercom_type
+      letter_box_type
+      has_a_roof
+      preaching_methods
+      phone_numbers
+      territory
+      phone_provider
+      apartments
+      notes
+      contacts_summary
+      assignee
+      assignment_dates
+    ]
+  end
 end

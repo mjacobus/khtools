@@ -150,6 +150,7 @@ pt-BR:
         assignee_id: Designado para
         assigned_at: Designado em
         returned_at: Devolvido em
+        assignment_dates: Data designação
         initial_phone_number: Número Inicial
         final_phone_number: Número Final
         phone_numbers: Telefones
@@ -186,6 +187,7 @@ pt-BR:
         one: "%{count} contato"
         other: "%{count} contatos"
     links:
+      download_xls: "Baixar XLS"
       reset: "Resetar"
       filter: "Filtrar"
       search: "Buscar"

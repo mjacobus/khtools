@@ -2,9 +2,9 @@
 
 module TerritoryAttributesConcern
   def attribute(name)
-    "Territories::Territory#{name.to_s.classify}Component".constantize.new(territory)
+    "Territories::Territory#{name.to_s.classify}Component".constantize.new(territory, attribute_name: name)
   rescue NameError => _exception
-    "Territories::Territory#{name.to_s.classify.pluralize}Component".constantize.new(territory)
+    "Territories::Territory#{name.to_s.classify.pluralize}Component".constantize.new(territory, attribute_name: name)
   end
 
   def contacts_text(territory)
@@ -39,6 +39,16 @@ module TerritoryAttributesConcern
       urls.territory_path(territory),
       class: 'btn'
     )
+  end
+
+  def xls_action
+    if type == :phone_list
+      link_to(
+        t('app.links.download_xls'),
+        urls.territory_download_xls_path(territory),
+        class: 'btn'
+      )
+    end
   end
 
   def delete_action
