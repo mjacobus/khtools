@@ -1,0 +1,12 @@
+<%= render breadcrumb %>
+
+<%= render attribute(:name).with_label.without_icon %>
+
+<%= simple_form_for(:assignment, url: target_url) do |f| %>
+  <%= input_wrapper do %>
+    <%= f.input :publisher_id, as: :select, collection: publishers, label: attribute_name(territory, :assignee_id) %>
+  <% end %>
+  <%= input_wrapper do %>
+    <%= f.submit(class: 'btn btn-primary mt-3 float-right', value: t('app.links.assign_territory')) %>
+  <% end %>
+<% end %>

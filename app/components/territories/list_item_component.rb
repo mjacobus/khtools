@@ -14,6 +14,7 @@ class Territories::ListItemComponent < ApplicationComponent
       xls_action,
       contacts_action,
       new_contact_action,
+      assignment_action,
       show_action,
       edit_action,
       delete_action

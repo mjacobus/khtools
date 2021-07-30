@@ -103,4 +103,8 @@ class Db::Territory < ApplicationRecord
     self.returned_at = nil
     save!
   end
+
+  def assigned?
+    assignee_id.present?
+  end
 end

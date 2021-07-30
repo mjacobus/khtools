@@ -10,6 +10,26 @@ RSpec.describe Territories::AssignmentsController, type: :request do
   let(:territory) { factories.territories.create(returned_at: Time.zone.now) }
   let(:publisher) { factories.publishers.create }
 
+  describe 'GET #new' do
+    let(:territory) { factories.territories.create }
+    let(:perform_request) { get routes.new_territory_assignment_path(territory) }
+
+    it 'returns http success' do
+      perform_request
+
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'renders the correct component' do
+      mock_renderer
+
+      perform_request
+
+      expected_component = Territories::Assignments::NewPageComponent.new(territory: territory)
+      expect(renderer).to have_rendered_component(expected_component)
+    end
+  end
+
   describe '#create' do
     let(:params) do
       {
@@ -17,7 +37,7 @@ RSpec.describe Territories::AssignmentsController, type: :request do
       }
     end
     let(:perform_request) do
-      post "/territories/territories/#{territory.id}/assignments", params: params
+      post routes.territory_assignments_path(territory), params: params
     end
 
     it 'assigns a territory' do
@@ -52,7 +72,7 @@ RSpec.describe Territories::AssignmentsController, type: :request do
   end
 
   describe '#destroy' do
-    let(:perform_request) { delete "/territories/territories/#{territory.id}/assignments/unassign" }
+    let(:perform_request) { delete routes.return_territory_path(territory) }
 
     it 'unassigns territory' do
       territory.assign_to(publisher)
