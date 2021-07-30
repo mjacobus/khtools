@@ -24,6 +24,10 @@ class Territories::ShowPageComponent < PageComponent
     ].compact
   end
 
+  def territory_attribute(name)
+    attribute(name).with_label.without_icon
+  end
+
   def attributes
     %i[
       name
@@ -31,9 +35,10 @@ class Territories::ShowPageComponent < PageComponent
       address
       area
       number_of_apartments
+      has_a_roof
+
       intercom_type
       letter_box_type
-      has_a_roof
       preaching_methods
       phone_numbers
       territory
