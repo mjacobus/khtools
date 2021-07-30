@@ -11,10 +11,6 @@ module TerritoryAttributesConcern
     I18n.t('app.messages.x_contacts', count: territory.contacts.count)
   end
 
-  def actions
-    [edit_action, contacts_action, new_contact_action, show_action, delete_action]
-  end
-
   private
 
   def contacts_action
