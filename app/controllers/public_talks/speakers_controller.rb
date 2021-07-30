@@ -2,7 +2,7 @@
 
 class PublicTalks::SpeakersController < ApplicationController
   def index
-    speakers = paginate(Db::PublicSpeaker.all.order(:name))
+    speakers = paginate(Db::PublicSpeaker.with_dependencies.order(:name))
     render PublicTalks::Speakers::IndexPageComponent.new(speakers)
   end
 
