@@ -2,6 +2,15 @@
 
 module Territories
   class TerritoryPhoneNumbersComponent < RecordAttributeComponent
+    def show_details
+      @details = true
+      self
+    end
+
+    def show_details?
+      @details
+    end
+
     private
 
     def value
