@@ -11,6 +11,10 @@ module Territories
       @details
     end
 
+    def render?
+      record.respond_to?(:phone_numbers)
+    end
+
     private
 
     def value
