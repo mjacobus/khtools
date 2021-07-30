@@ -11,7 +11,7 @@ class Territories::FormPageComponent < PageComponent
     )
 
     if territory.id
-      breadcrumb.add_item(territory.name)
+      breadcrumb.add_item(territory.name, urls.territory_path(territory))
       breadcrumb.add_item(t('app.links.edit'))
       return
     end
