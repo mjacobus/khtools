@@ -3,7 +3,7 @@
     <div class="col-sm-12 col-lg-12 territory-name mb-2 h5">
       <%= render attribute(:name) %>
       <%= render DropdownMenuComponent.new do |component| %>
-        <% actions.each do |action| %>
+        <% territory_actions.each do |action| %>
           <% component.item do %>
             <%= action %>
           <% end %>
