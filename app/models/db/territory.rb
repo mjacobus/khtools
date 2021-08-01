@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Db::Territory < ApplicationRecord
+  UNASSIGNED_TERRITORY_VALUE = 'none'
+
   belongs_to :assignee, class_name: 'Publisher', optional: true
   belongs_to :territory, class_name: 'Territory', optional: true
   belongs_to :area, class_name: 'Db::TerritoryArea', optional: true
@@ -62,7 +64,11 @@ class Db::Territory < ApplicationRecord
     end
 
     params.if(:publisher_id) do |value|
-      query = query.where(assignee_id: value)
+      query = if value == UNASSIGNED_TERRITORY_VALUE
+                query.where(assignee_id: nil)
+              else
+                query.where(assignee_id: value)
+              end
     end
 
     params.if(:phone_provider_id) do |value|

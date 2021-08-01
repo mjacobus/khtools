@@ -63,5 +63,25 @@ RSpec.describe Db::Territory, type: :model do
       found = described_class.search(name: "apple ' or 1=1 --")
       expect(found.count).to be_zero
     end
+
+    context 'when searching by assignee' do
+      let(:publisher) { factories.publishers.create }
+
+      before do
+        described_class.delete_all
+        factory.create(assignee_id: publisher.id, name: 'assigned')
+        factory.create(assignee_id: nil, name: 'unassigned')
+      end
+
+      it 'searches by assignee' do
+        found = described_class.search(publisher_id: publisher.id.to_s)
+        expect(found.map(&:name)).to eq(['assigned'])
+      end
+
+      it 'searches unassigned territories' do
+        found = described_class.search(publisher_id: 'none')
+        expect(found.map(&:name)).to eq(['unassigned'])
+      end
+    end
   end
 end

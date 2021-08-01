@@ -29,7 +29,8 @@ class Territories::SearchFormComponent < ApplicationComponent
 
   def publisher_input(form)
     publishers = Db::Publisher.pluck(:name, :id)
-    select_input(form, publishers, :publisher_id)
+    no_one = [[t('app.messages.unassigned_territory'), 'none']]
+    select_input(form, (no_one + publishers), :publisher_id)
   end
 
   def name_label
