@@ -3,3 +3,6 @@ function importAll(r) {
 }
 
 importAll(require.context("../components", true, /[_\/]component\.js$/));
+
+// Components inside app/javascript/src/components/
+importAll(require.context("./src/components", true, /[_\/]component\.js$/));
