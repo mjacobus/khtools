@@ -24,11 +24,11 @@
               </summary>
               <% entry.children.each do |child| %>
                 <% if child.visible?(current_user) %>
-                <div class="sub-item py-2">
-                  <a href="<%= child.url %>" class="<%= 'active' if child.active?(request.url) %>">
-                    <% if child.icon %><i class="bi bi-<%= child.icon %>"></i><% end %> <%= child.text %>
-                  </a>
-                </div>
+                  <div class="sub-item py-2">
+                    <a href="<%= child.url %>" class="<%= 'active' if child.active?(request.url) %>">
+                      <% if child.icon %><i class="bi bi-<%= child.icon %>"></i><% end %> <%= child.text %>
+                    </a>
+                  </div>
                 <% end %>
               <% end %>
             </details>
@@ -37,12 +37,4 @@
       <% end %>
     </div>
   </nav>
-
-  <div id="sidebar-button-container">
-    <button data-toggle-sidebar class="btn"><i class="bi bi-arrow-right-circle-fill"></i></button>
-  </div>
-
-  <div id="content" class="container-fluid width-auto position-relative">
-    <%= main_container %>
-  </div>
 </div>

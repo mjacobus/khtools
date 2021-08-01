@@ -4,8 +4,6 @@
 
 # rubocop:disable Metrics/ClassLength
 class Sidebar::SidebarComponent < ApplicationComponent
-  renders_one :main_container
-
   def render?
     current_user
   end
