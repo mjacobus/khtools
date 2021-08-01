@@ -33,6 +33,7 @@
 <% if territory.notes.present? %>
   <div class="alert alert-warning" role="alert"><%= render territory_attribute(:notes) %></div>
 <% end %>
+<div><%= render territory_attribute(:pending_verification) %></div>
 
 <h2 class="h5 my-3"><%= t('active_admin.resources.db/territories.sections.assignment') %></h2>
 <div><%= render territory_attribute(:assignee) %></div>
