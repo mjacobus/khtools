@@ -18,16 +18,22 @@
       </div>
     <% end %>
 
-    <%= render Sidebar::SidebarComponent.new do |component|%>
-      <% component.main_container do %>
+
+    <div class="wrapper" id="sidebar-component">
+      <%= render Sidebar::SidebarComponent.new %>
+
+      <div id="sidebar-button-container">
+        <button data-toggle-sidebar class="btn"><i class="bi bi-arrow-right-circle-fill"></i></button>
+      </div>
+
+      <div id="content" class="container-fluid width-auto position-relative">
         <% if flash[:error] %>
           <div class="alert alert-danger" role="alert">
             <%= flash[:error] %>
           </div>
         <% end %>
-
         <%= yield %>
-      <% end %>
-    <% end %>
+      </div>
+    </div>
   </body>
 </html>
