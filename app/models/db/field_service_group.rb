@@ -8,4 +8,6 @@ class Db::FieldServiceGroup < ApplicationRecord
 
   scope :active, -> { where("name NOT LIKE '\\_%'") }
   scope :with_dependencies, -> { includes([:publishers]) }
+
+  validates :name, presence: true, uniqueness: { case_sensitive: false }
 end
