@@ -75,6 +75,8 @@ class Db::Territory < ApplicationRecord
 
   def editable_attributes
     %i[
+      notes
+      pending_verification
       name
       assigned_at
       returned_at

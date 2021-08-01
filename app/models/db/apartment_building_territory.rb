@@ -12,7 +12,6 @@ class Db::ApartmentBuildingTerritory < Db::Territory
       has_a_roof
       intercom_type
       apartments
-      notes
       territory_id
       area_id
       intercom_type_id

@@ -143,6 +143,7 @@ pt-BR:
         intercom_type_id: Tipo de Interfone
         letter_box_type: Tipo de Caixa de Corrêio
         letter_box_type_id: Tipo de Caixa de Corrêio
+        pending_verification: Verificar informações
         area: Área
         area_id: Área
         type: Tipo
