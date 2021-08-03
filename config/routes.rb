@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   get '/discursos', to: 'public#public_talks'
 
   namespace :field_service do
-    resources :campaigns, only: [:index] do
+    resources :campaigns do
       resources :assignments, controller: :campaign_assignments, only: %i[index edit update] do
         collection do
           post 'create_assignments/:territory_type', action: :create_assignments, as: :create

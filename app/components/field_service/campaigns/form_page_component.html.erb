@@ -1,0 +1,20 @@
+<%= render breadcrumb %>
+
+<%= simple_form_for(campaign, url: target_url, as: :campaign) do |f| %>
+  <%= input_wrapper do %>
+    <%= f.input :code %>
+  <% end %>
+  <%= input_wrapper do %>
+    <%= f.input :name %>
+  <% end %>
+  <%= input_wrapper do %>
+    <%= f.input :start_date, include_blank: true %>
+  <% end %>
+  <%= input_wrapper do %>
+    <%= f.input :end_date, include_blank: true %>
+  <% end %>
+
+  <%= input_wrapper do %>
+    <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>
+  <% end %>
+<% end %>
