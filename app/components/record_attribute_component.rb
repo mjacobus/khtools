@@ -77,4 +77,8 @@ class RecordAttributeComponent < ApplicationComponent
       end
     end
   end
+
+  def to_date(date)
+    l(date.to_date)
+  end
 end
