@@ -11,6 +11,7 @@ class FieldService::Campaigns::ListItemComponent < ApplicationComponent
     [
       assignments_action,
       edit_action,
+      show_action,
       delete_action
     ]
   end
@@ -20,6 +21,10 @@ class FieldService::Campaigns::ListItemComponent < ApplicationComponent
   end
 
   def edit_action
+    link_to(t('app.links.edit'), urls.edit_field_service_campaign_path(campaign), class: 'btn')
+  end
+
+  def show_action
     link_to(t('app.links.view'), urls.field_service_campaign_path(campaign), class: 'btn')
   end
 
