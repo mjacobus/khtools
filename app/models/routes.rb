@@ -35,5 +35,9 @@ class Routes
   def return_territory_path(territory)
     @helpers.territories_territory_assignment_path(territory, 'unassign')
   end
+
+  def new_field_service_campaign_path
+    @helpers.new_field_service_campaign_path
+  end
 end
 # rubocop:enable Style/MissingRespondToMissing
