@@ -3,9 +3,18 @@
 module FieldService
   module Campaigns
     class CampaignNameComponent < RecordAttributeComponent
+      def with_code
+        @code = record.code
+        self
+      end
+
       private
 
       def value
+        if @code
+          return "(#{@code}) #{record.name}"
+        end
+
         record.name
       end
 

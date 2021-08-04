@@ -7,10 +7,15 @@
     <% end %>
   <% end %>
 
-  <div>
-    <%= render attribute(:name) %>
-  </div>
-  <div>
-    <%= render attribute(:code) %>
+  <div class="row">
+    <div class="col-sm-12 col-lg-4">
+      <%= render attribute(:name).with_code %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+      <%= render attribute(:dates) %>
+    </div>
+    <div class="col-sm-12 col-lg-4">
+      <%= render attribute(:territories) %>
+    </div>
   </div>
 </div>
