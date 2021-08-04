@@ -1,0 +1,16 @@
+<div class="item <%= bem %> position-relative">
+  <%= render DropdownMenuComponent.new(type: :item_options) do |component| %>
+    <% actions.each do |action| %>
+      <% component.item do %>
+        <%= action %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <div>
+    <%= render attribute(:name) %>
+  </div>
+  <div>
+    <%= render attribute(:code) %>
+  </div>
+</div>
