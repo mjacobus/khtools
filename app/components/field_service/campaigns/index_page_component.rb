@@ -7,4 +7,8 @@ class FieldService::Campaigns::IndexPageComponent < PageComponent
     @campaigns = campaigns
     breadcrumb.add_item(t('app.links.preaching_campaigns'))
   end
+
+  def pagination
+    PaginationComponent.new(campaigns, position: :bottom)
+  end
 end

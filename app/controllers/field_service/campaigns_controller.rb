@@ -2,7 +2,7 @@
 
 class FieldService::CampaignsController < ApplicationController
   def index
-    campaigns = model_class.order(created_at: :desc)
+    campaigns = paginate(model_class.order(created_at: :desc))
     render FieldService::Campaigns::IndexPageComponent.new(campaigns: campaigns)
   end
 
