@@ -55,7 +55,13 @@ class FieldService::CampaignsController < ApplicationController
   end
 
   def attributes
-    params.require(:campaign).permit(:code, :name, :start_date, :end_date)
+    params.require(:campaign).permit(
+      :code,
+      :description,
+      :name,
+      :start_date,
+      :end_date
+    )
   end
 
   def model_class

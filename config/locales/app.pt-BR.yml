@@ -84,6 +84,7 @@ pt-BR:
       db/preaching_campaign:
         code: Código
         name: Nome
+        dates: "Data Início - Fim"
         description: Descrição
         created_at: Criado em
         updated_at: Atualizado em
