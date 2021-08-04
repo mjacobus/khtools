@@ -5,5 +5,6 @@ class FieldService::Campaigns::IndexPageComponent < PageComponent
 
   def initialize(campaigns:)
     @campaigns = campaigns
+    breadcrumb.add_item(t('app.links.preaching_campaigns'))
   end
 end

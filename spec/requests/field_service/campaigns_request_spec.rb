@@ -12,11 +12,24 @@ RSpec.describe FieldService::CampaignsController, type: :request do
   end
 
   describe 'GET #index' do
+    let(:perform_request) { get routes.field_service_campaigns_path }
+
     it 'responds with success' do
-      get routes.field_service_campaigns_path
+      perform_request
 
       expect(response).to be_successful
       expect(response.body).to include(campaign.name)
+    end
+
+    it 'renders the correct component' do
+      mock_renderer
+
+      perform_request
+
+      expected_component = FieldService::Campaigns::IndexPageComponent.new(
+        campaigns: Db::PreachingCampaign.all
+      )
+      expect(renderer).to have_rendered_component(expected_component)
     end
   end
 

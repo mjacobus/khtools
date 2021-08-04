@@ -1,1 +1,16 @@
-<div>Add FieldService::Campaigns::IndexPage template here</div>
+<%= render breadcrumb %>
+
+<table class="table table-striped">
+  <tbody>
+    <% campaigns.each do |campaign| %>
+      <tr>
+        <td><%= campaign.name %></td>
+        <td><%= campaign.code %></td>
+        <td><%= campaign.assignments.count %></td>
+        <td>
+          <%= link_to(t('app.links.assignments'), field_service_campaign_assignments_url(campaign)) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
