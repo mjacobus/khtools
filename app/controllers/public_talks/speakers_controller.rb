@@ -1,60 +1,31 @@
 # frozen_string_literal: true
 
 class PublicTalks::SpeakersController < ApplicationController
-  def index
-    speakers = paginate(Db::PublicSpeaker.with_dependencies.order(:name))
-    render PublicTalks::Speakers::IndexPageComponent.new(speakers)
-  end
+  include CrudController
 
-  def show
-    speaker = Db::PublicSpeaker.find(params[:id])
-    render PublicTalks::Speakers::ShowPageComponent.new(speaker)
-  end
+  key :speaker
 
-  def new
-    speaker = Db::PublicSpeaker.new
-    render PublicTalks::Speakers::FormPageComponent.new(speaker)
-  end
+  model_class Db::PublicSpeaker
+  scope { Db::PublicSpeaker.with_dependencies.order(:name) }
 
-  def create
-    speaker = Db::PublicSpeaker.new(attributes)
+  permit :name,
+         :phone,
+         :email,
+         :congregation_id
 
-    if speaker.save
-      return redirect_to(action: :index)
-    end
-
-    render PublicTalks::Speakers::FormPageComponent.new(speaker), status: :unprocessable_entity
-  end
-
-  def edit
-    speaker = Db::PublicSpeaker.find(params[:id])
-    render PublicTalks::Speakers::FormPageComponent.new(speaker)
-  end
-
-  def update
-    speaker = Db::PublicSpeaker.find(params[:id])
-
-    if speaker.update(attributes)
-      return redirect_to(action: :index)
-    end
-
-    render PublicTalks::Speakers::FormPageComponent.new(speaker), status: :unprocessable_entity
-  end
-
-  def destroy
-    speaker = Db::PublicSpeaker.find(params[:id])
-    speaker.destroy
-    redirect_to(action: :index)
-  end
+  component_class_template 'PublicTalks::Speakers::%{type}PageComponent'
 
   private
 
-  def attributes
-    params.require(:speaker).permit(
-      :name,
-      :phone,
-      :email,
-      :congregation_id
-    )
+  def form_component(record)
+    component_class(:form).new(record)
+  end
+
+  def show_component(record)
+    component_class(:show).new(record)
+  end
+
+  def index_component(record)
+    component_class(:index).new(record)
   end
 end
