@@ -54,7 +54,7 @@ module CrudController
   end
 
   def save_record
-    record.attributes = attributes
+    record.attributes = permitted_attributes
 
     if record.save
       redirect_to action: :index
@@ -64,8 +64,8 @@ module CrudController
     render form_component(record), status: :unprocessable_entity
   end
 
-  def attributes
-    params.require(key).permit(*allowed_attributes)
+  def permitted_attributes
+    params.require(key).permit(*permitted_keys)
   end
 
   def key
@@ -76,7 +76,7 @@ module CrudController
     raise 'Define key :key_name [:pluralized_key]'
   end
 
-  def allowed_attributes
+  def permitted_keys
     raise 'Define permit :attr1, :attr2...'
   end
 
@@ -102,10 +102,10 @@ module CrudController
     end
 
     def permit(*args)
-      define_method :allowed_attributes do
+      define_method :permitted_keys do
         args
       end
-      private :allowed_attributes
+      private :permitted_keys
     end
 
     # rubocop:disable Performance/RedundantBlockCall:
