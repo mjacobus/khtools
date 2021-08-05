@@ -50,7 +50,15 @@ module CrudController
   end
 
   def record
-    @record ||= scope.find(params[:id])
+    @record ||= find_scope.find(params[:id])
+  end
+
+  def model_class
+    # NOOP
+  end
+
+  def find_scope
+    (model_class || scope)
   end
 
   def save_record
@@ -89,6 +97,18 @@ module CrudController
   end
 
   module ClassMethods
+    def model_class(model_class)
+      define_method :model_class do
+        model_class
+      end
+      private :model_class
+
+      define_method :pluralized_key do
+        pluralized || key.to_s.pluralize.to_sym
+      end
+      private :pluralized_key
+    end
+
     def key(key, pluralized = nil)
       define_method :key do
         key
