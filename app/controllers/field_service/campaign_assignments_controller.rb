@@ -2,7 +2,7 @@
 
 class FieldService::CampaignAssignmentsController < ApplicationController
   def index
-    campaign
+    @assignments = paginate(campaign.assignments.with_dependencies)
   end
 
   def edit

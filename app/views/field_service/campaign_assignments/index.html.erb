@@ -14,7 +14,7 @@
     </tr>
   </thead>
   <tbody>
-    <% @campaign.each_assignment do |assignemnt| %>
+    <% @assignments.each do |assignemnt| %>
       <tr>
         <td><%= assignemnt.territory.name %></td>
         <td><%= assignemnt.assignee&.name %></td>
@@ -31,3 +31,5 @@
     <% end %>
   </tbody>
 </table>
+
+<%= render PaginationComponent.new(@assignments)  %>
