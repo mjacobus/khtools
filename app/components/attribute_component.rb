@@ -43,7 +43,7 @@ class AttributeComponent < ApplicationComponent
   def wrap_with(tag, options = {})
     @container_tag = tag
     classes = [@container_options[:class], options[:class]].compact
-    @container_options.merge!(options).merge!(class: class_names(classes))
+    @container_options.merge!(options)[:class] = class_names(classes)
     self
   end
 
