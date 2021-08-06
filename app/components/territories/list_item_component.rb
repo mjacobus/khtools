@@ -2,14 +2,9 @@
 
 class Territories::ListItemComponent < ApplicationComponent
   include TerritoryAttributesConcern
+  has :territory
 
-  attr_reader :territory
-
-  def initialize(territory)
-    @territory = territory
-  end
-
-  def territory_actions
+  def actions
     [
       xls_action,
       contacts_action,
