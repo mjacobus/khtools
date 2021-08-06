@@ -13,19 +13,5 @@ class PublicTalks::SpeakersController < ApplicationController
          :email,
          :congregation_id
 
-  component_class_template 'PublicTalks::Speakers::%{type}PageComponent'
-
-  private
-
-  def form_component(record)
-    component_class(:form).new(record)
-  end
-
-  def show_component(record)
-    component_class(:show).new(record)
-  end
-
-  def index_component(record)
-    component_class(:index).new(record)
-  end
+  component_class_template 'PublicTalks::Speakers::%{type}PageComponent', use_key: false
 end
