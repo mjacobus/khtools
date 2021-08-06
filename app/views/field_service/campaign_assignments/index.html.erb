@@ -16,7 +16,7 @@
   <tbody>
     <% @assignments.each do |assignemnt| %>
       <tr>
-        <td><%= assignemnt.territory.name %></td>
+        <td><%= render Territories::TerritoryNameComponent.new(assignemnt.territory, attribute_name: :name) %></td>
         <td><%= assignemnt.assignee&.name %></td>
         <td><%= assignemnt.assigned_at %></td>
         <td><%= assignemnt.returned_at %></td>
