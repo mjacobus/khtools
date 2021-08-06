@@ -28,7 +28,7 @@ class FieldService::CampaignAssignmentsController < ApplicationController
   private
 
   def attributes
-    params.require(:db_preaching_campaign_assignment)
+    params.require(:assignment)
       .permit(:assignee_id, :assigned_at, :returned_at)
   end
 

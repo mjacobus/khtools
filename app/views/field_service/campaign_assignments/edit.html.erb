@@ -4,7 +4,7 @@
 <h2 class="mt-3"><%= model_name(model) %></h2>
 
 <div class="inline-check-boxes special-legends soft-labels">
-  <%= simple_form_for(@assignment, url: field_service_campaign_assignment_path(@campaign, @assignment)) do |f| %>
+  <%= simple_form_for(@assignment, url: field_service_campaign_assignment_path(@campaign, @assignment), as: :assignment) do |f| %>
     <div class="mb-3">
       <%= f.error_notification %>
     </div>
