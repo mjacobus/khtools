@@ -32,21 +32,33 @@ module CrudController
 
   def destroy
     record.destroy
-    redirect_to(action: :index)
+    redirect
   end
 
   private
 
   def index_component(records)
-    component_class(:index).new(pluralized_key => records)
+    if use_key?
+      return component_class(:index).new(pluralized_key => records)
+    end
+
+    component_class(:index).new(records)
   end
 
   def show_component(record)
-    component_class(:show).new(key => record)
+    if use_key?
+      return component_class(:show).new(key => record)
+    end
+
+    component_class(:show).new(record)
   end
 
   def form_component(record)
-    component_class(:form).new(key => record)
+    if use_key?
+      return component_class(:form).new(key => record)
+    end
+
+    component_class(:form).new(record)
   end
 
   def record
@@ -65,11 +77,14 @@ module CrudController
     record.attributes = permitted_attributes
 
     if record.save
-      redirect_to action: :index
-      return
+      return redirect
     end
 
     render form_component(record), status: :unprocessable_entity
+  end
+
+  def redirect
+    redirect_to action: :index
   end
 
   def permitted_attributes
@@ -131,13 +146,18 @@ module CrudController
     # rubocop:disable Performance/RedundantBlockCall:
     def scope(&block)
       define_method :scope do
-        block.call
+        block.call(params)
       end
       private :scope
     end
     # rubocop:enable Performance/RedundantBlockCall:
 
-    def component_class_template(value)
+    def component_class_template(value, use_key: true)
+      define_method :use_key? do
+        use_key
+      end
+      private :use_key?
+
       define_method :component_class do |type|
         value.sub('%{type}', type.to_s.classify).constantize
       end
