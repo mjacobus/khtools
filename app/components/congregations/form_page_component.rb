@@ -5,6 +5,19 @@ class Congregations::FormPageComponent < PageComponent
 
   def initialize(congregation)
     @congregation = congregation
+  end
+
+  def target_url
+    if congregation.id
+      return public_talks_congregation_path(congregation)
+    end
+
+    public_talks_congregations_path
+  end
+
+  private
+
+  def setup_breadcrumb
     breadcrumb.add_item(t('app.links.congregations'), urls.public_talks_congregations_path)
 
     if congregation.id
@@ -17,13 +30,5 @@ class Congregations::FormPageComponent < PageComponent
     end
 
     breadcrumb.add_item(t('app.links.new'))
-  end
-
-  def target_url
-    if congregation.id
-      return public_talks_congregation_path(congregation)
-    end
-
-    public_talks_congregations_path
   end
 end

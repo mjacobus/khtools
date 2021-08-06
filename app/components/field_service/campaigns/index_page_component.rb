@@ -1,12 +1,7 @@
 # frozen_string_literal: true
 
 class FieldService::Campaigns::IndexPageComponent < PageComponent
-  attr_reader :campaigns
-
-  def initialize(campaigns:)
-    @campaigns = campaigns
-    breadcrumb.add_item(t('app.links.preaching_campaigns'))
-  end
+  has :campaigns
 
   def new_link
     link_to(t('app.links.new'), urls.new_field_service_campaign_path)
@@ -14,5 +9,11 @@ class FieldService::Campaigns::IndexPageComponent < PageComponent
 
   def pagination
     PaginationComponent.new(campaigns, position: :bottom)
+  end
+
+  private
+
+  def setup_breadcrumb
+    breadcrumb.add_item(t('app.links.preaching_campaigns'))
   end
 end
