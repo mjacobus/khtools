@@ -1,83 +1,23 @@
 # frozen_string_literal: true
 
 module TerritoryAttributesConcern
+  delegate :contacts_text, to: :helper
+  delegate :assign_action, to: :helper
+  delegate :assignment_action, to: :helper
+  delegate :contacts_action, to: :helper
+  delegate :delete_action, to: :helper
+  delegate :edit_action, to: :helper
+  delegate :new_contact_action, to: :helper
+  delegate :show_action, to: :helper
+  delegate :type, to: :helper
+  delegate :unassign_action, to: :helper
+  delegate :xls_action, to: :helper
+
+  def helper
+    @helper ||= TerritoryHelper.new(territory, self)
+  end
+
   def attribute(name)
-    "Territories::Territory#{name.to_s.classify}Component".constantize.new(territory, attribute_name: name)
-  rescue NameError => _exception
-    "Territories::Territory#{name.to_s.classify.pluralize}Component".constantize.new(territory, attribute_name: name)
-  end
-
-  def contacts_text(territory)
-    I18n.t('app.messages.x_contacts', count: territory.contacts.count)
-  end
-
-  private
-
-  def assignment_action
-    if territory.assigned?
-      return unassign_action
-    end
-
-    assign_action
-  end
-
-  def assign_action
-    link_to t('app.links.assign_territory'), urls.new_territory_assignment_path(territory), class: 'btn'
-  end
-
-  def unassign_action
-    link_to(
-      t('app.links.unassign_territory'),
-      urls.return_territory_path(territory),
-      data: { method: :delete, confirm: t('app.messages.confirm_unassignment') },
-      class: 'btn'
-    )
-  end
-
-  def contacts_action
-    if type == :commercial
-      link_to t('app.links.contacts'), territories_commercial_territory_contacts_path(territory), class: 'btn'
-    end
-  end
-
-  def new_contact_action
-    if type == :commercial
-      link_to t('app.links.new_contact'), new_territories_commercial_territory_contact_path(territory), class: 'btn'
-    end
-  end
-
-  def edit_action
-    link_to(t('app.links.edit'), send("edit_territories_#{type}_territory_path", territory), class: 'btn')
-  end
-
-  def show_action
-    link_to(
-      t('app.links.view'),
-      urls.territory_path(territory),
-      class: 'btn'
-    )
-  end
-
-  def xls_action
-    if type == :phone_list
-      link_to(
-        t('app.links.download_xls'),
-        urls.territory_download_xls_path(territory),
-        class: 'btn'
-      )
-    end
-  end
-
-  def delete_action
-    link_to(
-      t('app.links.delete'),
-      urls.territory_path(territory),
-      data: { method: :delete, confirm: t('app.messages.confirm_delete') },
-      class: 'btn'
-    )
-  end
-
-  def type
-    territory.type_key.to_sym
+    helper.attribute_component(name)
   end
 end
