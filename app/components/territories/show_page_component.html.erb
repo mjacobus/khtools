@@ -1,7 +1,7 @@
 <%= render breadcrumb %>
 
 <%= render DropdownMenuComponent.new(classes: ['btn-primary'], type: :list_options) do |component| %>
-  <% territory_actions.each do |action| %>
+  <% actions.each do |action| %>
     <% component.item do %>
       <%= action %>
     <% end %>

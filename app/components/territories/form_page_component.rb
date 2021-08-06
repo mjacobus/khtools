@@ -1,23 +1,7 @@
 # frozen_string_literal: true
 
 class Territories::FormPageComponent < PageComponent
-  attr_reader :territory
-
-  def initialize(territory:)
-    @territory = territory
-    breadcrumb.add_item(
-      t("app.links.#{type}_territories"),
-      urls.territories_path(type)
-    )
-
-    if territory.id
-      breadcrumb.add_item(territory.name, urls.territory_path(territory))
-      breadcrumb.add_item(t('app.links.edit'))
-      return
-    end
-
-    breadcrumb.add_item(t('app.links.new'))
-  end
+  has :territory
 
   def target_url
     if territory.id
@@ -36,7 +20,7 @@ class Territories::FormPageComponent < PageComponent
   end
 
   def type
-    @territory.type_key
+    territory.type_key
   end
 
   def territory_collection
@@ -61,5 +45,22 @@ class Territories::FormPageComponent < PageComponent
 
   def boolean_collection
     [[I18n.t('true'), true], [I18n.t('false'), false]]
+  end
+
+  private
+
+  def setup_breadcrumb
+    breadcrumb.add_item(
+      t("app.links.#{type}_territories"),
+      urls.territories_path(type)
+    )
+
+    if territory.id
+      breadcrumb.add_item(territory.name, urls.territory_path(territory))
+      breadcrumb.add_item(t('app.links.edit'))
+      return
+    end
+
+    breadcrumb.add_item(t('app.links.new'))
   end
 end
