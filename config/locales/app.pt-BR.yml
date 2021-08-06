@@ -93,6 +93,7 @@ pt-BR:
         territories: Territórios
         assignments: Designações
       db/preaching_campaign_assignment:
+        assignment_dates: Data designação
         campaign: Campanha
         territory: Território
         assignee: Designado para
