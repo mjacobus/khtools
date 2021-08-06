@@ -2,10 +2,13 @@
 
 require 'rails_helper'
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers:
 RSpec.describe 'FieldService::CampaignAssignments', type: :request do
   let(:described_class) { FieldService::CampaignAssignmentsController }
   let(:campaign) { assignment.campaign }
   let(:assignment) { factories.preaching_campaign_assignments.create }
+  let(:publisher) { factories.publishers.create }
+  let(:another_publisher) { factories.publishers.create }
 
   before do
     login_user(admin_user)
@@ -38,4 +41,26 @@ RSpec.describe 'FieldService::CampaignAssignments', type: :request do
       expect(response).to redirect_to(field_service_campaign_assignments_url(campaign))
     end
   end
+
+  describe 'PATCH #update' do
+    let(:perform_request) do
+      patch field_service_campaign_assignment_path(campaign, assignment),
+            params: { assignment: { assignee_id: another_publisher.id } }
+    end
+
+    it 'updates assignemnt' do
+      publisher
+
+      expect do
+        perform_request
+      end.to change { assignment.reload.assignee_id }.to(another_publisher.id)
+    end
+
+    it 'redirects to index page' do
+      perform_request
+
+      expect(response).to redirect_to(field_service_campaign_assignments_url(campaign))
+    end
+  end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers:
