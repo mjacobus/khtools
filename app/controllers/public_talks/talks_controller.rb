@@ -6,7 +6,7 @@ class PublicTalks::TalksController < ApplicationController
   key :talk
 
   model_class Db::PublicTalk
-  scope { |params| Db::PublicTalk.filter(params).with_dependencies }
+  scope { Db::PublicTalk.filter(params).with_dependencies }
 
   permit :congregation_id,
          :speaker_id,

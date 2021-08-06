@@ -18,7 +18,7 @@ module CrudController
   end
 
   def create
-    @record = scope.new
+    @record = find_scope.new
     save_record
   end
 
@@ -119,7 +119,7 @@ module CrudController
       private :model_class
 
       define_method :pluralized_key do
-        pluralized || key.to_s.pluralize.to_sym
+        pluralized_key || key.to_s.pluralize.to_sym
       end
       private :pluralized_key
     end
@@ -143,14 +143,12 @@ module CrudController
       private :permitted_keys
     end
 
-    # rubocop:disable Performance/RedundantBlockCall:
     def scope(&block)
       define_method :scope do
-        block.call(params)
+        instance_eval(&block)
       end
       private :scope
     end
-    # rubocop:enable Performance/RedundantBlockCall:
 
     def component_class_template(value, use_key: true)
       define_method :use_key? do
