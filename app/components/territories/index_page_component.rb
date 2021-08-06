@@ -20,7 +20,7 @@ class Territories::IndexPageComponent < PageComponent
     Territories::SearchFormComponent.new(type: type, params: params)
   end
 
-  def list_actions
+  def actions
     [new_action]
   end
 

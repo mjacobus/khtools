@@ -1,7 +1,7 @@
 <div id="territories-common-index-component">
   <%= render breadcrumb %>
   <%= render DropdownMenuComponent.new(classes: ['btn-primary'], type: :list_options) do |component| %>
-    <% list_actions.each do |action| %>
+    <% actions.each do |action| %>
       <% component.item do %>
         <%= action %>
       <% end %>
