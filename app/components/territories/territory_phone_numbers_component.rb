@@ -19,7 +19,7 @@ module Territories
 
     def value
       if phone_numbers.any?
-        phone_numbers.join('- ')
+        phone_numbers.join(' - ')
       end
     end
 

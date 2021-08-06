@@ -6,13 +6,18 @@ class AttributeComponent < ApplicationComponent
   attr_reader :label
   attr_reader :link
   attr_reader :show_label
+  attr_reader :container_tag
+  attr_reader :container_options
 
-  def initialize(icon_name: nil, classes: nil, label: nil, link: nil, show_label: false)
+  def initialize(icon_name: nil, classes: nil, label: nil, link: nil, show_label: false, container_tag: :span, container_options: {})
     @icon_name = icon_name
     @classes = Array.wrap(classes)
     @label = label
     @link = link
     @show_label = show_label
+    @container_tag = :span
+    @container_options = { class: class_names(bem, classes), label: label, title: label }
+    wrap_with(container_tag, container_options)
   end
 
   def render?
@@ -33,6 +38,13 @@ class AttributeComponent < ApplicationComponent
     end
 
     content
+  end
+
+  def wrap_with(tag, options = {})
+    @container_tag = tag
+    classes = [@container_options[:class], options[:class]].compact
+    @container_options.merge!(options).merge!(class: class_names(classes))
+    self
   end
 
   private
