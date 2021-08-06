@@ -117,11 +117,6 @@ module CrudController
         model_class
       end
       private :model_class
-
-      define_method :pluralized_key do
-        pluralized_key || key.to_s.pluralize.to_sym
-      end
-      private :pluralized_key
     end
 
     def key(key, pluralized = nil)
