@@ -51,6 +51,12 @@ class RecordAttributeComponent < ApplicationComponent
     # NOOP
   end
 
+  def wrap_with(tag, options = {})
+    @container_tag = tag
+    @container_options = options || {}
+    self
+  end
+
   def call
     render AttributeComponent.new(**options) do
       value
@@ -70,6 +76,11 @@ class RecordAttributeComponent < ApplicationComponent
       opts[:classes] = bem
       if include_link?
         opts[:link] = link
+      end
+
+      if @container_tag
+        opts[:container_tag] = @container_tag
+        opts[:container_options] = @container_options
       end
 
       if include_label?

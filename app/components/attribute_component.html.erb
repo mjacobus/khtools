@@ -1,6 +1,6 @@
-<span class="<%= bem %> <%= class_names(classes) %>" title="<%= label %>" alt="<%= label %>">
+<%= content_tag(container_tag, container_options) do %>
   <% if show_label %>
     <span class="<%= bem('label') %> <%= class_names(classes) %>--label"><%= label_content %></span>
   <% end %>
   <span class="<%= bem('text') %>"><%= icon_name ? icon(icon_name, class: 'icon-soft') { content } : content %></span>
-</span>
+<% end %>
