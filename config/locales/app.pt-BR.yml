@@ -86,6 +86,8 @@ pt-BR:
         name: Nome
         dates: "Data Início - Fim"
         description: Descrição
+        start_date: "Data de início"
+        end_date: "Data de fim"
         created_at: Criado em
         updated_at: Atualizado em
         territories: Territórios
