@@ -17,7 +17,7 @@ class Territories::IndexPageComponent < PageComponent
   end
 
   def search_form
-    Territories::SearchFormComponent.new(type: type, params: params)
+    Territories::SearchFormComponent.new(prototype: prototype, params: params)
   end
 
   def actions
@@ -25,6 +25,10 @@ class Territories::IndexPageComponent < PageComponent
   end
 
   private
+
+  def prototype
+    @territories.first
+  end
 
   def new_action
     link_to(t('app.links.new'), send("new_territories_#{type}_territory_path"), class: 'btn')

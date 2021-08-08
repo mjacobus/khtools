@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
 class Territories::SearchFormComponent < ApplicationComponent
-  def initialize(type:, params:)
-    @type = type
+  def initialize(prototype:, params:)
+    @prototype = prototype
     @search = SearchParams.new(params)
+  end
+
+  def render?
+    @prototype.present?
   end
 
   def action
@@ -15,7 +19,7 @@ class Territories::SearchFormComponent < ApplicationComponent
   end
 
   def type
-    ActiveSupport::StringInquirer.new(@type.to_s)
+    ActiveSupport::StringInquirer.new(@prototype.type_key.to_s)
   end
 
   def name_input(form)
