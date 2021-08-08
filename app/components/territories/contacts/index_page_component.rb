@@ -11,7 +11,7 @@ class Territories::Contacts::IndexPageComponent < PageComponent
   end
 
   def title
-    model_name(Db::Contact)
+    model_name(Db::Contact).pluralize
   end
 
   def edit_path(contact)
