@@ -2,7 +2,6 @@
 
 require 'rails_helper'
 
-# rubocop:disable RSpec/MultipleMemoizedHelpers:
 RSpec.describe 'FieldService::CampaignAssignments', type: :request do
   let(:described_class) { FieldService::CampaignAssignmentsController }
   let(:campaign) { assignment.campaign }
@@ -63,4 +62,3 @@ RSpec.describe 'FieldService::CampaignAssignments', type: :request do
     end
   end
 end
-# rubocop:enable RSpec/MultipleMemoizedHelpers:

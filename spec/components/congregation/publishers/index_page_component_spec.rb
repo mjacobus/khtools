@@ -1,4 +1,6 @@
-require "rails_helper"
+# frozen_string_literal: true
+
+require 'rails_helper'
 
 RSpec.describe Congregation::Publishers::IndexPageComponent, type: :component do
   pending "add some examples to (or delete) #{__FILE__}"

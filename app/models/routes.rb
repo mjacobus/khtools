@@ -52,6 +52,10 @@ class Routes
     "#{publishers_path}/new"
   end
 
+  def edit_publisher_path(publisher)
+    "#{to(publisher)}/edit"
+  end
+
   def to(record)
     key = record.class.to_s.underscore.split('/').last
 
