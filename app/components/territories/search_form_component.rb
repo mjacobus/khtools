@@ -59,7 +59,7 @@ class Territories::SearchFormComponent < ApplicationComponent
   end
 
   def open_attribute
-    @search.any?(:name, :publisher_id, :phone_provider_id) ? 'open' : ''
+    @search.any?(:name, :publisher_id, :phone_provider_id, :area_id) ? 'open' : ''
   end
 
   def editable_attribute?(attribute_name)
