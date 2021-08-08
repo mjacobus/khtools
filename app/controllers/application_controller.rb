@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::DeleteRestrictionError do |exception|
     if respond_to?(:show)
       flash.now[:error] = t('app.messages.cannot_delete_record')
-      next render(:show)
+      next show
     end
 
     raise exception

@@ -1,15 +1,12 @@
 <div class="item position-relative">
   <%= render DropdownMenuComponent.new(type: :item_options) do |component| %>
-    <% component.item do %>
-      <%= show_link %>
-    <% end %>
-    <% component.item do %>
-      <%= edit_link %>
-    <% end %>
-    <% component.item do %>
-      <%= destroy_link %>
+    <% actions.each do |action| %>
+      <% component.item do %>
+        <%= action %>
+      <% end %>
     <% end %>
   <% end %>
+
   <div class="row">
     <%= render attribute(:name).wrap_with(:div, class: 'col-sm-12 col-lg-6') %>
     <%= render attribute(:group).wrap_with(:div, class: 'col-sm-12 col-lg-6') %>

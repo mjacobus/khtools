@@ -119,6 +119,7 @@ pt-BR:
         phone: Telefone
         gender: Sexo
         group: Grupo
+        group_id: Grupo
         created_at: Criado em
         updated_at: Atualizado em
       db/field_service_group:
