@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
 class Db::Territory < ApplicationRecord
   UNASSIGNED_TERRITORY_VALUE = 'none'
 
@@ -80,6 +81,12 @@ class Db::Territory < ApplicationRecord
       query = query.where(area_id: value)
     end
 
+    params.if(:preaching_method_id) do |value|
+      query = query.where(primary_preaching_method_id: value)
+        .or(query.where(secondary_preaching_method_id: value))
+        .or(query.where(tertiary_preaching_method_id: value))
+    end
+
     query
   end
   # rubocop:enable Metrics/MethodLength
@@ -122,3 +129,4 @@ class Db::Territory < ApplicationRecord
     assignee_id.present?
   end
 end
+# rubocop:enable Metrics/ClassLength

@@ -101,4 +101,31 @@ RSpec.describe Db::Territory, type: :model do
       expect(found.map(&:name)).to eq(['expected'])
     end
   end
+
+  describe '#search by preaching method' do
+    let(:method) { factories.preaching_methods.create }
+
+    before do
+      described_class.delete_all
+      factory.create(primary_preaching_method_id: method.id, name: 'expected1')
+      factory.create(secondary_preaching_method_id: method.id, name: 'expected2')
+      factory.create(tertiary_preaching_method_id: method.id, name: 'expected3')
+      factory.create(
+        primary_preaching_method_id: nil,
+        secondary_preaching_method_id: nil,
+        tertiary_preaching_method_id: nil,
+        name: 'unexpected1'
+      )
+    end
+
+    it 'returns expected territories' do
+      found = described_class.search(preaching_method_id: method.id.to_s)
+      expect(found.map(&:name)).to eq(%w[expected1 expected2 expected3])
+    end
+
+    it 'keeps other criterias' do
+      found = described_class.search(preaching_method_id: method.id.to_s, name: 'ted1')
+      expect(found.map(&:name)).to eq(%w[expected1])
+    end
+  end
 end
