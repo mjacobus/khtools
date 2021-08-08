@@ -16,7 +16,7 @@
   <div><%= render territory_attribute(:address) %></div>
   <div><%= render territory_attribute(:area) %></div>
   <div><%= render territory_attribute(:number_of_apartments) %></div>
-  <div><%= render territory_attribute(:territory) %></div>
+  <div><%= render territory_attribute(:territory).with_link %></div>
 
   <h2 class="h5 my-3"><%= t('active_admin.resources.db/territories.sections.preaching_methods') %></h2>
   <div><%= render territory_attribute(:preaching_methods) %></div>
@@ -36,5 +36,5 @@
 <div><%= render territory_attribute(:pending_verification) %></div>
 
 <h2 class="h5 my-3"><%= t('active_admin.resources.db/territories.sections.assignment') %></h2>
-<div><%= render territory_attribute(:assignee) %></div>
+<div><%= render territory_attribute(:assignee).with_link %></div>
 <div><%= render territory_attribute(:assignment_dates) %></div>
