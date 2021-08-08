@@ -196,6 +196,7 @@ pt-BR:
         one: "%{count} contato"
         other: "%{count} contatos"
     links:
+      territories: "Territories"
       download_xls: "Baixar XLS"
       clear_filters: "Limpar filtros"
       filter: "Filtrar"
