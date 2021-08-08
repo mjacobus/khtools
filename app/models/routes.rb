@@ -40,15 +40,25 @@ class Routes
     @helpers.new_field_service_campaign_path
   end
 
+  def publishers_path(*args)
+    @helpers.congregation_publishers_path(*args)
+  end
+
+  def publisher_path(*args)
+    @helpers.congregation_publisher_path(*args)
+  end
+
   def to(record)
-    if record.is_a?(Db::Territory)
-      return territory_path(record)
+    key = record.class.to_s.underscore.split('/').last
+
+    candidate = "#{key}_path"
+
+    if respond_to?(candidate)
+      return send(candidate, record)
     end
 
-    admin_path = "admin_#{record.class.to_s.underscore.tr('/', '_')}_path"
-
-    if @helpers.respond_to?(admin_path)
-      return @helpers.send(admin_path, record)
+    if record.is_a?(Db::Territory)
+      return territory_path(record)
     end
 
     raise "Unrecognized path for #{record.class}"
