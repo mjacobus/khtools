@@ -182,6 +182,7 @@ pt-BR:
     messages:
       unassigned_territory: "Território não designado"
       page_not_found: "Página não encontrada"
+      no_records_found: "Nenhum registro encontrado"
       contact_admin: "Se você já logou mas não tem acesso, contate o admin de sua congregação."
       confirm_delete: 'Tem certeza que quer excluir este registro?'
       confirm_unassignment: 'Tem certeza que este território foi devolvido?'
