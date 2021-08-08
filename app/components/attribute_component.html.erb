@@ -3,10 +3,14 @@
     <span class="<%= bem('label') %> <%= class_names(classes) %>--label"><%= label_content %></span>
   <% end %>
   <% if link %>
-    <a href="<%= link %>" class="<%= bem('link') %>">
+    <a href="<%= link %>" class="<%= bem('text') %> <%= bem('text', 'link') %>">
+  <% else %>
+      <span class="<%= bem('text') %>">
   <% end %>
-      <span class="<%= bem('text') %>"><%= icon_name ? icon(icon_name, class: 'icon-soft') { content } : content %></span>
+      <%= icon_name ? icon(icon_name, class: 'icon-soft') { content } : content %>
   <% if link %>
     </a>
+  <% else %>
+    </span>
   <% end %>
 <% end %>

@@ -32,8 +32,29 @@ class AttributeComponent < ApplicationComponent
     end
   end
 
-  def with_link(link)
-    @link = link
+  def with_classes(classes)
+    @classes += Array.wrap(classes)
+    self
+  end
+
+  def with_label(label)
+    @show_label = true
+    @label = label
+    self
+  end
+
+  def with_icon(icon)
+    @icon_name = icon
+    self
+  end
+
+  def without_icon
+    @icon_name = nil
+    self
+  end
+
+  def with_link(link = nil)
+    @link = link || default_link
     self
   end
 
