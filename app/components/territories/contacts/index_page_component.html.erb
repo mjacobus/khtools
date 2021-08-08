@@ -1,33 +1,19 @@
 <%= render breadcrumb %>
 
-<h1><%= title %></h1>
-<p><%= territory.name %></p>
+<%= render Territories::TerritoryNameComponent.new(territory, attribute_name: :name).with_label %>
 
-<%= render DropdownMenuComponent.new do |component| %>
+<h1 class="h5"><%= title %></h1>
+
+<%= render DropdownMenuComponent.new(type: :list_options) do |component| %>
   <% component.item do %>
     <%= link_to t('app.links.new'), new_territories_commercial_territory_contact_path, class: 'btn' %>
   <% end %>
 <% end %>
 
-
-<% contacts.each do |contact| %>
-  <hr>
-  <div class="row">
-    <div class="col-sm-12 col-lg-2">
-      <%= contact.name %>
-    </div>
-    <div class="col-sm-12 col-lg-4">
-      <p><%= contact.address %></p>
-      <div><%= contact.email %></div>
-      <% phones(contact).each do |phone| %>
-        <div><%= phone %></div>
-      <% end %>
-    </div>
-    <div class="col-sm-12 col-lg-4">
-      <p><%= contact.notes %></p>
-    </div>
-    <div class="col-sm-12 col-lg-2 pull-right">
-      <%= render DropdownMenuComponent.new do |component| %>
+<div class="index-list">
+  <% contacts.each do |contact| %>
+    <div class="item position-relative">
+      <%= render DropdownMenuComponent.new(type: :item_options) do |component| %>
         <% component.item do %>
           <%= link_to t('app.links.edit'), edit_path(contact), class: 'btn' %>
         <% end %>
@@ -35,6 +21,20 @@
           <%= link_to t('app.links.delete'), contact_path(contact), data: { method: :delete, confirm: t('app.messages.confirm_delete') }, class: 'btn' %>
         <% end %>
       <% end %>
+
+      <div> <%= contact.name %> </div>
+      <div class="col-sm-12 col-lg-4">
+        <p><%= contact.address %></p>
+        <div><%= contact.email %></div>
+        <% phones(contact).each do |phone| %>
+          <div><%= phone %></div>
+        <% end %>
+      </div>
+      <div class="col-sm-12 col-lg-4">
+        <p><%= contact.notes %></p>
+      </div>
+      <div class="col-sm-12 col-lg-2 pull-right">
+      </div>
     </div>
-  </div>
-<% end %>
+  <% end %>
+</div>
