@@ -48,6 +48,10 @@ class Routes
     @helpers.congregation_publisher_path(*args)
   end
 
+  def new_publisher_path
+    "#{publishers_path}/new"
+  end
+
   def to(record)
     key = record.class.to_s.underscore.split('/').last
 

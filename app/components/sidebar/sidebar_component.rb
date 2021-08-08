@@ -134,7 +134,7 @@ class Sidebar::SidebarComponent < ApplicationComponent
   end
 
   def publishers
-    entry(Db::Publisher.model_name.human, admin_db_publishers_path, icon: 'person-circle')
+    entry(Db::Publisher.model_name.human, urls.publishers_path, icon: 'person-circle')
   end
 
   def congregations
