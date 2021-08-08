@@ -16,6 +16,9 @@ RSpec.describe AttributeComponent, type: :component do
 
     expect(html).to have_css('span.AttributeComponent')
     expect(html).to have_css('.another-class')
+
+    expect(html).to have_css('.AttributeComponent', text: 'Text')
+    expect(html).to have_css('.AttributeComponent__text', text: 'Text')
   end
 
   it 'does not include lable by default' do
@@ -34,6 +37,18 @@ RSpec.describe AttributeComponent, type: :component do
     render(component(container_tag: :div, container_options: { class: 'hey' }))
 
     expect(html).to have_css('div.hey.AttributeComponent')
+  end
+
+  it 'does not include icon by default' do
+    render(component)
+
+    expect(html).not_to have_css('i.bi')
+  end
+
+  it 'can include icon' do
+    render(component(icon_name: :hey))
+
+    expect(html).to have_css('i.bi.bi-hey')
   end
 
   def component(**args)
