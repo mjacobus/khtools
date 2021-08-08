@@ -196,7 +196,7 @@ pt-BR:
         other: "%{count} contatos"
     links:
       download_xls: "Baixar XLS"
-      reset: "Resetar"
+      clear_filters: "Limpar filtros"
       filter: "Filtrar"
       search: "Buscar"
       assign_territory: "Designar"
