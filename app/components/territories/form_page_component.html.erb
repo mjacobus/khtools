@@ -1,24 +1,27 @@
 <%= render breadcrumb %>
 
 <%= simple_form_for(territory, url: target_url, as: :territory) do |f| %>
-  <%= input_wrapper do %>
-    <%= f.input :name %>
-  <% end %>
 
-  <% if type == 'phone_list'  %>
+  <fieldset class="mt-3">
+    <legend><%= t('active_admin.resources.db/territories.sections.general') %></legend>
     <%= input_wrapper do %>
-      <%= f.input :initial_phone_number %>
+      <%= f.input :name %>
     <% end %>
 
-    <%= input_wrapper do %>
-      <%= f.input :final_phone_number %>
-    <% end %>
+    <% if type == 'phone_list'  %>
+      <%= input_wrapper do %>
+        <%= f.input :initial_phone_number %>
+      <% end %>
 
-    <%= input_wrapper do %>
-      <%= f.input :phone_provider_id, as: :select, collection: phone_providers %>
-    <% end %>
-  <% end %>
+      <%= input_wrapper do %>
+        <%= f.input :final_phone_number %>
+      <% end %>
 
+      <%= input_wrapper do %>
+        <%= f.input :phone_provider_id, as: :select, collection: phone_providers %>
+      <% end %>
+    <% end %>
+  </fieldset>
 
   <% if type == 'apartment_building'  %>
     <fieldset class="mt-3">
@@ -49,9 +52,6 @@
       <%= input_wrapper do %>
         <%= f.input :apartments %>
       <% end %>
-      <%= input_wrapper do %>
-        <%= f.input :notes %>
-      <% end %>
     </fieldset>
 
     <fieldset class="mt-3">
@@ -81,9 +81,16 @@
     <% end %>
   </fieldset>
 
-  <%= input_wrapper do %>
-    <%= f.input :pending_verification, as: :select, collection: boolean_collection %>
-  <% end %>
+
+  <fieldset class="mt-3">
+    <legend><%= t('active_admin.resources.db/territories.sections.other') %></legend>
+    <%= input_wrapper do %>
+      <%= f.input :notes %>
+    <% end %>
+    <%= input_wrapper do %>
+      <%= f.input :pending_verification, as: :select, collection: boolean_collection %>
+    <% end %>
+  </fieldset>
 
   <%= input_wrapper do %>
     <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>

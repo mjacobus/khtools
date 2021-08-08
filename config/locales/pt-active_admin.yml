@@ -9,6 +9,7 @@ pt-BR:
         menu_entry: 'Publicadores'
       db/territories:
         sections:
+          other: "Outros"
           files: "Arquivos"
           general: "Geral"
           building_inputs: "Dados do Prédio"
