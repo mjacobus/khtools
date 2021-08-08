@@ -27,7 +27,7 @@ class Territories::IndexPageComponent < PageComponent
   private
 
   def prototype
-    @territories.first
+    "Db::#{type.to_s.classify}Territory".constantize.new
   end
 
   def new_action

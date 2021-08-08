@@ -6,10 +6,6 @@ class Territories::SearchFormComponent < ApplicationComponent
     @search = SearchParams.new(params)
   end
 
-  def render?
-    @prototype.present?
-  end
-
   def action
     url_for
   end
