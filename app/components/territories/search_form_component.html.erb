@@ -26,6 +26,15 @@
         </div>
       </div>
 
+      <% if editable_attribute?(:territory_id) %>
+        <div class="col-sm-12 col-md-4">
+          <div class="form-wrapper">
+            <label><%= territory_label %></label>
+            <%= territory_input(form) %>
+          </div>
+        </div>
+      <% end %>
+
       <% if editable_attribute?(:area_id) %>
         <div class="col-sm-12 col-md-4">
           <div class="form-wrapper">

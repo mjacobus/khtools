@@ -102,6 +102,21 @@ RSpec.describe Db::Territory, type: :model do
     end
   end
 
+  describe '#search by territory_id' do
+    let(:territory) { factories.territories.create }
+
+    before do
+      described_class.delete_all
+      factory.create(territory_id: territory.id, name: 'expected')
+      factory.create(territory_id: nil, name: 'unexpected')
+    end
+
+    it 'returns expected territories' do
+      found = described_class.search(territory_id: territory.id.to_s)
+      expect(found.map(&:name)).to eq(['expected'])
+    end
+  end
+
   describe '#search by preaching method' do
     let(:method) { factories.preaching_methods.create }
 

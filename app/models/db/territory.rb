@@ -81,6 +81,10 @@ class Db::Territory < ApplicationRecord
       query = query.where(area_id: value)
     end
 
+    params.if(:territory_id) do |value|
+      query = query.where(territory_id: value)
+    end
+
     params.if(:preaching_method_id) do |value|
       query = query.where(primary_preaching_method_id: value)
         .or(query.where(secondary_preaching_method_id: value))

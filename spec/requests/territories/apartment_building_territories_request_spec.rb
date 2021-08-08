@@ -17,7 +17,7 @@ RSpec.describe Territories::ApartmentBuildingTerritoriesController, type: :reque
   describe 'GET #index' do
     it 'returns http success' do
       territory = factories.apartment_building_territories.create
-      other = factories.territories.create
+      other = factories.phone_list_territories.create
 
       login_user(admin_user)
       get '/territories/apartment_building_territories'

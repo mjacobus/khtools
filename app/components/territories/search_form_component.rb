@@ -47,6 +47,15 @@ class Territories::SearchFormComponent < ApplicationComponent
     select_input(form, values, :preaching_method_id)
   end
 
+  def territory_label
+    attribute_name(Db::Territory, :territory)
+  end
+
+  def territory_input(form)
+    values = Db::RegularTerritory.pluck(:name, :id)
+    select_input(form, values, :territory_id)
+  end
+
   def name_label
     attribute_name(Db::Territory, :name)
   end
@@ -68,7 +77,15 @@ class Territories::SearchFormComponent < ApplicationComponent
   end
 
   def open_attribute
-    @search.any?(:name, :publisher_id, :phone_provider_id, :area_id) ? 'open' : ''
+    filters = %i[
+      name
+      publisher_id
+      phone_provider_id
+      preaching_method_id
+      area_id
+      territory_id
+    ]
+    @search.any?(filters) ? 'open' : ''
   end
 
   def editable_attribute?(attribute_name)

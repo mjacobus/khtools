@@ -41,7 +41,7 @@ RSpec.describe SearchParams do
   describe '#any?' do
     it 'ignores all non present values' do
       expect(params).to be_any(:foo, :bar, :present)
-      expect(params).to be_any([:foo, :bar, :present])
+      expect(params).to be_any(%i[foo bar present])
       expect(params).not_to be_any(:foo, :bar, :blank, :nil)
     end
   end
