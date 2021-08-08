@@ -64,7 +64,7 @@ pt-BR:
         name: Nome
         address: Endereço
         phone: Telefone
-        phone2: Telefone
+        phone2: Telefone Alternativo
         notes: Observações
       db/public_speaker:
         name: Nome
