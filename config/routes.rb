@@ -20,6 +20,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :congregation do
+    resources :publishers
+  end
+
   namespace :public_talks do
     resources :congregations
     resources :speakers
