@@ -17,7 +17,7 @@ class SearchParams < HashWithIndifferentAccess
   end
 
   def any?(*keys)
-    keys.find do |key|
+    keys.flatten.find do |key|
       key?(key)
     end
   end
