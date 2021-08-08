@@ -6,7 +6,12 @@ class RecordAttributeComponent < ApplicationComponent
     @include_link = nil
     @include_icon = true
     @attribute_name = attribute_name
+    @urls = Routes.new
   end
+
+  # def render?
+  #   value.present?
+  # end
 
   def without_icon
     @include_icon = false
@@ -47,10 +52,6 @@ class RecordAttributeComponent < ApplicationComponent
     @include_link
   end
 
-  def link
-    # NOOP
-  end
-
   def wrap_with(tag, options = {})
     @container_tag = tag
     @container_options = options || {}
@@ -59,13 +60,25 @@ class RecordAttributeComponent < ApplicationComponent
 
   def call
     render AttributeComponent.new(**options) do
-      value
+      if value.present? && include_link?
+        link_to(value, link)
+      else
+        value
+      end
     end
   end
 
   private
 
   attr_reader :record
+
+  def link
+    @link || default_link
+  end
+
+  def default_link
+    @urls.to(record.send(@attribute_name))
+  end
 
   def options
     {}.tap do |opts|
@@ -74,9 +87,6 @@ class RecordAttributeComponent < ApplicationComponent
       end
       opts[:label] = label
       opts[:classes] = bem
-      if include_link?
-        opts[:link] = link
-      end
 
       if @container_tag
         opts[:container_tag] = @container_tag

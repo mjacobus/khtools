@@ -39,5 +39,19 @@ class Routes
   def new_field_service_campaign_path
     @helpers.new_field_service_campaign_path
   end
+
+  def to(record)
+    if record.is_a?(Db::Territory)
+      return territory_path(record)
+    end
+
+    admin_path = "admin_#{record.class.to_s.underscore.tr('/', '_')}_path"
+
+    if @helpers.respond_to?(admin_path)
+      return @helpers.send(admin_path, record)
+    end
+
+    raise "Unrecognized path for #{record.class}"
+  end
 end
 # rubocop:enable Style/MissingRespondToMissing
