@@ -14,5 +14,9 @@
     <%= render Territories::ListItemComponent.new(territory: territory) %>
   <% end %>
 
+  <% if territories.empty? %>
+    <div class="alert alert-primary mt-5" role="alert"> <%= t('app.messages.no_records_found') %></div>
+  <% end %>
+
   <%= render PaginationComponent.new(territories, position: :bottom) %>
 </div>
