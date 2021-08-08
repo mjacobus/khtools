@@ -42,6 +42,11 @@ class Territories::SearchFormComponent < ApplicationComponent
     select_input(form, areas, :area_id)
   end
 
+  def preaching_method_input(form)
+    values = Db::PreachingMethod.pluck(:name, :id)
+    select_input(form, values, :preaching_method_id)
+  end
+
   def name_label
     attribute_name(Db::Territory, :name)
   end
@@ -54,6 +59,10 @@ class Territories::SearchFormComponent < ApplicationComponent
     attribute_name(Db::Territory, :area)
   end
 
+  def preaching_method_label
+    attribute_name(Db::Territory, :preaching_method)
+  end
+
   def phone_provider_label
     attribute_name(Db::Territory, :phone_provider)
   end
@@ -64,6 +73,12 @@ class Territories::SearchFormComponent < ApplicationComponent
 
   def editable_attribute?(attribute_name)
     @prototype.editable_attributes.include?(attribute_name)
+  end
+
+  def include_preaching_method?
+    editable_attribute?(:primary_preaching_method_id) ||
+      editable_attribute?(:secondary_preaching_method_id) ||
+      editable_attribute?(:tertiary_preaching_method_id)
   end
 
   private

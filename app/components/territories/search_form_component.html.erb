@@ -34,6 +34,15 @@
           </div>
         </div>
       <% end %>
+
+      <% if include_preaching_method? %>
+        <div class="col-sm-12 col-md-4">
+          <div class="form-wrapper">
+            <label><%= preaching_method_label %></label>
+            <%= preaching_method_input(form) %>
+          </div>
+        </div>
+      <% end %>
     </div>
 
 
