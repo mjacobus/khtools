@@ -22,12 +22,6 @@ class Territories::Contacts::IndexPageComponent < PageComponent
     territories_commercial_territory_contact_path(territory, contact)
   end
 
-  def phones(contact)
-    [contact.phone, contact.phone2].map(&:presence).compact.map do |phone|
-      PhoneNumber.new(phone)
-    end
-  end
-
   private
 
   def setup_breadcrumb
@@ -36,10 +30,7 @@ class Territories::Contacts::IndexPageComponent < PageComponent
       urls.territories_commercial_territories_path
     )
 
-    breadcrumb.add_item(
-      territory.name
-      # urls.territories_commercial_territory_path(@territory) # no action yet
-    )
+    breadcrumb.add_item(territory.name, urls.to(@territory))
 
     breadcrumb.add_item(t('app.links.contacts'))
   end

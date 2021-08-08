@@ -1,24 +1,19 @@
 # frozen_string_literal: true
 
 class Territories::Contacts::FormPageComponent < PageComponent
-  attr_reader :contact
-
-  def initialize(territory:, contact:)
-    @contact = contact
-    @territory = territory
-    setup_breadcrumb
-  end
+  has :contact
+  has :territory
 
   def page_title
-    model_name(@contact)
+    model_name(contact)
   end
 
   def target_url
     if contact.id
-      return territories_commercial_territory_contact_path(@territory, contact)
+      return territories_commercial_territory_contact_path(territory, contact)
     end
 
-    territories_commercial_territory_contacts_path(@territory)
+    territories_commercial_territory_contacts_path(territory)
   end
 
   private
@@ -29,14 +24,11 @@ class Territories::Contacts::FormPageComponent < PageComponent
       urls.territories_commercial_territories_path
     )
 
-    breadcrumb.add_item(
-      @territory.name
-      # urls.territories_commercial_territory_path(@territory) # no action yet
-    )
+    breadcrumb.add_item(territory.name, urls.to(territory))
 
     breadcrumb.add_item(
       t('app.links.contacts'),
-      urls.territories_commercial_territory_contacts_path(@territory)
+      urls.territories_commercial_territory_contacts_path(territory)
     )
 
     action = contact.id ? 'edit' : 'new'

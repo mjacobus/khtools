@@ -1,6 +1,6 @@
 <%= render breadcrumb %>
 
-<%= render Territories::TerritoryNameComponent.new(territory, attribute_name: :name).with_label %>
+<%= render Territories::TerritoryTerritoryComponent.new(Db::Territory.new(territory: territory), attribute_name: :territory).without_icon.with_label.with_link %>
 
 <h1 class="h5"><%= title %></h1>
 
@@ -22,18 +22,12 @@
         <% end %>
       <% end %>
 
-      <div> <%= contact.name %> </div>
-      <div class="col-sm-12 col-lg-4">
-        <p><%= contact.address %></p>
-        <div><%= contact.email %></div>
-        <% phones(contact).each do |phone| %>
-          <div><%= phone %></div>
-        <% end %>
-      </div>
-      <div class="col-sm-12 col-lg-4">
-        <p><%= contact.notes %></p>
-      </div>
-      <div class="col-sm-12 col-lg-2 pull-right">
+      <div class="row">
+        <%= render Territories::ContactNameComponent.new(contact, attribute_name: :name).with_label.without_icon.wrap_with(:div, class: 'col-sm-12 col-lg-4') %>
+        <%= render Territories::ContactEmailComponent.new(contact, attribute_name: :email).with_label.without_icon.wrap_with(:div, class: 'col-sm-12 col-lg-4') %>
+        <%= render Territories::ContactPhoneNumbersComponent.new(contact, attribute_name: :phone_numbers).with_label.without_icon.wrap_with(:div, class: 'col-sm-12 col-lg-4') %>
+        <%= render Territories::ContactAddressComponent.new(contact, attribute_name: :address).with_label.without_icon.wrap_with(:div, class: 'col-sm-12') %>
+        <%= render Territories::TerritoryNotesComponent.new(contact, attribute_name: :notes).with_label.without_icon.wrap_with(:div, class: 'col-sm-12') %>
       </div>
     </div>
   <% end %>
