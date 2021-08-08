@@ -52,9 +52,6 @@
       <%= input_wrapper do %>
         <%= f.input :notes %>
       <% end %>
-      <%= input_wrapper do %>
-        <%= f.input :pending_verification, as: :select, collection: boolean_collection %>
-      <% end %>
     </fieldset>
 
     <fieldset class="mt-3">
@@ -83,6 +80,10 @@
       <%= f.input :assigned_at, as: :date, include_blank: true %>
     <% end %>
   </fieldset>
+
+  <%= input_wrapper do %>
+    <%= f.input :pending_verification, as: :select, collection: boolean_collection %>
+  <% end %>
 
   <%= input_wrapper do %>
     <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>
