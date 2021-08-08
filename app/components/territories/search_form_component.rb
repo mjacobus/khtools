@@ -52,6 +52,15 @@ class Territories::SearchFormComponent < ApplicationComponent
     select_input(form, values, :territory_id)
   end
 
+  def pending_verification_label
+    attribute_name(Db::Territory, :pending_verification)
+  end
+
+  def pending_verification_input(form)
+    values = [[I18n.t('true'), true], [I18n.t('false'), false]]
+    select_input(form, values, :pending_verification)
+  end
+
   def name_label
     attribute_name(Db::Territory, :name)
   end
@@ -80,6 +89,7 @@ class Territories::SearchFormComponent < ApplicationComponent
       preaching_method_id
       area_id
       territory_id
+      pending_verification
     ]
     @search.any?(filters) ? 'open' : ''
   end

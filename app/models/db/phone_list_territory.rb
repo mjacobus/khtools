@@ -20,13 +20,10 @@ class Db::PhoneListTerritory < Db::Territory
   end
 
   def editable_attributes
-    %i[
-      name
+    super + %i[
       initial_phone_number
       final_phone_number
       phone_provider_id
-      assignee_id
-      assigned_at
     ]
   end
 end

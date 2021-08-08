@@ -52,6 +52,15 @@
           </div>
         </div>
       <% end %>
+
+      <% if editable_attribute?(:pending_verification) %>
+        <div class="col-sm-12 col-md-4">
+          <div class="form-wrapper">
+            <label><%= pending_verification_label %></label>
+            <%= pending_verification_input(form) %>
+          </div>
+        </div>
+      <% end %>
     </div>
 
 
