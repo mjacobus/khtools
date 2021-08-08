@@ -32,6 +32,11 @@ class AttributeComponent < ApplicationComponent
     end
   end
 
+  def with_link(link)
+    @link = link
+    self
+  end
+
   def text_content
     if show_icon_in_text?
       return icon(icon_name, class: 'icon-soft') { content }

@@ -2,5 +2,11 @@
   <% if show_label %>
     <span class="<%= bem('label') %> <%= class_names(classes) %>--label"><%= label_content %></span>
   <% end %>
-  <span class="<%= bem('text') %>"><%= icon_name ? icon(icon_name, class: 'icon-soft') { content } : content %></span>
+  <% if link %>
+    <a href="<%= link %>" class="<%= bem('link') %>">
+  <% end %>
+      <span class="<%= bem('text') %>"><%= icon_name ? icon(icon_name, class: 'icon-soft') { content } : content %></span>
+  <% if link %>
+    </a>
+  <% end %>
 <% end %>
