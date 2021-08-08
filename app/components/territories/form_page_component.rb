@@ -50,6 +50,8 @@ class Territories::FormPageComponent < PageComponent
   private
 
   def setup_breadcrumb
+    breadcrumb.add_item(t('app.links.territories'))
+
     breadcrumb.add_item(
       t("app.links.#{type}_territories"),
       urls.territories_path(type)

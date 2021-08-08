@@ -13,6 +13,7 @@ class Territories::IndexPageComponent < PageComponent
     @territories = territories
     @title = title
     @type = type
+    breadcrumb.add_item(t('app.links.territories'))
     breadcrumb.add_item(t("app.links.#{type}_territories"))
   end
 

@@ -21,6 +21,8 @@ class Territories::ShowPageComponent < PageComponent
   private
 
   def setup_breadcrumb
+    breadcrumb.add_item(t('app.links.territories'))
+
     breadcrumb.add_item(
       t("app.links.#{territory.type_key}_territories"),
       urls.territories_path(territory.type_key)
