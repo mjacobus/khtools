@@ -143,4 +143,21 @@ RSpec.describe Db::Territory, type: :model do
       expect(found.map(&:name)).to eq(%w[expected1])
     end
   end
+
+  describe '#search by pending_verification' do
+    before do
+      described_class.delete_all
+      factory.create(pending_verification: true, name: 'pending')
+      factory.create(pending_verification: false, name: 'ok')
+      factory.create(pending_verification: nil, name: 'maybe')
+    end
+
+    it 'returns expected territories' do
+      found = described_class.search(pending_verification: 'true')
+      expect(found.map(&:name)).to eq(['pending'])
+
+      found = described_class.search(pending_verification: 'false')
+      expect(found.map(&:name)).to eq(['ok'])
+    end
+  end
 end
