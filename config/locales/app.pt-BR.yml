@@ -65,6 +65,7 @@ pt-BR:
         address: Endereço
         phone: Telefone
         phone2: Telefone Alternativo
+        phone_numbers: Telefones
         notes: Observações
       db/public_speaker:
         name: Nome
