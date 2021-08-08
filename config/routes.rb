@@ -35,8 +35,7 @@ Rails.application.routes.draw do
   # TODO: Move to field service namespace
   namespace :territories do
     resources :territories, only: [:show] do
-      resources :assignments do
-      end
+      resources :assignments
     end
     resources :regular_territories
     resources :phone_list_territories do
