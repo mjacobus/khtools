@@ -11,7 +11,7 @@ module Territories
     end
 
     def icon_name
-      'wrarning'
+      'exclamation-diamond'
     end
   end
 end
