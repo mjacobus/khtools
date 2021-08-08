@@ -47,8 +47,7 @@ Rails.application.routes.draw do
     resources :commercial_territories do
       resources :contacts
     end
-    resources :phone_lists do
-    end
+    resources :phone_lists
   end
 
   resources :users, only: %i[index] do
