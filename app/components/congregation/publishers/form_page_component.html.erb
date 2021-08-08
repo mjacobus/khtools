@@ -1,0 +1,21 @@
+<div data-component="<%= bem %>" class="<%= bem %>">
+  <%= render breadcrumb %>
+
+  <%= simple_form_for(publisher, url: target_url, as: :publisher) do |f| %>
+    <%= input_wrapper do %>
+      <%= f.input :name %>
+    <% end %>
+
+    <%= input_wrapper do %>
+      <%= f.input :gender, as: :select, collection: genders %>
+    <% end %>
+
+    <%= input_wrapper do %>
+      <%= f.input :group_id, as: :select, collection: groups %>
+    <% end %>
+
+    <%= input_wrapper do %>
+      <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>
+    <% end %>
+  <% end %>
+</div>

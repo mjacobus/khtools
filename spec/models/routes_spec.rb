@@ -9,7 +9,7 @@ RSpec.describe Routes do
     it 'resolves publisher' do
       record = Db::Publisher.new(id: 1)
 
-      expected = '/admin/db_publishers/1'
+      expected = '/congregation/publishers/1'
 
       expect(routes.to(record)).to eq(expected)
     end

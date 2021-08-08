@@ -1,0 +1,16 @@
+<%= render breadcrumb %>
+
+
+<%= render DropdownMenuComponent.new(type: :list_options) do |component| %>
+  <% component.item do %>
+    <%= new_link %>
+  <% end %>
+<% end %>
+
+<div class="index-list">
+  <% publishers.each do |publisher| %>
+    <%= render Congregation::Publishers::ListItemComponent.new(publisher: publisher) %>
+  <% end %>
+</div>
+
+<%= render pagination %>

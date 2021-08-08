@@ -20,6 +20,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :congregation do
+    resources :publishers
+  end
+
   namespace :public_talks do
     resources :congregations
     resources :speakers
@@ -47,8 +51,7 @@ Rails.application.routes.draw do
     resources :commercial_territories do
       resources :contacts
     end
-    resources :phone_lists do
-    end
+    resources :phone_lists
   end
 
   resources :users, only: %i[index] do

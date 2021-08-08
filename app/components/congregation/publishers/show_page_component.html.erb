@@ -1,0 +1,16 @@
+<div class="<%= bem %>">
+  <%= render breadcrumb %>
+
+  <%= render DropdownMenuComponent.new(type: :list_options) do |component| %>
+    <% actions.each do |action| %>
+      <% component.item do %>
+        <%= action %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <div class="row">
+    <%= render attribute(:name).with_label.without_icon.wrap_with(:div, class: 'col-sm-12') %>
+    <%= render attribute(:group).with_label.without_icon.wrap_with(:div, class: 'col-sm-12') %>
+  </div>
+</div>
