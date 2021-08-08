@@ -25,7 +25,17 @@
           <%= publisher_input(form) %>
         </div>
       </div>
+
+      <% if editable_attribute?(:area_id) %>
+        <div class="col-sm-12 col-md-4">
+          <div class="form-wrapper">
+            <label><%= area_label %></label>
+            <%= area_input(form) %>
+          </div>
+        </div>
+      <% end %>
     </div>
+
 
     <div>
       <button class="my-2 btn btn-primary" type="submit"><%= icon(:search) { t('app.links.search') } %></button>
