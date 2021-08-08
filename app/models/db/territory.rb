@@ -54,6 +54,7 @@ class Db::Territory < ApplicationRecord
   end
 
   # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
   def self.search(params = {})
     params = SearchParams.new(params)
     arel = arel_table
@@ -75,9 +76,14 @@ class Db::Territory < ApplicationRecord
       query = query.where(phone_provider_id: value)
     end
 
+    params.if(:area_id) do |value|
+      query = query.where(area_id: value)
+    end
+
     query
   end
   # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize
 
   def editable_attributes
     %i[

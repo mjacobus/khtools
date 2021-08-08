@@ -37,6 +37,11 @@ class Territories::SearchFormComponent < ApplicationComponent
     select_input(form, (no_one + publishers), :publisher_id)
   end
 
+  def area_input(form)
+    areas = Db::TerritoryArea.pluck(:name, :id)
+    select_input(form, areas, :area_id)
+  end
+
   def name_label
     attribute_name(Db::Territory, :name)
   end
@@ -45,12 +50,20 @@ class Territories::SearchFormComponent < ApplicationComponent
     attribute_name(Db::Territory, :assignee)
   end
 
+  def area_label
+    attribute_name(Db::Territory, :area)
+  end
+
   def phone_provider_label
     attribute_name(Db::Territory, :phone_provider)
   end
 
   def open_attribute
     @search.any?(:name, :publisher_id, :phone_provider_id) ? 'open' : ''
+  end
+
+  def editable_attribute?(attribute_name)
+    @prototype.editable_attributes.include?(attribute_name)
   end
 
   private

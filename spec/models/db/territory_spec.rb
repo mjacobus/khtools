@@ -38,7 +38,7 @@ RSpec.describe Db::Territory, type: :model do
     expect(territory.assignee).to eq(publisher)
   end
 
-  describe '#search' do
+  describe '#search by name' do
     let(:banana) { factory.create(name: 'A Banana Territory') }
     let(:apple) { factory.create(name: 'An apple Territory') }
     let(:pineapple) { factory.create(name: 'A Pineapple Territory') }
@@ -63,7 +63,9 @@ RSpec.describe Db::Territory, type: :model do
       found = described_class.search(name: "apple ' or 1=1 --")
       expect(found.count).to be_zero
     end
+  end
 
+  describe '#search by assignee' do
     context 'when searching by assignee' do
       let(:publisher) { factories.publishers.create }
 
@@ -82,6 +84,21 @@ RSpec.describe Db::Territory, type: :model do
         found = described_class.search(publisher_id: 'none')
         expect(found.map(&:name)).to eq(['unassigned'])
       end
+    end
+  end
+
+  describe '#search by area' do
+    let(:area) { factories.territory_areas.create }
+
+    before do
+      described_class.delete_all
+      factory.create(area_id: area.id, name: 'expected')
+      factory.create(area_id: nil, name: 'unexpected')
+    end
+
+    it 'returns expected territories' do
+      found = described_class.search(area_id: area.id.to_s)
+      expect(found.map(&:name)).to eq(['expected'])
     end
   end
 end
