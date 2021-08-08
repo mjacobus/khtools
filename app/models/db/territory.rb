@@ -85,6 +85,10 @@ class Db::Territory < ApplicationRecord
       query = query.where(territory_id: value)
     end
 
+    params.if(:pending_verification) do |value|
+      query = query.where(pending_verification: value)
+    end
+
     params.if(:preaching_method_id) do |value|
       query = query.where(primary_preaching_method_id: value)
         .or(query.where(secondary_preaching_method_id: value))
