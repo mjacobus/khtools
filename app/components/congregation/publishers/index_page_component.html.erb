@@ -1,1 +1,5 @@
-<div>Add Congregation::Publishers::IndexPage template here</div>
+<%= render breadcrumb %>
+
+<% publishers.each do |publisher| %>
+  <%= render Congregation::Publishers::ListItemComponent.new(publisher: publisher) %>
+<% end %>

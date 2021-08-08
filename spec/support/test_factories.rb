@@ -192,7 +192,7 @@ class TestFactories
       {
         name: "User-#{seq}",
         gender: 'm',
-        group: overrides[:group] || factories.field_service_groups.random_or_create
+        group_id: overrides[:group]&.id || overrides[:group_id] || factories.field_service_groups.random_or_create.id
       }.merge(overrides)
     end
   end

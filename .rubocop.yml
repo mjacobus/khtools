@@ -88,6 +88,10 @@ RSpec/FilePath:
 RSpec/MultipleExpectations:
   Enabled: false
 
+RSpec/MultipleMemoizedHelpers:
+  Exclude:
+    - "spec/requests/**/*"
+
 # while that is a good rule, AR objects can't be properly instance_double'd
 RSpec/VerifiedDoubles:
   Enabled: false
