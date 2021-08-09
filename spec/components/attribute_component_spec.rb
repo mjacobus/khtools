@@ -33,6 +33,12 @@ RSpec.describe AttributeComponent, type: :component do
     expect(html).to have_css('.AttributeComponent__label', text: 'hello world')
   end
 
+  it 'can include localizable label' do
+    render(component.with_label('territory'))
+
+    expect(html).to have_css('.AttributeComponent__label', text: 'Território')
+  end
+
   it 'can change container and classes' do
     render(component.wrap_with(:div, { class: 'hey' }))
 

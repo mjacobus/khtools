@@ -36,6 +36,10 @@ class AttributeComponent < ApplicationComponent
   end
 
   def with_label(label = nil)
+    if label
+      label = I18n.t("app.attributes.#{label}", default: label)
+    end
+
     @show_label = true
     @label ||= label
     @container_options[:title] = @label
