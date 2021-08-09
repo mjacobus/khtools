@@ -63,8 +63,8 @@ RSpec.describe AttributeComponent, type: :component do
     expect(html).to have_css('a[href="/foo/bar"]', text: 'with link')
   end
 
-  def component(**args)
-    described_class.new(**args)
+  def component
+    described_class.new
   end
 
   def render(component, &block)
