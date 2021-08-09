@@ -12,10 +12,10 @@ RSpec.describe AttributeComponent, type: :component do
   end
 
   it 'includes bem and adicional classes' do
-    render(component(classes: 'another-class')) { 'Text' }
+    render(component.with_classes('another-class')) { 'Text' }
 
     expect(html).to have_css('span.AttributeComponent')
-    expect(html).to have_css('.another-class')
+    expect(html).to have_css('span.another-class')
 
     expect(html).to have_css('.AttributeComponent', text: 'Text')
     expect(html).to have_css('.AttributeComponent__text', text: 'Text')
@@ -28,13 +28,13 @@ RSpec.describe AttributeComponent, type: :component do
   end
 
   it 'can include label' do
-    render(component(label: 'hello world', show_label: true))
+    render(component.with_label('hello world'))
 
     expect(html).to have_css('.AttributeComponent__label', text: 'hello world')
   end
 
   it 'can change container and classes' do
-    render(component(container_tag: :div, container_options: { class: 'hey' }))
+    render(component.wrap_with(:div, { class: 'hey' }))
 
     expect(html).to have_css('div.hey.AttributeComponent')
   end
@@ -46,7 +46,7 @@ RSpec.describe AttributeComponent, type: :component do
   end
 
   it 'can include icon' do
-    render(component(icon_name: :hey))
+    render(component.with_icon(:hey))
 
     expect(html).to have_css('i.bi.bi-hey')
   end

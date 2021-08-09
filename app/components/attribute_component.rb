@@ -9,14 +9,12 @@ class AttributeComponent < ApplicationComponent
   attr_reader :container_tag
   attr_reader :container_options
 
-  def initialize(icon_name: nil, classes: nil, label: nil, link: nil, show_label: false, container_tag: :span, container_options: {})
-    @icon_name = icon_name
-    @classes = Array.wrap(classes)
+  def initialize
+    @classes = []
     @label = label
-    @link = link
-    @show_label = show_label
+    @show_label = false
     @container_tag = :span
-    @container_options = { class: class_names(bem, classes), label: label, title: label }
+    @container_options = { class: class_names(bem) }
     wrap_with(container_tag, container_options)
   end
 
@@ -33,13 +31,15 @@ class AttributeComponent < ApplicationComponent
   end
 
   def with_classes(classes)
-    @classes += Array.wrap(classes)
+    @container_options[:class] = class_names(@container_options[:class], class_names(classes))
     self
   end
 
   def with_label(label = nil)
     @show_label = true
     @label ||= label
+    @container_options[:title] = @label
+    @container_options[:alt] = @label
     self
   end
 
@@ -73,8 +73,9 @@ class AttributeComponent < ApplicationComponent
 
   def wrap_with(tag, options = {})
     @container_tag = tag
-    classes = [@container_options[:class], options[:class]].compact
-    @container_options.merge!(options)[:class] = class_names(classes)
+    classes = class_names(options[:class], @container_options[:class])
+    @container_options.merge!(options)
+    @container_options[:class] = classes
     self
   end
 

@@ -1,6 +1,6 @@
 <%= content_tag(container_tag, container_options) do %>
   <% if show_label %>
-    <span class="<%= bem('label') %> <%= class_names(classes) %>--label"><%= label_content %></span>
+    <span class="<%= bem('label') %>"><%= label_content %></span>
   <% end %>
   <% if link %>
     <a href="<%= link %>" class="<%= bem('text') %> <%= bem('text', 'link') %>">
