@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class AttributeWrapperComponent < ApplicationComponent
   def without_icon
     attribute.without_icon
