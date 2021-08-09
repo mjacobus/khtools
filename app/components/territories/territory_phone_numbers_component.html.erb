@@ -2,7 +2,7 @@
   <details>
     <summary>
 <% end %>
-<%= render AttributeComponent.new(**options) do value end %>
+<%= render(attribute) { value } %>
 <% if show_details? %>
     <%= render CopyToClipboardComponent.new(selector: ".#{bem('phones')}") %>
     </summary>
