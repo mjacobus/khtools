@@ -37,9 +37,14 @@ class AttributeComponent < ApplicationComponent
     self
   end
 
-  def with_label(label)
+  def with_label(label = nil)
     @show_label = true
-    @label = label
+    @label ||= label
+    self
+  end
+
+  def without_label
+    @show_label = false
     self
   end
 
@@ -53,8 +58,8 @@ class AttributeComponent < ApplicationComponent
     self
   end
 
-  def with_link(link = nil)
-    @link = link || default_link
+  def with_link(link)
+    @link = link
     self
   end
 
