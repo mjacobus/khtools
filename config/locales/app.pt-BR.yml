@@ -176,6 +176,82 @@ pt-BR:
         numbers: Números
         download_as: "Baixar"
   app:
+    attributes:
+      address: Endereço
+      apartments: Apartamentos
+      area: Área
+      area_id: Área
+      assigned_at: Designado em
+      assignee: Designado para
+      assignee_id: Designado para
+      assignment_dates: Data designação
+      assignments: Designações
+      avatar: Foto
+      building_name: Condomínio
+      campaign: Campanha
+      code: Código
+      congregation: Congregação
+      congregation: Onde
+      congregation_id: Congregação
+      controller_accesses: Acessos
+      created_at: Criado em
+      date: Data
+      dates: "Data Início - Fim"
+      description: Descrição
+      download_as: "Baixar"
+      email: Email
+      enabled: Ativo
+      end_date: "Data de fim"
+      final_phone_number: Número Final
+      gender: Sexo
+      group: Grupo
+      group_id: Grupo
+      has_a_roof: Coberto
+      initial_phone_number: Número Inicial
+      intercom_type: Tipo de Interfone
+      intercom_type_id: Tipo de Interfone
+      key: Configuração
+      letter_box_type: Tipo de Caixa de Corrêio
+      letter_box_type_id: Tipo de Caixa de Corrêio
+      local: Local
+      master: Administrador
+      name: Nome
+      notes: Observações
+      number_of_apartments: Número de Apartamentos
+      numbers: Números
+      pending_verification: Informações pendentes
+      phone2: Telefone Alternativo
+      phone: Telefone
+      phone_numbers: Telefones
+      phone_provider: Operadora Telefônica
+      phone_provider_id: Operadora Telefônica
+      preaching_method: Método de Pregação
+      preaching_methods: Métodos de Pregação
+      primary_contact_email: Email
+      primary_contact_person: Nome do contato
+      primary_contact_phone: Telefone
+      primary_preaching_method: Método Principal
+      primary_preaching_method_id: Método Principal
+      publishers: Publicadores
+      returned_at: Devolvido em
+      secondary_preaching_method: Método Secundário
+      secondary_preaching_method_id: Método Secundário
+      since: Data de início
+      speaker: Orador
+      special: Discurso especial
+      start_date: "Data de início"
+      status: Situação
+      territories: Territórios
+      territory: Território
+      territory_id: Território
+      tertiary_preaching_method: Método Alternativo
+      tertiary_preaching_method_id: Método Alternativo
+      theme: Tema
+      title: Título
+      type: Tipo
+      updated_at: Atualizado em
+      value: Conteúdo
+      weekend_meeting_time: Horário da reunião de final de semana
     title: "KH Tools"
     titles:
       meeting_attendance: "Contagem de Assistência"
