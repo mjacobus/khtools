@@ -26,8 +26,8 @@
         <%= render Territories::ContactNameComponent.new(contact, attribute_name: :name).with_label.without_icon.wrap_with(:div, class: 'col-sm-12 col-lg-4') %>
         <%= render Territories::ContactEmailComponent.new(contact, attribute_name: :email).with_label.without_icon.wrap_with(:div, class: 'col-sm-12 col-lg-4') %>
         <%= render Territories::ContactPhoneNumbersComponent.new(contact, attribute_name: :phone_numbers).with_label.without_icon.wrap_with(:div, class: 'col-sm-12 col-lg-4') %>
-        <%= render Territories::ContactAddressComponent.new(contact, attribute_name: :address).with_label.without_icon.wrap_with(:div, class: 'col-sm-12') %>
-        <%= render Territories::TerritoryNotesComponent.new(contact, attribute_name: :notes).with_label.without_icon.wrap_with(:div, class: 'col-sm-12') %>
+        <%= render AddressAttributeComponent.new(contact.address).with_label.without_icon.wrap_with(:div, class: 'col-sm-12') %>
+        <%= render NotesAttributeComponent.new(contact.notes).with_label.without_icon.wrap_with(:div, class: 'col-sm-12') %>
       </div>
     </div>
   <% end %>

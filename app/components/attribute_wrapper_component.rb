@@ -1,8 +1,15 @@
 # frozen_string_literal: true
 
 class AttributeWrapperComponent < ApplicationComponent
+  attr_reader :value
+
   def without_icon
     attribute.without_icon
+    self
+  end
+
+  def without_label
+    attribute.without_label
     self
   end
 
@@ -40,5 +47,9 @@ class AttributeWrapperComponent < ApplicationComponent
     @attribute ||= AttributeComponent.new
       .with_icon(icon_name)
       .with_classes(bem)
+  end
+
+  def icon_name
+    # No OP
   end
 end
