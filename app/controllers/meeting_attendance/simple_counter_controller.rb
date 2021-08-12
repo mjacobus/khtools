@@ -30,8 +30,8 @@ class MeetingAttendance::SimpleCounterController < ApplicationController
   end
 
   def names
-    params[:attendee][:name].to_s.split(',').map do |name|
+    params[:attendee][:name].to_s.split(',').filter_map do |name|
       name.strip.presence
-    end.compact
+    end
   end
 end
