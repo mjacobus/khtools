@@ -22,7 +22,7 @@ class PublicTalks::Talks::ShowPageComponent < PageComponent
   end
 
   def has_contact_information?
-    [talk.email, talk.phone].map(&:presence).compact.any?
+    [talk.email, talk.phone].filter_map(&:presence).any?
   end
 
   def whatsapp_web_link

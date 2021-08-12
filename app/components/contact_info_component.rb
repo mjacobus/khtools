@@ -10,7 +10,7 @@ class ContactInfoComponent < ApplicationComponent
   end
 
   def has_contact_information?
-    [email, phone].map(&:presence).compact.any?
+    [email, phone].filter_map(&:presence).any?
   end
 
   def whatsapp_web_link

@@ -16,9 +16,9 @@ class MeetingAttendance::SimpleCounterAttendeesForm < BaseForm
   end
 
   def names=(names)
-    @names = Array(names).join(',').split(',').map do |name|
+    @names = Array(names).join(',').split(',').filter_map do |name|
       name.strip.presence
-    end.compact
+    end
   end
 
   def save

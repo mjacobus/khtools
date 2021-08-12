@@ -26,7 +26,7 @@ class Congregations::ShowPageComponent < PageComponent
       congregation.primary_contact_person,
       congregation.primary_contact_email,
       congregation.primary_contact_phone
-    ].map(&:presence).compact.any?
+    ].filter_map(&:presence).any?
   end
 
   private

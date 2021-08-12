@@ -13,7 +13,7 @@ module Territories
     end
 
     def phone_numbers
-      @phone_numbers ||= [record.phone, record.phone2].map(&:presence).compact
+      @phone_numbers ||= [record.phone, record.phone2].filter_map(&:presence)
     end
 
     def icon_name
