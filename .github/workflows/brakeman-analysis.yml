@@ -21,12 +21,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    # Customize the ruby version depending on your needs
-    - name: Setup Ruby
-      uses: actions/setup-ruby@v1
-      with:
-        ruby-version: '3.0.2'
-
+    - uses: ruby/setup-ruby@v1
     - name: Setup Brakeman
       env:
         BRAKEMAN_VERSION: '4.10' # SARIF support is provided in Brakeman version 4.10+
