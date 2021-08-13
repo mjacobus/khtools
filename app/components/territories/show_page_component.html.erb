@@ -35,4 +35,11 @@
 <% end %>
 <div><%= render territory_attribute(:pending_verification) %></div>
 
+<% if territory.assigned? %>
+<h2 class="h5 my-3"><%= t('app.attributes.assignments') %></h2>
+<% end %>
+
+<div><%= render territory_attribute(:assignee).with_link %></div>
+<div><%= render territory_attribute(:assignment_dates) %></div>
+
 <%= render Territories::AssignmentsComponent.new(record: territory) %>

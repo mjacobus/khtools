@@ -4,6 +4,9 @@ class Db::TerritoryAssignment < ApplicationRecord
   belongs_to :territory
   belongs_to :assignee, class_name: 'Publisher'
 
+  default_scope -> { order(assigned_at: :desc) }
+  scope :with_dependencies, -> { includes([:assignee, :territory]) }
+
   validates :assigned_at, presence: true
 
   def returned?

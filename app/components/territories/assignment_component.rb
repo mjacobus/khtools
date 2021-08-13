@@ -3,6 +3,14 @@
 module Territories
   class AssignmentComponent < ApplicationComponent
     has :assignment
-    has :perspective
+    has :parent
+
+    def territory_perspective?
+      parent.is_a?(Db::Territory)
+    end
+
+    def publisher_perspective?
+      parent.is_a?(Db::Publisher)
+    end
   end
 end

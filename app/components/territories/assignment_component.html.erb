@@ -1,8 +1,16 @@
 <div class="item">
   <div class="row">
-    <%= render attribute(assignment.assignee&.name)
-      .with_label(:publisher)
-      .with_link(urls.publisher_path(assignment.assignee)).wrap_with(:div, class: 'col-md-6') %>
+    <% if territory_perspective? %>
+      <%= render attribute(assignment.assignee&.name)
+        .with_label(:publisher)
+        .with_link(urls.publisher_path(assignment.assignee)).wrap_with(:div, class: 'col-md-6') %>
+    <% end %>
+
+    <% if publisher_perspective? %>
+      <%= render attribute(assignment.territory&.name)
+        .with_label(:territory)
+        .with_link(urls.to(assignment.territory)).wrap_with(:div, class: 'col-md-6') %>
+    <% end %>
 
     <%= render Territories::TerritoryAssignmentDatesComponent.new(assignment, attribute_name: :assignment_dates)
     .with_label(:assignment_dates)
