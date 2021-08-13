@@ -10,5 +10,7 @@ class CreateDbTerritoryAssignments < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
+
+    remove_column :territories, :returned_at
   end
 end

@@ -19,7 +19,13 @@ namespace :db do
     Rake::Task['db:migrate'].invoke
   end
 
-  desc "Seed territory assignments"
-  task(seed_territory_assignments: :environment) do
+end
+
+namespace :data do
+  namespace :migrate do
+    desc "Migrate territory assignments"
+    task(territory_assignments: :environment) do
+      TerritoryAssignmentMigration.new.migrate
+    end
   end
 end

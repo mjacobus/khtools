@@ -2,6 +2,8 @@
 
 class TerritoryAssignmentMigration
   def migrate
+    @migration_time = Time.zone.now
+
     Db::Territory.find_each do |territory|
       if territory.assigned?
         create_assignments(territory)
@@ -15,7 +17,7 @@ class TerritoryAssignmentMigration
     unless assignment_exist?(territory)
       territory.assignments.create!(
         assignee_id: territory.assignee_id,
-        assigned_at: territory.assigned_at
+        assigned_at: territory.assigned_at || @migration_time
       )
     end
   end
