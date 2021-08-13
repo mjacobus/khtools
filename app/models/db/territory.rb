@@ -22,6 +22,7 @@ class Db::Territory < ApplicationRecord
   belongs_to :letter_box_type,
              class_name: 'Db::LetterBoxType',
              optional: true
+  has_many :assignments, class_name: 'Db::TerritoryAssignment'
 
   default_scope { order(:name) }
   scope :with_dependencies, lambda {

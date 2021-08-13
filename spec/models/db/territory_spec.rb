@@ -3,7 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe Db::Territory, type: :model do
+  subject(:territory) { factory.build }
+
   let(:factory) { factories.territories }
+
+  it { expect(territory).to have_many(:assignments).class_name('Db::TerritoryAssignment') }
 
   it 'persists' do
     expect { factory.create }.to change(described_class, :count).by(1)
