@@ -58,7 +58,5 @@ class AttributeWrapperComponent < ApplicationComponent
       .with_classes(bem)
   end
 
-  def icon_name
-    @icon_name
-  end
+  attr_reader :icon_name
 end
