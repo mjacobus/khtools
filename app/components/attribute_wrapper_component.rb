@@ -3,6 +3,10 @@
 class AttributeWrapperComponent < ApplicationComponent
   attr_reader :value
 
+  def initialize(value = nil)
+    @value = value
+  end
+
   def without_icon
     attribute.without_icon
     self
@@ -33,6 +37,11 @@ class AttributeWrapperComponent < ApplicationComponent
     self
   end
 
+  def with_icon(icon_name = nil)
+    @icon_name = icon_name
+    self
+  end
+
   def call
     render(attribute) { value }
   end
@@ -50,6 +59,6 @@ class AttributeWrapperComponent < ApplicationComponent
   end
 
   def icon_name
-    # No OP
+    @icon_name
   end
 end

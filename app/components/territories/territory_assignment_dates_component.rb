@@ -5,11 +5,21 @@ module Territories
     private
 
     def value
-      dates.map { |date| l(date) }.join(' - ')
+      dates.compact.map { |date| l(date) }.join(' - ')
     end
 
     def dates
-      @dates = [record.assigned_at&.to_date, record.returned_at&.to_date].compact
+      if defined?(@dates)
+        return @dates
+      end
+
+      @dates = [record.assigned_at&.to_date]
+
+      if record.respond_to?(:returned_at)
+        @dates.push(record.returned_at&.to_date)
+      end
+
+      @dates
     end
 
     def icon_name

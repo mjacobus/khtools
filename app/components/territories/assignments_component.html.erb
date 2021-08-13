@@ -1,0 +1,7 @@
+<h2 class="h5 my-3"><%= t('app.attributes.assignments') %></h2>
+
+<div class="index-list">
+  <% record.assignments.each do |assignment| %>
+    <%= render Territories::AssignmentComponent.new(assignment: assignment, parent: record) %>
+  <% end %>
+</div>

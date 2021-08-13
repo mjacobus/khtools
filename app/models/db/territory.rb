@@ -109,7 +109,6 @@ class Db::Territory < ApplicationRecord
       pending_verification
       name
       assigned_at
-      returned_at
       assignee_id
     ]
   end
@@ -130,7 +129,6 @@ class Db::Territory < ApplicationRecord
 
     self.assignee_id = publisher
     self.assigned_at = Time.zone.now
-    self.returned_at = nil
 
     self.class.transaction do
       save!
@@ -144,7 +142,6 @@ class Db::Territory < ApplicationRecord
 
     self.assignee_id = nil
     self.assigned_at = nil
-    self.returned_at = nil
 
     self.class.transaction do
       assignments_to_return.map(&:return)

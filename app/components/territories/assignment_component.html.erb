@@ -1,0 +1,12 @@
+<div class="item">
+  <div class="row">
+    <%= render attribute(assignment.assignee&.name)
+      .with_label(:publisher)
+      .with_link(urls.publisher_path(assignment.assignee)).wrap_with(:div, class: 'col-md-6') %>
+
+    <%= render Territories::TerritoryAssignmentDatesComponent.new(assignment, attribute_name: :assignment_dates)
+    .with_label(:assignment_dates)
+    .without_icon
+    .wrap_with(:div, class: 'col-md-6') %>
+  </div>
+</div>
