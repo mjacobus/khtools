@@ -7,7 +7,7 @@ RSpec.describe Territories::AssignmentsController, type: :request do
     login_user(admin_user)
   end
 
-  let(:territory) { factories.territories.create(returned_at: Time.zone.now) }
+  let(:territory) { factories.territories.create }
   let(:publisher) { factories.publishers.create }
 
   describe 'GET #new' do
@@ -53,14 +53,6 @@ RSpec.describe Territories::AssignmentsController, type: :request do
         expect { perform_request }.to change {
                                         territory.reload.assigned_at
                                       }.from(nil).to(Time.zone.now)
-      end
-    end
-
-    it 'resets the return time' do
-      freeze_time do
-        expect { perform_request }.to change {
-                                        territory.reload.returned_at
-                                      }.from(Time.zone.now).to(nil)
       end
     end
 

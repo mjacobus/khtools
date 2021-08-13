@@ -2,6 +2,8 @@
 
 # rubocop:disable Metrics/ClassLength
 class Db::Territory < ApplicationRecord
+  AssignmentError = Class.new(StandardError)
+
   UNASSIGNED_TERRITORY_VALUE = 'none'
 
   belongs_to :assignee, class_name: 'Publisher', optional: true
@@ -22,6 +24,7 @@ class Db::Territory < ApplicationRecord
   belongs_to :letter_box_type,
              class_name: 'Db::LetterBoxType',
              optional: true
+  has_many :assignments, class_name: 'Db::TerritoryAssignment', dependent: :restrict_with_exception
 
   default_scope { order(:name) }
   scope :with_dependencies, lambda {
@@ -106,7 +109,6 @@ class Db::Territory < ApplicationRecord
       pending_verification
       name
       assigned_at
-      returned_at
       assignee_id
     ]
   end
@@ -115,22 +117,36 @@ class Db::Territory < ApplicationRecord
     @type_key ||= self.class.to_s.underscore.split('/').last.sub('_territory', '')
   end
 
+  # rubocop:disable Metrics/MethodLength
   def assign_to(publisher)
-    unless publisher.is_a?(Db::Publisher)
-      publisher = Db::Publisher.find(publisher)
+    if assigned?
+      raise AssignmentError, 'Already assigned'
     end
 
-    self.assignee_id = publisher.id
+    if publisher.is_a?(Db::Publisher)
+      publisher = publisher.id
+    end
+
+    self.assignee_id = publisher
     self.assigned_at = Time.zone.now
-    self.returned_at = nil
-    save!
+
+    self.class.transaction do
+      save!
+      assignments.create!(assignee_id: assignee_id, assigned_at: assigned_at)
+    end
   end
+  # rubocop:enable Metrics/MethodLength
 
   def return
+    assignments_to_return = assignments.where(assignee_id: assignee_id)
+
     self.assignee_id = nil
     self.assigned_at = nil
-    self.returned_at = nil
-    save!
+
+    self.class.transaction do
+      assignments_to_return.map(&:return)
+      save!
+    end
   end
 
   def assigned?

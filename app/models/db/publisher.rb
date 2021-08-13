@@ -11,6 +11,12 @@ class Db::Publisher < ApplicationRecord
            inverse_of: :assignee,
            dependent: :restrict_with_exception
 
+  has_many :assignments,
+           foreign_key: :assignee_id,
+           class_name: 'Db::TerritoryAssignment',
+           inverse_of: :assignee,
+           dependent: :restrict_with_exception
+
   validates :name, presence: true
   validates :gender, presence: true
 

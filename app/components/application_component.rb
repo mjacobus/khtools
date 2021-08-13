@@ -14,6 +14,10 @@ class ApplicationComponent < ViewComponent::Base
     end
   end
 
+  def attribute(value)
+    AttributeWrapperComponent.new(value)
+  end
+
   def initialize(options = {})
     @options = options
   end

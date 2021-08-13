@@ -3,7 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe Db::Territory, type: :model do
+  subject(:territory) { factory.build }
+
   let(:factory) { factories.territories }
+
+  it {
+    expect(territory).to have_many(:assignments)
+      .class_name('Db::TerritoryAssignment')
+      .dependent(:restrict_with_exception)
+  }
 
   it 'persists' do
     expect { factory.create }.to change(described_class, :count).by(1)
@@ -158,6 +166,74 @@ RSpec.describe Db::Territory, type: :model do
 
       found = described_class.search(pending_verification: 'false')
       expect(found.map(&:name)).to eq(['ok'])
+    end
+  end
+
+  describe '#assign_to' do
+    subject(:territory) { factory.create }
+
+    let(:publisher) { factories.publishers.create }
+    let(:assign) { territory.assign_to(publisher) }
+
+    it 'assigns publisher' do
+      expect { assign }.to change { territory.reload.assignee }.from(nil).to(publisher)
+    end
+
+    it 'assigns sets assigned_at' do
+      freeze_time do
+        expect { assign }.to change { territory.assigned_at }.from(nil).to(Time.zone.now)
+      end
+    end
+
+    it 'creates an assignment' do
+      freeze_time do
+        expect { assign }.to change(Db::TerritoryAssignment, :count).by(1)
+      end
+    end
+
+    it 'creates an assignment with correct publisher id' do
+      assign
+
+      expect(Db::TerritoryAssignment.last.assignee_id).to eq(publisher.id)
+    end
+
+    it 'creates an assignment with correct timestamp' do
+      freeze_time do
+        assign
+
+        expect(Db::TerritoryAssignment.last.assigned_at).to eq(Time.zone.now)
+      end
+    end
+
+    it 'raises error if territory is already assigned' do
+      assign
+
+      expect { territory.assign_to(publisher) }.to raise_error(Db::Territory::AssignmentError)
+    end
+  end
+
+  describe '#return' do
+    subject(:territory) { factory.create }
+
+    let(:publisher) { factories.publishers.create }
+
+    it 'resets assignment fields' do
+      territory.assign_to(publisher)
+      territory.return
+
+      expect(territory.assignee).to be_nil
+      expect(territory.assigned_at).to be_nil
+    end
+
+    it 'markes assignments as returned' do
+      assignment = territory.assign_to(publisher)
+      other_assignment = factory.create.assign_to(publisher)
+
+      territory.return
+      territory.return # yes, twice
+
+      expect(assignment.reload).to be_returned
+      expect(other_assignment.reload).not_to be_returned
     end
   end
 end

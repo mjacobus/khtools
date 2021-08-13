@@ -177,6 +177,7 @@ pt-BR:
         download_as: "Baixar"
   app:
     attributes:
+      publisher: "Publicador"
       address: Endereço
       apartments: Apartamentos
       area: Área
@@ -184,8 +185,9 @@ pt-BR:
       assigned_at: Designado em
       assignee: Designado para
       assignee_id: Designado para
-      assignment_dates: Data designação
+      assignment_dates: Datas designação
       assignments: Designações
+      assignment_history: Histórico de designações
       avatar: Foto
       building_name: Condomínio
       campaign: Campanha

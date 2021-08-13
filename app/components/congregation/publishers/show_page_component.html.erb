@@ -14,3 +14,5 @@
     <%= render attribute(:group).with_label.without_icon.wrap_with(:div, class: 'col-sm-12') %>
   </div>
 </div>
+
+<%= render Territories::AssignmentsComponent.new(record: publisher) %>

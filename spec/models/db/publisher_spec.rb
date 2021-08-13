@@ -11,6 +11,13 @@ RSpec.describe Db::Publisher, type: :model do
     expect(described_class.count).to be 1
   end
 
+  it 'has many assignments' do
+    expect(publisher).to have_many(:assignments)
+      .class_name('Db::TerritoryAssignment')
+      .inverse_of(:assignee)
+      .dependent(:restrict_with_exception)
+  end
+
   it 'belongs to a #group' do
     group = Db::FieldServiceGroup.create!(name: 'group')
 

@@ -18,4 +18,14 @@ namespace :db do
     ActiveRecord::Base.logger = Logger.new($stdout)
     Rake::Task['db:migrate'].invoke
   end
+
+end
+
+namespace :data do
+  namespace :migrate do
+    desc "Migrate territory assignments"
+    task(territory_assignments: :environment) do
+      TerritoryAssignmentMigration.new.migrate
+    end
+  end
 end
