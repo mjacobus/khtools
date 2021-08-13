@@ -10,6 +10,7 @@ RSpec.describe TerritoryAssignmentMigration do
   let(:publisher) { factories.publishers.create }
 
   describe '#migrate' do
+    # rubocop:disable RSpec/ExampleLength
     it 'creates territory assignemnts if they do not exist yet' do
       freeze_time do
         territories.create(assignee_id: nil)
@@ -26,5 +27,6 @@ RSpec.describe TerritoryAssignmentMigration do
         expect(assignment.assignee_id).to eq(publisher.id)
       end
     end
+    # rubocop:enable RSpec/ExampleLength
   end
 end
