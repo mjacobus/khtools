@@ -185,14 +185,6 @@ RSpec.describe Db::Territory, type: :model do
       end
     end
 
-    it 'assigns nils returned_at' do
-      freeze_time do
-        territory.returned_at = Time.zone.now
-
-        expect { assign }.to change { territory.returned_at }.from(Time.zone.now).to(nil)
-      end
-    end
-
     it 'creates an assignment' do
       freeze_time do
         expect { assign }.to change(Db::TerritoryAssignment, :count).by(1)
@@ -231,7 +223,6 @@ RSpec.describe Db::Territory, type: :model do
 
       expect(territory.assignee).to be_nil
       expect(territory.assigned_at).to be_nil
-      expect(territory.returned_at).to be_nil
     end
 
     it 'markes assignments as returned' do
