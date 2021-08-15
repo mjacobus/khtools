@@ -41,13 +41,13 @@
         <%= f.input :has_a_roof, as: :select, collection: boolean_collection %>
       <% end %>
       <%= input_wrapper do %>
-        <%= f.input :number_of_apartments %>
-      <% end %>
-      <%= input_wrapper do %>
         <%= f.input :intercom_type_id, as: :select, collection: intercom_type_collection %>
       <% end %>
       <%= input_wrapper do %>
         <%= f.input :letter_box_type_id, as: :select, collection: letter_box_type_collection %>
+      <% end %>
+      <%= input_wrapper do %>
+        <%= f.input :number_of_apartments %>
       <% end %>
       <%= input_wrapper do %>
         <%= f.input :apartments %>
