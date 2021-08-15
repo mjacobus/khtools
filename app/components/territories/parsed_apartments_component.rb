@@ -9,7 +9,16 @@ module Territories
     end
 
     def grouped_apartments
-      apartments.group_by { |value| value[0] }
+      apartments.group_by { |value| group_by(value) }
+    end
+
+    private
+
+    def group_by(value)
+      @difference ||= (apartments.last.length - apartments.first.length)
+      value[(0..@difference)]
+    rescue StandardError
+      value[0].to_s
     end
   end
 end
