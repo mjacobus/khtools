@@ -44,4 +44,10 @@ RSpec.describe Db::ApartmentBuildingTerritory, type: :model do
 
     expect(territory.parsed_apartments).to eq(%w[201 202 203 204])
   end
+
+  it 'has empty apartments when apartments is nil' do
+    territory.apartments = nil
+
+    expect(territory.parsed_apartments).to eq([])
+  end
 end
