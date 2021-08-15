@@ -15,15 +15,15 @@
   <div><%= render territory_attribute(:building_name) %></div>
   <div><%= render territory_attribute(:address) %></div>
   <div><%= render territory_attribute(:area) %></div>
-  <div><%= render territory_attribute(:number_of_apartments) %></div>
   <div><%= render territory_attribute(:territory).with_link %></div>
+  <div><%= render territory_attribute(:number_of_apartments) %></div>
+  <div><%= render territory_attribute(:apartments) %></div>
 
   <h2 class="h5 my-3"><%= t('active_admin.resources.db/territories.sections.preaching_methods') %></h2>
   <div><%= render territory_attribute(:preaching_methods) %></div>
   <div><%= render territory_attribute(:has_a_roof) %></div>
   <div><%= render territory_attribute(:intercom_type) %></div>
   <div><%= render territory_attribute(:letter_box_type) %></div>
-  <div><%= render territory_attribute(:apartments) %></div>
 <% end %>
 
 <div><%= render territory_attribute(:contacts_summary) %></div>
