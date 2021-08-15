@@ -42,11 +42,6 @@ RSpec.describe Db::ApartmentBuildingTerritory, type: :model do
       204,
     STR
 
-    expect(territory.parsed_apartments).to eq([
-      '201',
-      '202',
-      '203',
-      '204',
-    ])
+    expect(territory.parsed_apartments).to eq(%w[201 202 203 204])
   end
 end
