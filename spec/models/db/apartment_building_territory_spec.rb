@@ -34,4 +34,19 @@ RSpec.describe Db::ApartmentBuildingTerritory, type: :model do
     expect(territory).to belong_to(:letter_box_type)
       .class_name('Db::LetterBoxType').optional
   }
+
+  it 'has #apartments' do
+    territory.apartments = <<~STR
+      201, 202,
+      203
+      204,
+    STR
+
+    expect(territory.parsed_apartments).to eq([
+      '201',
+      '202',
+      '203',
+      '204',
+    ])
+  end
 end
