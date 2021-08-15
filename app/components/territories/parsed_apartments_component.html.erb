@@ -1,0 +1,9 @@
+<div class="<%= bem %>">
+  <% grouped_apartments.each do |_, group| %>
+    <div>
+      <% group.each do |item| %>
+        <span class="<%= bem('item') %>"><%= item %></span>
+      <% end %>
+    </div>
+  <% end %>
+</div>
