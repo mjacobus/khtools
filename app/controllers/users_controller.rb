@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :require_master_user
 
   def index
-    @users = User.all
+    @users = User.order(:email)
   end
 
   def enable
