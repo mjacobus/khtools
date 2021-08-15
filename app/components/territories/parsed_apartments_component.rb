@@ -3,6 +3,7 @@
 module Territories
   class ParsedApartmentsComponent < ApplicationComponent
     has :apartments
+    has :expected_number_of_apartments
 
     def render?
       apartments.any?
@@ -10,6 +11,18 @@ module Territories
 
     def grouped_apartments
       apartments.group_by { |value| group_by(value) }
+    end
+
+    def show_text?
+      expected_number_of_apartments != apartments.size
+    end
+
+    def text
+      t(
+        'app.messages.x_out_of_z_apartments',
+        expected: expected_number_of_apartments,
+        registered: apartments.size
+      )
     end
 
     private

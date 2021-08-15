@@ -1,4 +1,7 @@
 <div class="<%= bem %>">
+  <% if show_text? %>
+    <p class="small"><%= text %></p>
+  <% end %>
   <% grouped_apartments.each do |_, group| %>
     <div>
       <% group.each do |item| %>
