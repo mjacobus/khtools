@@ -5,11 +5,7 @@ module Territories
     private
 
     def value
-      if record.apartments
-        tag.pre do
-          record.apartments
-        end
-      end
+      render Territories::ParsedApartmentsComponent.new(apartments: record.parsed_apartments)
     end
 
     def icon_name
