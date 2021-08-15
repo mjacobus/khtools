@@ -25,7 +25,7 @@ RSpec.describe UsersController, type: :controller do
       it 'assigns all users' do
         get :index
 
-        expect(assigns(:users)).to eq(User.all)
+        expect(assigns(:users)).to eq(User.order(:email))
       end
     end
 
