@@ -5,19 +5,19 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '~> 3.0.2'
 
+gem 'activeadmin'
 gem 'bootsnap', '>= 1.4.2', require: false
+gem 'caxlsx'
 gem 'dotenv-rails'
 gem 'omniauth', '~> 1.9.1'
 gem 'omniauth-google-oauth2'
 gem 'pg'
 gem 'puma', '~> 5.1'
 gem 'rails', '~> 6.1'
-
-gem 'activeadmin'
-gem 'caxlsx'
-
 gem 'sentry-rails'
 gem 'sentry-ruby'
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binpath'
 
 # frontend
 # gem 'bootstrap', '~> 4.4'
