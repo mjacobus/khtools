@@ -44,4 +44,17 @@ class ApplicationController < ActionController::Base
   def routes
     @routes ||= Routes.new
   end
+
+  def export_pdf(file_name, options = {})
+    default_options = {
+      pdf: file_name,
+      layout: 'pdf',
+      header: {
+        right: t('app.messages.page_x_of_y', x: '[page]', y: '[topage]'),
+        font_size: 6
+      }
+    }
+
+    render(default_options.merge(options))
+  end
 end

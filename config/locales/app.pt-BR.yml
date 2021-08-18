@@ -260,6 +260,7 @@ pt-BR:
       week_talks: "Discursos da semana"
       public_talks: "Discursos"
     messages:
+      page_x_of_y: "Página %{x} de %{y}"
       unassigned_territory: "Território não designado"
       page_not_found: "Página não encontrada"
       no_records_found: "Nenhum registro encontrado"
@@ -279,6 +280,7 @@ pt-BR:
     links:
       territories: "Territories"
       download_xls: "Baixar XLS"
+      download_pdf: "Baixar PDF"
       clear_filters: "Limpar filtros"
       filter: "Filtrar"
       search: "Buscar"
@@ -322,10 +324,10 @@ pt-BR:
       create_phone_list_territory_assignment: "Vincular aos territórios de lista telefonicas"
     phone_list_spreadsheet:
       territory_description: "Território %{name}"
-      phone_number: "Número telefônico"
-      date_of_first_attempt: "1º Tentativa (data)"
-      date_of_second_attempt: "2º Tentativa (data)"
-      date_of_third_attempt: "3º Tentativa (data)"
+      phone_number: "Telefone"
+      date_of_first_attempt: "1º Tentativa"
+      date_of_second_attempt: "2º Tentativa"
+      date_of_third_attempt: "3º Tentativa"
       notes: "Observações"
     forms:
       admin:
