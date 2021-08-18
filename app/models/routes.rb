@@ -24,6 +24,10 @@ class Routes
     @helpers.xls_territories_phone_list_territory_path(territory)
   end
 
+  def territory_download_pdf_path(territory)
+    @helpers.pdf_territories_phone_list_territory_path(territory)
+  end
+
   def new_territory_assignment_path(territory)
     @helpers.new_territories_territory_assignment_path(territory)
   end

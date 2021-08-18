@@ -68,6 +68,16 @@ module TerritoryAttributesConcern
     end
   end
 
+  def download_pdf_action
+    if type == :phone_list
+      link_to(
+        t('app.links.download_pdf'),
+        urls.territory_download_pdf_path(territory),
+        class: 'btn'
+      )
+    end
+  end
+
   def delete_action
     link_to(
       t('app.links.delete'),

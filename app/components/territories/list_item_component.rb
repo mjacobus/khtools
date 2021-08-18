@@ -7,6 +7,7 @@ class Territories::ListItemComponent < ApplicationComponent
   def actions
     [
       xls_action,
+      download_pdf_action,
       contacts_action,
       new_contact_action,
       assignment_action,

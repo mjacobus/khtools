@@ -9,6 +9,7 @@ class Territories::ShowPageComponent < PageComponent
     [
       assignment_action,
       xls_action,
+      download_pdf_action,
       edit_action,
       delete_action
     ].compact

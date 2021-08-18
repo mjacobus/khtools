@@ -45,6 +45,7 @@ Rails.application.routes.draw do
     resources :phone_list_territories do
       member do
         get :xls
+        get :pdf, defaults: { format: :pdf }
       end
     end
     resources :apartment_building_territories
