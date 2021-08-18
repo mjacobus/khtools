@@ -46,6 +46,7 @@ Rails.application.routes.draw do
       member do
         get :xls
         get :pdf, defaults: { format: :pdf }
+        post :create_token
       end
     end
     resources :apartment_building_territories

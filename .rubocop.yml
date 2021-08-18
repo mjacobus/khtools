@@ -92,6 +92,9 @@ RSpec/MultipleMemoizedHelpers:
   Exclude:
     - "spec/requests/**/*"
 
+RSpec/NestedGroups:
+  Max: 4
+
 # while that is a good rule, AR objects can't be properly instance_double'd
 RSpec/VerifiedDoubles:
   Enabled: false

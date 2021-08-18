@@ -1,5 +1,12 @@
 <%= render breadcrumb %>
 
+<% if access_token %>
+  <div class="alert alert-danger" role="alert">
+    <div class="shareable-xls-link"><%= tokenized_xls_link %></div>
+    <div class="shareable-pdf-link"><%= tokenized_pdf_link %></div>
+  </div>
+<% end %>
+
 <%= render DropdownMenuComponent.new(classes: ['btn-primary'], type: :list_options) do |component| %>
   <% actions.each do |action| %>
     <% component.item do %>
