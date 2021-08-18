@@ -19,7 +19,7 @@ module Territories
     private
 
     def per_page
-      34
+      25
     end
 
     def phone_numbers

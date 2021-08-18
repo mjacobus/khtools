@@ -8,6 +8,11 @@ table { margin-top: 10px; }
 .<%= bem('territory_name') %> {
   font-weight: bold;
 }
+
+td {
+  font-size: 15px;
+  line-height: 24px;
+}
 </style>
 <div class="<%= bem %>">
   <% phone_numbers_in_groups.each.with_index do |numbers, index| %>
