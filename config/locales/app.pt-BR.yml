@@ -278,6 +278,7 @@ pt-BR:
         one: "%{count} contato"
         other: "%{count} contatos"
     links:
+      create_tokenized_link_to_files: "Criar links para download"
       territories: "Territories"
       download_xls: "Baixar XLS"
       download_pdf: "Baixar PDF"

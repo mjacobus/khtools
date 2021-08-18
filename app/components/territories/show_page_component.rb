@@ -4,6 +4,7 @@ class Territories::ShowPageComponent < PageComponent
   include TerritoryAttributesConcern
 
   has :territory
+  attr_reader :access_token
 
   def actions
     [
@@ -11,12 +12,33 @@ class Territories::ShowPageComponent < PageComponent
       xls_action,
       download_pdf_action,
       edit_action,
-      delete_action
+      delete_action,
+      create_link_to_files_action
     ].compact
   end
 
   def territory_attribute(name)
     attribute(name).with_label.without_icon
+  end
+
+  def with_access_token(token)
+    @access_token = token
+    self
+  end
+
+  def create_link_to_files_action
+    url = urls.territory_tokenized_files_path(territory)
+    link_to(t('app.links.create_tokenized_link_to_files'), url, data: { method: :post }, class: 'btn')
+  end
+
+  def tokenized_pdf_link
+    url = urls.territory_download_pdf_path(territory, access_token: access_token.token)
+    "#{root_url}#{url}"
+  end
+
+  def tokenized_xls_link
+    url = urls.territory_download_xls_path(territory, access_token: access_token.token)
+    "#{root_url}#{url}"
   end
 
   private

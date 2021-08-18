@@ -20,12 +20,16 @@ class Routes
     @helpers.send(method, *args)
   end
 
-  def territory_download_xls_path(territory)
-    @helpers.xls_territories_phone_list_territory_path(territory)
+  def territory_tokenized_files_path(territory)
+    @helpers.create_token_territories_phone_list_territory_path(territory)
   end
 
-  def territory_download_pdf_path(territory)
-    @helpers.pdf_territories_phone_list_territory_path(territory)
+  def territory_download_xls_path(territory, params = {})
+    @helpers.xls_territories_phone_list_territory_path(territory, params)
+  end
+
+  def territory_download_pdf_path(territory, params = {})
+    @helpers.pdf_territories_phone_list_territory_path(territory, params)
   end
 
   def new_territory_assignment_path(territory)
