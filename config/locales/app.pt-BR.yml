@@ -6,6 +6,7 @@ pt-BR:
   activerecord:
     models:
       user: Usuário
+      db/access_token: Token de Acesso
       db/app_config: Configuração
       db/congregation: Congregação
       db/public_talk: Discurso
@@ -47,6 +48,10 @@ pt-BR:
         theme: Tema
         notes: Observações
         status: Situação
+      db/access_token:
+        token: Token
+        resource: Registro
+        expires_at: Expira em
       db/app_config:
         key: Configuração
         value: Conteúdo
