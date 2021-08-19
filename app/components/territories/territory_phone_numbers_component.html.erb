@@ -4,12 +4,11 @@
 <% end %>
 <%= render(attribute) { value } %>
 <% if show_details? %>
-    <%= render CopyToClipboardComponent.new(selector: ".#{bem('phones')}") %>
     </summary>
-    <div hidden class="<%= bem('phones') %>"><%= record.phone_numbers.join("\n") %></div>
-    
-    <% record.phone_numbers.each do |phone| %>
-      <div><%= phone %></div>
+    <%= render CopyToClipboardComponent.new do %>
+      <% record.phone_numbers.each do |phone| %>
+        <div><%= phone %></div>
+      <% end %>
     <% end %>
   </details>
 <% end %>
