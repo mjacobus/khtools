@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   namespace :territories do
     resources :territories, only: [:show] do
       resources :assignments
+      resource :map
     end
     resources :regular_territories
     resources :phone_list_territories do
