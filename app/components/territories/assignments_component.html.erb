@@ -1,7 +1,0 @@
-<h2 class="h5 my-3"><%= t('app.attributes.assignment_history') %></h2>
-
-<div class="index-list">
-  <% assignments.each do |assignment| %>
-    <%= render Territories::AssignmentComponent.new(assignment: assignment, parent: record) %>
-  <% end %>
-</div>
