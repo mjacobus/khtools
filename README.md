@@ -2,14 +2,14 @@
 
 A few utilities for Kingdom Hall users.
 
-[![Build Status](https://github.com/mjacobus/khtools/actions/workflows/rails-unit-tests.yml/badge.svg)](https://github.com/mjacobus/khtools/actions/workflows/rails-unit-tests.yml?query=branch%3Amaster)
-[![Rubocop](https://github.com/mjacobus/khtools/actions/workflows/rubocop.yml/badge.svg)](https://github.com/mjacobus/khtools/actions/workflows/rubocop.yml?query=branch%3Amaster)
-[![Maintainability](https://api.codeclimate.com/v1/badges/65fad0b0ff0bed478231/maintainability)](https://codeclimate.com/github/mjacobus/khtools/maintainability)
-[![Coverage Status](https://coveralls.io/repos/github/mjacobus/khtools/badge.svg?branch=master)](https://coveralls.io/github/mjacobus/khtools?branch=master)
+[![Build Status](https://github.com/mjacobus/bible-tools/actions/workflows/rails-unit-tests.yml/badge.svg)](https://github.com/mjacobus/bible-tools/actions/workflows/rails-unit-tests.yml?query=branch%3Amaster)
+[![Rubocop](https://github.com/mjacobus/bible-tools/actions/workflows/rubocop.yml/badge.svg)](https://github.com/mjacobus/bible-tools/actions/workflows/rubocop.yml?query=branch%3Amaster)
+[![Maintainability](https://api.codeclimate.com/v1/badges/65fad0b0ff0bed478231/maintainability)](https://codeclimate.com/github/mjacobus/bible-tools/maintainability)
+[![Coverage Status](https://coveralls.io/repos/github/mjacobus/bible-tools/badge.svg?branch=master)](https://coveralls.io/github/mjacobus/bible-tools?branch=master)
 
 ### How to run/install the app:
 
-After installing the ruby version displayed in [this file](https://github.com/mjacobus/khtools/blob/master/.ruby-version).
+After installing the ruby version displayed in [this file](https://github.com/mjacobus/bible-tools/blob/master/.ruby-version).
 Also install `nodejs` and `yarn`.
 
 ```bash
@@ -17,8 +17,8 @@ Also install `nodejs` and `yarn`.
 gem install bundler
 mkdir ~/Projects
 cd projects
-git clone https://github.com/mjacobus/khtools.git
-cd khtools
+git clone https://github.com/mjacobus/bible-tools.git
+cd bible-tools
 bundle install # after you installed ruby version
 cp .env.sample .env
 
@@ -26,7 +26,7 @@ yarn install
 
 # every time you update your project
 
-cd ~/Projects/khtools
+cd ~/Projects/bible-tools
 docker-compose up     # start docker. Make sure your local postgress is not running
 bundle install
 ./bin/rake db:create  # create database
@@ -65,5 +65,5 @@ bundle exec rubocop -a
 Download a backup from the above link and then:
 
 ```bash
-pg_restore -U pguser -W --no-owner --no-privileges -h localhost -d khtools_development -1 tmp/bkp/jw-khtools-backup-21-01-14
+pg_restore -U pguser -W --no-owner --no-privileges -h localhost -d bible_tools_development -1 tmp/bkp/bible_tools-backup-21-01-14
 ```
