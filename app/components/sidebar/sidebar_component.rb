@@ -26,12 +26,17 @@ class Sidebar::SidebarComponent < ApplicationComponent
     if current_user.master?
       entry('Admin', '#', icon: 'pencil').tap do |section|
         section.append_child(users)
+        section.append_child(admin_users)
       end
     end
   end
 
   def users
     entry(User.model_name.human, users_path, icon: 'people')
+  end
+
+  def admin_users
+    entry(User.model_name.human, admin_users_path, icon: 'people')
   end
 
   def logout
