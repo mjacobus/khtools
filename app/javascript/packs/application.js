@@ -7,7 +7,6 @@ require("@rails/ujs").start();
 
 import "../src/application.scss";
 import "../components";
-import "../src/pages/public_talks/talks/form_page_component";
 
 require("bootstrap"); // not enough to enable toggle
 
