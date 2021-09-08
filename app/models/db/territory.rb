@@ -152,5 +152,35 @@ class Db::Territory < ApplicationRecord
   def assigned?
     assignee_id.present?
   end
+
+  # make sure it saves an array of hashes instead of hash of hashes
+  # Also, makes sure it saves numbers instead of strings
+  #
+  # rubocop:disable Metrics/MethodLength
+  def map_coordinates=(coordinates)
+    unless coordinates.is_a?(Hash)
+      super(coordinates)
+      return
+    end
+
+    new_values = coordinates.values.map do |value|
+      if value['lat']
+        value['lat'] = Float(value['lat'])
+      end
+
+      if value['lng']
+        value['lng'] = Float(value['lng'])
+      end
+
+      value
+    end
+
+    super(new_values)
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  def mapped?
+    map_coordinates.present?
+  end
 end
 # rubocop:enable Metrics/ClassLength

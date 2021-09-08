@@ -236,4 +236,63 @@ RSpec.describe Db::Territory, type: :model do
       expect(other_assignment.reload).not_to be_returned
     end
   end
+
+  describe '#map_coordinates' do
+    let(:coordinates) { [{ 'lat' => 1, 'lon' => 2 }] }
+
+    it 'defaults to nil' do
+      expect(described_class.new.map_coordinates).to be_nil
+    end
+
+    context 'when coordinates are given in hash' do
+      # rubocop:disable RSpec/ExampleLength
+      it 'converts hash to array' do
+        coordinates = {
+          '1' => { 'lat' => '1.2', 'lng' => '2.1' },
+          '2' => { 'lat' => nil, 'lng' => nil }
+        }
+
+        territory = factories.territories.create(map_coordinates: coordinates)
+
+        territory.reload
+
+        expected = [
+          { 'lat' => 1.2, 'lng' => 2.1 },
+          { 'lat' => nil, 'lng' => nil }
+        ]
+
+        expect(territory.map_coordinates).to eq(expected)
+      end
+      # rubocop:enable RSpec/ExampleLength
+    end
+
+    it 'can save a array of hashes' do
+      territory = factories.territories.create(map_coordinates: coordinates)
+
+      territory.reload
+
+      expect(territory.map_coordinates).to eq coordinates
+    end
+  end
+
+  describe '#mapped?' do
+    it 'returns true when there are borders' do
+      coordinates = [{ 'lat' => 1, 'lng' => 1 }]
+      territory = factories.territories.create(map_coordinates: coordinates)
+
+      expect(territory.mapped?).to be true
+    end
+
+    it 'returns false when there are no borders' do
+      territory = factories.territories.create(map_coordinates: nil)
+
+      expect(territory.mapped?).to be false
+    end
+
+    it 'returns false when borders are blank' do
+      territory = factories.territories.create(map_coordinates: '')
+
+      expect(territory.mapped?).to be false
+    end
+  end
 end
