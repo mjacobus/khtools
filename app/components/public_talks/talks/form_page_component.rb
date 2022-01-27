@@ -5,6 +5,7 @@ class PublicTalks::Talks::FormPageComponent < PageComponent
 
   def initialize(talk)
     @talk = talk
+    @talk.date ||= guess_date
     breadcrumb.add_item(t('app.links.public_talks'), urls.public_talks_talks_path)
 
     if talk.id
@@ -56,5 +57,15 @@ class PublicTalks::Talks::FormPageComponent < PageComponent
 
   def theme_text_disabled?
     !@talk.special?
+  end
+
+  private
+
+  def guess_date
+    last = Db::PublicTalk.reorder(created_at: :desc).limit(1).first
+
+    if last
+      last.date + 7.days
+    end
   end
 end
