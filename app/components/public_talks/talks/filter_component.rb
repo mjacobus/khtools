@@ -15,6 +15,10 @@ class PublicTalks::Talks::FilterComponent < ApplicationComponent
     attribute_name(Db::PublicTalk, :since)
   end
 
+  def speaker_name(speaker)
+    [speaker.name, speaker.congregation&.name].join(' - ')
+  end
+
   def label_for_speaker
     Db::PublicSpeaker.model_name.human
   end
