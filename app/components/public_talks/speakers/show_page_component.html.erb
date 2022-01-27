@@ -15,8 +15,8 @@
       <%= icon('person') { speaker.name } %>
     </div>
     <div class="col-sm-12 mb-2">
-      <% if speaker.congregation.present? %>
-        <%= icon('shop') { speaker.congregation.name } %>
+      <% if speaker.congregation_name.present? %>
+        <%= icon('shop') { speaker.congregation_name } %>
       <% end %>
     </div>
   </div>

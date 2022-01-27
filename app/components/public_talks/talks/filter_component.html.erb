@@ -19,7 +19,7 @@
         <select name="speaker_id" class="form-control">
           <option value=""></option>
           <% options_for_speaker.each do |speaker| %>
-            <option value="<%= speaker.id %>" <%= 'selected' if speaker_selected?(speaker) %>><%= speaker.name %> (<%= speaker.congregation.name  %> )</option>
+            <option value="<%= speaker.id %>" <%= 'selected' if speaker_selected?(speaker) %>><%= speaker_name(speaker) %></option>
           <% end %>
         </select>
       </div>

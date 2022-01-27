@@ -24,7 +24,7 @@ class PublicTalks::ContactSpeakerMessageComponent < ApplicationComponent
   def variables
     {
       'congregation.name' => local_congregation_name,
-      'speaker.congregation' => talk.speaker.congregation.name,
+      'speaker.congregation' => talk.speaker.congregation_name,
       'speaker.first_name' => talk.speaker.name.split.first,
       'speaker.name' => talk.speaker.name,
       'talk.date' => l(talk.date, format: :short),

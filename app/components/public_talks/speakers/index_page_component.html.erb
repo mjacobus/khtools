@@ -28,7 +28,7 @@
       <div class="row small">
         <div class="col-sm-12 col-lg-4">
           <% if speaker.congregation.present? %>
-            <%= icon('shop') { speaker.congregation.name } %>
+            <%= icon('shop') { speaker.congregation&.name } %>
           <% end %>
         </div>
         <div class="col-sm-12 col-lg-4">
