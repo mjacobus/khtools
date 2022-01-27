@@ -39,5 +39,15 @@
         <%= icon('pencil') { content_tag(:em) { talk.notes } } %>
       </div>
     <% end %>
+    <% if talk&.speaker&.phone.present? %>
+      <div class="extra-small mt-2">
+        <%= icon('phone') { PhoneNumber.new(talk.speaker.phone) } %>
+      </div>
+    <% end %>
+    <% if talk&.speaker&.email.present? %>
+      <div class="extra-small mt-2">
+        <%= icon('at') { talk.speaker.email } %>
+      </div>
+    <% end %>
   </div>
 </div>
