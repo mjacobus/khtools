@@ -19,6 +19,10 @@ gem 'sentry-ruby'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binpath'
 
+# file upload
+gem 'carrierwave', '~> 2.0'
+gem 'carrierwave-i18n'
+
 # frontend
 # gem 'bootstrap', '~> 4.4'
 # gem 'jquery-rails'
