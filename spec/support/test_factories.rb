@@ -124,6 +124,11 @@ class TestFactories
     def model_class
       @model_class ||= self.class.to_s.sub('TestFactories::', '').sub('Factory', '').constantize
     end
+
+    def file_upload(file_name)
+      file_path = Rails.root.join("spec/fixtures/#{file_name}")
+      Rack::Test::UploadedFile.new(file_path)
+    end
   end
 
   class UserFactory < Factory
@@ -222,7 +227,8 @@ class TestFactories
   class Db::RegularTerritoryFactory < Factory
     def attributes(overrides = {})
       {
-        name: "Territory-#{seq}"
+        name: "Territory-#{seq}",
+        file: file_upload('sample_territory.jpg')
       }.merge(overrides)
     end
   end
