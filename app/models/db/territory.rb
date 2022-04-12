@@ -44,6 +44,8 @@ class Db::Territory < ApplicationRecord
 
   validates :name, presence: true, uniqueness: { case_sensitive: false, scope: :type }
 
+  mount_uploader :file, Territories::Uploaders::LocalUploader
+
   def area_name
     if area
       return area.name
