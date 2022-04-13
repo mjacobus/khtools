@@ -22,6 +22,7 @@ gem 'wkhtmltopdf-binpath'
 # file upload
 gem 'carrierwave', '~> 2.0'
 gem 'carrierwave-i18n'
+gem 'cloudinary'
 
 # frontend
 # gem 'bootstrap', '~> 4.4'
