@@ -1,7 +1,6 @@
 <%= render breadcrumb %>
 
 <%= simple_form_for(territory, url: target_url, as: :territory) do |f| %>
-
   <fieldset class="mt-3">
     <legend><%= t('active_admin.resources.db/territories.sections.general') %></legend>
     <%= input_wrapper do %>
@@ -92,7 +91,18 @@
     <% end %>
   </fieldset>
 
-  <%= input_wrapper do %>
-    <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>
+  <% if territory.editable_attributes.include?(:file) %>
+    <% if territory.file.url %>
+      <%= image_tag(territory.file.medium.url, class: 'img-fluid') %>
+    <% end %>
+
+    <%= input_wrapper do %>
+      <%= f.input :file_cache, as: :hidden %>
+      <%= f.input :file, as: :file %>
+    <% end %>
+
+    <%= input_wrapper do %>
+      <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>
+    <% end %>
   <% end %>
 <% end %>

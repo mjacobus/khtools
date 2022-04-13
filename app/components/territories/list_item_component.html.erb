@@ -36,4 +36,8 @@
   <div class="row small">
     <%= render attribute(:notes).wrap_with(:div, class: 'col-sm-12 col-lg-12 small') %>
   </div>
+
+  <% if territory.file.url %>
+    <%= image_tag(territory.file.small.url, class: 'img-fluid') %>
+  <% end %>
 </div>
