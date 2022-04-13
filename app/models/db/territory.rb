@@ -44,7 +44,11 @@ class Db::Territory < ApplicationRecord
 
   validates :name, presence: true, uniqueness: { case_sensitive: false, scope: :type }
 
-  mount_uploader :file, Territories::Uploaders::LocalUploader
+  mount_uploader :file, if Rails.env.production?
+                          Territories::Uploaders::CloudinaryUploader
+                        else
+                          Territories::Uploaders::LocalUploader
+                        end
 
   def area_name
     if area
