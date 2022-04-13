@@ -142,6 +142,7 @@ pt-BR:
         updated_at: Atualizado em
       db/territory:
         name: Nome
+        file: Foto
         building_name: Condomínio
         address: Endereço
         has_a_roof: Coberto

@@ -13,32 +13,22 @@ module Territories
         "uploads/#{env_dir}#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
       end
 
-      private
-
-      def env_dir
-        [
-          Rails.application.class.module_parent.name.underscore,
-          Rails.env.production? ? nil : Rails.env.to_s,
-          ''
-        ].compact.join('/')
-      end
-
       process resize_to_fit: [2880, 1920] # 3x2
 
       version :big do
-        process resize_to_fill: [1440, 960]
+        process resize_to_fit: [1440, 960]
       end
 
       version :medium do
-        process resize_to_fill: [720, 480]
+        process resize_to_fit: [720, 480]
       end
 
       version :small do
-        process resize_to_fill: [360, 240]
+        process resize_to_fit: [360, 240]
       end
 
       version :thumb do
-        process resize_to_fill: [180, 120]
+        process resize_to_fit: [180, 120]
       end
 
       def extension_allowlist
@@ -49,6 +39,16 @@ module Territories
         if original_filename
           Digest::SHA1.hexdigest(original_filename)
         end
+      end
+
+      private
+
+      def env_dir
+        [
+          Rails.application.class.module_parent.name.underscore,
+          Rails.env.production? ? nil : Rails.env.to_s,
+          ''
+        ].compact.join('/')
       end
     end
   end
