@@ -8,8 +8,16 @@ class Territories::Assignments::NewPageComponent < PageComponent
     Db::Publisher.all.pluck(:name, :id)
   end
 
+  def preaching_campaigns
+    Db::PreachingCampaign.order(created_at: :desc).pluck(:name, :id)
+  end
+
   def target_url
     urls.territory_assignments_path(territory)
+  end
+
+  def territory_assignment
+    @territory_assignment ||= territory.assignments.build
   end
 
   private
