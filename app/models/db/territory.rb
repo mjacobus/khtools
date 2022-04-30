@@ -124,7 +124,7 @@ class Db::Territory < ApplicationRecord
   end
 
   # rubocop:disable Metrics/MethodLength
-  def assign_to(publisher)
+  def assign_to(publisher, campaign_id: nil)
     if assigned?
       raise AssignmentError, 'Already assigned'
     end

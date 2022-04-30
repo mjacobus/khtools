@@ -2,7 +2,9 @@
 
 class Territories::AssignmentsController < ApplicationController
   def create
-    territory.assign_to(params[:assignment][:publisher_id])
+    publisher_id = params[:assignment][:publisher_id]
+    campaign_id = params[:assignment][:campaign_id]
+    territory.assign_to(publisher_id, campaign_id: campaign_id)
     show_territory
   end
 
