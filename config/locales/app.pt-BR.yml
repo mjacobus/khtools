@@ -26,7 +26,6 @@ pt-BR:
       db/letter_box_type: Tipo de Caixa de Correio
       db/preaching_method: Método de Pregação
       db/preaching_campaign: Campanha de Pregação
-      db/preaching_campaign_assignment: Designação de Campanha
     attributes:
       user:
         name: Nome
@@ -98,7 +97,7 @@ pt-BR:
         updated_at: Atualizado em
         territories: Territórios
         assignments: Designações
-      db/preaching_campaign_assignment:
+      db/territory_assignment:
         assignment_dates: Data designação
         campaign: Campanha
         territory: Território
@@ -181,10 +180,6 @@ pt-BR:
         phone_provider_id: Operadora Telefônica
         numbers: Números
         download_as: "Baixar"
-      db/territory_assignment:
-        assignee_id: Publicador
-        campaign_id: Campanha
-        notes: Observações
   app:
     attributes:
       publisher: "Publicador"

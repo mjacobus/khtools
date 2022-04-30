@@ -41,8 +41,8 @@ class TestFactories
     @preaching_campaigns ||= Db::PreachingCampaignFactory.new(self)
   end
 
-  def preaching_campaign_assignments
-    @preaching_campaign_assignments ||= Db::PreachingCampaignAssignmentFactory.new(self)
+  def territory_assignments
+    @territory_assignments ||= Db::TerritoryAssignmentFactory.new(self)
   end
 
   def territory_areas
@@ -271,7 +271,7 @@ class TestFactories
     end
   end
 
-  class Db::PreachingCampaignAssignmentFactory < Factory
+  class Db::TerritoryAssignmentFactory < Factory
     def attributes(overrides = {})
       {
         campaign: overrides[:campaign] || factories.preaching_campaigns.random_or_create,
