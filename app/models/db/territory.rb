@@ -124,7 +124,8 @@ class Db::Territory < ApplicationRecord
   end
 
   # rubocop:disable Metrics/MethodLength
-  def assign_to(publisher, campaign_id: nil)
+  def assign_to(publisher, campaign_id: nil, notes: nil)
+    # TODO: allow multiple assignments for multiple campaigns
     if assigned?
       raise AssignmentError, 'Already assigned'
     end
@@ -138,7 +139,12 @@ class Db::Territory < ApplicationRecord
 
     self.class.transaction do
       save!
-      assignments.create!(assignee_id: assignee_id, assigned_at: assigned_at)
+      assignments.create!(
+        assignee_id: assignee_id,
+        assigned_at: assigned_at,
+        campaign_id: campaign_id,
+        notes: notes
+      )
     end
   end
   # rubocop:enable Metrics/MethodLength
