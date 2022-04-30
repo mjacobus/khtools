@@ -44,6 +44,10 @@ class Routes
     @helpers.territories_territory_assignment_path(territory, 'unassign')
   end
 
+  def preaching_campaign_path(campaign)
+    @helpers.field_service_campaign_path(campaign)
+  end
+
   def new_field_service_campaign_path
     @helpers.new_field_service_campaign_path
   end
@@ -77,7 +81,7 @@ class Routes
       return territory_path(record)
     end
 
-    raise "Unrecognized path for #{record.class}"
+    raise "Unrecognized path for #{record.class}/#{key}"
   end
 end
 # rubocop:enable Style/MissingRespondToMissing
