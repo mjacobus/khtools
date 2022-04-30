@@ -173,6 +173,7 @@ RSpec.describe Db::Territory, type: :model do
     subject(:territory) { factory.create }
 
     let(:publisher) { factories.publishers.create }
+    let(:campaign) { factories.preaching_campaigns.create }
     let(:assign) { territory.assign_to(publisher) }
 
     it 'assigns publisher' do
@@ -195,6 +196,18 @@ RSpec.describe Db::Territory, type: :model do
       assign
 
       expect(Db::TerritoryAssignment.last.assignee_id).to eq(publisher.id)
+    end
+
+    it 'optinally adds notes to assignment' do
+      territory.assign_to(publisher, notes: 'foo')
+
+      expect(Db::TerritoryAssignment.last.notes).to eq('foo')
+    end
+
+    it 'optinally adds campaign_id to assignment' do
+      territory.assign_to(publisher, campaign_id: campaign.id)
+
+      expect(Db::TerritoryAssignment.last.campaign_id).to eq(campaign.id)
     end
 
     it 'creates an assignment with correct timestamp' do
