@@ -181,6 +181,10 @@ pt-BR:
         phone_provider_id: Operadora Telefônica
         numbers: Números
         download_as: "Baixar"
+      db/territory_assignment:
+        assignee_id: Publicador
+        campaign_id: Campanha
+        notes: Observações
   app:
     attributes:
       publisher: "Publicador"
