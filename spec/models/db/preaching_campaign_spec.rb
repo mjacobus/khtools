@@ -11,7 +11,7 @@ RSpec.describe Db::PreachingCampaign, type: :model do
 
   it 'has many assignments' do
     expect(campaign).to have_many(:assignments)
-      .class_name('Db::PreachingCampaignAssignment')
+      .class_name('Db::TerritoryAssignment')
       .inverse_of(:campaign)
       .dependent(:restrict_with_exception)
   end

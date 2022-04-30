@@ -23,24 +23,6 @@ RSpec.describe 'FieldService::CampaignAssignments', type: :request do
     end
   end
 
-  describe 'POST #create_assignments' do
-    let(:service) { instance_double(FieldService::CampaignAssignmentService) }
-
-    before do
-      allow(FieldService::CampaignAssignmentService).to receive(:new).and_return(service)
-      allow(service).to receive(:create)
-    end
-
-    it 'creates assignments' do
-      post create_field_service_campaign_assignments_url(campaign, territory_type: 'foo_bar')
-
-      expect(service).to have_received(:create)
-        .with(campaign_id: campaign.id.to_s, territory_type: 'foo_bar')
-
-      expect(response).to redirect_to(field_service_campaign_assignments_url(campaign))
-    end
-  end
-
   describe 'PATCH #update' do
     let(:perform_request) do
       patch field_service_campaign_assignment_path(campaign, assignment),

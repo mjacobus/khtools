@@ -1,16 +1,11 @@
 <% model = Db::PreachingCampaignAssignment %>
 
-<%= render partial: 'campaign', locals: { buttons: true } %>
+<%= render partial: 'campaign' %>
 
 <h2 class="mt-3"><%= model_name(model) %></h2>
 <div class="index-list">
   <% @assignments.each do |assignemnt| %>
     <div class="item position-relative">
-      <%= render DropdownMenuComponent.new(type: :item_options) do |component| %>
-        <% component.item do %>
-          <%= link_to(t('app.links.edit'), edit_field_service_campaign_assignment_path(@campaign, assignemnt)) %>
-        <% end %>
-      <% end %>
       <div class="row">
         <%= render Territories::TerritoryNameComponent.new(assignemnt.territory, attribute_name: :name).wrap_with(:div, class: 'col-sm-12') %>
         <%= render Territories::TerritoryAssigneeComponent.new(assignemnt, attribute_name: :assignee).wrap_with(:div, class: 'col-sm-6') %>
