@@ -107,6 +107,7 @@ pt-BR:
         returned_at: Devolvido em
         created_at: Criado em
         updated_at: Atualizado em
+        notes: "Observações"
       db/intercom_type:
         name: Nome
         description: Descrição
