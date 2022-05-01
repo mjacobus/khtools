@@ -13,6 +13,10 @@ module Territories
       parent.is_a?(Db::Publisher)
     end
 
+    def campaign_perspective?
+      parent.is_a?(Db::PreachingCampaign)
+    end
+
     def campaign_url
       if assignment.campaign
         urls.to(assignment.campaign)

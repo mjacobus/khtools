@@ -1,15 +1,10 @@
 <%= render partial: 'campaign' %>
 
 <h2 class="mt-3"><%= t("app.titles.assignments") %></h2>
+
 <div class="index-list">
-  <% @assignments.each do |assignemnt| %>
-    <div class="item position-relative">
-      <div class="row">
-        <%= render Territories::TerritoryNameComponent.new(assignemnt.territory, attribute_name: :name).wrap_with(:div, class: 'col-sm-12') %>
-        <%= render Territories::TerritoryAssigneeComponent.new(assignemnt, attribute_name: :assignee).wrap_with(:div, class: 'col-sm-6') %>
-        <%= render Territories::TerritoryAssignmentDatesComponent.new(assignemnt, attribute_name: :assignment_dates).wrap_with(:div, class: 'col-sm-6') %>
-      </div>
-    </div>
+  <% @assignments.each do |assignment| %>
+    <%= render Territories::AssignmentComponent.new(assignment: assignment, parent: @campaign) %>
   <% end %>
 </div>
 
