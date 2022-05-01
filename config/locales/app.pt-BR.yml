@@ -275,7 +275,6 @@ pt-BR:
       confirm_unassignment: 'Tem certeza que este território foi devolvido?'
       confirm_delete_x: 'Tem certeza que quer excluir "%{record}"?'
       x_out_of_z_apartments: '%{registered} registrados dos %{expected} esperados'
-      assign_campaigns_to_territories: 'Vincular campanha ao o(s) território(s)'
       confirm_campaign_assignment: 'Tem certeza que quer vincular esta campanha a todos os territórios do tipo "%{territory_type}"?'
       number_of_attendees: 'Assistência total: %{attendees} '
       access_denied: 'Acesso negado'
