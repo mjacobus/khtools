@@ -27,10 +27,5 @@ namespace :data do
     task(territory_assignments: :environment) do
       TerritoryAssignmentMigration.new.migrate
     end
-
-    desc "Migrate preching campaign assignments to territory assignments"
-    task(preaching_campaign_assignments_to_territory_assignments: :environment) do
-      PreachingCampaignAssignmentsToTerritoryAssignmentsMigration.new.migrate
-    end
   end
 end
