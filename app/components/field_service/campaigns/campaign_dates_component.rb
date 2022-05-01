@@ -12,7 +12,7 @@ module FieldService
       end
 
       def dates
-        @dates ||= [record.start_date, record.start_date]
+        @dates ||= [record.start_date, record.end_date].compact
       end
 
       def icon_name
