@@ -16,6 +16,7 @@ pt-BR:
       db/publisher: Publicador
       db/field_service_group: Grupo de Campo
       db/territory: Território
+      db/territory_assignment: Designação
       db/regular_territory: Território Normal
       db/commercial_territory: Território Comercial
       db/phone_provider: Operadora de Telefone
@@ -265,6 +266,7 @@ pt-BR:
       meeting_attendance: "Contagem de Assistência"
       week_talks: "Discursos da semana"
       public_talks: "Discursos"
+      assignments: "Designações"
     messages:
       page_x_of_y: "Página %{x} de %{y}"
       unassigned_territory: "Território não designado"
