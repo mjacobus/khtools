@@ -44,6 +44,10 @@ class Routes
     @helpers.territories_territory_assignment_path(territory, 'unassign')
   end
 
+  def preaching_campaigns_path(args = {})
+    @helpers.field_service_campaigns_path(args)
+  end
+
   def preaching_campaign_path(campaign)
     @helpers.field_service_campaign_path(campaign)
   end

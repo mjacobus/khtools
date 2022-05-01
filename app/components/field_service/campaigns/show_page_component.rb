@@ -21,6 +21,6 @@ class FieldService::Campaigns::ShowPageComponent < PageComponent
       urls.field_service_campaigns_path
     )
 
-    breadcrumb.add_item(campaign.code)
+    breadcrumb.add_item(campaign.name)
   end
 end
