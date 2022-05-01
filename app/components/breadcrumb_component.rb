@@ -3,7 +3,7 @@
 class BreadcrumbComponent < ApplicationComponent
   attr_reader :items
 
-  Item = Struct.new(:text, :url)
+  Item = Struct.new(:text, :url, :header_title?)
 
   def initialize
     @items = []
@@ -13,9 +13,11 @@ class BreadcrumbComponent < ApplicationComponent
     items.any?
   end
 
-  def add_item(text, url = nil)
-    @items << Item.new(text, url)
+  # rubocop:disable Style/OptionalBooleanParameter
+  def add_item(text, url = nil, append_title_part = true)
+    @items << Item.new(text, url, append_title_part)
   end
+  # rubocop:enable Style/OptionalBooleanParameter
 
   def active_class_for_index(index)
     if (index + 1) == items.length
@@ -27,5 +29,9 @@ class BreadcrumbComponent < ApplicationComponent
     if (index + 1) == items.length
       'aria-current="page"'
     end
+  end
+
+  def page_title
+    @items.select(&:header_title?).reverse.map(&:text).join(' · ')
   end
 end
