@@ -1,14 +1,11 @@
   <% if has_contact_information? %>
     <div class="row">
       <% if phone.present? %>
-        <div class="col-sm-4 mb-2">
+        <div class="col-sm-12 mb-2">
           <%= icon('phone') { PhoneNumber.new(phone).to_s } %>
         </div>
-        <div class="col-sm-4 mb-2">
-          <%= icon('whatsapp') { whatsapp_api_link  } %>
-        </div>
-        <div class="col-sm-4 mb-2">
-          <%= icon('whatsapp') { whatsapp_web_link  } %>
+        <div class="col-sm-12 mb-2">
+          <%= icon('whatsapp') { whatsapp_url  } %>
         </div>
       <% end %>
       <div class="col-sm-12 mb-2">
