@@ -1,3 +1,4 @@
+<% content_for(:title) { page_title }  %>
 <nav class="<%= bem %>" aria-label="breadcrumb">
   <ol class="breadcrumb <%= bem('list') %>">
     <% items.each_with_index do |item, index| %>
