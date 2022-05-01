@@ -2,7 +2,7 @@
 
 class Db::PreachingCampaign < ApplicationRecord
   has_many :assignments,
-           class_name: 'PreachingCampaignAssignment',
+           class_name: 'TerritoryAssignment',
            inverse_of: :campaign,
            foreign_key: :campaign_id,
            dependent: :restrict_with_exception

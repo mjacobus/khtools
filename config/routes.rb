@@ -12,11 +12,7 @@ Rails.application.routes.draw do
 
   namespace :field_service do
     resources :campaigns do
-      resources :assignments, controller: :campaign_assignments, only: %i[index edit update] do
-        collection do
-          post 'create_assignments/:territory_type', action: :create_assignments, as: :create
-        end
-      end
+      resources :assignments, controller: :campaign_assignments, only: %i[index]
     end
   end
 
