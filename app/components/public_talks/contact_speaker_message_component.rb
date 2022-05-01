@@ -12,14 +12,18 @@ class PublicTalks::ContactSpeakerMessageComponent < ApplicationComponent
   end
 
   def formatted_message
-    simple_format replace(message, variables)
+    simple_format(text_message)
   end
 
   def contact_info
-    ContactInfoComponent.new(phone: talk&.speaker&.phone, email: talk&.speaker&.email)
+    ContactInfoComponent.new(phone: talk&.speaker&.phone, email: talk&.speaker&.email, message: text_message)
   end
 
   private
+
+  def text_message
+    @text_message ||= replace(message, variables)
+  end
 
   def variables
     {

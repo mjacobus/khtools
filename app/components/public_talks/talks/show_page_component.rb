@@ -25,22 +25,6 @@ class PublicTalks::Talks::ShowPageComponent < PageComponent
     [talk.email, talk.phone].filter_map(&:presence).any?
   end
 
-  def whatsapp_web_link
-    link_to(
-      'Web',
-      "https://web.whatsapp.com/send?phone=#{phone_number}",
-      target: :blank
-    )
-  end
-
-  def whatsapp_api_link
-    link_to(
-      'APP',
-      "https://api.whatsapp.com/send?phone=#{phone_number}",
-      target: :blank
-    )
-  end
-
   def speaker_name(talk)
     "#{talk&.speaker&.name} (#{talk&.speaker&.congregation&.name})"
   end
