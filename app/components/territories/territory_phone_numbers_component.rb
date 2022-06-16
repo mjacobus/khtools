@@ -18,9 +18,7 @@ module Territories
     private
 
     def value
-      if phone_numbers.any?
-        phone_numbers.join(' - ')
-      end
+      phone_numbers.join(' - ') if phone_numbers.any?
     end
 
     def phone_numbers

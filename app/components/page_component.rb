@@ -4,9 +4,7 @@ class PageComponent < ApplicationComponent
   def initialize(*args)
     super
 
-    if respond_to?(:setup_breadcrumb, true)
-      send(:setup_breadcrumb)
-    end
+    send(:setup_breadcrumb) if respond_to?(:setup_breadcrumb, true)
   end
 
   def breadcrumb

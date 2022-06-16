@@ -11,9 +11,7 @@ module FieldService
       private
 
       def value
-        if @code
-          return "(#{@code}) #{record.name}"
-        end
+        return "(#{@code}) #{record.name}" if @code
 
         record.name
       end

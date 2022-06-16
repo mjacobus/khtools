@@ -6,9 +6,7 @@ module Congregation
       has :publisher
 
       def target_url
-        if publisher.id
-          return urls.to(publisher)
-        end
+        return urls.to(publisher) if publisher.id
 
         urls.publishers_path
       end

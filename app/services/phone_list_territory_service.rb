@@ -17,12 +17,12 @@ class PhoneListTerritoryService
   def add_territory_cells(territory, sheet)
     sheet.add_row([t('territory_description', name: territory.name)])
     sheet.add_row([
-      t(:phone_number),
-      t(:date_of_first_attempt),
-      t(:date_of_second_attempt),
-      t(:date_of_third_attempt),
-      t(:notes)
-    ])
+                    t(:phone_number),
+                    t(:date_of_first_attempt),
+                    t(:date_of_second_attempt),
+                    t(:date_of_third_attempt),
+                    t(:notes)
+                  ])
 
     territory.phone_numbers.each do |number|
       sheet.add_row [PhoneNumber.new(number)]

@@ -5,9 +5,7 @@ class TerritoryAssignmentMigration
     @migration_time = Time.zone.now
 
     Db::Territory.find_each do |territory|
-      if territory.assigned?
-        create_assignments(territory)
-      end
+      create_assignments(territory) if territory.assigned?
     end
   end
 

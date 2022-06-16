@@ -5,9 +5,7 @@ module Territories
     private
 
     def value
-      if record.pending_verification
-        t(record.pending_verification.to_s)
-      end
+      t(record.pending_verification.to_s) if record.pending_verification
     end
 
     def icon_name

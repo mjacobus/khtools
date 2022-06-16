@@ -1,16 +1,20 @@
 # frozen_string_literal: true
 
-class FieldService::Campaigns::ListItemComponent < ApplicationComponent
-  include FieldServiceCampaignConcern
+module FieldService
+  module Campaigns
+    class ListItemComponent < ApplicationComponent
+      include FieldServiceCampaignConcern
 
-  has :campaign
+      has :campaign
 
-  def actions
-    [
-      assignments_action,
-      edit_action,
-      show_action,
-      delete_action
-    ]
+      def actions
+        [
+          assignments_action,
+          edit_action,
+          show_action,
+          delete_action
+        ]
+      end
+    end
   end
 end

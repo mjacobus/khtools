@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
-class Db::Contact < ApplicationRecord
-  validates :name, presence: true
+module Db
+  class Contact < ApplicationRecord
+    validates :name, presence: true
+  end
 end

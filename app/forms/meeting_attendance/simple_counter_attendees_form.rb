@@ -1,39 +1,41 @@
 # frozen_string_literal: true
 
-class MeetingAttendance::SimpleCounterAttendeesForm < BaseForm
-  attr_reader :names
-  attr_accessor :quantity
+module MeetingAttendance
+  class SimpleCounterAttendeesForm < BaseForm
+    attr_reader :names
+    attr_accessor :quantity
 
-  def initialize(meeting)
-    super(Db::MeetingAttendance::SimpleCounterAttendee.new)
-    @meeting = meeting
-    @names = []
-    @quantity = 1
-  end
-
-  def params=(params)
-    self.attributes = params.require(:attendee).permit(:names, :quantity)
-  end
-
-  def names=(names)
-    @names = Array(names).join(',').split(',').filter_map do |name|
-      name.strip.presence
+    def initialize(meeting)
+      super(Db::MeetingAttendance::SimpleCounterAttendee.new)
+      @meeting = meeting
+      @names = []
+      @quantity = 1
     end
-  end
 
-  def save
-    names.each do |name|
-      @meeting.attendees.create(name: name, quantity: quantity)
+    def params=(params)
+      self.attributes = params.require(:attendee).permit(:names, :quantity)
     end
-  end
 
-  private
+    def names=(names)
+      @names = Array(names).join(',').split(',').filter_map do |name|
+        name.strip.presence
+      end
+    end
 
-  def param_key
-    'attendee'
-  end
+    def save
+      names.each do |name|
+        @meeting.attendees.create(name: name, quantity: quantity)
+      end
+    end
 
-  def singular_route_key
-    'meeting_attendance_meeting_simple_counter_attendee'
+    private
+
+    def param_key
+      'attendee'
+    end
+
+    def singular_route_key
+      'meeting_attendance_meeting_simple_counter_attendee'
+    end
   end
 end

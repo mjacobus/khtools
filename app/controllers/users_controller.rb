@@ -30,9 +30,7 @@ class UsersController < ApplicationController
   private
 
   def require_master_user
-    unless current_user.master?
-      redirect_to('/')
-    end
+    redirect_to('/') unless current_user.master?
   end
 
   def change_user_attribute(attribute_name, new_value)

@@ -59,9 +59,9 @@ RSpec.describe Db::Territory, type: :model do
       found = described_class.search(name: 'apple')
 
       expect(found.pluck(:name)).to eq([
-        'An apple Territory',
-        'A Pineapple Territory'
-      ])
+                                         'An apple Territory',
+                                         'A Pineapple Territory'
+                                       ])
     end
 
     it 'search by name is sqli safe' do
@@ -182,7 +182,7 @@ RSpec.describe Db::Territory, type: :model do
 
     it 'assigns sets assigned_at' do
       freeze_time do
-        expect { assign }.to change { territory.assigned_at }.from(nil).to(Time.zone.now)
+        expect { assign }.to change(territory, :assigned_at).from(nil).to(Time.zone.now)
       end
     end
 

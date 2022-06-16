@@ -20,9 +20,7 @@ class RecordAttributeComponent < AttributeWrapperComponent
   def default_link
     attribute = record.send(@attribute_name)
 
-    if attribute.present?
-      return @urls.to(attribute)
-    end
+    return @urls.to(attribute) if attribute.present?
 
     super
   end

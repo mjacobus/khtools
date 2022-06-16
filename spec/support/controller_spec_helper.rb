@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ControllerSpecHelper
-  # rubocop:disable Metrics/MethodLength
   def self.included(base)
     base.class_eval do
       let(:regular_user) { User.new(id: 1, enabled: true, master: false) }
@@ -10,13 +9,10 @@ module ControllerSpecHelper
       let(:skip_login) { false }
 
       before do
-        unless skip_login
-          login_user(current_user)
-        end
+        login_user(current_user) unless skip_login
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength
 
   def login_user(user)
     allow(controller).to receive(:current_user).and_return(user)

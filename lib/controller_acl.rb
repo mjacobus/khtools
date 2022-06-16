@@ -6,23 +6,19 @@ class ControllerAcl
   end
 
   def authorized?(user)
-    unless user
-      return false
-    end
+    return false unless user
 
-    if user.master?
-      return true
-    end
+    return true if user.master?
 
     authorized_controller_action(user)
   end
 
   def self.controller_actions_for_acl
     Rails.application.routes.routes.map(&:defaults)
-      .map { |item| [item[:controller], item[:action]].join('#') }
-      .sort
-      .uniq
-      .reject do |item|
+         .map { |item| [item[:controller], item[:action]].join('#') }
+         .sort
+         .uniq
+         .reject do |item|
       item.strip == '#' || item.starts_with?(/rails|active_storage|action/)
     end
   end

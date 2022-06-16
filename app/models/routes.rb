@@ -77,13 +77,9 @@ class Routes
 
     candidate = "#{key}_path"
 
-    if respond_to?(candidate)
-      return send(candidate, record)
-    end
+    return send(candidate, record) if respond_to?(candidate)
 
-    if record.is_a?(Db::Territory)
-      return territory_path(record)
-    end
+    return territory_path(record) if record.is_a?(Db::Territory)
 
     raise "Unrecognized path for #{record.class}/#{key}"
   end

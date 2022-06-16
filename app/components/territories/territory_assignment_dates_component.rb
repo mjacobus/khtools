@@ -9,15 +9,11 @@ module Territories
     end
 
     def dates
-      if defined?(@dates)
-        return @dates
-      end
+      return @dates if defined?(@dates)
 
       @dates = [record.assigned_at&.to_date]
 
-      if record.respond_to?(:returned_at)
-        @dates.push(record.returned_at&.to_date)
-      end
+      @dates.push(record.returned_at&.to_date) if record.respond_to?(:returned_at)
 
       @dates
     end

@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
-class Db::PublicSpeaker < ApplicationRecord
-  belongs_to :congregation, optional: true
+module Db
+  class PublicSpeaker < ApplicationRecord
+    belongs_to :congregation, optional: true
 
-  scope :with_dependencies, -> { includes(:congregation) }
+    scope :with_dependencies, -> { includes(:congregation) }
 
-  validates :name, presence: true
+    validates :name, presence: true
 
-  def congregation_name
-    congregation&.name
+    def congregation_name
+      congregation&.name
+    end
   end
 end

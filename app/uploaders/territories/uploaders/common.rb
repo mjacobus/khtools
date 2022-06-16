@@ -36,9 +36,7 @@ module Territories
       end
 
       def filename
-        if original_filename
-          [Digest::SHA1.hexdigest(original_filename), file.extension].join('.')
-        end
+        [Digest::SHA1.hexdigest(original_filename), file.extension].join('.') if original_filename
       end
 
       def extension_allowlist

@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
-class MeetingAttendance::MeetingForm < BaseForm
-  delegate :title, :title=, to: :@record
-  validates :title, presence: true
+module MeetingAttendance
+  class MeetingForm < BaseForm
+    delegate :title, :title=, to: :@record
+    validates :title, presence: true
 
-  def params=(params)
-    self.attributes = params.require(:meeting).permit(:title)
+    def params=(params)
+      self.attributes = params.require(:meeting).permit(:title)
+    end
   end
 end

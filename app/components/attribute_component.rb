@@ -1,13 +1,7 @@
 # frozen_string_literal: true
 
 class AttributeComponent < ApplicationComponent
-  attr_reader :icon_name
-  attr_reader :classes
-  attr_reader :label
-  attr_reader :link
-  attr_reader :show_label
-  attr_reader :container_tag
-  attr_reader :container_options
+  attr_reader :icon_name, :classes, :label, :link, :show_label, :container_tag, :container_options
 
   def initialize
     @classes = []
@@ -36,9 +30,7 @@ class AttributeComponent < ApplicationComponent
   end
 
   def with_label(label = nil)
-    if label
-      @label = I18n.t("app.attributes.#{label}", default: label)
-    end
+    @label = I18n.t("app.attributes.#{label}", default: label) if label
 
     @show_label = true
     @container_options[:title] = @label
@@ -67,9 +59,7 @@ class AttributeComponent < ApplicationComponent
   end
 
   def text_content
-    if show_icon_in_text?
-      return icon(icon_name, class: 'icon-soft') { content }
-    end
+    return icon(icon_name, class: 'icon-soft') { content } if show_icon_in_text?
 
     content
   end

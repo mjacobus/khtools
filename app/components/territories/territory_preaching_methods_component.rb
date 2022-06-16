@@ -5,9 +5,7 @@ module Territories
     private
 
     def value
-      if record.preaching_method_names.any?
-        record.preaching_method_names.join(', ')
-      end
+      record.preaching_method_names.join(', ') if record.preaching_method_names.any?
     end
 
     def icon_name

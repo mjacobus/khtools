@@ -54,8 +54,8 @@ class AttributeWrapperComponent < ApplicationComponent
 
   def attribute
     @attribute ||= AttributeComponent.new
-      .with_icon(icon_name)
-      .with_classes(bem)
+                                     .with_icon(icon_name)
+                                     .with_classes(bem)
   end
 
   attr_reader :icon_name

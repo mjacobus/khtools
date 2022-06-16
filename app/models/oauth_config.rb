@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
 class OauthConfig
-  attr_reader :provider
-  attr_reader :uid
-  attr_reader :name
-  attr_reader :email
-  attr_reader :avatar
+  attr_reader :provider, :uid, :name, :email, :avatar
 
   def initialize(attributes)
     @provider = attributes.fetch(:provider)

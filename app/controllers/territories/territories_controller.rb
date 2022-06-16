@@ -1,25 +1,27 @@
 # frozen_string_literal: true
 
-class Territories::TerritoriesController < ApplicationController
-  include CrudController
+module Territories
+  class TerritoriesController < ApplicationController
+    include CrudController
 
-  key :territory
+    key :territory
 
-  scope { model_class.all.with_dependencies.search(params) }
+    scope { model_class.all.with_dependencies.search(params) }
 
-  component_class_template 'Territories::%{type}PageComponent'
+    component_class_template 'Territories::%{type}PageComponent'
 
-  private
+    private
 
-  def permitted_keys
-    model_class.new.editable_attributes
-  end
+    def permitted_keys
+      model_class.new.editable_attributes
+    end
 
-  def index_component(territories)
-    Territories::IndexPageComponent.new(
-      territories: territories,
-      title: model_class.model_name.human,
-      type: model_class.new.type_key.to_sym
-    )
+    def index_component(territories)
+      Territories::IndexPageComponent.new(
+        territories: territories,
+        title: model_class.model_name.human,
+        type: model_class.new.type_key.to_sym
+      )
+    end
   end
 end

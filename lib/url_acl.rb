@@ -12,9 +12,7 @@ class UrlAcl
   end
 
   def authorized?(user)
-    if PUBLIC_URLS.include?(@url)
-      return true
-    end
+    return true if PUBLIC_URLS.include?(@url)
 
     params = Rails.application.routes.recognize_path(@url.to_s)
     ControllerAcl.new(SimplifiedRequest.new(params)).authorized?(user)

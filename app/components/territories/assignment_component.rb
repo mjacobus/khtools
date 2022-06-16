@@ -18,9 +18,7 @@ module Territories
     end
 
     def campaign_url
-      if assignment.campaign
-        urls.to(assignment.campaign)
-      end
+      urls.to(assignment.campaign) if assignment.campaign
     end
   end
 end

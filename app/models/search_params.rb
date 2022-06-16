@@ -3,17 +3,13 @@
 class SearchParams < HashWithIndifferentAccess
   def initialize(hash)
     hash.each do |key, value|
-      if value.present?
-        self[key] = value
-      end
+      self[key] = value if value.present?
     end
     freeze
   end
 
   def if(key)
-    if self[key]
-      yield(self[key])
-    end
+    yield(self[key]) if self[key]
   end
 
   def any?(*keys)

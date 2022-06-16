@@ -9,9 +9,7 @@ class ApplicationComponent < ViewComponent::Base
     define_method field do
       get(field) || raise(MissingArgument, "Missing argument: #{field}")
     end
-    unless public
-      private field
-    end
+    private field unless public
   end
 
   def attribute(value)
@@ -26,9 +24,7 @@ class ApplicationComponent < ViewComponent::Base
     options[:class] = [options[:class], "bi bi-#{name}"].compact.join(' ')
     icon = tag.i('', **options)
 
-    unless block
-      return icon
-    end
+    return icon unless block
 
     icon + '&nbsp;'.html_safe + yield
   end
@@ -39,13 +35,9 @@ class ApplicationComponent < ViewComponent::Base
 
     parts = [block]
 
-    if element
-      parts << "__#{element}"
-    end
+    parts << "__#{element}" if element
 
-    if modifier
-      parts << "--#{modifier}"
-    end
+    parts << "--#{modifier}" if modifier
 
     parts.join
   end
@@ -69,9 +61,7 @@ class ApplicationComponent < ViewComponent::Base
   end
 
   def attribute_name(klass, attribute)
-    if klass.is_a?(ApplicationRecord)
-      klass = klass.class
-    end
+    klass = klass.class if klass.is_a?(ApplicationRecord)
     klass.human_attribute_name(attribute)
   end
 end

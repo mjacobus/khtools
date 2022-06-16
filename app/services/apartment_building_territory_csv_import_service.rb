@@ -46,17 +46,11 @@ class ApartmentBuildingTerritoryCsvImportService
 
     territory = Db::ApartmentBuildingTerritory.new(row)
 
-    if area
-      territory.area = Db::TerritoryArea.find_or_create_by(name: area)
-    end
+    territory.area = Db::TerritoryArea.find_or_create_by(name: area) if area
 
-    if assignee
-      territory.assignee = Db::Publisher.identify(assignee)
-    end
+    territory.assignee = Db::Publisher.identify(assignee) if assignee
 
-    if parent
-      territory.territory = Db::Territory.identify(parent)
-    end
+    territory.territory = Db::Territory.identify(parent) if parent
 
     if primary_preaching_method
       territory.primary_preaching_method = Db::PreachingMethod.find_or_create_by(

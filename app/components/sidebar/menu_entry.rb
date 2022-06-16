@@ -16,17 +16,13 @@ module Sidebar
     end
 
     def visible?(user)
-      if children.any?
-        return children.any? { |child| child.visible?(user) }
-      end
+      return children.any? { |child| child.visible?(user) } if children.any?
 
       UrlAcl.new(url).authorized?(user)
     end
 
     def active?(url)
-      if children.any?
-        return children.any? { |child| child.active?(url) }
-      end
+      return children.any? { |child| child.active?(url) } if children.any?
 
       url_controller = Rails.application.routes.recognize_path(url)[:controller]
       controller = Rails.application.routes.recognize_path(@url)[:controller]

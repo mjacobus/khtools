@@ -20,15 +20,11 @@ class BreadcrumbComponent < ApplicationComponent
   # rubocop:enable Style/OptionalBooleanParameter
 
   def active_class_for_index(index)
-    if (index + 1) == items.length
-      'active'
-    end
+    'active' if (index + 1) == items.length
   end
 
   def aria_current(index)
-    if (index + 1) == items.length
-      'aria-current="page"'
-    end
+    'aria-current="page"' if (index + 1) == items.length
   end
 
   def page_title

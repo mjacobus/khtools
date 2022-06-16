@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class ContactInfoComponent < ApplicationComponent
-  attr_reader :email
-  attr_reader :phone
+  attr_reader :email, :phone
 
   def initialize(phone: nil, email: nil, message: nil)
     @phone = phone

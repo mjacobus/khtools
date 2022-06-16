@@ -5,9 +5,7 @@ module Territories
     private
 
     def value
-      if record.respond_to?(:phone_provider)
-        record.phone_provider&.name
-      end
+      record.phone_provider&.name if record.respond_to?(:phone_provider)
     end
 
     def icon_name

@@ -68,9 +68,7 @@ RSpec.describe AttributeComponent, type: :component do
   end
 
   def render(component, &block)
-    if block
-      render_inline(component, &block)
-    end
+    render_inline(component, &block) if block
 
     render_inline(component) { 'test' }
   end

@@ -6,9 +6,7 @@ module FieldService
       private
 
       def value
-        if dates.any?
-          dates.map { |date| to_date(date) }.join(' - ')
-        end
+        dates.map { |date| to_date(date) }.join(' - ') if dates.any?
       end
 
       def dates

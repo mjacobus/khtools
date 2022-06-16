@@ -38,25 +38,19 @@ module CrudController
   private
 
   def index_component(records)
-    if use_key?
-      return component_class(:index).new(pluralized_key => records)
-    end
+    return component_class(:index).new(pluralized_key => records) if use_key?
 
     component_class(:index).new(records)
   end
 
   def show_component(record)
-    if use_key?
-      return component_class(:show).new(key => record)
-    end
+    return component_class(:show).new(key => record) if use_key?
 
     component_class(:show).new(record)
   end
 
   def form_component(record)
-    if use_key?
-      return component_class(:form).new(key => record)
-    end
+    return component_class(:form).new(key => record) if use_key?
 
     component_class(:form).new(record)
   end
@@ -76,9 +70,7 @@ module CrudController
   def save_record
     record.attributes = permitted_attributes
 
-    if record.save
-      return redirect
-    end
+    return redirect if record.save
 
     render form_component(record), status: :unprocessable_entity
   end

@@ -17,9 +17,7 @@ module RequestSpecHelper
       let(:routes) { Routes.new }
 
       before do
-        unless skip_login
-          login_user(current_user)
-        end
+        login_user(current_user) unless skip_login
       end
     end
   end

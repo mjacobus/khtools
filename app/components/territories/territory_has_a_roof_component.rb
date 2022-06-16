@@ -5,9 +5,7 @@ module Territories
     private
 
     def value
-      unless record.has_a_roof.nil?
-        t(record.has_a_roof.to_s)
-      end
+      t(record.has_a_roof.to_s) unless record.has_a_roof.nil?
     end
 
     def icon_name

@@ -14,9 +14,7 @@ module TerritoryAttributesConcern
   private
 
   def assignment_action
-    if territory.assigned?
-      return unassign_action
-    end
+    return unassign_action if territory.assigned?
 
     assign_action
   end

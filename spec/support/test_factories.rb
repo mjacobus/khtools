@@ -137,188 +137,230 @@ class TestFactories
     end
   end
 
-  class Db::PublicSpeakerFactory < Factory
-    def attributes(overrides = {})
-      {
-        name: "Br. John #{seq}",
-        phone: "(51) 1234-123#{seq}",
-        email: "person#{seq}@email.com",
-        congregation_id: overrides[:congregation]&.id ||
-          overrides[:congregation_id] ||
-          factories.congregations.random_or_create.id
-      }.merge(overrides)
+  module Db
+    class PublicSpeakerFactory < Factory
+      def attributes(overrides = {})
+        {
+          name: "Br. John #{seq}",
+          phone: "(51) 1234-123#{seq}",
+          email: "person#{seq}@email.com",
+          congregation_id: overrides[:congregation]&.id ||
+            overrides[:congregation_id] ||
+            factories.congregations.random_or_create.id
+        }.merge(overrides)
+      end
     end
   end
 
-  class Db::PublicTalkFactory < Factory
-    def attributes(overrides = {})
-      {
-        theme: seq,
-        date: seq.days.from_now.round,
-        speaker_id: overrides[:speaker]&.id ||
-          overrides[:speaker_id] ||
-          factories.public_speakers.random_or_create.id,
-        congregation_id: overrides[:congregation]&.id ||
-          overrides[:congregation_id] ||
-          factories.congregations.random_or_create.id
-      }.merge(overrides)
+  module Db
+    class PublicTalkFactory < Factory
+      def attributes(overrides = {})
+        {
+          theme: seq,
+          date: seq.days.from_now.round,
+          speaker_id: overrides[:speaker]&.id ||
+            overrides[:speaker_id] ||
+            factories.public_speakers.random_or_create.id,
+          congregation_id: overrides[:congregation]&.id ||
+            overrides[:congregation_id] ||
+            factories.congregations.random_or_create.id
+        }.merge(overrides)
+      end
     end
   end
 
-  class Db::CongregationFactory < Factory
-    def attributes(overrides = {})
-      {
-        name: "Congregation-#{seq}",
-        address: "Some street #{seq}",
-        primary_contact_person: "Br. John #{seq}",
-        primary_contact_phone: "(51) 1234-123#{seq}",
-        primary_contact_email: "person#{seq}@email.com",
-        weekend_meeting_time: "Saturday seq o'clock",
-        local: false
-      }.merge(overrides)
+  module Db
+    class CongregationFactory < Factory
+      def attributes(overrides = {})
+        {
+          name: "Congregation-#{seq}",
+          address: "Some street #{seq}",
+          primary_contact_person: "Br. John #{seq}",
+          primary_contact_phone: "(51) 1234-123#{seq}",
+          primary_contact_email: "person#{seq}@email.com",
+          weekend_meeting_time: "Saturday seq o'clock",
+          local: false
+        }.merge(overrides)
+      end
     end
   end
 
-  class Db::ContactFactory < Factory
-    def attributes(overrides = {})
-      {
-        name: "Contact-#{seq}",
-        email: "email#{seq}@example.com",
-        address: "Some street #{seq}",
-        phone: "(51) 1234-123#{seq}",
-        phone2: "(51) 1234-123#{seq + 1}",
-        notes: "Some notes for Contact-#{seq}"
-      }.merge(overrides)
+  module Db
+    class ContactFactory < Factory
+      def attributes(overrides = {})
+        {
+          name: "Contact-#{seq}",
+          email: "email#{seq}@example.com",
+          address: "Some street #{seq}",
+          phone: "(51) 1234-123#{seq}",
+          phone2: "(51) 1234-123#{seq + 1}",
+          notes: "Some notes for Contact-#{seq}"
+        }.merge(overrides)
+      end
     end
   end
 
-  class Db::PublisherFactory < Factory
-    def attributes(overrides = {})
-      {
-        name: "User-#{seq}",
-        gender: 'm',
-        group_id: overrides[:group]&.id ||
-          overrides[:group_id] ||
-          factories.field_service_groups.random_or_create.id
-      }.merge(overrides)
+  module Db
+    class PublisherFactory < Factory
+      def attributes(overrides = {})
+        {
+          name: "User-#{seq}",
+          gender: 'm',
+          group_id: overrides[:group]&.id ||
+            overrides[:group_id] ||
+            factories.field_service_groups.random_or_create.id
+        }.merge(overrides)
+      end
     end
   end
 
-  class Db::PhoneListTerritoryFactory < Factory
-    def attributes(overrides = {})
-      {
-        name: "PhoneList-#{seq}",
-        initial_phone_number: 5_199_990_000 + seq,
-        final_phone_number: 5_199_990_000 + seq,
-        phone_provider: overrides[:phone_provider] || factories.phone_providers.random_or_create
-      }.merge(overrides)
+  module Db
+    class PhoneListTerritoryFactory < Factory
+      def attributes(overrides = {})
+        {
+          name: "PhoneList-#{seq}",
+          initial_phone_number: 5_199_990_000 + seq,
+          final_phone_number: 5_199_990_000 + seq,
+          phone_provider: overrides[:phone_provider] || factories.phone_providers.random_or_create
+        }.merge(overrides)
+      end
     end
   end
 
-  class Db::ApartmentBuildingTerritoryFactory < Factory
-    def attributes(overrides = {})
-      {
-        name: "ApartmentBuilding-#{seq}",
-        address: "Some address #{seq}"
-      }.merge(overrides)
+  module Db
+    class ApartmentBuildingTerritoryFactory < Factory
+      def attributes(overrides = {})
+        {
+          name: "ApartmentBuilding-#{seq}",
+          address: "Some address #{seq}"
+        }.merge(overrides)
+      end
     end
   end
 
-  class Db::RegularTerritoryFactory < Factory
-    def attributes(overrides = {})
-      {
-        name: "Territory-#{seq}",
-        file: file_upload('sample_territory.jpg')
-      }.merge(overrides)
+  module Db
+    class RegularTerritoryFactory < Factory
+      def attributes(overrides = {})
+        {
+          name: "Territory-#{seq}",
+          file: file_upload('sample_territory.jpg')
+        }.merge(overrides)
+      end
     end
   end
 
-  class Db::CommercialTerritoryFactory < Factory
-    def attributes(overrides = {})
-      {
-        name: "C-#{seq}"
-      }.merge(overrides)
+  module Db
+    class CommercialTerritoryFactory < Factory
+      def attributes(overrides = {})
+        {
+          name: "C-#{seq}"
+        }.merge(overrides)
+      end
     end
   end
 
-  class Db::FieldServiceGroupFactory < Factory
-    def attributes(overrides = {})
-      { name: "group-#{seq}" }.merge(overrides)
+  module Db
+    class FieldServiceGroupFactory < Factory
+      def attributes(overrides = {})
+        { name: "group-#{seq}" }.merge(overrides)
+      end
     end
   end
 
-  class Db::MeetingAttendance::MeetingFactory < Factory
-    def attributes(overrides = {})
-      { title: "Meeting-#{seq}" }.merge(overrides)
+  module Db
+    module MeetingAttendance
+      class MeetingFactory < Factory
+        def attributes(overrides = {})
+          { title: "Meeting-#{seq}" }.merge(overrides)
+        end
+      end
     end
   end
 
-  class Db::MeetingAttendance::SimpleCounterAttendeeFactory < Factory
-    def attributes(overrides = {})
-      {
-        name: "Attendee-#{seq}",
-        meeting: overrides[:meeting] || factories.meetings.random_or_create
-      }.merge(overrides)
+  module Db
+    module MeetingAttendance
+      class SimpleCounterAttendeeFactory < Factory
+        def attributes(overrides = {})
+          {
+            name: "Attendee-#{seq}",
+            meeting: overrides[:meeting] || factories.meetings.random_or_create
+          }.merge(overrides)
+        end
+      end
     end
   end
 
-  class Db::PreachingCampaignFactory < Factory
-    def attributes(overrides = {})
-      {
-        code: "code-#{seq}",
-        name: "Campaign-#{seq}"
-      }.merge(overrides)
+  module Db
+    class PreachingCampaignFactory < Factory
+      def attributes(overrides = {})
+        {
+          code: "code-#{seq}",
+          name: "Campaign-#{seq}"
+        }.merge(overrides)
+      end
     end
   end
 
-  class Db::TerritoryAssignmentFactory < Factory
-    def attributes(overrides = {})
-      {
-        campaign: overrides[:campaign] || factories.preaching_campaigns.random_or_create,
-        territory: overrides[:territory] || factories.territories.random_or_create,
-        assignee: overrides[:assignee] || factories.publishers.random_or_create,
-        assigned_at: Time.zone.today
-      }.merge(overrides)
+  module Db
+    class TerritoryAssignmentFactory < Factory
+      def attributes(overrides = {})
+        {
+          campaign: overrides[:campaign] || factories.preaching_campaigns.random_or_create,
+          territory: overrides[:territory] || factories.territories.random_or_create,
+          assignee: overrides[:assignee] || factories.publishers.random_or_create,
+          assigned_at: Time.zone.today
+        }.merge(overrides)
+      end
     end
   end
 
-  class Db::PreachingMethodFactory < Factory
-    def attributes(overrides = {})
-      {
-        name: "PrechingMethod-#{seq}"
-      }.merge(overrides)
+  module Db
+    class PreachingMethodFactory < Factory
+      def attributes(overrides = {})
+        {
+          name: "PrechingMethod-#{seq}"
+        }.merge(overrides)
+      end
     end
   end
 
-  class Db::TerritoryAreaFactory < Factory
-    def attributes(overrides = {})
-      {
-        name: "Area-#{seq}"
-      }.merge(overrides)
+  module Db
+    class TerritoryAreaFactory < Factory
+      def attributes(overrides = {})
+        {
+          name: "Area-#{seq}"
+        }.merge(overrides)
+      end
     end
   end
 
-  class Db::IntercomTypeFactory < Factory
-    def attributes(overrides = {})
-      {
-        name: "IntercomType-#{seq}"
-      }.merge(overrides)
+  module Db
+    class IntercomTypeFactory < Factory
+      def attributes(overrides = {})
+        {
+          name: "IntercomType-#{seq}"
+        }.merge(overrides)
+      end
     end
   end
 
-  class Db::LetterBoxTypeFactory < Factory
-    def attributes(overrides = {})
-      {
-        name: "LetterBoxType-#{seq}"
-      }.merge(overrides)
+  module Db
+    class LetterBoxTypeFactory < Factory
+      def attributes(overrides = {})
+        {
+          name: "LetterBoxType-#{seq}"
+        }.merge(overrides)
+      end
     end
   end
 
-  class Db::PhoneProviderFactory < Factory
-    def attributes(overrides = {})
-      {
-        name: "Provider-#{seq}"
-      }.merge(overrides)
+  module Db
+    class PhoneProviderFactory < Factory
+      def attributes(overrides = {})
+        {
+          name: "Provider-#{seq}"
+        }.merge(overrides)
+      end
     end
   end
 end

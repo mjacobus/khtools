@@ -2,9 +2,7 @@
 
 class DropdownMenuComponent < ApplicationComponent
   renders_many :items
-  attr_reader :title
-  attr_reader :icon_name
-  attr_reader :type
+  attr_reader :title, :icon_name, :type
 
   def initialize(title: '', classes: [], icon: 'three-dots', type: nil)
     @title = title
@@ -18,8 +16,6 @@ class DropdownMenuComponent < ApplicationComponent
   end
 
   def container_classes
-    if @pull
-      "pull-#{@pull}"
-    end
+    "pull-#{@pull}" if @pull
   end
 end

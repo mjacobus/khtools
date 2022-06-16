@@ -16,11 +16,11 @@ RSpec.describe Territories::ParsedApartmentsComponent, type: :component do
       end
 
       expect(grouped).to eq([
-        %w[801 802],
-        %w[901 902],
-        %w[1001 1002],
-        %w[1101 1102]
-      ])
+                              %w[801 802],
+                              %w[901 902],
+                              %w[1001 1002],
+                              %w[1101 1102]
+                            ])
     end
     # rubocop:enable RSpec/ExampleLength
   end

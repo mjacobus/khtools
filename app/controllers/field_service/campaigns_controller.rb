@@ -1,17 +1,19 @@
 # frozen_string_literal: true
 
-class FieldService::CampaignsController < ApplicationController
-  include CrudController
+module FieldService
+  class CampaignsController < ApplicationController
+    include CrudController
 
-  key :campaign
+    key :campaign
 
-  permit :code,
-         :description,
-         :name,
-         :start_date,
-         :end_date
+    permit :code,
+           :description,
+           :name,
+           :start_date,
+           :end_date
 
-  scope { Db::PreachingCampaign.order(created_at: :desc) }
+    scope { Db::PreachingCampaign.order(created_at: :desc) }
 
-  component_class_template 'FieldService::Campaigns::%{type}PageComponent'
+    component_class_template 'FieldService::Campaigns::%{type}PageComponent'
+  end
 end

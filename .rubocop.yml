@@ -30,42 +30,8 @@ Layout/LineLength:
     - 'db/seeds.rb'
     - 'app/components/**/*'
    
-Style/AccessorGrouping:
-  Enabled: false
-
-Style/ClassAndModuleChildren:
-  Enabled: false
-
-Style/Documentation:
-  Enabled: false
-
-Style/GuardClause:
-  Enabled: false
-
-Style/IfUnlessModifier:
-  Enabled: false
-
-Layout/MultilineMethodCallIndentation:
-  EnforcedStyle: indented
-
-Layout/MultilineOperationIndentation:
-  Enabled: true
-  EnforcedStyle: indented
-
-Layout/FirstArrayElementIndentation:
-  EnforcedStyle: consistent
-
-Lint/MissingSuper:
-  Enabled: false
-
 Naming/RescuedExceptionsVariableName:
   PreferredName: 'exception'
-
-Naming/PredicateName:
-  Enabled: false
-
-Style/FormatStringToken:
-  EnforcedStyle: template
 
 Rails/SkipsModelValidations:
   Exclude:
@@ -78,15 +44,9 @@ RSpec:
 RSpec/ExampleLength:
   Max: 10
 
-RSpec/ExpectChange:
-  Enabled: false
-
 RSpec/FilePath:
   Exclude:
     - 'spec/requests/**/*'
-
-RSpec/MultipleExpectations:
-  Enabled: false
 
 RSpec/MultipleMemoizedHelpers:
   Exclude:
@@ -94,10 +54,6 @@ RSpec/MultipleMemoizedHelpers:
 
 RSpec/NestedGroups:
   Max: 4
-
-# while that is a good rule, AR objects can't be properly instance_double'd
-RSpec/VerifiedDoubles:
-  Enabled: false
 
 AllCops:
   NewCops: enable

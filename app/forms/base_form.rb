@@ -9,9 +9,7 @@ class BaseForm
   end
 
   def save
-    if valid?
-      @record.save!
-    end
+    @record.save! if valid?
   end
 
   def destroy
