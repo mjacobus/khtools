@@ -44,7 +44,7 @@ end
 
 group :development do
   gem 'listen', '~> 3.4'
-  gem 'rubocop', '~> 1.8.1', require: false
+  gem 'rubocop', '~> 1.30', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
