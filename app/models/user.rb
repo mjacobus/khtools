@@ -3,11 +3,9 @@
 class User < ApplicationRecord
   def permissions
     @permissions ||= begin
-      begin
-        default_permissions_config.merge(JSON.parse(permissions_config.to_s))
-      rescue JSON::ParserError
-        default_permissions_config
-      end
+      default_permissions_config.merge(JSON.parse(permissions_config.to_s))
+    rescue JSON::ParserError
+      default_permissions_config
     end
   end
 
