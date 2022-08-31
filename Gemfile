@@ -9,7 +9,7 @@ gem 'activeadmin'
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'caxlsx'
 gem 'dotenv-rails'
-gem 'omniauth', '~> 1.9.1'
+gem 'omniauth', '~> 1.9.2'
 gem 'omniauth-google-oauth2'
 gem 'pg'
 gem 'puma', '~> 5.6'
