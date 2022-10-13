@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class TestFactories
+  def accounts
+    @accounts ||= Db::AccountFactory.new(self)
+  end
+
   def users
     @users ||= UserFactory.new(self)
   end
@@ -131,9 +135,20 @@ class TestFactories
     end
   end
 
+  class Db::AccountFactory < Factory
+    def attributes(overrides = {})
+      { congregation_name: "Congregation-#{seq}" }.merge(overrides)
+    end
+  end
+
   class UserFactory < Factory
     def attributes(overrides = {})
-      { name: "User-#{seq}" }.merge(overrides)
+      {
+        name: "User-#{seq}",
+        account_id: overrides[:account]&.id ||
+          overrides[:account_id] ||
+          factories.accounts.random_or_create.id
+      }.merge(overrides)
     end
   end
 

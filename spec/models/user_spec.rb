@@ -6,6 +6,8 @@ RSpec.describe User, type: :model do
   let(:factory) { factories.users }
   let(:user) { factory.build }
 
+  it { is_expected.to belong_to(:account).class_name('Db::Account').optional }
+
   describe '#permissions' do
     it 'is initially an empty hash' do
       user.permissions_config = ''
