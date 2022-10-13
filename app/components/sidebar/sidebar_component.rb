@@ -23,7 +23,7 @@ class Sidebar::SidebarComponent < ApplicationComponent
   private
 
   def home_link
-    entry(t('app.links.home'), root_path, icon: 'house-door')
+    entry(current_user.congregation_name, root_path, icon: 'house-door')
   end
 
   def meeting_attendance

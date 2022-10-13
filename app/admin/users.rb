@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 ActiveAdmin.register User do
-  permit_params :master, :enabled, controller_accesses: []
+  permit_params :master, :enabled, :account_id, controller_accesses: []
 
   index do
     selectable_column
     column :name
     column :email
+    column :congregation_name
     column :enabled
     column :master
     column :updated_at
@@ -18,6 +19,7 @@ ActiveAdmin.register User do
     f.inputs do
       f.input :name, input_html: { disabled: true }
       f.input :email, input_html: { disabled: true }
+      f.input :account
       f.input :master
       f.input :enabled
       f.input :controller_accesses, as: :check_boxes,

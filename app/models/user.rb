@@ -32,6 +32,10 @@ class User < ApplicationRecord
     permissions['controllers']
   end
 
+  def congregation_name
+    account&.congregation_name
+  end
+
   private
 
   def default_permissions_config

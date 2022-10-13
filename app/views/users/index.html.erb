@@ -13,7 +13,10 @@
       <%= 'Admin' if user.master? %>
       <%= 'Enabled' if user.enabled? %>
     </div>
-    <div class="col-sm-3"> <%= user.name %></div>
+    <div class="col-sm-3"> 
+      <div> <%= user.name %> </div>
+      <div> <%= user.congregation_name %> </div>
+    </div>
     <div class="col-sm-3"> <%= user.email %></div>
     <div class="col-sm-4">
       <% if user.enabled? %>

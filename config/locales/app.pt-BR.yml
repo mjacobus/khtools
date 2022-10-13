@@ -36,6 +36,7 @@ pt-BR:
         updated_at: Atualizado em
         controller_accesses: Acessos
         master: Administrador
+        congregation_name: Congregação
         enabled: Ativo
       meeting_attendance/meeting:
         title: Título
