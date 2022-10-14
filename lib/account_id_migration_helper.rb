@@ -4,7 +4,7 @@ module AccountIdMigrationHelper
   private
 
   def add_account_ownership(table_name, required: true) # rubocop:disable Metrics/MethodLength
-    add_reference table_name, :account, null: !required, foreign_key: true
+    add_reference table_name, :account, null: true, foreign_key: true
 
     unless Rails.env.test?
       id ||= first_id
