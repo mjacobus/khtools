@@ -6,6 +6,16 @@ module Territories
       include Cloudinary::CarrierWave
       include Common
 
+      process :attach_credentials
+
+      def attach_credentials
+        {
+          cloud_name:  ENV['CLOUDINARY_CLOUD_NAME_TWO'],
+          api_key: ENV['CLOUDINARY_API_KEY_TWO'],
+          api_secret: ENV['CLOUDINARY_API_SECRET_TWO'],
+        }
+      end
+
       # Carrierwave can remove stale images when the public_id is consistent
       # accross edits
       def public_id
