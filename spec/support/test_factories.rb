@@ -25,6 +25,10 @@ class TestFactories
     @public_speakers ||= Db::PublicSpeakerFactory.new(self)
   end
 
+  def speakers
+    public_speakers
+  end
+
   def meetings
     @meetings ||= Db::MeetingAttendance::MeetingFactory.new(self)
   end
@@ -81,6 +85,10 @@ class TestFactories
     @field_service_groups ||= Db::FieldServiceGroupFactory.new(self)
   end
 
+  def groups
+    field_service_groups
+  end
+
   def phone_providers
     @phone_providers ||= Db::PhoneProviderFactory.new(self)
   end
@@ -101,10 +109,20 @@ class TestFactories
       @sequency ||= 0
     end
 
-    def relation(type, attributes)
-      attributes[type]&.id ||
-        attributes["#{type}_id".to_sym] ||
-        factories.send(type.to_s.pluralize).random_or_create.id
+    def associations(associations, data)
+      added_values = {}
+
+      associations.each do |model|
+        id_key = "#{model}_id".to_sym
+
+        if data.key?(model) || data.key?(id_key)
+          next
+        end
+
+        added_values[id_key] = factories.send(model.to_s.pluralize).random_or_create.id
+      end
+
+      added_values
     end
 
     def random
@@ -151,9 +169,8 @@ class TestFactories
     def attributes(overrides = {})
       {
         name: "User-#{seq}",
-        avatar: 'https://lh3.googleusercontent.com/-QTW2nlN4-NU/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnAmijxFSFomGTNwgC-PRjxi5qPVg/s96-c/photo.jpgend',
-        account_id: relation(:account, overrides)
-      }.merge(overrides)
+        avatar: 'https://lh3.googleusercontent.com/-QTW2nlN4-NU/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnAmijxFSFomGTNwgC-PRjxi5qPVg/s96-c/photo.jpgend'
+      }.merge(overrides).merge(associations([:account], overrides))
     end
   end
 
@@ -162,11 +179,8 @@ class TestFactories
       {
         name: "Br. John #{seq}",
         phone: "(51) 1234-123#{seq}",
-        email: "person#{seq}@email.com",
-        congregation_id: overrides[:congregation]&.id ||
-          overrides[:congregation_id] ||
-          factories.congregations.random_or_create.id
-      }.merge(overrides)
+        email: "person#{seq}@email.com"
+      }.merge(overrides).merge(associations([:congregation], overrides))
     end
   end
 
@@ -174,14 +188,8 @@ class TestFactories
     def attributes(overrides = {})
       {
         theme: seq,
-        date: seq.days.from_now.round,
-        speaker_id: overrides[:speaker]&.id ||
-          overrides[:speaker_id] ||
-          factories.public_speakers.random_or_create.id,
-        congregation_id: overrides[:congregation]&.id ||
-          overrides[:congregation_id] ||
-          factories.congregations.random_or_create.id
-      }.merge(overrides)
+        date: seq.days.from_now.round
+      }.merge(overrides).merge(associations(%i[congregation speaker], overrides))
     end
   end
 
@@ -216,12 +224,8 @@ class TestFactories
     def attributes(overrides = {})
       {
         name: "User-#{seq}",
-        gender: 'm',
-        group_id: overrides[:group]&.id ||
-          overrides[:group_id] ||
-          factories.field_service_groups.random_or_create.id,
-        account_id: relation(:account, overrides)
-      }.merge(overrides)
+        gender: 'm'
+      }.merge(overrides).merge(associations(%i[account group], overrides))
     end
   end
 
@@ -265,11 +269,8 @@ class TestFactories
   class Db::FieldServiceGroupFactory < Factory
     def attributes(overrides = {})
       {
-        name: "group-#{seq}",
-        account_id: overrides[:account]&.id ||
-          overrides[:account_id] ||
-          factories.accounts.random_or_create.id
-      }.merge(overrides)
+        name: "group-#{seq}"
+      }.merge(overrides).merge(associations([:account], overrides))
     end
   end
 
