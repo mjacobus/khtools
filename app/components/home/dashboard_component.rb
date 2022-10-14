@@ -22,7 +22,7 @@ class Home::DashboardComponent < PageComponent
   end
 
   def field_service_groups
-    Db::FieldServiceGroup.with_dependencies.active.order(:name)
+    current_account.field_service_groups.active.with_dependencies.order(:name)
   end
 
   private

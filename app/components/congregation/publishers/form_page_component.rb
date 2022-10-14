@@ -18,7 +18,7 @@ module Congregation
       end
 
       def groups
-        Db::FieldServiceGroup.order(:name).pluck(:name, :id)
+        current_account.field_service_groups.order(:name).pluck(:name, :id)
       end
 
       private
