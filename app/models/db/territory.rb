@@ -49,7 +49,7 @@ class Db::Territory < ApplicationRecord
   validates :name, presence: true,
                    uniqueness: { case_sensitive: false, scope: %i[account_id type] }
 
-  mount_uploader :file, if Rails.env.production?
+  mount_uploader :file, if !Rails.env.production?
                           Territories::Uploaders::CloudinaryUploader
                         else
                           Territories::Uploaders::LocalUploader
