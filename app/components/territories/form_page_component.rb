@@ -12,7 +12,7 @@ class Territories::FormPageComponent < PageComponent
   end
 
   def publishers
-    Db::Publisher.all.pluck(:name, :id)
+    current_account.publishers.all.pluck(:name, :id)
   end
 
   def phone_providers

@@ -5,7 +5,7 @@ class Territories::Assignments::NewPageComponent < PageComponent
   has :territory
 
   def publishers
-    Db::Publisher.all.pluck(:name, :id)
+    current_account.publishers.pluck(:name, :id)
   end
 
   def preaching_campaigns

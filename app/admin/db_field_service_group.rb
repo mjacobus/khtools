@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 ActiveAdmin.register Db::FieldServiceGroup do
-  permit_params :name
+  permit_params :name, :account_id
   config.sort_order = 'name_asc'
 
   index do
@@ -10,6 +10,7 @@ ActiveAdmin.register Db::FieldServiceGroup do
     column :publishers do |group|
       group.publishers.count
     end
+    column :account
     actions
   end
 

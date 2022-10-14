@@ -74,4 +74,8 @@ class ApplicationComponent < ViewComponent::Base
     end
     klass.human_attribute_name(attribute)
   end
+
+  def current_account
+    current_user.account
+  end
 end
