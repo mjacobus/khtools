@@ -6,7 +6,7 @@ class Territories::TerritoriesController < ApplicationController
 
   key :territory
 
-  scope { model_class.all.with_dependencies.search(params) }
+  scope { model_class.with_account(current_account).with_dependencies.search(params) }
 
   component_class_template 'Territories::%{type}PageComponent'
 

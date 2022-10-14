@@ -24,7 +24,7 @@ class Territories::FormPageComponent < PageComponent
   end
 
   def territory_collection
-    Db::RegularTerritory.order(:name).pluck(:name, :id)
+    current_account.territories.regular.order(:name).pluck(:name, :id)
   end
 
   def area_collection

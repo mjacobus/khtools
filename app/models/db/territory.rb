@@ -40,6 +40,8 @@ class Db::Territory < ApplicationRecord
       { territory: %i[area territory] }
     ])
   }
+  scope :with_account, ->(account) { where(account: account) }
+  scope :regular, -> { where(type: 'Db::RegularTerritory') }
 
   identifiable_by :name
 

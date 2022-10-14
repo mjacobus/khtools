@@ -109,7 +109,7 @@ RSpec.describe Territories::PhoneListTerritoriesController, type: :request do
 
     describe 'GET #index' do
       it 'returns http success' do
-        territory = factory.create
+        territory = factory.create(account: current_account)
         other = factories.territories.create
 
         get '/territories/phone_list_territories'

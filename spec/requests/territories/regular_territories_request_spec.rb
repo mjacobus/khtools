@@ -16,7 +16,7 @@ RSpec.describe Territories::RegularTerritoriesController, type: :request do
 
   describe 'GET #index' do
     it 'returns http success' do
-      territory = factories.territories.create
+      territory = factories.territories.create(account: current_account)
       other = factories.commercial_territories.create
 
       get '/territories/regular_territories'
