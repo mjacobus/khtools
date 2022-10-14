@@ -6,12 +6,14 @@ module RequestSpecHelper
   # rubocop:disable Metrics/AbcSize
   def self.included(base)
     base.class_eval do
-      let(:avatar) do
-        'https://lh3.googleusercontent.com/-QTW2nlN4-NU/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnAmijxFSFomGTNwgC-PRjxi5qPVg/s96-c/photo.jpgend'
+      let(:regular_user) do
+        factories.users.create(enabled: true, master: false, account: current_account)
       end
-      let(:regular_user) { User.new(id: 1, enabled: true, master: false, avatar: avatar) }
       let(:current_user) { regular_user }
-      let(:admin_user) { User.new(id: 2, enabled: true, master: true, avatar: avatar) }
+      let(:admin_user) do
+        factories.users.create(enabled: true, master: true, account: current_account)
+      end
+      let(:current_account) { factories.accounts.create }
       let(:skip_login) { false }
       let(:factories) { TestFactories.new }
       let(:routes) { Routes.new }

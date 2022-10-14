@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.describe Congregation::PublishersController, type: :request do
   # general
-  let(:record) { factory.create }
+  let(:record) { factory.create(account_id: current_account.id) }
   let(:factory) { factories.publishers }
-  let(:scope) { model_class.all }
+  let(:scope) { current_account.publishers.order(:name) }
   let(:key) { model_class.to_s.underscore.split('/').last.to_sym }
   let(:model_class) { Db::Publisher }
 
@@ -85,6 +85,7 @@ RSpec.describe Congregation::PublishersController, type: :request do
 
       perform_request
 
+      record.account_id = current_account.id
       expected_component = form_component.new(key => record)
       expect(renderer).to have_rendered_component(expected_component)
     end
