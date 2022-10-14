@@ -8,8 +8,9 @@ RSpec.describe Db::FieldServiceGroup, type: :model do
   let(:groups) { factories.field_service_groups }
   let(:publisher_group) { factories.publishers.create.group }
 
-  it { is_expected.to validate_uniqueness_of(:name).case_insensitive }
+  it { is_expected.to validate_uniqueness_of(:name).case_insensitive.scoped_to(:account_id) }
   it { is_expected.to validate_presence_of(:name) }
+  it { is_expected.to belong_to(:account).class_name('Db::Account').optional }
 
   it 'can be persisted' do
     expect { groups.create }.to change(described_class, :count).by(1)

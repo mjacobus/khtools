@@ -25,6 +25,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def current_account
+    @current_account ||= current_user.account
+  end
+
   def current_user
     @current_user ||= UserSessionService.new(session: session).current_user
   end

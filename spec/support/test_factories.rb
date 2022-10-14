@@ -145,6 +145,7 @@ class TestFactories
     def attributes(overrides = {})
       {
         name: "User-#{seq}",
+        avatar: 'https://lh3.googleusercontent.com/-QTW2nlN4-NU/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnAmijxFSFomGTNwgC-PRjxi5qPVg/s96-c/photo.jpgend',
         account_id: overrides[:account]&.id ||
           overrides[:account_id] ||
           factories.accounts.random_or_create.id
@@ -214,7 +215,10 @@ class TestFactories
         gender: 'm',
         group_id: overrides[:group]&.id ||
           overrides[:group_id] ||
-          factories.field_service_groups.random_or_create.id
+          factories.field_service_groups.random_or_create.id,
+        account_id: overrides[:account]&.id ||
+          overrides[:account_id] ||
+          factories.accounts.random_or_create.id
       }.merge(overrides)
     end
   end
@@ -258,7 +262,12 @@ class TestFactories
 
   class Db::FieldServiceGroupFactory < Factory
     def attributes(overrides = {})
-      { name: "group-#{seq}" }.merge(overrides)
+      {
+        name: "group-#{seq}",
+        account_id: overrides[:account]&.id ||
+          overrides[:account_id] ||
+          factories.accounts.random_or_create.id
+      }.merge(overrides)
     end
   end
 

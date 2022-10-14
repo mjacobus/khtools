@@ -3,9 +3,11 @@
 module Congregation
   class PublishersController < ApplicationController
     include CrudController
+    include AccountAwareCrudController
+
     key :publisher
     permit :name, :gender, :group_id
-    scope { Db::Publisher.order(:name) }
+    scope { current_account.publishers.order(:name) }
     component_class_template 'Congregation::Publishers::%{type}PageComponent'
   end
 end
