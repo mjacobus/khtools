@@ -122,7 +122,9 @@ RSpec.describe Congregation::PublishersController, type: :request do
 
         perform_request
 
-        expected_component = form_component.new(key => model_class.new(invalid_attributes))
+        record = model_class.new(invalid_attributes)
+        record.account = current_account
+        expected_component = form_component.new(key => record)
         expect(renderer).to have_rendered_component(expected_component)
       end
     end
@@ -179,6 +181,8 @@ RSpec.describe Congregation::PublishersController, type: :request do
         perform_request
 
         record.attributes = invalid_attributes
+        record.account = current_account
+
         expected_component = form_component.new(key => record)
         expect(renderer).to have_rendered_component(expected_component)
       end

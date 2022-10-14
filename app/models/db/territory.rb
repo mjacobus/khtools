@@ -6,6 +6,7 @@ class Db::Territory < ApplicationRecord
 
   UNASSIGNED_TERRITORY_VALUE = 'none'
 
+  belongs_to :account, class_name: 'Db::Account'
   belongs_to :assignee, class_name: 'Publisher', optional: true
   belongs_to :territory, class_name: 'Territory', optional: true
   belongs_to :area, class_name: 'Db::TerritoryArea', optional: true

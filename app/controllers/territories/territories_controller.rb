@@ -2,6 +2,7 @@
 
 class Territories::TerritoriesController < ApplicationController
   include CrudController
+  include AccountAwareCrudController
 
   key :territory
 
