@@ -5,7 +5,7 @@ class Db::Publisher < ApplicationRecord
   identifiable_by :name
 
   belongs_to :group, class_name: 'FieldServiceGroup'
-  belongs_to :account, class_name: 'Db::Account', optional: true
+  belongs_to :account, class_name: 'Db::Account'
 
   has_many :territories,
            foreign_key: :assignee_id,

@@ -6,7 +6,7 @@ class Db::FieldServiceGroup < ApplicationRecord
            inverse_of: :group,
            dependent: :restrict_with_exception
 
-  belongs_to :account, class_name: 'Db::Account', optional: true
+  belongs_to :account, class_name: 'Db::Account'
 
   scope :active, -> { where("name NOT LIKE '\\_%'") }
   scope :with_dependencies, -> { includes([:publishers]) }

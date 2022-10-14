@@ -101,6 +101,12 @@ class TestFactories
       @sequency ||= 0
     end
 
+    def relation(type, attributes)
+      attributes[type]&.id ||
+        attributes["#{type}_id".to_sym] ||
+        factories.send(type.to_s.pluralize).random_or_create.id
+    end
+
     def random
       model_class.order('RANDOM()').first
     end
@@ -146,9 +152,7 @@ class TestFactories
       {
         name: "User-#{seq}",
         avatar: 'https://lh3.googleusercontent.com/-QTW2nlN4-NU/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnAmijxFSFomGTNwgC-PRjxi5qPVg/s96-c/photo.jpgend',
-        account_id: overrides[:account]&.id ||
-          overrides[:account_id] ||
-          factories.accounts.random_or_create.id
+        account_id: relation(:account, overrides)
       }.merge(overrides)
     end
   end
@@ -216,9 +220,7 @@ class TestFactories
         group_id: overrides[:group]&.id ||
           overrides[:group_id] ||
           factories.field_service_groups.random_or_create.id,
-        account_id: overrides[:account]&.id ||
-          overrides[:account_id] ||
-          factories.accounts.random_or_create.id
+        account_id: relation(:account, overrides)
       }.merge(overrides)
     end
   end

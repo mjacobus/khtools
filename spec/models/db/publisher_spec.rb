@@ -18,10 +18,10 @@ RSpec.describe Db::Publisher, type: :model do
       .dependent(:restrict_with_exception)
   end
 
-  it { is_expected.to belong_to(:account).class_name('Db::Account').optional }
+  it { is_expected.to belong_to(:account).class_name('Db::Account') }
 
   it 'belongs to a #group' do
-    group = Db::FieldServiceGroup.create!(name: 'group')
+    group = factories.field_service_groups.create(name: 'group')
 
     factories.publishers.create(group: group)
 
