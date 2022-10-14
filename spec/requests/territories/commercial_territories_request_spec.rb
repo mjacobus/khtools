@@ -60,7 +60,7 @@ RSpec.describe Territories::CommercialTerritoriesController, type: :request do
 
         perform_request
 
-        new_territory = Db::CommercialTerritory.new(name: '')
+        new_territory = Db::CommercialTerritory.new(name: '', account: current_account)
         expected_component = Territories::FormPageComponent.new(territory: new_territory)
         expect(renderer).to have_rendered_component(expected_component)
       end
@@ -102,6 +102,7 @@ RSpec.describe Territories::CommercialTerritoriesController, type: :request do
         perform_request
 
         territory.name = ''
+        territory.account = current_account
         expected_component = Territories::FormPageComponent.new(territory: territory)
         expect(renderer).to have_rendered_component(expected_component)
       end

@@ -19,6 +19,10 @@ class ApartmentBuildingTerritoryCsvImportService
     apartments
   ].freeze
 
+  def initialize(account_id:)
+    @account_id = account_id
+  end
+
   def import_file(file)
     Db::ApartmentBuildingTerritory.transaction do
       CSV.parse(file, headers: true) do |row|
@@ -44,7 +48,7 @@ class ApartmentBuildingTerritoryCsvImportService
     letter_box_type = row.delete(:letter_box_type)
     intercom_type = row.delete(:intercom_type)
 
-    territory = Db::ApartmentBuildingTerritory.new(row)
+    territory = Db::ApartmentBuildingTerritory.new(row.merge(account_id: @account_id))
 
     if area
       territory.area = Db::TerritoryArea.find_or_create_by(name: area)

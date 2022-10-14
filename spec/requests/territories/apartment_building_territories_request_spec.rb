@@ -61,7 +61,7 @@ RSpec.describe Territories::ApartmentBuildingTerritoriesController, type: :reque
 
         perform_request
 
-        new_territory = Db::ApartmentBuildingTerritory.new(name: '')
+        new_territory = Db::ApartmentBuildingTerritory.new(name: '', account_id: current_account.id)
         expected_component = Territories::FormPageComponent.new(territory: new_territory)
         expect(renderer).to have_rendered_component(expected_component)
       end
@@ -103,6 +103,7 @@ RSpec.describe Territories::ApartmentBuildingTerritoriesController, type: :reque
         perform_request
 
         territory.name = ''
+        territory.account_id = current_account.id
         expected_component = Territories::FormPageComponent.new(territory: territory)
         expect(renderer).to have_rendered_component(expected_component)
       end

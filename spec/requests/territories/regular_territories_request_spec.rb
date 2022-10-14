@@ -80,7 +80,7 @@ RSpec.describe Territories::RegularTerritoriesController, type: :request do
 
         perform_request
 
-        new_territory = Db::RegularTerritory.new(name: '')
+        new_territory = Db::RegularTerritory.new(name: '', account: current_account)
         expected_component = Territories::FormPageComponent.new(territory: new_territory)
         expect(renderer).to have_rendered_component(expected_component)
       end
@@ -122,6 +122,7 @@ RSpec.describe Territories::RegularTerritoriesController, type: :request do
         perform_request
 
         territory.name = ''
+        territory.account = current_account
         expected_component = Territories::FormPageComponent.new(territory: territory)
         expect(renderer).to have_rendered_component(expected_component)
       end

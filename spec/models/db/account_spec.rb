@@ -7,4 +7,5 @@ RSpec.describe Db::Account, type: :model do
   it { is_expected.to have_many(:users) }
   it { is_expected.to have_many(:publishers).class_name('Db::Publisher') }
   it { is_expected.to have_many(:field_service_groups).class_name('Db::FieldServiceGroup') }
+  it { is_expected.to have_many(:territories).class_name('Db::Territory') }
 end

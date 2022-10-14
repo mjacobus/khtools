@@ -13,6 +13,8 @@ RSpec.describe Db::Territory, type: :model do
       .dependent(:restrict_with_exception)
   }
 
+  it { is_expected.to belong_to(:account).class_name('Db::Account') }
+
   it 'persists' do
     expect { factory.create }.to change(described_class, :count).by(1)
   end
@@ -25,15 +27,15 @@ RSpec.describe Db::Territory, type: :model do
 
   describe '#name uniqueness' do
     it 'is scopped to type' do
-      factory.create(name: 'SomeName')
-      territory = factory.build
+      t1 = factory.create(name: 'SomeName')
+      territory = factory.build(account: t1.account)
 
       expect { territory.name = 'Somename' }.to change(territory, :valid?).from(true).to(false)
     end
 
     it 'accepts the same name if types are different' do
       factory.create(name: 'SomeName')
-      territory = described_class.new(name: 'Somename')
+      territory = factory.build(name: 'Somename')
 
       expect { territory.save! }.to change(described_class, :count).by(1)
     end
@@ -41,7 +43,7 @@ RSpec.describe Db::Territory, type: :model do
     it 'accepts the same name and type if account is different' do
       account = factories.accounts.create
       factory.create(name: 'SomeName') # regular territory
-      territory = factory.build(name: 'Somename', account_id: account.id)
+      territory = factory.build(name: 'Somename', account: account)
 
       expect { territory.save! }.to change(described_class, :count).by(1)
     end

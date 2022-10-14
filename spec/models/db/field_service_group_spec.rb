@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Db::FieldServiceGroup, type: :model do
-  let(:factories) { TestFactories.new }
+  subject(:group) { factories.field_service_groups.build }
+
   let(:publishers) { factories.publishers }
   let(:groups) { factories.field_service_groups }
   let(:publisher_group) { factories.publishers.create.group }

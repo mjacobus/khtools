@@ -217,7 +217,7 @@ RSpec.describe ApartmentBuildingTerritoryCsvImportService, type: :service do
     contents = array.join
     file = StringIO.new(contents)
 
-    described_class.new.import_file(file)
+    described_class.new(account_id: factories.accounts.create.id).import_file(file)
 
     data
   end

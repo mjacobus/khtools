@@ -119,7 +119,7 @@ class TestFactories
           next
         end
 
-        added_values[id_key] = factories.send(model.to_s.pluralize).random_or_create.id
+        added_values[id_key] = factories.send(model.to_s.pluralize).create.id
       end
 
       added_values
@@ -236,7 +236,7 @@ class TestFactories
         initial_phone_number: 5_199_990_000 + seq,
         final_phone_number: 5_199_990_000 + seq,
         phone_provider: overrides[:phone_provider] || factories.phone_providers.random_or_create
-      }.merge(overrides)
+      }.merge(overrides).merge(associations([:account], overrides))
     end
   end
 
@@ -245,7 +245,7 @@ class TestFactories
       {
         name: "ApartmentBuilding-#{seq}",
         address: "Some address #{seq}"
-      }.merge(overrides)
+      }.merge(overrides).merge(associations([:account], overrides))
     end
   end
 
@@ -254,7 +254,7 @@ class TestFactories
       {
         name: "Territory-#{seq}",
         file: file_upload('sample_territory.jpg')
-      }.merge(overrides)
+      }.merge(overrides).merge(associations([:account], overrides))
     end
   end
 
@@ -262,7 +262,7 @@ class TestFactories
     def attributes(overrides = {})
       {
         name: "C-#{seq}"
-      }.merge(overrides)
+      }.merge(overrides).merge(associations([:account], overrides))
     end
   end
 

@@ -7,6 +7,8 @@ class Db::Account < ApplicationRecord
   has_many :publishers, dependent: :restrict_with_exception, class_name: 'Db::Publisher'
   has_many :field_service_groups, dependent: :restrict_with_exception,
                                   class_name: 'Db::FieldServiceGroup'
+  has_many :territories, dependent: :restrict_with_exception,
+                         class_name: 'Db::Territory'
 
   def to_s
     congregation_name
