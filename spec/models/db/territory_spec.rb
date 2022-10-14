@@ -37,6 +37,14 @@ RSpec.describe Db::Territory, type: :model do
 
       expect { territory.save! }.to change(described_class, :count).by(1)
     end
+
+    it 'accepts the same name and type if account is different' do
+      account = factories.accounts.create
+      factory.create(name: 'SomeName') # regular territory
+      territory = factory.build(name: 'Somename', account_id: account.id)
+
+      expect { territory.save! }.to change(described_class, :count).by(1)
+    end
   end
 
   it 'has an assignee' do
