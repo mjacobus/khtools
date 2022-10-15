@@ -56,3 +56,5 @@
 <% end %>
 
 <%= render Territories::AssignmentsComponent.new(record: territory) %>
+
+<%= render GoogleMapComponent.new(url: territory.google_map) %>

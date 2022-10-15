@@ -118,6 +118,7 @@ class Db::Territory < ApplicationRecord
       notes
       pending_verification
       name
+      google_map
       assigned_at
       assignee_id
     ]

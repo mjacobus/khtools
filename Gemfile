@@ -24,6 +24,9 @@ gem 'carrierwave', '~> 2.0'
 gem 'carrierwave-i18n'
 gem 'cloudinary'
 
+# HTTP Clients
+gem 'koine-rest_client'
+
 # frontend
 # gem 'bootstrap', '~> 4.4'
 # gem 'jquery-rails'
