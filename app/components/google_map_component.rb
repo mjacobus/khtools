@@ -19,8 +19,9 @@ class GoogleMapComponent < ApplicationComponent
   def attributes
     {
       src: src,
+      class: 'google-map-iframe',
       width: @width,
       height: @height
-    }
+    }.compact
   end
 end
