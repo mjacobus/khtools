@@ -8,4 +8,8 @@ class CopyToClipboardComponent < ApplicationComponent
   def selector
     @options[:selector]
   end
+
+  def label
+    @options[:label]
+  end
 end

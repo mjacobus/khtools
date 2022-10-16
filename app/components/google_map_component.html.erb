@@ -1,1 +1,6 @@
 <%= content_tag(:iframe, attributes) {} %>
+<div class="mb-4">
+  <%= render CopyToClipboardComponent.new(label: "Copiar link para o mapa") do %>
+    <%= src.editable %>
+  <% end %>
+</div>
