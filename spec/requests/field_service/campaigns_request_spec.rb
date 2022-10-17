@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe FieldService::CampaignsController, type: :request do
-  let(:campaign) { factories.preaching_campaigns.create }
+  let(:campaign) { factories.preaching_campaigns.create(account: current_account) }
   let(:factory) { factories.preaching_campaigns }
 
   before do
@@ -27,7 +27,7 @@ RSpec.describe FieldService::CampaignsController, type: :request do
       perform_request
 
       expected_component = FieldService::Campaigns::IndexPageComponent.new(
-        campaigns: Db::PreachingCampaign.all
+        campaigns: current_account.preaching_campaigns.order(created_at: :desc)
       )
       expect(renderer).to have_rendered_component(expected_component)
     end
@@ -69,6 +69,8 @@ RSpec.describe FieldService::CampaignsController, type: :request do
 
       perform_request
 
+      campaign.account = current_account
+
       expected_component = FieldService::Campaigns::FormPageComponent.new(
         campaign: campaign
       )
@@ -108,7 +110,7 @@ RSpec.describe FieldService::CampaignsController, type: :request do
         perform_request
 
         expected_component = FieldService::Campaigns::FormPageComponent.new(
-          campaign: Db::PreachingCampaign.new(name: '')
+          campaign: Db::PreachingCampaign.new(name: '', account: current_account)
         )
         expect(renderer).to have_rendered_component(expected_component)
       end

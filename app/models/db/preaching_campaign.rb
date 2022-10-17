@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Db::PreachingCampaign < ApplicationRecord
+  belongs_to :account, class_name: 'Db::Account'
   has_many :assignments,
            class_name: 'TerritoryAssignment',
            inverse_of: :campaign,
