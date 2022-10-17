@@ -294,7 +294,7 @@ class TestFactories
       {
         code: "code-#{seq}",
         name: "Campaign-#{seq}"
-      }.merge(overrides)
+      }.merge(overrides).merge(associations([:account], overrides))
     end
   end
 

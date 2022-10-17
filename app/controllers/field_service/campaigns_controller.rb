@@ -2,6 +2,7 @@
 
 class FieldService::CampaignsController < ApplicationController
   include CrudController
+  include AccountAwareCrudController
 
   key :campaign
 
@@ -11,7 +12,7 @@ class FieldService::CampaignsController < ApplicationController
          :start_date,
          :end_date
 
-  scope { Db::PreachingCampaign.order(created_at: :desc) }
+  scope { current_account.preaching_campaigns.order(created_at: :desc) }
 
   component_class_template 'FieldService::Campaigns::%{type}PageComponent'
 end

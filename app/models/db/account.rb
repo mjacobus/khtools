@@ -9,6 +9,8 @@ class Db::Account < ApplicationRecord
                                   class_name: 'Db::FieldServiceGroup'
   has_many :territories, dependent: :restrict_with_exception,
                          class_name: 'Db::Territory'
+  has_many :preaching_campaigns, dependent: :restrict_with_exception,
+                                 class_name: 'Db::PreachingCampaign'
 
   def to_s
     congregation_name
