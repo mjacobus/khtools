@@ -9,7 +9,7 @@ class Territories::Assignments::NewPageComponent < PageComponent
   end
 
   def preaching_campaigns
-    Db::PreachingCampaign.order(created_at: :desc).pluck(:name, :id)
+    current_account.preaching_campaigns.order(created_at: :desc).pluck(:name, :id)
   end
 
   def target_url
