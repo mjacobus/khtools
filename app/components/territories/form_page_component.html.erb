@@ -70,15 +70,17 @@
     </fieldset>
   <% end %>
 
-  <fieldset class="mt-3">
-    <legend><%= t('active_admin.resources.db/territories.sections.assignment') %></legend>
-    <%= input_wrapper do %>
-      <%= f.input :assignee_id, as: :select, collection: publishers %>
-    <% end %>
-    <%= input_wrapper do %>
-      <%= f.input :assigned_at, as: :date, include_blank: true %>
-    <% end %>
-  </fieldset>
+  <% if assignment_editable? %>
+    <fieldset class="mt-3">
+      <legend><%= t('active_admin.resources.db/territories.sections.assignment') %></legend>
+      <%= input_wrapper do %>
+        <%= f.input :assignee_id, as: :select, collection: publishers %>
+      <% end %>
+      <%= input_wrapper do %>
+        <%= f.input :assigned_at, as: :date, include_blank: true %>
+      <% end %>
+    </fieldset>
+  <% end %>
 
 
   <fieldset class="mt-3">

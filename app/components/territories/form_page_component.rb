@@ -47,6 +47,12 @@ class Territories::FormPageComponent < PageComponent
     [[I18n.t('true'), true], [I18n.t('false'), false]]
   end
 
+  def assignment_editable?
+    # as of this moment, editing assignments won't fix the assignment history.
+    # So maybe not a good idea to edit it in the form.
+    false
+  end
+
   private
 
   def setup_breadcrumb
