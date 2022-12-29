@@ -122,6 +122,7 @@ class Db::Territory < ApplicationRecord
       google_map
       assigned_at
       assignee_id
+      field_service_group_id
     ]
   end
 

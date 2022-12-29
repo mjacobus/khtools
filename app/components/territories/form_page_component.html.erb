@@ -7,6 +7,10 @@
       <%= f.input :name %>
     <% end %>
 
+    <%= input_wrapper do %>
+      <%= f.input :field_service_group_id, as: :select, collection: field_service_group_options %>
+    <% end %>
+
     <% if type == 'phone_list'  %>
       <%= input_wrapper do %>
         <%= f.input :initial_phone_number %>

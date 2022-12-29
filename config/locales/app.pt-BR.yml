@@ -152,6 +152,8 @@ pt-BR:
         apartments: Apartamentos
         territory: Território
         territory_id: Território
+        field_service_group: Grupo
+        field_service_group_id: Grupo
         notes: Observações
         intercom_type: Tipo de Interfone
         intercom_type_id: Tipo de Interfone
