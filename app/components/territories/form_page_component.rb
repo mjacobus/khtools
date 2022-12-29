@@ -27,6 +27,10 @@ class Territories::FormPageComponent < PageComponent
     current_account.territories.regular.order(:name).pluck(:name, :id)
   end
 
+  def field_service_group_options
+    current_account.field_service_groups.pluck(:name, :id)
+  end
+
   def area_collection
     Db::TerritoryArea.pluck(:name, :id)
   end
