@@ -18,6 +18,7 @@
 <% end %>
 
 <%= render attribute(:name).with_label.without_icon %>
+<%= render attribute(:field_service_group).with_label.without_icon %>
 
 <% if type == :apartment_building  %>
   <h2 class="h5 my-3"><%= t('active_admin.resources.db/territories.sections.building_inputs') %></h2>
