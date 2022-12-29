@@ -14,6 +14,7 @@ RSpec.describe Db::Territory, type: :model do
   }
 
   it { is_expected.to belong_to(:account).class_name('Db::Account') }
+  it { is_expected.to belong_to(:field_service_group).class_name('Db::FieldServiceGroup').optional }
 
   it 'persists' do
     expect { factory.create }.to change(described_class, :count).by(1)
