@@ -33,6 +33,15 @@ class Territories::SearchFormComponent < ApplicationComponent
     select_input(form, (no_one + publishers), :publisher_id)
   end
 
+  def field_service_group_label
+    attribute_name(Db::Territory, :field_service_group)
+  end
+
+  def field_service_group_input(form)
+    groups = current_account.field_service_groups.order(:name).pluck(:name, :id)
+    select_input(form, groups, :field_service_group_id)
+  end
+
   def area_input(form)
     areas = Db::TerritoryArea.pluck(:name, :id)
     select_input(form, areas, :area_id)
@@ -85,6 +94,7 @@ class Territories::SearchFormComponent < ApplicationComponent
     filters = %i[
       name
       publisher_id
+      field_service_group_id
       phone_provider_id
       preaching_method_id
       area_id

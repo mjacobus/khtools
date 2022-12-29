@@ -91,6 +91,10 @@ class Db::Territory < ApplicationRecord
       query = query.where(phone_provider_id: value)
     end
 
+    params.if(:field_service_group_id) do |value|
+      query = query.where(field_service_group_id: value)
+    end
+
     params.if(:area_id) do |value|
       query = query.where(area_id: value)
     end
