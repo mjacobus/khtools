@@ -51,6 +51,7 @@ class Db::Territory < ApplicationRecord
                    uniqueness: { case_sensitive: false, scope: %i[account_id type] }
 
   mount_uploader :file, file_uploader
+
   def area_name
     if area
       return area.name

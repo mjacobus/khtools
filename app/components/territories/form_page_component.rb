@@ -57,6 +57,10 @@ class Territories::FormPageComponent < PageComponent
     false
   end
 
+  def supports_upload?
+    territory.editable_attributes.include?(:file) && current_account.supports_uploads?
+  end
+
   private
 
   def setup_breadcrumb
