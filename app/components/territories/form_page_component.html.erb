@@ -123,6 +123,10 @@
     </details>
   <% end %>
 
+  <% if static_map? %>
+    <%= image_tag(static_map_url) %>
+  <% end %>
+
 
   <%= input_wrapper do %>
     <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>

@@ -10,14 +10,16 @@ module GoogleMaps
 
         def values
           @values ||= @node.text.split("\n").map(&:strip).compact_blank.map do |line|
-            line.split(',').map { |item| Float(item) }
+            line.split(',')[0..1].reverse.map { |item| Float(item) }
           end
         end
 
+        # @return [ [lat1, lon1], [lat2, lon2], ... ]
         def to_a
-          values.map { |line| line[0..1] }
+          values
         end
 
+        # @return [lat, lon]
         def center
           sorted_x = to_a.map { |(x, _)| x }.sort
           sorted_y = to_a.map { |(_, y)| y }.sort
@@ -29,7 +31,8 @@ module GoogleMaps
         def mid(array)
           first = array.first
           last = array.last
-          (last - first) / 2
+          diff = (last - first) / 2
+          first + diff
         end
       end
     end

@@ -19,7 +19,7 @@ RSpec.describe GoogleMaps::StaticMapService do
     let(:parsed) { Addressable::URI.parse(url.to_s) }
 
     it 'sets the boundaries' do
-      expected = 'color:0x0000ff|weight:5|10.0,20.0|30.0,40.0|10.0,20.0'
+      expected = 'color:0x0000ff|weight:2|20.0,10.0|40.0,30.0|20.0,10.0'
       expect(url.query_params['path']).to eq(expected)
     end
 

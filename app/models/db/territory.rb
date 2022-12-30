@@ -169,6 +169,19 @@ class Db::Territory < ApplicationRecord
     end
   end
 
+  def static_map_url
+    if has_static_map?
+      GoogleMaps::StaticMapService
+        .new(api_key: account.google_api_key_for_static_maps)
+        .url_from_kml(kml)
+        .with_added_query_params(size: '580x380', zoom: 16, scale: 1)
+    end
+  end
+
+  def has_static_map?
+    kml.present? && account.google_api_key_for_static_maps.present?
+  end
+
   def assigned?
     assignee_id.present?
   end
