@@ -61,6 +61,14 @@ class Territories::FormPageComponent < PageComponent
     territory.editable_attributes.include?(:file) && current_account.supports_uploads?
   end
 
+  def static_map?
+    territory.has_static_map?
+  end
+
+  def static_map_url
+    @static_map_url ||= territory.static_map_url.to_s
+  end
+
   private
 
   def setup_breadcrumb

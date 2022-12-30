@@ -18,7 +18,7 @@ RSpec.describe GoogleMaps::Kml::Nodes::Coordinates do
     end
 
     it 'returns the middle point' do
-      expect(node.center).to eq([8.5, 7.0])
+      expect(node.center).to eq([24.0, -11.5])
     end
   end
 end
