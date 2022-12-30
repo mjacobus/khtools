@@ -1,6 +1,9 @@
 <% if display_static_map? %>
   <%= image_tag(territory.static_map_url(scale: 4).to_s, height: 450) %>
 <% end %>
+<% if display_file? %>
+  <%= image_tag(territory.file.url, height: 450) %>
+<% end %>
 
 <h1> <%= territory.name %></h1>
 
