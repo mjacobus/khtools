@@ -35,5 +35,7 @@ module KhTools
     end
 
     config.autoload_paths << "#{Rails.root}/lib"
+
+    config.active_record.legacy_connection_handling = false
   end
 end
