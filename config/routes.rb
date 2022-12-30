@@ -37,7 +37,9 @@ Rails.application.routes.draw do
     resources :territories, only: [:show] do
       resources :assignments
     end
-    resources :regular_territories
+    resources :regular_territories do
+      get :printable, defaults: { format: :pdf }
+    end
     resources :phone_list_territories do
       member do
         get :xls

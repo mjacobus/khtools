@@ -26,8 +26,4 @@ class Db::PhoneListTerritory < Db::Territory
       phone_provider_id
     ]
   end
-
-  def filename(extension = nil)
-    [name, extension].compact.join('.')
-  end
 end
