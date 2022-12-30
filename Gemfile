@@ -36,6 +36,7 @@ gem 'simple_form'
 gem 'kaminari'
 gem 'view_component', require: 'view_component/engine'
 gem 'webpacker', '~> 4.0'
+gem "rqrcode", "~> 2.0"
 
 group :development, :test do
   gem 'awesome_print'
