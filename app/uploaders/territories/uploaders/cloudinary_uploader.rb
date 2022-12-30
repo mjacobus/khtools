@@ -12,7 +12,7 @@ module Territories
         {
           cloud_name: model.account.cloudinary_cloud_name,
           api_key: model.account.cloudinary_api_key,
-          api_secret: model.account.cloudinary_api_secret,
+          api_secret: model.account.cloudinary_api_secret
         }
       end
 
@@ -25,7 +25,7 @@ module Territories
       def url(*args)
         url = super(*args)
 
-        url&.sub("/congregation-cloud-name/", "/#{model.account.cloudinary_cloud_name}/")
+        url&.sub('/congregation-cloud-name/', "/#{model.account.cloudinary_cloud_name}/")
       end
     end
   end
