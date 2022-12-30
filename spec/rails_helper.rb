@@ -38,6 +38,14 @@ end
 require 'view_component/test_helpers'
 require 'capybara/rspec'
 
+def fixture_file_path(file)
+  "#{::Rails.root}/spec/fixtures/#{file}"
+end
+
+def read_fixture(file)
+  File.read(fixture_file_path(file))
+end
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

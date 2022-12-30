@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Map Name</name>
+    <Style id="poly-0288D1-1200-31-nodesc-normal">
+      <LineStyle>
+        <color>ffd18802</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>1fd18802</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-0288D1-1200-31-nodesc-highlight">
+      <LineStyle>
+        <color>ffd18802</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>1fd18802</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-0288D1-1200-31-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-0288D1-1200-31-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-0288D1-1200-31-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Placemark>
+      <name>Poligon Name</name>
+      <styleUrl>#poly-0288D1-1200-31-nodesc</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <tessellate>1</tessellate>
+            <coordinates>
+              10,20,0
+              30,40,0
+              10,20,0
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Document>
+</kml>
