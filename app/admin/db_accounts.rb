@@ -5,7 +5,8 @@ ActiveAdmin.register Db::Account do
                 :territory_map,
                 :cloudinary_cloud_name,
                 :cloudinary_api_key,
-                :cloudinary_api_secret
+                :cloudinary_api_secret,
+                :google_api_key_for_static_maps
 
   form do |f|
     f.semantic_errors
@@ -15,6 +16,7 @@ ActiveAdmin.register Db::Account do
       f.input :cloudinary_cloud_name
       f.input :cloudinary_api_key
       f.input :cloudinary_api_secret
+      f.input :google_api_key_for_static_maps
     end
     f.actions
   end
