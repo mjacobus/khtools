@@ -10,9 +10,9 @@ module Territories
 
       def attach_credentials
         {
-          cloud_name:  ENV['CLOUDINARY_CLOUD_NAME_TWO'],
-          api_key: ENV['CLOUDINARY_API_KEY_TWO'],
-          api_secret: ENV['CLOUDINARY_API_SECRET_TWO'],
+          cloud_name: model.account.cloudinary_cloud_name,
+          api_key: model.account.cloudinary_api_key,
+          api_secret: model.account.cloudinary_api_secret,
         }
       end
 
