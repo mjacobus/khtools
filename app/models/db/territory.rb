@@ -2,6 +2,7 @@
 
 # rubocop:disable Metrics/ClassLength
 class Db::Territory < ApplicationRecord
+  include TerritoryUploaderConcern
   AssignmentError = Class.new(StandardError)
 
   UNASSIGNED_TERRITORY_VALUE = 'none'
@@ -49,12 +50,7 @@ class Db::Territory < ApplicationRecord
   validates :name, presence: true,
                    uniqueness: { case_sensitive: false, scope: %i[account_id type] }
 
-  mount_uploader :file, if Rails.env.production?
-                          Territories::Uploaders::LocalUploader
-                        else
-                          Territories::Uploaders::CloudinaryUploader
-                        end
-
+  mount_uploader :file, file_uploader
   def area_name
     if area
       return area.name
