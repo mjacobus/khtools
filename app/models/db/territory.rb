@@ -121,6 +121,7 @@ class Db::Territory < ApplicationRecord
       pending_verification
       name
       google_map
+      kml
       assigned_at
       assignee_id
       field_service_group_id
