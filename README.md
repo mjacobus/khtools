@@ -67,3 +67,14 @@ Download a backup from the above link and then:
 ```bash
 pg_restore -U pguser -W --no-owner --no-privileges -h localhost -d khtools_development -1 tmp/bkp/jw-khtools-backup-21-01-14
 ```
+
+### Editing credentials
+
+
+The master key is stored in 1password, and the development key is the same as prod.
+
+```
+RAILS_MASTER_KEY=the-key bin/rails credentials:edit
+
+RAILS_MASTER_KEY=12345678901234567890123456789012 bin/rails credentials:edit --environment test
+```
