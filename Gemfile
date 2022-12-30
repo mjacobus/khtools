@@ -34,9 +34,9 @@ gem 'sass-rails', '>= 6'
 gem 'simple_form'
 # gem 'turbolinks', '~> 5'
 gem 'kaminari'
+gem 'rqrcode', '~> 2.0'
 gem 'view_component', require: 'view_component/engine'
 gem 'webpacker', '~> 4.0'
-gem "rqrcode", "~> 2.0"
 
 group :development, :test do
   gem 'awesome_print'
