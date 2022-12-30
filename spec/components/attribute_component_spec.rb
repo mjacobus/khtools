@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe AttributeComponent, type: :component do
-  let(:html) { rendered_component }
+  let(:html) { page }
 
   it 'renders block' do
     render(component) { 'Hi there' }
