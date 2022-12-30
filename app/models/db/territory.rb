@@ -175,7 +175,7 @@ class Db::Territory < ApplicationRecord
 
   def static_map_url(params = {})
     if has_static_map?
-      params = { size: '580x380', zoom: 16, scale: 1 }
+      params = { size: '2048x2048', zoom: 17, scale: 4 }
 
       GoogleMaps::StaticMapService
         .new(api_key: account.google_api_key_for_static_maps)
