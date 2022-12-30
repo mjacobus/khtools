@@ -173,14 +173,14 @@ class Db::Territory < ApplicationRecord
     end
   end
 
-  def static_map_url
+  def static_map_url(params = {})
     if has_static_map?
       params = { size: '580x380', zoom: 16, scale: 1 }
 
       GoogleMaps::StaticMapService
         .new(api_key: account.google_api_key_for_static_maps)
         .url_from_kml(kml)
-        .with_added_query_params(params.merge(custom_map_params))
+        .with_added_query_params(params.merge(custom_map_params).merge(params))
     end
   end
 
@@ -230,6 +230,10 @@ class Db::Territory < ApplicationRecord
 
   def static_map_center
     read_config(:static_map_center)
+  end
+
+  def filename(extension = nil)
+    [name, extension].compact.join('.')
   end
 
   private
