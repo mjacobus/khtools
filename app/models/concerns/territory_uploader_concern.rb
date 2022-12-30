@@ -5,6 +5,10 @@ module TerritoryUploaderConcern
 
   module ClassMethods
     def file_uploader
+      if Rails.env.test?
+        return Territories::Uploaders::LocalUploader
+      end
+
       if Rails.env.production?
         return Territories::Uploaders::CloudinaryUploader
       end
