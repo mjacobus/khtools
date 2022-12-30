@@ -109,9 +109,20 @@
   <% end %>
 
 
-  <%= input_wrapper do %>
-    <%= f.input :google_map %>
+  <% if supports_upload? %>
+    <%= input_wrapper do %>
+      <%= f.input :google_map %>
+    <% end %>
+
+
+    <details>
+      <summary>KML</summary>
+      <%= input_wrapper do %>
+        <%= f.input :kml, as: :text, input_html: { rows: 10 } %>
+      <% end %>
+    </details>
   <% end %>
+
 
   <%= input_wrapper do %>
     <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>
