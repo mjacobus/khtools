@@ -32,6 +32,10 @@ class Routes
     @helpers.pdf_territories_phone_list_territory_path(territory, params)
   end
 
+  def territory_download_printable_path(territory, params = {})
+    @helpers.territories_regular_territory_printable_path(territory, params)
+  end
+
   def new_territory_assignment_path(territory)
     @helpers.new_territories_territory_assignment_path(territory)
   end

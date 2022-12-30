@@ -70,9 +70,17 @@ module TerritoryAttributesConcern
 
   def download_pdf_action
     if type == :phone_list
-      link_to(
+      return link_to(
         t('app.links.download_pdf'),
         urls.territory_download_pdf_path(territory),
+        class: 'btn'
+      )
+    end
+
+    if territory.kml.present? || territory.file.present?
+      link_to(
+        t('app.links.download_pdf'),
+        urls.territory_download_printable_path(territory),
         class: 'btn'
       )
     end
