@@ -115,7 +115,7 @@ class Db::Territory < ApplicationRecord
   # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/AbcSize
 
-  def editable_attributes
+  def editable_attributes # rubocop:disable Metrics/MethodLength
     %i[
       notes
       pending_verification
