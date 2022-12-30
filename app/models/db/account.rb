@@ -42,6 +42,14 @@ class Db::Account < ApplicationRecord
     read_secret(:cloudinary_api_secret)
   end
 
+  def google_api_key_for_static_maps=(value)
+    write_secret(:google_api_key_for_static_maps, value)
+  end
+
+  def google_api_key_for_static_maps
+    read_secret(:google_api_key_for_static_maps)
+  end
+
   def supports_uploads?
     [cloudinary_cloud_name, cloudinary_api_key, cloudinary_api_secret].all?(&:present?)
   end
