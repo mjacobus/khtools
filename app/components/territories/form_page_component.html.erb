@@ -117,8 +117,25 @@
 
     <details>
       <summary>KML</summary>
+
       <%= input_wrapper do %>
         <%= f.input :kml, as: :text, input_html: { rows: 10 } %>
+      <% end %>
+
+      <%= input_wrapper do %>
+        <%= f.input :static_map_zoom, placeholder: "16" %>
+      <% end %>
+
+      <%= input_wrapper do %>
+        <%= f.input :static_map_scale, placeholder: "1" %>
+      <% end %>
+
+      <%= input_wrapper do %>
+        <%= f.input :static_map_size, placeholder: "580x380" %>
+      <% end %>
+
+      <%= input_wrapper do %>
+        <%= f.input :static_map_center, placeholder: "lat,lon" %>
       <% end %>
     </details>
   <% end %>

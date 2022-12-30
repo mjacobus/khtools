@@ -125,6 +125,10 @@ class Db::Territory < ApplicationRecord
       assigned_at
       assignee_id
       field_service_group_id
+      static_map_zoom
+      static_map_scale
+      static_map_size
+      static_map_center
     ]
   end
 
@@ -171,10 +175,12 @@ class Db::Territory < ApplicationRecord
 
   def static_map_url
     if has_static_map?
+      params = { size: '580x380', zoom: 16, scale: 1 }
+
       GoogleMaps::StaticMapService
         .new(api_key: account.google_api_key_for_static_maps)
         .url_from_kml(kml)
-        .with_added_query_params(size: '580x380', zoom: 16, scale: 1)
+        .with_added_query_params(params.merge(custom_map_params))
     end
   end
 
@@ -184,6 +190,69 @@ class Db::Territory < ApplicationRecord
 
   def assigned?
     assignee_id.present?
+  end
+
+  def google_api_key_for_static_maps
+    read_secret(:google_api_key_for_static_maps)
+  end
+
+  def supports_uploads?
+    [cloudinary_cloud_name, cloudinary_api_key, cloudinary_api_secret].all?(&:present?)
+  end
+
+  def static_map_zoom=(value)
+    write_config(:static_map_zoom, value)
+  end
+
+  def static_map_zoom
+    read_config(:static_map_zoom)
+  end
+
+  def static_map_scale=(value)
+    write_config(:static_map_scale, value)
+  end
+
+  def static_map_scale
+    read_config(:static_map_scale)
+  end
+
+  def static_map_size=(value)
+    write_config(:static_map_size, value)
+  end
+
+  def static_map_size
+    read_config(:static_map_size)
+  end
+
+  def static_map_center=(value)
+    write_config(:static_map_center, value)
+  end
+
+  def static_map_center
+    read_config(:static_map_center)
+  end
+
+  private
+
+  def write_config(attribute, value)
+    parsed_config[attribute.to_s] = value
+  end
+
+  def read_config(attribute)
+    parsed_config[attribute.to_s]
+  end
+
+  def parsed_config
+    self.config ||= {}
+  end
+
+  def custom_map_params
+    {
+      zoom: static_map_zoom,
+      scale: static_map_scale,
+      size: static_map_size,
+      center: static_map_center
+    }.compact_blank
   end
 end
 # rubocop:enable Metrics/ClassLength
