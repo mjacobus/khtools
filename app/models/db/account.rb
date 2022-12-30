@@ -42,6 +42,10 @@ class Db::Account < ApplicationRecord
     read_secret(:cloudinary_api_secret)
   end
 
+  def supports_uploads?
+    [cloudinary_cloud_name, cloudinary_api_key, cloudinary_api_secret].all?(&:present?)
+  end
+
   private
 
   def write_secret(attribute, value)
