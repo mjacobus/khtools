@@ -21,6 +21,12 @@ module Territories
       def public_id
         "#{env_dir}/#{model.class.to_s.underscore.split('/').last}/#{model.id}"
       end
+
+      def url(*args)
+        url = super(*args)
+
+        url&.sub("/congregation-cloud-name/", "/#{model.account.cloudinary_cloud_name}/")
+      end
     end
   end
 end
