@@ -37,4 +37,14 @@ RSpec.describe Db::Account, type: :model do
       .to change { account.cloudinary_api_secret }
       .from(nil).to("foo")
   end
+
+  it "responds to supports_uploads?" do
+    account.cloudinary_cloud_name = "name"
+    account.cloudinary_api_key = "key"
+    account.cloudinary_api_secret = "secret"
+
+    expect { account.cloudinary_cloud_name = "" }
+      .to change { account.supports_uploads? }
+      .from(true).to(false)
+  end
 end
