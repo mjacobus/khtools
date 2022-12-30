@@ -5,5 +5,7 @@
 <% end %>
 
 <% if territory.notes.present? %>
-  <%= simple_format(territory.notes) %>
+  <div><%= simple_format(territory.notes) %></div>
 <% end %>
+
+<%= render QrCodeComponent.new(territory.google_map) %>
