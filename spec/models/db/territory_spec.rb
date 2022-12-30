@@ -260,4 +260,36 @@ RSpec.describe Db::Territory, type: :model do
       expect(other_assignment.reload).not_to be_returned
     end
   end
+
+  it 'has static_map_zoom' do
+    expect do
+      territory.static_map_zoom = 'foo'
+    end.to change {
+      territory.static_map_zoom
+    }.from(nil).to('foo')
+  end
+
+  it 'has static_map_scale' do
+    expect do
+      territory.static_map_scale = 'foo'
+    end.to change {
+      territory.static_map_scale
+    }.from(nil).to('foo')
+  end
+
+  it 'has static_map_size' do
+    expect do
+      territory.static_map_size = 'foo'
+    end.to change {
+      territory.static_map_size
+    }.from(nil).to('foo')
+  end
+
+  it 'has static_map_center' do
+    expect do
+      territory.static_map_center = 'foo'
+    end.to change {
+      territory.static_map_center
+    }.from(nil).to('foo')
+  end
 end
