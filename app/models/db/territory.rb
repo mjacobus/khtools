@@ -39,6 +39,8 @@ class Db::Territory < ApplicationRecord
       :area,
       :intercom_type,
       :letter_box_type,
+      :field_service_group,
+      :last_assignment,
       :primary_preaching_method,
       :secondary_preaching_method,
       :tertiary_preaching_method,
