@@ -9,6 +9,7 @@ class Territories::ShowPageComponent < PageComponent
   def actions
     [
       assignment_action,
+      assignments_action,
       xls_action,
       download_pdf_action,
       edit_action,

@@ -21,6 +21,10 @@ module TerritoryAttributesConcern
     assign_action
   end
 
+  def assignments_action
+    link_to(t('app.attributes.assignment_history'), urls.territory_assignments_path(territory), class: 'btn')
+  end
+
   def assign_action
     link_to t('app.links.assign_territory'), urls.new_territory_assignment_path(territory), class: 'btn'
   end

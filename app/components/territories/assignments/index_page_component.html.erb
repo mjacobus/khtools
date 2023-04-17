@@ -1,0 +1,7 @@
+<%= render breadcrumb.on_index %>
+
+<div class="index-list">
+  <% assignments.each do |assignment| %>
+    <%= render Territories::AssignmentComponent.new(assignment: assignment, parent: territory) %>
+  <% end %>
+</div>
