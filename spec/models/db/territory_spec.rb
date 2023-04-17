@@ -203,6 +203,13 @@ RSpec.describe Db::Territory, type: :model do
       end
     end
 
+    it 'sets last assignment' do
+      freeze_time do
+        expect { assign }.to change { territory.reload.last_assignment }
+          .from(nil)
+      end
+    end
+
     it 'creates an assignment with correct publisher id' do
       assign
 
@@ -216,7 +223,7 @@ RSpec.describe Db::Territory, type: :model do
     end
 
     it 'optinally adds campaign_id to assignment' do
-      territory.assign_to(publisher, campaign_id: campaign.id)
+      territory.assign_to(publisher, campaign: campaign.id)
 
       expect(Db::TerritoryAssignment.last.campaign_id).to eq(campaign.id)
     end
@@ -232,7 +239,9 @@ RSpec.describe Db::Territory, type: :model do
     it 'raises error if territory is already assigned' do
       assign
 
-      expect { territory.assign_to(publisher) }.to raise_error(Db::Territory::AssignmentError)
+      expect do
+        territory.assign_to(publisher)
+      end.to raise_error(TerritoryAssignmentService::AssignmentError)
     end
   end
 
