@@ -3,7 +3,6 @@
 # rubocop:disable Metrics/ClassLength
 class Db::Territory < ApplicationRecord
   include TerritoryUploaderConcern
-  AssignmentError = Class.new(StandardError)
 
   UNASSIGNED_TERRITORY_VALUE = 'none'
 
@@ -141,41 +140,17 @@ class Db::Territory < ApplicationRecord
     @type_key ||= self.class.to_s.underscore.split('/').last.sub('_territory', '')
   end
 
-  # rubocop:disable Metrics/MethodLength
-  def assign_to(publisher, campaign_id: nil, notes: nil)
-    if assigned?
-      raise AssignmentError, 'Already assigned'
-    end
-
-    if publisher.is_a?(Db::Publisher)
-      publisher = publisher.id
-    end
-
-    self.assignee_id = publisher
-    self.assigned_at = Time.zone.now
-
-    self.class.transaction do
-      save!
-      assignments.create!(
-        assignee_id: assignee_id,
-        assigned_at: assigned_at,
-        campaign_id: campaign_id,
-        notes: notes
-      )
-    end
+  def assign_to(publisher, campaign: nil, notes: nil)
+    TerritoryAssignmentService.new.assign(
+      territory: self,
+      to: publisher,
+      campaign: campaign,
+      notes: notes
+    )
   end
-  # rubocop:enable Metrics/MethodLength
 
   def return
-    assignments_to_return = assignments.where(assignee_id: assignee_id)
-
-    self.assignee_id = nil
-    self.assigned_at = nil
-
-    self.class.transaction do
-      assignments_to_return.map(&:return)
-      save!
-    end
+    TerritoryAssignmentService.new.return_territory(territory: self)
   end
 
   def static_map_url(params = {})
