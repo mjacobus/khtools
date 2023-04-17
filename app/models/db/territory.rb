@@ -15,6 +15,9 @@ class Db::Territory < ApplicationRecord
   belongs_to :primary_preaching_method,
              class_name: 'Db::PreachingMethod',
              optional: true
+  belongs_to :last_assignment,
+             class_name: 'Db::TerritoryAssignment',
+             optional: true
   belongs_to :secondary_preaching_method,
              class_name: 'Db::PreachingMethod',
              optional: true
