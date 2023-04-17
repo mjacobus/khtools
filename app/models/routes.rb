@@ -45,6 +45,11 @@ class Routes
     "#{path}/assignments"
   end
 
+  def edit_territory_assignment_path(assignment)
+    path = territory_assignments_path(assignment.territory)
+    "#{path}/#{assignment.to_param}/edit"
+  end
+
   def return_territory_path(territory)
     @helpers.territories_territory_assignment_path(territory, 'unassign')
   end

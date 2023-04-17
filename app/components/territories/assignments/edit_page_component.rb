@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Territories::Assignments::NewPageComponent < PageComponent
+class Territories::Assignments::EditPageComponent < PageComponent
   include TerritoryAttributesConcern
   has :territory
   has :assignment
@@ -8,7 +8,7 @@ class Territories::Assignments::NewPageComponent < PageComponent
   def form
     Territories::Assignments::FormComponent.new(
       territory: territory,
-      assignment: territory.assignments.build
+      assignment: assignment
     )
   end
 

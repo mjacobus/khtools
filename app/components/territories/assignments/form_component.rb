@@ -2,6 +2,7 @@
 
 class Territories::Assignments::FormComponent < PageComponent
   has :territory
+  has :assignment
 
   def publishers
     current_account.publishers.pluck(:name, :id)
@@ -13,9 +14,5 @@ class Territories::Assignments::FormComponent < PageComponent
 
   def target_url
     urls.territory_assignments_path(territory)
-  end
-
-  def territory_assignment
-    @territory_assignment ||= territory.assignments.build
   end
 end

@@ -12,11 +12,18 @@ class Territories::AssignmentsController < ApplicationController
     render Territories::Assignments::NewPageComponent.new(territory: territory)
   end
 
+  def edit
+    render Territories::Assignments::EditPageComponent.new(
+      territory: territory,
+      assignment: assignment
+    )
+  end
+
   def create
-    publisher_id = params[:assignment][:publisher_id]
+    assignee_id = params[:assignment][:assignee_id]
     campaign_id = params[:assignment][:campaign_id]
     notes = params[:assignment][:notes]
-    territory.assign_to(publisher_id, campaign: campaign_id, notes: notes)
+    territory.assign_to(assignee_id, campaign: campaign_id, notes: notes)
     show_territory
   end
 
@@ -27,13 +34,16 @@ class Territories::AssignmentsController < ApplicationController
 
   private
 
+  def assignment
+    @assignment ||= territory.assignments.find(params[:id])
+  end
+
   def show_territory
     redirect_to routes.territory_path(territory)
   end
 
   def territory
-    # TODO: scope to account
-    @territory ||= Db::Territory.find(territory_id)
+    @territory ||= current_account.territories.find(territory_id)
   end
 
   def territory_id
