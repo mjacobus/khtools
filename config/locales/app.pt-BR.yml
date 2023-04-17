@@ -100,6 +100,7 @@ pt-BR:
         territories: Territórios
         assignments: Designações
       db/territory_assignment:
+        last_assignment_dates: Última designação
         assignment_dates: Data designação
         campaign: Campanha
         territory: Território
@@ -168,6 +169,7 @@ pt-BR:
         assigned_at: Designado em
         returned_at: Devolvido em
         assignment_dates: Data designação
+        last_assignment_dates: Última designação
         initial_phone_number: Número Inicial
         final_phone_number: Número Final
         phone_numbers: Telefones
