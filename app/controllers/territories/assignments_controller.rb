@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class Territories::AssignmentsController < ApplicationController
+  def new
+    render Territories::Assignments::NewPageComponent.new(territory: territory)
+  end
+
   def create
     publisher_id = params[:assignment][:publisher_id]
     campaign_id = params[:assignment][:campaign_id]
@@ -12,10 +16,6 @@ class Territories::AssignmentsController < ApplicationController
   def destroy
     territory.return
     show_territory
-  end
-
-  def new
-    render Territories::Assignments::NewPageComponent.new(territory: territory)
   end
 
   private
