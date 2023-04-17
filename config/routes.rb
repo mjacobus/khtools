@@ -39,16 +39,21 @@ Rails.application.routes.draw do
     end
     resources :regular_territories do
       get :printable, defaults: { format: :pdf }
+      resources :assignments
     end
     resources :phone_list_territories do
+      resources :assignments
       member do
         get :xls
         get :pdf, defaults: { format: :pdf }
         post :create_token
       end
     end
-    resources :apartment_building_territories
+    resources :apartment_building_territories do
+      resources :assignments
+    end
     resources :commercial_territories do
+      resources :assignments
       resources :contacts
     end
     resources :phone_lists
