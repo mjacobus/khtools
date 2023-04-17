@@ -68,6 +68,18 @@ Download a backup from the above link and then:
 pg_restore -U pguser -W --no-owner --no-privileges -h localhost -d khtools_development -1 tmp/bkp/jw-khtools-backup-21-01-14
 ```
 
+Other tricks
+
+```
+heroku run 'pg_dump $DATABASE_URL' > tmp/my_database.sql
+
+
+./bin/rails db:drop
+./bin/rails db:create
+psql -U pguser -W -h localhost -d khtools_development \
+  -f tmp/my_database.sql
+```
+
 ### Editing credentials
 
 
