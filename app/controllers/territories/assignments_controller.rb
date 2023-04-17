@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 class Territories::AssignmentsController < ApplicationController
+  def index
+    render Territories::Assignments::IndexPageComponent.new(
+      territory: territory,
+      assignments: territory.assignments
+    )
+  end
+
   def new
     render Territories::Assignments::NewPageComponent.new(territory: territory)
   end
@@ -25,6 +32,17 @@ class Territories::AssignmentsController < ApplicationController
   end
 
   def territory
-    @territory ||= Db::Territory.find(params[:territory_id])
+    # TODO: scope to account
+    @territory ||= Db::Territory.find(territory_id)
+  end
+
+  def territory_id
+    keys = %i[
+      territory_id
+      apartment_building_territory_id
+      regular_territory_id
+      phone_list_territory_id
+    ]
+    params.slice(*keys).values.compact.first
   end
 end
