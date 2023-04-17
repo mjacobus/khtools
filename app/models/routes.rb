@@ -41,7 +41,8 @@ class Routes
   end
 
   def territory_assignments_path(territory)
-    @helpers.territories_territory_assignments_path(territory)
+    path = territory_path(territory)
+    "#{path}/assignments"
   end
 
   def return_territory_path(territory)
