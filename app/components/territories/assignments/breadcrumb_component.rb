@@ -12,6 +12,11 @@ class Territories::Assignments::BreadcrumbComponent < ApplicationComponent
     self
   end
 
+  def on_new
+    breadcrumb.add_item(t('app.links.assign_territory'))
+    self
+  end
+
   private
 
   def breadcrumb

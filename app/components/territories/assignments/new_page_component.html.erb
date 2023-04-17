@@ -1,21 +1,5 @@
-<%= render breadcrumb %>
+<%= render breadcrumb.on_new %>
 
 <%= render attribute(:name).with_label.without_icon %>
 
-<%= simple_form_for(:assignment, url: target_url) do |f| %>
-  <%= input_wrapper do %>
-    <%= f.input :publisher_id, as: :select, collection: publishers, label: attribute_name(territory_assignment, :assignee_id) %>
-  <% end %>
-
-  <%= input_wrapper do %>
-    <%= f.input :campaign_id, as: :select, collection: preaching_campaigns, label: attribute_name(territory_assignment, :campaign) %>
-  <% end %>
-
-  <%= input_wrapper do %>
-    <%= f.input :notes, label: attribute_name(territory_assignment, :notes) %>
-  <% end %>
-
-  <%= input_wrapper do %>
-    <%= f.submit(class: 'btn btn-primary mt-3 float-right', value: t('app.links.assign_territory')) %>
-  <% end %>
-<% end %>
+<%= render Territories::Assignments::FormComponent.new(territory: territory) %>
