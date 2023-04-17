@@ -4,7 +4,6 @@ class Territories::Assignments::IndexPageComponent < PageComponent
   has :territory
   has :assignments
 
-
   private
 
   def breadcrumb
