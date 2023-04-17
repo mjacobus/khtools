@@ -1,4 +1,12 @@
-<div class="item">
+<div class="item position-relative">
+  <%= render DropdownMenuComponent.new(type: :item_options) do |component| %>
+    <% actions.each do |action| %>
+      <% component.item do %>
+        <%= action %>
+      <% end %>
+    <% end %>
+  <% end %>
+
   <div class="row">
     <% unless territory_perspective? %>
       <%= render attribute(assignment.territory&.name)

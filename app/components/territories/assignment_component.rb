@@ -22,5 +22,21 @@ module Territories
         urls.to(assignment.campaign)
       end
     end
+
+    def actions
+      [
+        edit_action
+      ]
+    end
+
+    private
+
+    def edit_action
+      link_to(
+        t('app.links.edit'),
+        urls.edit_territory_assignment_path(assignment),
+        class: 'btn'
+      )
+    end
   end
 end
