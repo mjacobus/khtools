@@ -7,6 +7,16 @@
     <%= f.input :campaign_id, as: :select, collection: preaching_campaigns, label: attribute_name(assignment, :campaign) %>
   <% end %>
 
+  <% if assignment.id %>
+    <%= input_wrapper do %>
+      <%= f.input :assigned_at, label: attribute_name(assignment, :assigned_at) %>
+    <% end %>
+
+    <%= input_wrapper do %>
+      <%= f.input :returned_at, label: attribute_name(assignment, :returned_at) %>
+    <% end %>
+  <% end %>
+
   <%= input_wrapper do %>
     <%= f.input :notes, label: attribute_name(assignment, :notes) %>
   <% end %>

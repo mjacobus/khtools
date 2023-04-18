@@ -24,6 +24,8 @@ RSpec.describe TerritoryAssignmentService do
 
       expect(territory.last_assignment_id).to eq(last.id)
       expect(territory.last_assignment).to eq(last)
+      expect(territory.assignee_id).to eq(last.assignee_id)
+      expect(territory.assigned_at).to eq(last.assigned_at)
     end
   end
 end

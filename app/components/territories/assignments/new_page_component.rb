@@ -8,7 +8,7 @@ class Territories::Assignments::NewPageComponent < PageComponent
   def form
     Territories::Assignments::FormComponent.new(
       territory: territory,
-      assignment: territory.assignments.build
+      assignment: assignment
     )
   end
 
