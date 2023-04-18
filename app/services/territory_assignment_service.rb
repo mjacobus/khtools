@@ -56,6 +56,12 @@ class TerritoryAssignmentService
     territory.last_assignment = assignment
     territory.assignee_id = assignment.assignee_id
     territory.assigned_at = assignment.assigned_at
+
+    if assignment.returned?
+      territory.assignee_id = nil
+      territory.assigned_at = nil
+    end
+
     territory.save!
   end
 
