@@ -5,6 +5,8 @@ require 'rails_helper'
 RSpec.describe Territories::AssignmentsController, type: :request do
   before do
     login_user(admin_user)
+    admin_user.account = territory.account
+    admin_user.save!
   end
 
   let(:territory) { factories.territories.create }
@@ -25,7 +27,10 @@ RSpec.describe Territories::AssignmentsController, type: :request do
 
       perform_request
 
-      expected_component = Territories::Assignments::NewPageComponent.new(territory: territory)
+      expected_component = Territories::Assignments::NewPageComponent.new(
+        territory: territory,
+        assignment: territory.assignments.build
+      )
       expect(renderer).to have_rendered_component(expected_component)
     end
   end
@@ -33,7 +38,7 @@ RSpec.describe Territories::AssignmentsController, type: :request do
   describe '#create' do
     let(:params) do
       {
-        assignment: { publisher_id: publisher.id }
+        assignment: { assignee_id: publisher.id }
       }
     end
     let(:perform_request) do
