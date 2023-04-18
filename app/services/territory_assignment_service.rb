@@ -5,7 +5,7 @@ class TerritoryAssignmentService
 
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/MethodLength
-  def assign(territory:, to:, campaign:, notes: nil)
+  def assign(territory:, to:, campaign: nil, notes: nil)
     if territory.assigned?
       raise AssignmentError, 'Already assigned'
     end

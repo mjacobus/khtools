@@ -68,7 +68,7 @@ class Territories::AssignmentsController < ApplicationController
   def assignment_params
     permited = %i[assignee_id campaign_id notes]
 
-    if assignment.id
+    if params[:action] == 'update'
       permited += %i[assigned_at returned_at]
     end
 
