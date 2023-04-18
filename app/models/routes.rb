@@ -45,9 +45,14 @@ class Routes
     "#{path}/assignments"
   end
 
-  def edit_territory_assignment_path(assignment)
+  def territory_assignment_path(assignment)
     path = territory_assignments_path(assignment.territory)
-    "#{path}/#{assignment.to_param}/edit"
+    "#{path}/#{assignment.to_param}"
+  end
+
+  def edit_territory_assignment_path(assignment)
+    path = territory_assignment_path(assignment)
+    "#{path}/edit"
   end
 
   def return_territory_path(territory)

@@ -13,6 +13,10 @@ class Territories::Assignments::FormComponent < PageComponent
   end
 
   def target_url
+    if assignment.id
+      return urls.territory_assignment_path(assignment)
+    end
+
     urls.territory_assignments_path(territory)
   end
 end

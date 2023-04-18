@@ -9,7 +9,12 @@ class Territories::AssignmentsController < ApplicationController
   end
 
   def new
-    render Territories::Assignments::NewPageComponent.new(territory: territory)
+    @assignment ||= territory.assignments.build
+
+    render Territories::Assignments::NewPageComponent.new(
+      territory: territory,
+      assignment: assignment
+    )
   end
 
   def edit
@@ -20,11 +25,33 @@ class Territories::AssignmentsController < ApplicationController
   end
 
   def create
-    assignee_id = params[:assignment][:assignee_id]
-    campaign_id = params[:assignment][:campaign_id]
-    notes = params[:assignment][:notes]
-    territory.assign_to(assignee_id, campaign: campaign_id, notes: notes)
+    payload = assignment_params
+    territory.assign_to(
+      payload[:assignee_id],
+      campaign: payload[:campaign_id],
+      notes: payload[:notes]
+    )
     show_territory
+  rescue ActiveRecord::RecordInvalid => exception
+    @assignment = exception.record
+    new
+  end
+
+  def update # rubocop:disable Mertrics/MethodLength
+    payload = assignment_params
+    dates = DateTimeParamParser.new.parse(payload)
+
+    assignment_service.update_assignment(
+      assignment: assignment,
+      campaign: payload[:campaign_id],
+      to: payload[:assignee_id],
+      assigned_at: dates[:assigned_at],
+      returned_at: dates[:returned_at],
+      notes: payload[:notes]
+    )
+    show_territory
+  rescue ActiveRecord::RecordInvalid
+    edit
   end
 
   def destroy
@@ -33,6 +60,20 @@ class Territories::AssignmentsController < ApplicationController
   end
 
   private
+
+  def assignment_service
+    @assignment_service ||= TerritoryAssignmentService.new
+  end
+
+  def assignment_params
+    permited = %i[assignee_id campaign_id notes]
+
+    if assignment.id
+      permited += %i[assigned_at returned_at]
+    end
+
+    params.require(:assignment).permit(*permited)
+  end
 
   def assignment
     @assignment ||= territory.assignments.find(params[:id])
