@@ -39,14 +39,13 @@ class Territories::AssignmentsController < ApplicationController
 
   def update # rubocop:disable Mertrics/MethodLength
     payload = assignment_params
-    dates = DateTimeParamParser.new.parse(payload)
 
     assignment_service.update_assignment(
       assignment: assignment,
       campaign: payload[:campaign_id],
       to: payload[:assignee_id],
-      assigned_at: dates[:assigned_at],
-      returned_at: dates[:returned_at],
+      assigned_at: payload[:assigned_at],
+      returned_at: payload[:returned_at],
       notes: payload[:notes]
     )
     show_territory

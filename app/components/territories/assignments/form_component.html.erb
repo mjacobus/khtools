@@ -9,11 +9,11 @@
 
   <% if assignment.id %>
     <%= input_wrapper do %>
-      <%= f.input :assigned_at, label: attribute_name(assignment, :assigned_at) %>
+      <%= f.input :assigned_at, label: attribute_name(assignment, :assigned_at), as: :string, input_html: { type: 'datetime-local', value: assignment.assigned_at&.to_fs(:db) } %>
     <% end %>
 
     <%= input_wrapper do %>
-      <%= f.input :returned_at, label: attribute_name(assignment, :returned_at) %>
+      <%= f.input :returned_at, label: attribute_name(assignment, :returned_at), as: :string, input_html: { type: 'datetime-local', value: assignment.returned_at&.to_fs(:db) } %>
     <% end %>
   <% end %>
 
