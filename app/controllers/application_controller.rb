@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::Base
   before_action :require_authorization
+  before_action :set_current
   helper_method :current_user
 
   layout :layout
@@ -23,6 +24,11 @@ class ApplicationController < ActionController::Base
     unless ControllerAcl.new(request).authorized?(current_user)
       redirect_to('/', flash: { error: t('app.messages.access_denied') })
     end
+  end
+
+  def set_current
+    Current.user = current_user
+    Current.root_url = root_url
   end
 
   def current_account

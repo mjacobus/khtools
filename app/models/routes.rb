@@ -15,9 +15,9 @@ class Routes
     @helpers.send(method, territory, *args)
   end
 
-  def public_territory_path(territory)
+  def public_territory_url(territory)
     base = territory_path(territory)
-    "#{base}/token/#{territory.public_view_token}"
+    "#{root_url}/#{base}/token/#{territory.public_view_token}"
   end
 
   def territories_path(type, *args)
@@ -106,6 +106,10 @@ class Routes
     end
 
     raise "Unrecognized path for #{record.class}/#{key}"
+  end
+
+  def root_url
+    Current.root_url
   end
 end
 # rubocop:enable Style/MissingRespondToMissing

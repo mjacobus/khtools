@@ -10,4 +10,8 @@ class Territories::PrintableTerritoryPageComponent < ApplicationComponent
   def display_file?
     territory.file.present?
   end
+
+  def qr_code_url
+    urls.public_territory_url(territory)
+  end
 end

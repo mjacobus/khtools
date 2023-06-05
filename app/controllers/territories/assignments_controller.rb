@@ -37,7 +37,7 @@ class Territories::AssignmentsController < ApplicationController
     new
   end
 
-  def update # rubocop:disable Mertrics/MethodLength
+  def update # rubocop:disable Metrics/MethodLength
     payload = assignment_params
 
     assignment_service.update_assignment(

@@ -11,4 +11,4 @@
   <div><%= simple_format(territory.notes) %></div>
 <% end %>
 
-<%= render QrCodeComponent.new(territory.google_map) %>
+<%= render QrCodeComponent.new(qr_code_url) %>
