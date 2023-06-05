@@ -47,6 +47,26 @@ RSpec.describe Territories::RegularTerritoriesController, type: :request do
     end
   end
 
+  describe 'GET #public_show' do
+    let(:territory) { factories.territories.create }
+
+    before do
+      login_user(nil)
+    end
+
+    context 'when token is valid' do
+      let(:perform_request) do
+        get "/territories/regular_territories/#{territory.id}/token/#{territory.public_view_token}"
+      end
+
+      it 'returns http success' do
+        perform_request
+
+        expect(response).to have_http_status(:success)
+      end
+    end
+  end
+
   describe 'POST #create' do
     let(:params) { { territory: territory_params } }
 

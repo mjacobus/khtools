@@ -39,6 +39,7 @@ Rails.application.routes.draw do
     end
     resources :regular_territories do
       get :printable, defaults: { format: :pdf }
+      get '/token/:token', action: 'public_show'
       resources :assignments
     end
     resources :phone_list_territories do

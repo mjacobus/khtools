@@ -331,6 +331,7 @@ pt-BR:
       publishers: "Publicadores"
       field_service_groups: "Grupos de Campo"
       assignments: "Designações"
+      public_view: "Link Público"
       create_regular_territory_assignment: "Vincular aos Territórios Tradicionais"
       create_apartment_building_territory_assignment: "Vincular aos Territórios de Apartamentos"
       create_phone_list_territory_assignment: "Vincular aos territórios de lista telefonicas"
