@@ -11,7 +11,7 @@ Dotenv::Railtie.load
 module KhTools
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 6.1
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
@@ -20,11 +20,11 @@ module KhTools
 
     config.middleware.use OmniAuth::Builder do
       if ENV['OAUTH_GOOGLE_KEY']
-        provider :google_oauth2, ENV['OAUTH_GOOGLE_KEY'], ENV['OAUTH_GOOGLE_SECRET']
+        provider :google_oauth2, ENV['OAUTH_GOOGLE_KEY'], ENV.fetch('OAUTH_GOOGLE_SECRET', nil)
       end
     end
 
-    config.i18n.available_locales = ["pt-BR"]
+    config.i18n.available_locales = ['pt-BR']
     config.i18n.default_locale = 'pt-BR'
     config.time_zone = 'America/Sao_Paulo'
 
