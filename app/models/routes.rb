@@ -15,6 +15,11 @@ class Routes
     @helpers.send(method, territory, *args)
   end
 
+  def public_territory_path(territory)
+    base = territory_path(territory)
+    "#{base}/token/#{territory.public_view_token}"
+  end
+
   def territories_path(type, *args)
     method = "territories_#{type}_territories_path"
     @helpers.send(method, *args)

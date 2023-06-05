@@ -10,6 +10,7 @@ class Territories::ShowPageComponent < PageComponent
     [
       assignment_action,
       assignments_action,
+      public_view_action,
       xls_action,
       download_pdf_action,
       edit_action,

@@ -21,6 +21,16 @@ module TerritoryAttributesConcern
     assign_action
   end
 
+  def public_view_action
+    if territory.type_key == 'regular'
+      link_to(
+        t('app.links.public_view'),
+        urls.public_territory_path(territory),
+        class: 'btn'
+      )
+    end
+  end
+
   def assignments_action
     link_to(t('app.attributes.assignment_history'), urls.territory_assignments_path(territory), class: 'btn')
   end
