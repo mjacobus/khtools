@@ -15,7 +15,6 @@ module Territories
         return @dates
       end
 
-      assignment = record.last_assignment
       @dates = []
 
       unless assignment
@@ -28,10 +27,24 @@ module Territories
       @dates
     end
 
+    def assignment
+      if defined?(@assignment)
+        return @assignment
+      end
+
+      @assignment ||= record.last_assignment
+    end
+
     def time_ago
       if dates.any?
         text = time_ago_in_words(dates.last)
-        "(#{text} atrás)"
+        "(#{text} atrás)#{campaign_info}"
+      end
+    end
+
+    def campaign_info
+      if assignment.campaign
+        " - #{assignment.campaign.name}"
       end
     end
 
