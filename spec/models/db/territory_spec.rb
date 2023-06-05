@@ -301,4 +301,52 @@ RSpec.describe Db::Territory, type: :model do
       territory.static_map_center
     }.from(nil).to('foo')
   end
+
+  describe '#public_view_token' do
+    before { territory.save! }
+
+    context 'when there is no token' do
+      it 'creates and persists a new token' do
+        token = territory.public_view_token
+
+        expect(territory.reload.public_view_token.length).to eq(36)
+        expect(territory.public_view_token).to eq(token)
+      end
+
+      it 'creates saves a new public_view_token_expires_at' do
+        freeze_time do
+          territory.public_view_token
+          territory.reload
+
+          expect(territory.public_view_token_expires_at).to eq(4.months.from_now)
+        end
+      end
+
+      it 'does not persist any other attribute' do
+        territory.name = 'something else'
+        territory.public_view_token
+        territory.reload
+
+        expect(territory.name).not_to eq('something else')
+      end
+    end
+
+    context 'when there is a token' do
+      before do
+        territory.update(public_view_token: 'the-token',
+                         public_view_token_expires_at: 1.month.from_now)
+      end
+
+      it 'returns the existing token' do
+        expect(territory.reload.public_view_token).to eq('the-token')
+      end
+
+      it 'creates a new token if the token has expired' do
+        territory.update(public_view_token_expires_at: 1.minute.ago)
+
+        expect(territory.reload.public_view_token).not_to eq('the-token')
+        expect(territory.reload.public_view_token.length).to eq(36)
+      end
+    end
+  end
 end

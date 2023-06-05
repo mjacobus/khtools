@@ -216,6 +216,21 @@ class Db::Territory < ApplicationRecord
     [name, extension].compact.join('.')
   end
 
+  def public_view_token
+    token = super
+
+    if token && public_view_token_expires_at > Time.current
+      return token
+    end
+
+    # rubocop:disable Rails/SkipsModelValidations
+    update_columns(public_view_token: UniqueId.new.to_s,
+                   public_view_token_expires_at: 4.months.from_now)
+    # rubocop:enable Rails/SkipsModelValidations
+
+    public_view_token
+  end
+
   private
 
   def write_config(attribute, value)
