@@ -25,7 +25,7 @@ module TerritoryAttributesConcern
     if territory.type_key == 'regular'
       link_to(
         t('app.links.public_view'),
-        urls.public_territory_path(territory),
+        urls.public_territory_url(territory),
         class: 'btn'
       )
     end
