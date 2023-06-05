@@ -1,0 +1,10 @@
+<%= render attribute(:name).with_label.without_icon %>
+<% if territory.notes.present? %>
+  <div class="alert alert-warning" role="alert"><%= simple_format(territory.notes) %></div>
+<% end %>
+
+<% if territory.google_map %>
+  <%= render GoogleMapComponent.new(url: territory.google_map) %>
+<% elsif territory.file.url %>
+  <%= image_tag(territory.file.medium.url, class: 'img-fluid') %>
+<% end %>

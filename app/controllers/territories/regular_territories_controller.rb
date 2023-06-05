@@ -16,8 +16,6 @@ class Territories::RegularTerritoriesController < Territories::TerritoriesContro
       params[:regular_territory_id],
       params[:token]
     )
-    render plain: territory.name
-    # @component = Territories::PrintableTerritoryPageComponent.new(territory: territory)
-    # export_pdf(territory.filename('pdf'), header: { right: territory.name })
+    render Territories::PublicShowPageComponent.new(territory: territory)
   end
 end
