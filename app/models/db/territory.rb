@@ -32,6 +32,11 @@ class Db::Territory < ApplicationRecord
   has_many :assignments, class_name: 'Db::TerritoryAssignment', dependent: :restrict_with_exception
 
   default_scope { order(:name) }
+  scope :by_id_and_public_view_token, lambda { |id, token|
+    where(id: id, public_view_token: token)
+      .where('public_view_token_expires_at > ?', Time.zone.now)
+      .first!
+  }
   scope :with_dependencies, lambda {
     includes([
       :assignee,

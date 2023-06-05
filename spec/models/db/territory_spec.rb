@@ -349,4 +349,32 @@ RSpec.describe Db::Territory, type: :model do
       end
     end
   end
+
+  describe '.by_id_and_public_view_token' do
+    let(:territory) do
+      factory.create(public_view_token: 'the-token', public_view_token_expires_at: 1.day.from_now)
+    end
+    let(:found) do
+      described_class.by_id_and_public_view_token(
+        territory.id,
+        'the-token'
+      )
+    end
+
+    it 'returns territory by id' do
+      expect(found).to eq(territory)
+    end
+
+    it 'raises not found when token is expired' do
+      territory.update(public_view_token_expires_at: 1.minute.ago)
+
+      expect { found }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it 'raises not token is not found' do
+      territory.update(public_view_token: 'something-else')
+
+      expect { found }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
 end
