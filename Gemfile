@@ -54,6 +54,7 @@ group :development do
   gem 'rubocop-rspec', require: false
   gem 'simplecov', require: false
   gem 'simplecov-lcov', require: false
+  gem 'solargraph', require: false
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.1'
