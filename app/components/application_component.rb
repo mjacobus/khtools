@@ -30,7 +30,7 @@ class ApplicationComponent < ViewComponent::Base
       return icon
     end
 
-    icon + '&nbsp;'.html_safe + yield
+    icon + '&nbsp;'.html_safe + yield.to_s
   end
 
   def bem(element = nil, modifier = nil, block: nil)

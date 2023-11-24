@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe PublicTalks::TalksController, type: :request do
   let(:talk) { factories.public_talks.create }
   let(:index_page) do
-    public_talks_talks_path(since: MeetingWeek.new.first_day.to_s(:db))
+    public_talks_talks_path(since: MeetingWeek.new.first_day.to_fs(:db))
   end
 
   before do
