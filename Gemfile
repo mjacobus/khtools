@@ -20,7 +20,7 @@ gem 'wicked_pdf'
 gem 'wkhtmltopdf-binpath'
 
 # file upload
-gem 'carrierwave', '~> 2.0'
+gem 'carrierwave', '~> 2.2'
 gem 'carrierwave-i18n'
 gem 'cloudinary'
 
