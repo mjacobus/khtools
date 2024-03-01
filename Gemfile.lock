@@ -464,7 +464,7 @@ GEM
     wkhtmltopdf-binpath (0.0.1)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    yard (0.9.34)
+    yard (0.9.36)
     zeitwerk (2.6.6)
 
 PLATFORMS
