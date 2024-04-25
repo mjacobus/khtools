@@ -10,7 +10,6 @@ ApplicationRecord.extend(DevRandomModule)
 
 [
   Db::MeetingAttendance::Meeting,
-  Db::PreachingCampaignAssignment,
   Db::PreachingCampaign,
   Db::Publisher,
   Db::Territory,
