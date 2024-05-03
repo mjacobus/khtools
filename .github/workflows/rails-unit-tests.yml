@@ -1,7 +1,7 @@
 name: Rails Unit Tests
 on:
   push:
-    branches: 
+    branches:
       - master
   pull_request:
     branches:
@@ -28,7 +28,7 @@ jobs:
     - name: 'Setup node'
       uses: actions/setup-node@v2
       with:
-        node-version: '14.18.3'
+        node-version: '16.20.2'
     - name: Build and test with Rake
       env:
         RAILS_ENV: test
