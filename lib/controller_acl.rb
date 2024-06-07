@@ -34,6 +34,6 @@ class ControllerAcl
       "#{@request.params[:controller]}##{@request.params[:action]}",
       "#{@request.params[:controller]}#*"
     ]
-    (user.permissions['controllers'] & allowed_items).any?
+    user.permissions['controllers'].intersect?(allowed_items)
   end
 end

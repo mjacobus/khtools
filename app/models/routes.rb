@@ -6,13 +6,13 @@ class Routes
     @helpers = helpers
   end
 
-  def method_missing(*args)
-    @helpers.send(*args)
+  def method_missing(*)
+    @helpers.send(*)
   end
 
-  def territory_path(territory, *args)
+  def territory_path(territory, *)
     method = "territories_#{territory.type_key}_territory_path"
-    @helpers.send(method, territory, *args)
+    @helpers.send(method, territory, *)
   end
 
   def public_territory_url(territory)
@@ -20,9 +20,9 @@ class Routes
     "#{root_url}/#{base}/token/#{territory.public_view_token}"
   end
 
-  def territories_path(type, *args)
+  def territories_path(type, *)
     method = "territories_#{type}_territories_path"
-    @helpers.send(method, *args)
+    @helpers.send(method, *)
   end
 
   def territory_tokenized_files_path(territory)
@@ -76,12 +76,12 @@ class Routes
     @helpers.new_field_service_campaign_path
   end
 
-  def publishers_path(*args)
-    @helpers.congregation_publishers_path(*args)
+  def publishers_path(*)
+    @helpers.congregation_publishers_path(*)
   end
 
-  def publisher_path(*args)
-    @helpers.congregation_publisher_path(*args)
+  def publisher_path(*)
+    @helpers.congregation_publisher_path(*)
   end
 
   def new_publisher_path

@@ -28,7 +28,7 @@ RSpec.describe Territories::AssignmentsController, type: :request do
       perform_request
 
       expected_component = Territories::Assignments::NewPageComponent.new(
-        territory: territory,
+        territory:,
         assignment: territory.assignments.build
       )
       expect(renderer).to have_rendered_component(expected_component)
@@ -42,7 +42,7 @@ RSpec.describe Territories::AssignmentsController, type: :request do
       }
     end
     let(:perform_request) do
-      post routes.territory_assignments_path(territory), params: params
+      post routes.territory_assignments_path(territory), params:
     end
 
     it 'assigns a territory' do

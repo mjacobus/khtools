@@ -92,7 +92,7 @@ RSpec.describe Congregation::PublishersController, type: :request do
   end
 
   describe 'POST #create' do
-    let(:perform_request) { post(index_path, params: params) }
+    let(:perform_request) { post(index_path, params:) }
 
     context 'when payload is valid' do
       let(:params) { { key => valid_attributes } }
@@ -150,7 +150,7 @@ RSpec.describe Congregation::PublishersController, type: :request do
   end
 
   describe 'PATCH #update' do
-    let(:perform_request) { patch(show_path, params: params) }
+    let(:perform_request) { patch(show_path, params:) }
 
     context 'when payload is valid' do
       let(:params) { { key => valid_attributes } }

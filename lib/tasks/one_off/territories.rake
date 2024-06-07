@@ -7,7 +7,7 @@ namespace :one_off do
       service = TerritoryAssignmentService.new
 
       Db::Territory.find_each do |territory|
-        service.update_last_assignment(territory: territory)
+        service.update_last_assignment(territory:)
       end
     end
   end

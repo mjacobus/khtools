@@ -9,7 +9,7 @@ class Territories::PhoneListTerritoriesController < Territories::TerritoriesCont
   end
 
   def pdf
-    @component = Territories::PhoneListPdfComponent.new(territory: territory)
+    @component = Territories::PhoneListPdfComponent.new(territory:)
     options = { orientation: 'Landscape' }
 
     if token_present?

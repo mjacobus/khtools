@@ -113,7 +113,7 @@ class TestFactories
       added_values = {}
 
       associations.each do |model|
-        id_key = "#{model}_id".to_sym
+        id_key = :"#{model}_id"
 
         if data.key?(model) || data.key?(id_key)
           next

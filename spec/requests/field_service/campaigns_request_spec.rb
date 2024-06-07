@@ -48,7 +48,7 @@ RSpec.describe FieldService::CampaignsController, type: :request do
       perform_request
 
       expected_component = FieldService::Campaigns::ShowPageComponent.new(
-        campaign: campaign
+        campaign:
       )
       expect(renderer).to have_rendered_component(expected_component)
     end
@@ -72,14 +72,14 @@ RSpec.describe FieldService::CampaignsController, type: :request do
       campaign.account = current_account
 
       expected_component = FieldService::Campaigns::FormPageComponent.new(
-        campaign: campaign
+        campaign:
       )
       expect(renderer).to have_rendered_component(expected_component)
     end
   end
 
   describe 'POST #create' do
-    let(:perform_request) { post('/field_service/campaigns', params: params) }
+    let(:perform_request) { post('/field_service/campaigns', params:) }
 
     context 'when payload is valid' do
       let(:params) { { campaign: factory.attributes.merge(code: 'new code') } }
@@ -131,14 +131,14 @@ RSpec.describe FieldService::CampaignsController, type: :request do
 
       perform_request
 
-      expected_component = FieldService::Campaigns::FormPageComponent.new(campaign: campaign)
+      expected_component = FieldService::Campaigns::FormPageComponent.new(campaign:)
       expect(renderer).to have_rendered_component(expected_component)
     end
   end
 
   describe 'PATCH #update' do
     let(:perform_request) do
-      patch("/field_service/campaigns/#{campaign.id}", params: params)
+      patch("/field_service/campaigns/#{campaign.id}", params:)
     end
 
     context 'when payload is valid' do
@@ -173,7 +173,7 @@ RSpec.describe FieldService::CampaignsController, type: :request do
 
         campaign.name = ''
         expected_component = FieldService::Campaigns::FormPageComponent.new(
-          campaign: campaign
+          campaign:
         )
         expect(renderer).to have_rendered_component(expected_component)
       end

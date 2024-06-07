@@ -42,7 +42,7 @@ RSpec.describe Territories::RegularTerritoriesController, type: :request do
 
       perform_request
 
-      expected_component = Territories::ShowPageComponent.new(territory: territory)
+      expected_component = Territories::ShowPageComponent.new(territory:)
       expect(renderer).to have_rendered_component(expected_component)
     end
   end
@@ -71,7 +71,7 @@ RSpec.describe Territories::RegularTerritoriesController, type: :request do
     let(:params) { { territory: territory_params } }
 
     let(:perform_request) do
-      post('/territories/regular_territories', params: params)
+      post('/territories/regular_territories', params:)
     end
 
     context 'when payload is valid' do
@@ -112,7 +112,7 @@ RSpec.describe Territories::RegularTerritoriesController, type: :request do
     let(:params) { { territory: territory_params } }
 
     let(:perform_request) do
-      patch("/territories/regular_territories/#{territory.id}", params: params)
+      patch("/territories/regular_territories/#{territory.id}", params:)
     end
 
     context 'when payload is valid' do
@@ -143,7 +143,7 @@ RSpec.describe Territories::RegularTerritoriesController, type: :request do
 
         territory.name = ''
         territory.account = current_account
-        expected_component = Territories::FormPageComponent.new(territory: territory)
+        expected_component = Territories::FormPageComponent.new(territory:)
         expect(renderer).to have_rendered_component(expected_component)
       end
     end

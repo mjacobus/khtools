@@ -11,7 +11,7 @@ class Db::PreachingCampaign < ApplicationRecord
   validates :code, presence: true, uniqueness: { case_sensitive: false }
   validates :name, presence: true
 
-  def each_assignment(&block)
-    assignments.includes(:territory, :assignee).order('territory.name').each(&block)
+  def each_assignment(&)
+    assignments.includes(:territory, :assignee).order('territory.name').each(&)
   end
 end

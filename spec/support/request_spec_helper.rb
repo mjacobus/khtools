@@ -35,7 +35,7 @@ module RequestSpecHelper
   def grant_access(user, actions: ['*'])
     controller = described_class.to_s.underscore.sub('_controller', '')
     actions.each do |action|
-      user.grant_controller_access(controller, action: action)
+      user.grant_controller_access(controller, action:)
     end
   end
 

@@ -3,7 +3,7 @@
 class Territories::AssignmentsController < ApplicationController
   def index
     render Territories::Assignments::IndexPageComponent.new(
-      territory: territory,
+      territory:,
       assignments: territory.assignments
     )
   end
@@ -12,15 +12,15 @@ class Territories::AssignmentsController < ApplicationController
     @assignment ||= territory.assignments.build
 
     render Territories::Assignments::NewPageComponent.new(
-      territory: territory,
-      assignment: assignment
+      territory:,
+      assignment:
     )
   end
 
   def edit
     render Territories::Assignments::EditPageComponent.new(
-      territory: territory,
-      assignment: assignment
+      territory:,
+      assignment:
     )
   end
 
@@ -41,7 +41,7 @@ class Territories::AssignmentsController < ApplicationController
     payload = assignment_params
 
     assignment_service.update_assignment(
-      assignment: assignment,
+      assignment:,
       campaign: payload[:campaign_id],
       to: payload[:assignee_id],
       assigned_at: payload[:assigned_at],

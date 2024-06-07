@@ -202,8 +202,8 @@ RSpec.describe ApartmentBuildingTerritoryCsvImportService, type: :service do
   end
 
   def it_imports(field, value = nil, expected = nil)
-    value = value.nil? ? "some-#{field}" : value
-    expected = expected.nil? ? value : expected
+    value = "some-#{field}" if value.nil?
+    expected = value if expected.nil?
 
     import(field => value)
 

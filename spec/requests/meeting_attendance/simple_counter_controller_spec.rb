@@ -15,7 +15,7 @@ RSpec.describe MeetingAttendance::SimpleCounterController, type: :request do
       attendee
     end
 
-    let(:attendee) { factories.attendees.create(meeting: meeting) }
+    let(:attendee) { factories.attendees.create(meeting:) }
     let(:other_attendee) { factories.attendees.create }
 
     it 'lists all attendees of the meeting' do
@@ -50,7 +50,7 @@ RSpec.describe MeetingAttendance::SimpleCounterController, type: :request do
     let(:perform_request) do
       delete meeting_attendance_meeting_simple_counter_attendee_url(meeting, attendee)
     end
-    let(:attendee) { factories.attendees.create(meeting: meeting) }
+    let(:attendee) { factories.attendees.create(meeting:) }
 
     before { attendee }
 

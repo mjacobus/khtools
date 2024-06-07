@@ -8,10 +8,10 @@ RSpec.describe TerritoryAssignmentService do
   describe '#update_last_assignment' do
     let(:territory) { factories.territories.create }
     let(:first) do
-      factories.territory_assignments.create(territory: territory, assigned_at: 2.days.ago)
+      factories.territory_assignments.create(territory:, assigned_at: 2.days.ago)
     end
     let(:last) do
-      factories.territory_assignments.create(territory: territory, assigned_at: 2.hours.ago)
+      factories.territory_assignments.create(territory:, assigned_at: 2.hours.ago)
     end
 
     before do
@@ -20,7 +20,7 @@ RSpec.describe TerritoryAssignmentService do
     end
 
     it 'updates last assignment' do
-      service.update_last_assignment(territory: territory)
+      service.update_last_assignment(territory:)
 
       expect(territory.last_assignment_id).to eq(last.id)
       expect(territory.last_assignment).to eq(last)
@@ -33,7 +33,7 @@ RSpec.describe TerritoryAssignmentService do
     let(:territory) { factories.territories.create }
     let(:publisher) { factories.publishers.create }
     let(:campaign) { factories.preaching_campaigns.create }
-    let(:assign) { service.assign(territory: territory, to: publisher) }
+    let(:assign) { service.assign(territory:, to: publisher) }
 
     it 'assigns publisher' do
       expect { assign }.to change { territory.reload.assignee }.from(nil).to(publisher)

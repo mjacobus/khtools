@@ -70,7 +70,7 @@ RSpec.describe PublicTalks::SpeakersController, type: :request do
   end
 
   describe 'POST #create' do
-    let(:perform_request) { post('/public_talks/speakers', params: params) }
+    let(:perform_request) { post('/public_talks/speakers', params:) }
 
     context 'when payload is valid' do
       let(:params) { { speaker: factories.public_speakers.attributes } }
@@ -129,7 +129,7 @@ RSpec.describe PublicTalks::SpeakersController, type: :request do
 
   describe 'PATCH #update' do
     let(:perform_request) do
-      patch("/public_talks/speakers/#{speaker.id}", params: params)
+      patch("/public_talks/speakers/#{speaker.id}", params:)
     end
 
     context 'when payload is valid' do

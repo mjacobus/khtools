@@ -23,7 +23,7 @@ RSpec.describe Db::Publisher, type: :model do
   it 'belongs to a #group' do
     group = factories.field_service_groups.create(name: 'group')
 
-    factories.publishers.create(group: group)
+    factories.publishers.create(group:)
 
     expect(described_class.last.group).to eq(group)
   end

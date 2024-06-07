@@ -7,11 +7,11 @@ RSpec.describe Territories::ParsedApartmentsComponent, type: :component do
     # rubocop:disable RSpec/ExampleLength
     it 'gruops by floor' do
       apartments = %w[801 802 901 902 1001 1002 1101 1102]
-      component = described_class.new(apartments: apartments)
+      component = described_class.new(apartments:)
 
       grouped = []
 
-      component.grouped_apartments.each do |_, group|
+      component.grouped_apartments.each_value do |group|
         grouped << group
       end
 
