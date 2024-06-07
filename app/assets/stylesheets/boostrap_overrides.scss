@@ -1,0 +1,10 @@
+.was-validated .form-control:valid,
+.form-control.is-valid {
+  border-color: #ced4da;
+}
+
+.btn:focus,
+.btn:active{
+    box-shadow:none !important;
+    outline:0px !important;
+}
