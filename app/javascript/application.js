@@ -4,6 +4,7 @@ import { on } from "delegated-events";
 
 Rails.start();
 
+// Sidebar
 on("click", "[data-toggle-sidebar]", () => {
   const content = document.getElementById("content");
   const sidebar = document.getElementById("sidebar");
@@ -12,7 +13,7 @@ on("click", "[data-toggle-sidebar]", () => {
   sidebar.classList.toggle("hidden");
 });
 
-
+// Clipboard
 on("click", "[data-clipboard-selector]", async (event) => {
   event.preventDefault();
   let button = event.target;
@@ -23,7 +24,7 @@ on("click", "[data-clipboard-selector]", async (event) => {
     "[data-clipboard-copy-confirmation]"
   );
   const icon = button.querySelector("[data-clipboard-icon]");
-  const selector = button.getAttribute("data-clipboard-selector");
+  const selector = button.getAttribute("data-clipboardl-selector");
   const element = document.querySelector(selector);
   console.log(button, icon, confirmation);
 
@@ -35,3 +36,17 @@ on("click", "[data-clipboard-selector]", async (event) => {
   }, 1000);
   await navigator.clipboard.writeText(element.innerText);
 });
+
+// Talks form
+on('change', '.PublicTalks_Talks_FormPageComponent__special_flag', (event) => {
+  const special = event.target.checked;
+  const selectContainer = document.querySelector('.PublicTalks_Talks_FormPageComponent__theme_select_container')
+  const select = selectContainer.querySelector('select')
+  const textContainer = document.querySelector('.PublicTalks_Talks_FormPageComponent__theme_text_container')
+  const text = textContainer.querySelector('input')
+
+  select.disabled = special
+  selectContainer.hidden = special
+  text.disabled = !special
+  textContainer.hidden = !special
+})
