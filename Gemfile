@@ -28,8 +28,6 @@ gem 'cloudinary'
 # HTTP Clients
 gem 'koine-rest_client'
 
-gem 'psych', '< 4' # https://stackoverflow.com/questions/71191685/visit-psych-nodes-alias-unknown-alias-default-psychbadalias
-
 # frontend
 gem 'importmap-rails'
 gem 'kaminari'
