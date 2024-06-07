@@ -31,14 +31,11 @@ gem 'koine-rest_client'
 gem 'psych', '< 4' # https://stackoverflow.com/questions/71191685/visit-psych-nodes-alias-unknown-alias-default-psychbadalias
 
 # frontend
-# gem 'bootstrap', '~> 4.4'
-# gem 'jquery-rails'
-gem 'sass-rails', '>= 6'
-gem 'simple_form'
-# gem 'turbolinks', '~> 5'
 gem 'importmap-rails'
 gem 'kaminari'
 gem 'rqrcode', '~> 2.0'
+gem 'sass-rails', '>= 6'
+gem 'simple_form'
 gem 'view_component', require: 'view_component/engine'
 
 group :development, :test do
