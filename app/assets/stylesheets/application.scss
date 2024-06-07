@@ -1,6 +1,5 @@
-// app/javascript/src/application.scss
-// @import "./boostrap_overrides";
 @import "./variables";
+@import "./boostrap_overrides";
 @import "./index_pages";
 @import "./components/breadcrumb";
 @import "./components/attribute_component";
@@ -8,7 +7,11 @@
 @import "./components/dropdown_menu_component";
 @import "./components/copy_to_clipboard_component";
 @import "./components/territories/search_form_component";
+@import "./components/territories/common_index_page_component";
 @import "./components/territories/parsed_apartments_component";
+@import "./components/public_talks/contact_speaker_message_component";
+@import "./components/public_talks/talks/index_page_component";
+
 @import "./components/icons";
 
 .kh-gray {
