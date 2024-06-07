@@ -11,7 +11,7 @@ Dotenv::Railtie.load
 module KhTools
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 7.0
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
@@ -34,7 +34,7 @@ module KhTools
       generate.view_specs false
     end
 
-    config.autoload_paths << "#{Rails.root}/lib"
+    config.autoload_paths << "#{Rails.root.join('lib')}"
 
     config.add_autoload_paths_to_load_path = true
   end
