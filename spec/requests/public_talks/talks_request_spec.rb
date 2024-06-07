@@ -85,7 +85,7 @@ RSpec.describe PublicTalks::TalksController, type: :request do
   end
 
   describe 'POST #create' do
-    let(:perform_request) { post('/public_talks/talks', params: params) }
+    let(:perform_request) { post('/public_talks/talks', params:) }
 
     context 'when payload is valid' do
       let(:params) { { talk: factories.public_talks.attributes } }
@@ -144,7 +144,7 @@ RSpec.describe PublicTalks::TalksController, type: :request do
 
   describe 'PATCH #update' do
     let(:perform_request) do
-      patch("/public_talks/talks/#{talk.id}", params: params)
+      patch("/public_talks/talks/#{talk.id}", params:)
     end
 
     context 'when payload is valid' do

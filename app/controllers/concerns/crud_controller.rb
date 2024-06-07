@@ -70,7 +70,7 @@ module CrudController
   end
 
   def find_scope
-    (model_class || scope)
+    model_class || scope
   end
 
   def save_record

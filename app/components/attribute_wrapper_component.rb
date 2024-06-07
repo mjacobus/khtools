@@ -22,13 +22,13 @@ class AttributeWrapperComponent < ApplicationComponent
     self
   end
 
-  def with_label(*args)
-    attribute.with_label(*args)
+  def with_label(*)
+    attribute.with_label(*)
     self
   end
 
-  def with_classes(*args)
-    attribute.with_classes(*args)
+  def with_classes(*)
+    attribute.with_classes(*)
     self
   end
 

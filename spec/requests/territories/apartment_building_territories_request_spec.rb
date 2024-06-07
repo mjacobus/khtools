@@ -32,7 +32,7 @@ RSpec.describe Territories::ApartmentBuildingTerritoriesController, type: :reque
     let(:params) { { territory: territory_params } }
 
     let(:perform_request) do
-      post('/territories/apartment_building_territories', params: params)
+      post('/territories/apartment_building_territories', params:)
     end
 
     context 'when payload is valid' do
@@ -73,7 +73,7 @@ RSpec.describe Territories::ApartmentBuildingTerritoriesController, type: :reque
     let(:params) { { territory: territory_params } }
 
     let(:perform_request) do
-      patch("/territories/apartment_building_territories/#{territory.id}", params: params)
+      patch("/territories/apartment_building_territories/#{territory.id}", params:)
     end
 
     context 'when payload is valid' do
@@ -104,7 +104,7 @@ RSpec.describe Territories::ApartmentBuildingTerritoriesController, type: :reque
 
         territory.name = ''
         territory.account_id = current_account.id
-        expected_component = Territories::FormPageComponent.new(territory: territory)
+        expected_component = Territories::FormPageComponent.new(territory:)
         expect(renderer).to have_rendered_component(expected_component)
       end
     end

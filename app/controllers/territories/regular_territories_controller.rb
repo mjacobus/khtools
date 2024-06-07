@@ -7,7 +7,7 @@ class Territories::RegularTerritoriesController < Territories::TerritoriesContro
 
   def printable
     territory = current_user.account.territories.regular.find(params[:regular_territory_id])
-    @component = Territories::PrintableTerritoryPageComponent.new(territory: territory)
+    @component = Territories::PrintableTerritoryPageComponent.new(territory:)
     export_pdf(territory.filename('pdf'), header: { right: territory.name })
   end
 
@@ -16,6 +16,6 @@ class Territories::RegularTerritoriesController < Territories::TerritoriesContro
       params[:regular_territory_id],
       params[:token]
     )
-    render Territories::PublicShowPageComponent.new(territory: territory)
+    render Territories::PublicShowPageComponent.new(territory:)
   end
 end

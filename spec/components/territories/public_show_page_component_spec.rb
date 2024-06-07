@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Territories::PublicShowPageComponent, type: :component do
-  subject(:component) { described_class.new(territory: territory) }
+  subject(:component) { described_class.new(territory:) }
 
   let(:territory) { factories.territories.build }
 

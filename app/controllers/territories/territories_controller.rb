@@ -18,7 +18,7 @@ class Territories::TerritoriesController < ApplicationController
 
   def index_component(territories)
     Territories::IndexPageComponent.new(
-      territories: territories,
+      territories:,
       title: model_class.model_name.human,
       type: model_class.new.type_key.to_sym
     )

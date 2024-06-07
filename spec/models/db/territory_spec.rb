@@ -44,7 +44,7 @@ RSpec.describe Db::Territory, type: :model do
     it 'accepts the same name and type if account is different' do
       account = factories.accounts.create
       factory.create(name: 'SomeName') # regular territory
-      territory = factory.build(name: 'Somename', account: account)
+      territory = factory.build(name: 'Somename', account:)
 
       expect { territory.save! }.to change(described_class, :count).by(1)
     end

@@ -5,8 +5,8 @@ class Home::DashboardComponent < PageComponent
     current_user
   end
 
-  def talks(&block)
-    segregate_talks(week_talks, &block)
+  def talks(&)
+    segregate_talks(week_talks, &)
   end
 
   def talks_title

@@ -2,7 +2,7 @@
 
 class Territories::ContactsController < ApplicationController
   def index
-    render Territories::Contacts::IndexPageComponent.new(territory: territory)
+    render Territories::Contacts::IndexPageComponent.new(territory:)
   end
 
   def new
@@ -57,8 +57,8 @@ class Territories::ContactsController < ApplicationController
 
   def form_for(contact)
     Territories::Contacts::FormPageComponent.new(
-      territory: territory,
-      contact: contact
+      territory:,
+      contact:
     )
   end
 end

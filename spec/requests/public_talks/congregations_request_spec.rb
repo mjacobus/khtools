@@ -70,7 +70,7 @@ RSpec.describe PublicTalks::CongregationsController, type: :request do
   end
 
   describe 'POST #create' do
-    let(:perform_request) { post('/public_talks/congregations', params: params) }
+    let(:perform_request) { post('/public_talks/congregations', params:) }
 
     context 'when payload is valid' do
       let(:params) { { congregation: factories.congregations.attributes } }
@@ -127,7 +127,7 @@ RSpec.describe PublicTalks::CongregationsController, type: :request do
 
   describe 'PATCH #update' do
     let(:perform_request) do
-      patch("/public_talks/congregations/#{congregation.id}", params: params)
+      patch("/public_talks/congregations/#{congregation.id}", params:)
     end
 
     context 'when payload is valid' do

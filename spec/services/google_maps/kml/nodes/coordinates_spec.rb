@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe GoogleMaps::Kml::Nodes::Coordinates do
   subject(:node) { described_class.new(xml_node) }
 
-  let(:xml_node) { double(text: text) }
+  let(:xml_node) { double(text:) }
 
   describe '#center' do
     let(:text) do

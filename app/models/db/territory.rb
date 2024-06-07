@@ -33,7 +33,7 @@ class Db::Territory < ApplicationRecord
 
   default_scope { order(:name) }
   scope :by_id_and_public_view_token, lambda { |id, token|
-    where(id: id, public_view_token: token)
+    where(id:, public_view_token: token)
       .where('public_view_token_expires_at > ?', Time.zone.now)
       .first!
   }
@@ -51,7 +51,7 @@ class Db::Territory < ApplicationRecord
       { territory: %i[area territory] }
     ])
   }
-  scope :with_account, ->(account) { where(account: account) }
+  scope :with_account, ->(account) { where(account:) }
   scope :regular, -> { where(type: 'Db::RegularTerritory') }
 
   identifiable_by :name
@@ -149,8 +149,8 @@ class Db::Territory < ApplicationRecord
     TerritoryAssignmentService.new.assign(
       territory: self,
       to: publisher,
-      campaign: campaign,
-      notes: notes
+      campaign:,
+      notes:
     )
   end
 

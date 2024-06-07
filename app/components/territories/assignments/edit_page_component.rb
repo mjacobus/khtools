@@ -7,14 +7,14 @@ class Territories::Assignments::EditPageComponent < PageComponent
 
   def form
     Territories::Assignments::FormComponent.new(
-      territory: territory,
-      assignment: assignment
+      territory:,
+      assignment:
     )
   end
 
   private
 
   def breadcrumb
-    @breadcrumb ||= Territories::Assignments::BreadcrumbComponent.new(territory: territory)
+    @breadcrumb ||= Territories::Assignments::BreadcrumbComponent.new(territory:)
   end
 end

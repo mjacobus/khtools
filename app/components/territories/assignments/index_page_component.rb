@@ -7,6 +7,6 @@ class Territories::Assignments::IndexPageComponent < PageComponent
   private
 
   def breadcrumb
-    @breadcrumb ||= Territories::Assignments::BreadcrumbComponent.new(territory: territory)
+    @breadcrumb ||= Territories::Assignments::BreadcrumbComponent.new(territory:)
   end
 end

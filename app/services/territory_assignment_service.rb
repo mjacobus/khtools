@@ -26,7 +26,7 @@ class TerritoryAssignmentService
         assignee_id: territory.assignee_id,
         assigned_at: territory.assigned_at,
         campaign_id: campaign,
-        notes: notes
+        notes:
       )
       assignment.save!
       territory.last_assignment = assignment

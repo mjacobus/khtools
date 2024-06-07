@@ -51,7 +51,7 @@ RSpec.describe MeetingAttendance::MeetingsController, type: :request do
   end
 
   describe '#create' do
-    let(:perform_request) { post meeting_attendance_meetings_url, params: params }
+    let(:perform_request) { post meeting_attendance_meetings_url, params: }
     let(:params) { { meeting: { title: 'A Meeting' } } }
 
     it 'redirects to index' do
@@ -79,7 +79,7 @@ RSpec.describe MeetingAttendance::MeetingsController, type: :request do
   end
 
   describe '#update' do
-    let(:perform_request) { patch meeting_attendance_meeting_url(meeting), params: params }
+    let(:perform_request) { patch meeting_attendance_meeting_url(meeting), params: }
     let(:params) { { meeting: { title: 'A Meeting' } } }
 
     it 'redirects to index' do

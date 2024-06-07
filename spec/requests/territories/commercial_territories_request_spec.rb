@@ -31,7 +31,7 @@ RSpec.describe Territories::CommercialTerritoriesController, type: :request do
     let(:params) { { territory: territory_params } }
 
     let(:perform_request) do
-      post('/territories/commercial_territories', params: params)
+      post('/territories/commercial_territories', params:)
     end
 
     context 'when payload is valid' do
@@ -72,7 +72,7 @@ RSpec.describe Territories::CommercialTerritoriesController, type: :request do
     let(:params) { { territory: territory_params } }
 
     let(:perform_request) do
-      patch("/territories/commercial_territories/#{territory.id}", params: params)
+      patch("/territories/commercial_territories/#{territory.id}", params:)
     end
 
     context 'when payload is valid' do
@@ -103,7 +103,7 @@ RSpec.describe Territories::CommercialTerritoriesController, type: :request do
 
         territory.name = ''
         territory.account = current_account
-        expected_component = Territories::FormPageComponent.new(territory: territory)
+        expected_component = Territories::FormPageComponent.new(territory:)
         expect(renderer).to have_rendered_component(expected_component)
       end
     end

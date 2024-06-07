@@ -23,7 +23,7 @@ class MeetingAttendance::SimpleCounterAttendeesForm < BaseForm
 
   def save
     names.each do |name|
-      @meeting.attendees.create(name: name, quantity: quantity)
+      @meeting.attendees.create(name:, quantity:)
     end
   end
 

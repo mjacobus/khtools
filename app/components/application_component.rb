@@ -60,8 +60,8 @@ class ApplicationComponent < ViewComponent::Base
     @options[key]
   end
 
-  def t(key, **options)
-    I18n.t(key, **options)
+  def t(key, **)
+    I18n.t(key, **)
   end
 
   def model_name(model_or_model_class)

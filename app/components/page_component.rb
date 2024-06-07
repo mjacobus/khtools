@@ -15,7 +15,7 @@ class PageComponent < ApplicationComponent
     end
   end
 
-  def input_wrapper(&block)
-    tag.div(class: 'form-wrapper my-3', &block)
+  def input_wrapper(&)
+    tag.div(class: 'form-wrapper my-3', &)
   end
 end

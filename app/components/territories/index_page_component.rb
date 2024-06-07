@@ -18,7 +18,7 @@ class Territories::IndexPageComponent < PageComponent
   end
 
   def search_form
-    Territories::SearchFormComponent.new(prototype: prototype, params: params)
+    Territories::SearchFormComponent.new(prototype:, params:)
   end
 
   def actions

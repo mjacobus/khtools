@@ -124,7 +124,7 @@ RSpec.describe Territories::PhoneListTerritoriesController, type: :request do
       let(:params) { { territory: territory_params } }
 
       let(:perform_request) do
-        post('/territories/phone_list_territories', params: params)
+        post('/territories/phone_list_territories', params:)
       end
 
       context 'when payload is valid' do
@@ -165,7 +165,7 @@ RSpec.describe Territories::PhoneListTerritoriesController, type: :request do
       let(:params) { { territory: territory_params } }
 
       let(:perform_request) do
-        patch("/territories/phone_list_territories/#{territory.id}", params: params)
+        patch("/territories/phone_list_territories/#{territory.id}", params:)
       end
 
       context 'when payload is valid' do
@@ -196,7 +196,7 @@ RSpec.describe Territories::PhoneListTerritoriesController, type: :request do
 
           territory.name = ''
           territory.account = current_account
-          expected_component = Territories::FormPageComponent.new(territory: territory)
+          expected_component = Territories::FormPageComponent.new(territory:)
           expect(renderer).to have_rendered_component(expected_component)
         end
       end

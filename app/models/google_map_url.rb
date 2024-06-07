@@ -20,7 +20,7 @@ class GoogleMapUrl
   end
 
   def with_background(color)
-    color = color.sub(/#/, '')
+    color = color.sub('#', '')
     url = Koine::Url.new(@value).with_query_param(:ehbc, color)
     new(url)
   end
