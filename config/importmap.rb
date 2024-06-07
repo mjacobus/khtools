@@ -10,3 +10,5 @@
 
 pin 'application'
 pin "@rails/ujs", to: "@rails--ujs.js" # @7.1.3
+pin "delegated-events" # @1.1.2
+pin "selector-set" # @1.1.5
