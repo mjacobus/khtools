@@ -71,6 +71,38 @@ Rails/SkipsModelValidations:
   Exclude:
     - 'spec/**/*'
 
+Rails/ThreeStateBooleanColumn:
+  Exclude:
+    - db/migrate/20200213230911_create_users.rb
+    - db/migrate/20200213230911_create_users.rb
+    - db/migrate/20210525582813_add_apartment_build_fields_to_territories.rb
+    - db/migrate/20210627150506_create_db_congregations.rb
+    - db/migrate/20210630224755_create_db_public_talks.rb
+    - db/migrate/20210706143248_add_draft_to_public_talks.rb
+    - db/migrate/20210717180035_add_special_flag_to_public_talk.rb
+    - db/migrate/20210801151652_add_pending_verification_to_territories.rb
+
+Rails/AddColumnIndex:
+  Exclude:
+    - db/migrate/20210525582813_add_apartment_build_fields_to_territories.rb
+    - db/migrate/20210525582813_add_apartment_build_fields_to_territories.rb
+
+
+RSpec/SpecFilePathFormat:
+  Exclude:
+    - spec/requests/congregation/publishers_request_spec.rb
+    - spec/requests/field_service/campaigns_request_spec.rb
+    - spec/requests/public_request_spec.rb
+    - spec/requests/public_talks/congregations_request_spec.rb
+    - spec/requests/public_talks/speakers_request_spec.rb
+    - spec/requests/public_talks/talks_request_spec.rb
+    - spec/requests/territories/apartment_building_territories_request_spec.rb
+    - spec/requests/territories/assignments_request_spec.rb
+    - spec/requests/territories/commercial_territories_request_spec.rb
+    - spec/requests/territories/contacts_request_spec.rb
+    - spec/requests/territories/phone_list_territories_request_spec.rb
+    - spec/requests/territories/regular_territories_request_spec.rb
+
 RSpec:
   Exclude:
     - 'spec/factories/**/*'

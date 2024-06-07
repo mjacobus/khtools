@@ -60,7 +60,7 @@ RSpec.describe AttributeComponent, type: :component do
   it 'can include link' do
     render(component.with_link('/foo/bar')) { 'with link' }
 
-    expect(html).to have_css('a[href="/foo/bar"]', text: 'with link')
+    expect(html).to have_link(href: '/foo/bar', text: 'with link')
   end
 
   def component
