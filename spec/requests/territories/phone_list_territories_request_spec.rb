@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Territories::PhoneListTerritoriesController, type: :request do
+RSpec.describe Territories::PhoneListTerritoriesController do
   let(:factory) { factories.phone_list_territories }
   let(:territory_params) do
     factory.attributes(

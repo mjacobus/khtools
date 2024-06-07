@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::PreachingMethod, type: :model do
+RSpec.describe Db::PreachingMethod do
   subject(:method) { factories.preaching_methods.build }
 
   it { is_expected.to validate_presence_of(:name) }

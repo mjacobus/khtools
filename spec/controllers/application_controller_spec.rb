@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ApplicationController, type: :controller do
+RSpec.describe ApplicationController do
   let(:service) { instance_double(UserSessionService, current_user: 'the-user') }
   let(:skip_login) { true }
 

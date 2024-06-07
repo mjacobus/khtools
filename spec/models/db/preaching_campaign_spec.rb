@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::PreachingCampaign, type: :model do
+RSpec.describe Db::PreachingCampaign do
   subject(:campaign) { factories.preaching_campaigns.build }
 
   it { is_expected.to belong_to(:account).class_name('Db::Account') }

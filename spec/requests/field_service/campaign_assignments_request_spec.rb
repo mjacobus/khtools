@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'FieldService::CampaignAssignments', type: :request do
+RSpec.describe 'FieldService::CampaignAssignments' do
   let(:described_class) { FieldService::CampaignAssignmentsController }
   let(:campaign) { assignment.campaign }
   let(:assignment) { factories.territory_assignments.create }

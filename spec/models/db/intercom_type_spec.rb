@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::IntercomType, type: :model do
+RSpec.describe Db::IntercomType do
   subject(:type) { factories.intercom_types.build }
 
   it { is_expected.to validate_presence_of(:name) }

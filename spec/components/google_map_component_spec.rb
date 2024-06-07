@@ -12,7 +12,7 @@ RSpec.describe GoogleMapComponent, type: :component do
 
     url = GoogleMapUrl.new(args[:url]).embeddable.with_background('395c96')
 
-    expect(page).to have_selector("iframe[src='#{url}']")
+    expect(page).to have_css("iframe[src='#{url}']")
   end
 
   it 'renders nothing if url is not present' do
@@ -20,6 +20,6 @@ RSpec.describe GoogleMapComponent, type: :component do
 
     render_inline component
 
-    expect(page).not_to have_selector('iframe')
+    expect(page).to have_no_css('iframe')
   end
 end

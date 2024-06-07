@@ -8,7 +8,6 @@ class Db::TerritoryAssignment < ApplicationRecord
   default_scope -> { order(assigned_at: :desc) }
   scope :with_dependencies, -> { includes(%i[assignee territory]) }
 
-  validates :assignee_id, presence: true
   validates :assigned_at, presence: true
 
   def returned?

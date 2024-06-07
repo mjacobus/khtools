@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Congregation::PublishersController, type: :request do
+RSpec.describe Congregation::PublishersController do
   # general
   let(:record) { factory.create(account_id: current_account.id) }
   let(:factory) { factories.publishers }

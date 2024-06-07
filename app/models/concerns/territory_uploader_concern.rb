@@ -13,7 +13,7 @@ module TerritoryUploaderConcern
         return Territories::Uploaders::CloudinaryUploader
       end
 
-      if ENV['FORCE_CLOUDINARY_UPLOADER'] # rubocop:disable Rails/EnvironmentVariableAccess
+      if ENV['FORCE_CLOUDINARY_UPLOADER']
         return Territories::Uploaders::CloudinaryUploader
       end
 

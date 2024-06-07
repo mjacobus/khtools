@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::PublicTalk, type: :model do
+RSpec.describe Db::PublicTalk do
   subject(:talk) { factories.public_talks.build }
 
   let(:talks) { factories.public_talks }

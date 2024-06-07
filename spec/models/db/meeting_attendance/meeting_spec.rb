@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::MeetingAttendance::Meeting, type: :model do
+RSpec.describe Db::MeetingAttendance::Meeting do
   let(:factories) { TestFactories.new }
   let(:meeting) { factories.meetings.build }
 

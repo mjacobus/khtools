@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::LetterBoxType, type: :model do
+RSpec.describe Db::LetterBoxType do
   subject(:type) { factories.letter_box_types.build }
 
   it { is_expected.to validate_presence_of(:name) }

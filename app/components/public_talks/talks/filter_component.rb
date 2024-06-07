@@ -48,11 +48,11 @@ class PublicTalks::Talks::FilterComponent < ApplicationComponent
   end
 
   def options_for_speaker
-    Db::PublicSpeaker.all.order(:name).with_dependencies
+    Db::PublicSpeaker.order(:name).with_dependencies
   end
 
   def options_for_congregation
-    Db::Congregation.all.order(:name)
+    Db::Congregation.order(:name)
   end
 
   def options_for_theme

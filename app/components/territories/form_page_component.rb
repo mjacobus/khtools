@@ -5,18 +5,18 @@ class Territories::FormPageComponent < PageComponent
 
   def target_url
     if territory.id
-      return urls.send("territories_#{type}_territory_path", territory)
+      return urls.send(:"territories_#{type}_territory_path", territory)
     end
 
-    urls.send("territories_#{type}_territories_path")
+    urls.send(:"territories_#{type}_territories_path")
   end
 
   def publishers
-    current_account.publishers.all.pluck(:name, :id)
+    current_account.publishers.pluck(:name, :id)
   end
 
   def phone_providers
-    Db::PhoneProvider.all.pluck(:name, :id)
+    Db::PhoneProvider.pluck(:name, :id)
   end
 
   def type

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::MeetingAttendance::SimpleCounterAttendee, type: :model do
+RSpec.describe Db::MeetingAttendance::SimpleCounterAttendee do
   let(:attendee) { TestFactories.new.attendees.create(name: 'John Doe') }
 
   it 'belongs to meeting' do

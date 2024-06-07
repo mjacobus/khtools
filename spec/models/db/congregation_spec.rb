@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::Congregation, type: :model do
+RSpec.describe Db::Congregation do
   subject(:congregation) { described_class.new }
 
   it 'is not local by default' do

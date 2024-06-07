@@ -41,7 +41,7 @@ end
 
 campaign = Db::PreachingCampaign.first
 
-Db::Territory.all.each do |territory|
+Db::Territory.find_each do |territory|
   factory.territory_assignments.create(
     campaign:,
     territory:
@@ -50,7 +50,7 @@ end
 
 campaign = Db::PreachingCampaign.last
 
-Db::ApartmentBuildingTerritory.all.each do |territory|
+Db::ApartmentBuildingTerritory.find_each do |territory|
   factory.territory_assignments.create(
     campaign:,
     territory:

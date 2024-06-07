@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::PhoneListTerritory, type: :model do
+RSpec.describe Db::PhoneListTerritory do
   let(:factory) { factories.phone_list_territories }
   let(:territory) { factory.build }
 

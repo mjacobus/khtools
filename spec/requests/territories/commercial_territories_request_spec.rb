@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Territories::CommercialTerritoriesController, type: :request do
+RSpec.describe Territories::CommercialTerritoriesController do
   let(:factory) { factories.commercial_territories }
   let(:territory_params) do
     factory.attributes(

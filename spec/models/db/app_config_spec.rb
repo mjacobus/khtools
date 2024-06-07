@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::AppConfig, type: :model do
+RSpec.describe Db::AppConfig do
   it { is_expected.to validate_uniqueness_of(:key).case_insensitive }
   it { is_expected.to validate_presence_of(:value) }
 end

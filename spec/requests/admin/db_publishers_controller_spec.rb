@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Admin::DbPublishersController, type: :request do
+RSpec.describe Admin::DbPublishersController do
   describe '#index' do
     context 'when logged out' do
       let(:current_user) { nil }

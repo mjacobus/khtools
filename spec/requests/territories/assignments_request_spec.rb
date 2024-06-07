@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Territories::AssignmentsController, type: :request do
+RSpec.describe Territories::AssignmentsController do
   before do
     login_user(admin_user)
     admin_user.account = territory.account
@@ -77,8 +77,8 @@ RSpec.describe Territories::AssignmentsController, type: :request do
       perform_request
 
       territory.reload
-      expect(territory.assignee_id).to be(nil)
-      expect(territory.assigned_at).to be(nil)
+      expect(territory.assignee_id).to be_nil
+      expect(territory.assigned_at).to be_nil
     end
 
     it 'redirects to show page' do

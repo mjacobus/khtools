@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Territories::ContactsController, type: :request do
+RSpec.describe Territories::ContactsController do
   before do
     login_user(admin_user)
   end

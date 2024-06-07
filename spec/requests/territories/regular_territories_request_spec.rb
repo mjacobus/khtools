@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Territories::RegularTerritoriesController, type: :request do
+RSpec.describe Territories::RegularTerritoriesController do
   let(:factory) { factories.territories }
   let(:territory_params) do
     factory.attributes(
