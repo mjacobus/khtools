@@ -28,6 +28,8 @@ gem 'cloudinary'
 # HTTP Clients
 gem 'koine-rest_client'
 
+gem 'psych', '< 4' # https://stackoverflow.com/questions/71191685/visit-psych-nodes-alias-unknown-alias-default-psychbadalias
+
 # frontend
 # gem 'bootstrap', '~> 4.4'
 # gem 'jquery-rails'
@@ -63,7 +65,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara', '>= 2.15'
+  gem 'capybara'
   gem 'object_comparator'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 4.0'
