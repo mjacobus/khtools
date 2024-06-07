@@ -6,7 +6,7 @@ class PublicTalks::CongregationsController < ApplicationController
   key :congregation
 
   model_class Db::Congregation
-  scope { Db::Congregation.all.order(:name) }
+  scope { Db::Congregation.order(:name) }
 
   permit :name,
          :address,

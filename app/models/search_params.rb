@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SearchParams < HashWithIndifferentAccess
+class SearchParams < ActiveSupport::HashWithIndifferentAccess
   def initialize(hash)
     hash.each do |key, value|
       if value.present?

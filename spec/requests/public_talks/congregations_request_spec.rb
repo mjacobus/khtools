@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe PublicTalks::CongregationsController, type: :request do
+RSpec.describe PublicTalks::CongregationsController do
   let(:congregation) { factories.congregations.create }
 
   before do

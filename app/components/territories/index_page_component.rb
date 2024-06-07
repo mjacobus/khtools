@@ -32,6 +32,6 @@ class Territories::IndexPageComponent < PageComponent
   end
 
   def new_action
-    link_to(t('app.links.new'), send("new_territories_#{type}_territory_path"), class: 'btn')
+    link_to(t('app.links.new'), send(:"new_territories_#{type}_territory_path"), class: 'btn')
   end
 end

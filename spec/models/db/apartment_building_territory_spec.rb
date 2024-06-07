@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::ApartmentBuildingTerritory, type: :model do
+RSpec.describe Db::ApartmentBuildingTerritory do
   subject(:territory) { factory.build }
 
   let(:factory) { factories.apartment_building_territories }

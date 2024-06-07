@@ -24,7 +24,7 @@ RSpec.describe AttributeComponent, type: :component do
   it 'does not include lable by default' do
     render(component)
 
-    expect(html).not_to have_css('.AttributeComponent--label')
+    expect(html).to have_no_css('.AttributeComponent--label')
   end
 
   it 'can include label' do
@@ -48,7 +48,7 @@ RSpec.describe AttributeComponent, type: :component do
   it 'does not include icon by default' do
     render(component)
 
-    expect(html).not_to have_css('i.bi')
+    expect(html).to have_no_css('i.bi')
   end
 
   it 'can include icon' do

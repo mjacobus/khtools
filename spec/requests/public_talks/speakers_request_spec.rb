@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe PublicTalks::SpeakersController, type: :request do
+RSpec.describe PublicTalks::SpeakersController do
   let(:speaker) { factories.public_speakers.create }
 
   before do

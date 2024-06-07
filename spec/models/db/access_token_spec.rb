@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::AccessToken, type: :model do
+RSpec.describe Db::AccessToken do
   let(:territory) { factories.territories.create }
   let(:create) { described_class.for(territory) }
 

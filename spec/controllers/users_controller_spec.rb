@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe UsersController, type: :controller do
+RSpec.describe UsersController do
   let(:current_user) { admin_user }
   let(:enabled) { true }
   let(:master) { true }

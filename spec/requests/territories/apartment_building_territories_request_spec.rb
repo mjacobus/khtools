@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Territories::ApartmentBuildingTerritoriesController, type: :request do
+RSpec.describe Territories::ApartmentBuildingTerritoriesController do
   let(:factory) { factories.apartment_building_territories }
   let(:territory_params) do
     factory.attributes(

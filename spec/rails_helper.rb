@@ -39,7 +39,7 @@ require 'view_component/test_helpers'
 require 'capybara/rspec'
 
 def fixture_file_path(file)
-  "#{Rails.root}/spec/fixtures/#{file}"
+  Rails.root.join("spec/fixtures/#{file}").to_s
 end
 
 def read_fixture(file)

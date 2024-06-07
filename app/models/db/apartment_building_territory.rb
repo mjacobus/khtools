@@ -24,6 +24,6 @@ class Db::ApartmentBuildingTerritory < Db::Territory
   # rubocop:enable Metrics/MethodLength
 
   def parsed_apartments
-    apartments.to_s.split(/[\n,]/).map(&:strip).reject(&:blank?)
+    apartments.to_s.split(/[\n,]/).map(&:strip).compact_blank
   end
 end

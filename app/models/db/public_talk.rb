@@ -8,7 +8,7 @@ class Db::PublicTalk < ApplicationRecord
 
   default_scope -> { order(:date) }
   scope :with_dependencies, -> { includes([:congregation, { speaker: [:congregation] }]) }
-  scope :since, ->(date) { where('date >= ?', date) }
+  scope :since, ->(date) { where(date: date..) }
   scope :scheduled, -> { where(status: 'scheduled') }
   scope :upcoming, -> { where.not(status: 'draft') }
   scope :local, -> { joins(:congregation).where(congregation: { local: true }) }

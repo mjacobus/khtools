@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe PublicTalks::TalksController, type: :request do
+RSpec.describe PublicTalks::TalksController do
   let(:talk) { factories.public_talks.create }
   let(:index_page) do
     public_talks_talks_path(since: MeetingWeek.new.first_day.to_fs(:db))

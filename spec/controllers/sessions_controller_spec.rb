@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SessionsController, type: :controller do
+RSpec.describe SessionsController do
   let(:user_session_service) { instance_double(UserSessionService) }
 
   before do

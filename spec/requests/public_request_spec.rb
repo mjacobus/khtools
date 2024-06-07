@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe PublicController, type: :request do
+RSpec.describe PublicController do
   let(:talk) { factories.public_talks.create }
 
   before do

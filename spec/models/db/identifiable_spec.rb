@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::Identifiable, type: :model do
+RSpec.describe Db::Identifiable do
   let(:publishers) { factories.publishers }
   let(:model) { Db::Publisher }
 

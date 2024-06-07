@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::FieldServiceGroup, type: :model do
+RSpec.describe Db::FieldServiceGroup do
   subject(:group) { factories.field_service_groups.build }
 
   let(:publishers) { factories.publishers }

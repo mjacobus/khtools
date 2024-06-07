@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::RegularTerritory, type: :model do
+RSpec.describe Db::RegularTerritory do
   let(:factory) { factories.territories }
 
   it 'persists' do

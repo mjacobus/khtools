@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::TerritoryAssignment, type: :model do
+RSpec.describe Db::TerritoryAssignment do
   let(:assignment) { described_class.new }
 
   it { expect(assignment).to belong_to(:territory) }

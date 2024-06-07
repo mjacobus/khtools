@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe MeetingAttendance::MeetingsController, type: :request do
+RSpec.describe MeetingAttendance::MeetingsController do
   let(:model) { Db::MeetingAttendance::Meeting }
   let(:meeting) { TestFactories.new.meetings.create }
 
@@ -72,7 +72,7 @@ RSpec.describe MeetingAttendance::MeetingsController, type: :request do
       it 're-renders the form' do
         perform_request
 
-        expect(response.status).to eq(422)
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include(I18n.t('simple_form.error_notification.default_message'))
       end
     end
@@ -100,7 +100,7 @@ RSpec.describe MeetingAttendance::MeetingsController, type: :request do
       it 're-renders the form' do
         perform_request
 
-        expect(response.status).to eq(422)
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include(I18n.t('simple_form.error_notification.default_message'))
       end
     end

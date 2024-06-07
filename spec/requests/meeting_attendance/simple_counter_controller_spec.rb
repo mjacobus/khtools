@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe MeetingAttendance::SimpleCounterController, type: :request do
+RSpec.describe MeetingAttendance::SimpleCounterController do
   let(:factories) { TestFactories.new }
   let(:meeting) { factories.meetings.create }
 

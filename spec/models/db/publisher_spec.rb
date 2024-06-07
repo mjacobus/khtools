@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::Publisher, type: :model do
+RSpec.describe Db::Publisher do
   let(:publisher) { factories.publishers.create }
 
   it 'persists' do

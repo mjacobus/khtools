@@ -61,7 +61,7 @@ module TerritoryAttributesConcern
   end
 
   def edit_action
-    link_to(t('app.links.edit'), send("edit_territories_#{type}_territory_path", territory), class: 'btn')
+    link_to(t('app.links.edit'), send(:"edit_territories_#{type}_territory_path", territory), class: 'btn')
   end
 
   def show_action

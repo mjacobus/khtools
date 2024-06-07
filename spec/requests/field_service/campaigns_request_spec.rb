@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe FieldService::CampaignsController, type: :request do
+RSpec.describe FieldService::CampaignsController do
   let(:campaign) { factories.preaching_campaigns.create(account: current_account) }
   let(:factory) { factories.preaching_campaigns }
 
