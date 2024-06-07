@@ -36,6 +36,7 @@ gem 'psych', '< 4' # https://stackoverflow.com/questions/71191685/visit-psych-no
 gem 'sass-rails', '>= 6'
 gem 'simple_form'
 # gem 'turbolinks', '~> 5'
+gem 'importmap-rails'
 gem 'kaminari'
 gem 'rqrcode', '~> 2.0'
 gem 'view_component', require: 'view_component/engine'
