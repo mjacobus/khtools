@@ -20,11 +20,11 @@ module KhTools
 
     config.middleware.use OmniAuth::Builder do
       if ENV['OAUTH_GOOGLE_KEY']
-        provider :google_oauth2, ENV['OAUTH_GOOGLE_KEY'], ENV['OAUTH_GOOGLE_SECRET']
+        provider :google_oauth2, ENV['OAUTH_GOOGLE_KEY'], ENV.fetch('OAUTH_GOOGLE_SECRET', nil)
       end
     end
 
-    config.i18n.available_locales = ["pt-BR"]
+    config.i18n.available_locales = ['pt-BR']
     config.i18n.default_locale = 'pt-BR'
     config.time_zone = 'America/Sao_Paulo'
 
@@ -36,6 +36,6 @@ module KhTools
 
     config.autoload_paths << "#{Rails.root}/lib"
 
-    config.active_record.legacy_connection_handling = false
+    config.add_autoload_paths_to_load_path = true
   end
 end
