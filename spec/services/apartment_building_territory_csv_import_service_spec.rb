@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# rubocop:disable RSpec/NoExpectationExample
 RSpec.describe ApartmentBuildingTerritoryCsvImportService, type: :service do
   let(:db_class) { Db::ApartmentBuildingTerritory }
   let(:imported) { db_class.last }
@@ -222,3 +223,4 @@ RSpec.describe ApartmentBuildingTerritoryCsvImportService, type: :service do
     data
   end
 end
+# rubocop:enable RSpec/NoExpectationExample

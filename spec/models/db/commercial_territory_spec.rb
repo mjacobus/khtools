@@ -13,8 +13,8 @@ RSpec.describe Db::CommercialTerritory do
   end
 
   describe '#contacts' do
-    let(:c1) { factories.contacts.create }
-    let(:c2) { factories.contacts.create }
+    let(:c1) { factories.contacts.create } # rubocop:disable RSpec/IndexedLet
+    let(:c2) { factories.contacts.create } # rubocop:disable RSpec/IndexedLet
 
     before do
       territory.save!
