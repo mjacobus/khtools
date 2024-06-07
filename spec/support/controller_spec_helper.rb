@@ -5,6 +5,8 @@ module ControllerSpecHelper
   # rubocop:disable Metrics/AbcSize
   def self.included(base)
     base.class_eval do
+      render_views # required by rails upgrade from 7.0 to 7.1
+
       let(:regular_user) do
         factories.users.create(enabled: true, master: false, account: current_account)
       end
