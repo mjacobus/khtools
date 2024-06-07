@@ -15,10 +15,13 @@ gem 'omniauth-google-oauth2'
 gem 'pg', '~> 1.2'
 gem 'puma', '~> 5.6'
 gem 'rails', '~> 7.1.0'
-gem 'sentry-rails'
-gem 'sentry-ruby'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binpath'
+
+# monitoring
+gem 'sentry-rails'
+gem 'sentry-ruby'
+gem 'stackprof'
 
 # file upload
 gem 'carrierwave', '~> 2.2'
