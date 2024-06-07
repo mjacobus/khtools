@@ -2,6 +2,7 @@
 
 class ApplicationRecord < ActiveRecord::Base
   include Db::Identifiable
+  include RansackConfig
 
   self.abstract_class = true
 
