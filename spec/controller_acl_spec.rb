@@ -6,7 +6,7 @@ RSpec.describe ControllerAcl do
   subject(:acl) { described_class.new(request) }
 
   let(:user) { User.new }
-  let(:request) { Struct.new(:params).new(controller: controller, action: action) }
+  let(:request) { Struct.new(:params).new({ controller:, action: }) }
   let(:controller) { 'foo_bar/baz' }
   let(:action) { 'index' }
 
@@ -19,7 +19,7 @@ RSpec.describe ControllerAcl do
 
     context 'when user is authorized to the controller and action' do
       before do
-        user.grant_controller_access(controller, action: action)
+        user.grant_controller_access(controller, action:)
       end
 
       it 'returns true' do
