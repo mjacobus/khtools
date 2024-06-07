@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '~> 3.2.2'
 
 gem 'activeadmin'
-gem 'bootsnap', '>= 1.4.2', require: false
+gem 'bootsnap', require: false
 gem 'caxlsx'
 gem 'dotenv-rails'
 gem 'matrix'
