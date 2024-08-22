@@ -368,7 +368,7 @@ GEM
       netrc (~> 0.8)
     reverse_markdown (2.1.1)
       nokogiri
-    rexml (3.3.3)
+    rexml (3.3.6)
       strscan
     rqrcode (2.1.2)
       chunky_png (~> 1.0)
