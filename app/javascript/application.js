@@ -24,9 +24,8 @@ on("click", "[data-clipboard-selector]", async (event) => {
     "[data-clipboard-copy-confirmation]"
   );
   const icon = button.querySelector("[data-clipboard-icon]");
-  const selector = button.getAttribute("data-clipboardl-selector");
+  const selector = button.getAttribute("data-clipboard-selector");
   const element = document.querySelector(selector);
-  console.log(button, icon, confirmation);
 
   confirmation.hidden = false;
   icon.hidden = true;
