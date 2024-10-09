@@ -35,6 +35,14 @@ class Territories::FormPageComponent < PageComponent
     Db::TerritoryArea.pluck(:name, :id)
   end
 
+  def fetch_address_params
+    {
+      latitudeSelector: '#territory_latitude',
+      longitudeSelector: '#territory_longitude',
+      addressSelector: '#territory_address'
+    }
+  end
+
   def intercom_type_collection
     Db::IntercomType.pluck(:name, :id)
   end

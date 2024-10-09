@@ -14,6 +14,10 @@ class ControllerAcl
       return true
     end
 
+    if user.enabled? && requested_config?
+      return true
+    end
+
     authorized_controller_action(user)
   end
 
@@ -35,5 +39,9 @@ class ControllerAcl
       "#{@request.params[:controller]}#*"
     ]
     user.permissions['controllers'].intersect?(allowed_items)
+  end
+
+  def requested_config?
+    @request.params.slice('controller', 'action').values.join('#') == 'config#index'
   end
 end

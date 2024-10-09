@@ -34,8 +34,11 @@
       <%= input_wrapper do %>
         <%= f.input :building_name %>
       <% end %>
+      <a class="btn btn-success" href='javascript:fetchAddress(<%= fetch_address_params.to_json %>)'>Buscar endereço automaticamente</a>
       <%= input_wrapper do %>
         <%= f.input :address %>
+        <%= f.input :latitude, as: :hidden %>
+        <%= f.input :longitude, as: :hidden %>
       <% end %>
       <%= input_wrapper do %>
         <%= f.input :area_id, as: :select, collection: area_collection %>

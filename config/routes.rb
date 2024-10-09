@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   end
 
   get '/discursos', to: 'public#public_talks'
+  get '/config', to: 'config#index'
 
   namespace :field_service do
     resources :campaigns do
