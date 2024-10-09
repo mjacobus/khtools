@@ -7,6 +7,8 @@ class Db::ApartmentBuildingTerritory < Db::Territory
   def editable_attributes
     super + %i[
       address
+      latitude
+      longitude
       building_name
       number_of_apartments
       has_a_roof

@@ -20,6 +20,9 @@
     <% unless current_user %>
       <div class="d-grid gap-2">
         <%= link_to t('app.links.google_login'), '/auth/google_oauth2', class: 'btn btn-light google-login'  %>
+        <script type="text/javascript">
+          localStorage.clear()
+        </script>
       </div>
     <% end %>
 

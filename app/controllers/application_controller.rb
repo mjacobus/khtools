@@ -21,9 +21,16 @@ class ApplicationController < ActionController::Base
   private
 
   def require_authorization
-    unless ControllerAcl.new(request).authorized?(current_user)
-      redirect_to('/', flash: { error: t('app.messages.access_denied') })
+    if ControllerAcl.new(request).authorized?(current_user)
+      return
     end
+
+    if request.format.json?
+      return render(json: { user_id: current_user&.id, error: t('app.messages.access_denied') },
+                    status: :forbidden)
+    end
+
+    redirect_to('/', flash: { error: t('app.messages.access_denied') })
   end
 
   def set_current
