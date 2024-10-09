@@ -13,6 +13,7 @@ class UserSessionService
     if User.count.zero?
       user.master = true
       user.enabled = true
+      user.account = Db::Account.first
     end
 
     user.save!
