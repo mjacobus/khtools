@@ -11,7 +11,7 @@ ApplicationRecord.extend(DevRandomModule)
 Db::Account.create!(congregation_name: 'Test Congregation')
 
 [
-  Db::MeetingAttendance::Meetingj
+  Db::MeetingAttendance::Meeting,
   Db::PreachingCampaign,
   Db::Publisher,
   Db::Territory,

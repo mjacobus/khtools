@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ConfigController do
-  let(:parsed_body) { JSON.parse(response.body).symbolize_keys }
+  let(:parsed_body) { response.parsed_body.symbolize_keys }
 
   describe 'GET #index' do
     let(:make_request) { get '/config', headers: { 'ACCEPT' => 'application/json' } }
