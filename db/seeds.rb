@@ -8,8 +8,10 @@ end
 
 ApplicationRecord.extend(DevRandomModule)
 
+Db::Account.create!(congregation_name: 'Test Congregation')
+
 [
-  Db::MeetingAttendance::Meeting,
+  Db::MeetingAttendance::Meetingj
   Db::PreachingCampaign,
   Db::Publisher,
   Db::Territory,
