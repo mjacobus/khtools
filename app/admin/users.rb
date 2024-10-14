@@ -3,6 +3,22 @@
 ActiveAdmin.register User do
   permit_params :master, :enabled, :account_id, controller_accesses: []
 
+  action_item :impersonate, only: :show do
+    link_to 'Impersonate', impersonate_admin_user_path(user), method: :post
+  end
+
+  # Add a route for impersonation
+  member_action :impersonate, method: :post do
+    session[:user_id] = resource.id
+    redirect_to root_path, notice: "You are now impersonating #{resource.email}"
+  end
+
+  # Add a route to stop impersonation
+  collection_action :stop_impersonating, method: :post do
+    stop_impersonating_user
+    redirect_to admin_users_path, notice: 'Stopped impersonating the user'
+  end
+
   index do
     selectable_column
     column :name
