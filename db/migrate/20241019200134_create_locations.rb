@@ -1,7 +1,7 @@
 class CreateLocations < ActiveRecord::Migration[7.1]
   def change
     create_table :locations do |t|
-      t.text :address
+      t.string :address
       t.string :street_name
       t.string :number
       t.decimal :latitude, precision: 9, scale: 6

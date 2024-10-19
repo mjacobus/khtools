@@ -45,8 +45,17 @@ class Routes
     @helpers.new_territories_territory_assignment_path(territory)
   end
 
+  # TODO: Change to new_territory_location_path()
   def new_location_path(territory:)
     @helpers.new_territories_regular_territory_location_path(territory)
+  end
+
+  def territory_locations_path(territory:)
+    @helpers.territories_regular_territory_locations_path(territory)
+  end
+
+  def territory_location_path(location)
+    @helpers.territories_regular_territory_location_path(location.territory, location)
   end
 
   def territory_assignments_path(territory)
