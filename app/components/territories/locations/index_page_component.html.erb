@@ -1,0 +1,12 @@
+
+<%= render breadcrumb.on_index %>
+
+<%= link_to 'Novo', urls.new_location_path(territory:), class: 'btn' %>
+
+<div class="index-list">
+  <% locations.each do |location| %>
+    <div>
+      <%= location %>
+    </div>
+  <% end %>
+</div>

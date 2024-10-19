@@ -200,12 +200,12 @@ pt-BR:
       assignment_dates: Datas designação
       assignments: Designações
       assignment_history: Histórico de designações
+      locations: Locais
       avatar: Foto
       building_name: Condomínio
       campaign: Campanha
       code: Código
       congregation: Congregação
-      congregation: Onde
       congregation_id: Congregação
       controller_accesses: Acessos
       created_at: Criado em
@@ -296,6 +296,7 @@ pt-BR:
       clear_filters: "Limpar filtros"
       filter: "Filtrar"
       search: "Buscar"
+      new_location: "Novo Local"
       assign_territory: "Designar"
       unassign_territory: "Devolver"
       copy: "Copiar"
