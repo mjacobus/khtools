@@ -1,5 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Db::Location, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:location) { FactoryBot.create(:location) }
+
+  it "has a valid factory" do
+    expect(location).to be_valid
+  end
+
+  it "belongs to territory" do
+    expect(location).to belong_to(:territory)
+  end
 end
