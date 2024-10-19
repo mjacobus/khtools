@@ -1,0 +1,35 @@
+<%= simple_form_for(location, as: :location, url: target_url) do |f| %>
+  <%= input_wrapper do %>
+    <%= f.input :address, label: attribute_name(location, :address) %>
+  <% end %>
+
+  <%= input_wrapper do %>
+    <%= f.input :street_name, label: attribute_name(location, :street_name) %>
+  <% end %>
+
+  <%= input_wrapper do %>
+    <%= f.input :street_name, label: attribute_name(location, :street_number) %>
+  <% end %>
+
+  <%= input_wrapper do %>
+    <%= f.input :block_number, label: attribute_name(location, :block_number) %>
+  <% end %>
+
+  <%= input_wrapper do %>
+    <%= f.input :last_contacted_at, label: attribute_name(location, :last_contacted_at), as: :string, input_html: { type: 'datetime-local', value: location.last_contacted_at&.to_fs(:db) } %>
+  <% end %>
+
+  <%= input_wrapper do %>
+    <%= f.input :latitude, label: attribute_name(location, :latitude) %>
+  <% end %>
+
+  <%= input_wrapper do %>
+    <%= f.input :longitude, label: attribute_name(location, :longitude) %>
+  <% end %>
+
+
+  <%= input_wrapper do %>
+    <%= f.submit(class: 'btn btn-primary mt-3 float-right', value: t('app.links.assign_territory')) %>
+  <% end %>
+<% end %>
+
