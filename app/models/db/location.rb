@@ -6,5 +6,4 @@ class Db::Location < ApplicationRecord
   validates :address, presence: true
   validates :street_name, presence: true
   validates :number, presence: true
-  validates :block_number, presence: true
 end

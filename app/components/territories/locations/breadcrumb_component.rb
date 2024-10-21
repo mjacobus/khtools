@@ -12,8 +12,8 @@ class Territories::Locations::BreadcrumbComponent < ApplicationComponent
     self
   end
 
-  def on_edit(_assignment)
-    breadcrumb.add_item(t('app.attributes.locations'), urls.territory_assignments_path(territory))
+  def on_edit(location)
+    breadcrumb.add_item(t('app.attributes.locations'), urls.territory_location_path(location))
     breadcrumb.add_item(t('app.links.edit'))
     self
   end
