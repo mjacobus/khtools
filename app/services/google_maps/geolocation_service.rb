@@ -7,9 +7,10 @@ module GoogleMaps
     end
 
     def addresses_by_geolocation(geolocation)
-      result = @client.get('/geocode/json', latlng: "#{geolocation.latitude},#{geolocation.longitude}")
-      result['results'].map do |result|
-        GeocodingResult.create(result)
+      result = @client.get('/geocode/json',
+                           latlng: "#{geolocation.latitude},#{geolocation.longitude}")
+      result['results'].map do |item|
+        GeocodingResult.create(item)
       end
     end
 

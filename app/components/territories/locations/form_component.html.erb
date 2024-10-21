@@ -1,5 +1,9 @@
 <%= simple_form_for(location, as: :location, url: target_url) do |f| %>
   <%= input_wrapper do %>
+    <%= f.input :block_number, label: attribute_name(location, :block_number) %>
+  <% end %>
+
+  <%= input_wrapper do %>
     <%= f.input :address, label: attribute_name(location, :address) %>
   <% end %>
 
@@ -8,11 +12,7 @@
   <% end %>
 
   <%= input_wrapper do %>
-    <%= f.input :street_name, label: attribute_name(location, :street_number) %>
-  <% end %>
-
-  <%= input_wrapper do %>
-    <%= f.input :block_number, label: attribute_name(location, :block_number) %>
+    <%= f.input :number, label: attribute_name(location, :number) %>
   <% end %>
 
   <%= input_wrapper do %>

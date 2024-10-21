@@ -58,6 +58,10 @@ class Routes
     @helpers.territories_regular_territory_location_path(location.territory, location)
   end
 
+  def edit_territory_location_path(location)
+    @helpers.edit_territories_regular_territory_location_path(location.territory, location)
+  end
+
   def territory_assignments_path(territory)
     path = territory_path(territory)
     "#{path}/assignments"
