@@ -11,6 +11,7 @@ pt-BR:
       db/congregation: Congregação
       db/public_talk: Discurso
       db/contact: Contato
+      db/location: Localização
       db/public_speaker: Orador
       db/meeting_attendance/meeting: Reunião
       db/publisher: Publicador
@@ -49,6 +50,14 @@ pt-BR:
         theme: Tema
         notes: Observações
         status: Situação
+      db/location:
+        street_name: Rua
+        street_number: Número
+        block_number: Quadra
+        address: Endreço
+        last_contacted_at: Último contato
+        latitude: Latitude
+        longitude: Longitude
       db/access_token:
         token: Token
         resource: Registro
@@ -200,12 +209,12 @@ pt-BR:
       assignment_dates: Datas designação
       assignments: Designações
       assignment_history: Histórico de designações
+      locations: Locais
       avatar: Foto
       building_name: Condomínio
       campaign: Campanha
       code: Código
       congregation: Congregação
-      congregation: Onde
       congregation_id: Congregação
       controller_accesses: Acessos
       created_at: Criado em
@@ -296,6 +305,7 @@ pt-BR:
       clear_filters: "Limpar filtros"
       filter: "Filtrar"
       search: "Buscar"
+      new_location: "Novo Local"
       assign_territory: "Designar"
       unassign_territory: "Devolver"
       copy: "Copiar"
@@ -314,7 +324,6 @@ pt-BR:
       contacts: "Contatos"
       public_speakers: "Oradores"
       delete: "Excluir"
-      edit: "Editar"
       edit: "Editar"
       google_login: "Entrar com minha conta do Gmail"
       home: "Página Inicial"
