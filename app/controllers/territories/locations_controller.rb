@@ -9,8 +9,16 @@ class Territories::LocationsController < ApplicationController
   end
 
   def new
-    @location ||= territory.locations.build
+    if geolocation
+      @location = territory.create_location_by_geolocation(geolocation)
+      return redirect_to(action: :edit, id: location.id)
+    end
 
+    @location = territory.locations.build
+    render Territories::Locations::NewPageComponent.new(territory:, location:)
+  rescue StandardError
+    flash.now[:error] = 'Erro ao criar localização automaticamente'
+    @location = territory.locations.build
     render Territories::Locations::NewPageComponent.new(territory:, location:)
   end
 
@@ -19,50 +27,51 @@ class Territories::LocationsController < ApplicationController
   end
 
   def create
+    @location = territory.locations.build
+    @location.update!(payload)
+    flash[:success] = 'Localização criada com sucesso'
+    redirect_to(action: :index)
   rescue ActiveRecord::RecordInvalid => exception
     @location = exception.record
-    new
+    @location = territory.locations.build
+    render Territories::Locations::NewPageComponent.new(territory:, location:)
   end
 
-  def update # rubocop:disable Metrics/MethodLength
-    payload = assignment_params
-
-    assignment_service.update_assignment(
-      location:,
-      campaign: payload[:campaign_id],
-      to: payload[:assignee_id],
-      assigned_at: payload[:assigned_at],
-      returned_at: payload[:returned_at],
-      notes: payload[:notes]
-    )
-    show_territory
-  rescue ActiveRecord::RecordInvalid
-    edit
-  end
+  def update; end
 
   def destroy
-    territory.return
-    show_territory
+    # TODO:
   end
 
   private
 
-  def assignment_service
-    @assignment_service ||= TerritoryAssignmentService.new
+  def geolocation
+    if defined?(@geolocation)
+      return @geolocation
+    end
+
+    @geolocation ||= GoogleMaps::Geolocation.new(latitude: params[:latitude],
+                                                 longitude: params[:longitude])
+  rescue ArgumentError
+    @geolocation = nil
   end
 
-  def assignment_params
-    permited = %i[assignee_id campaign_id notes]
-
-    if params[:action] == 'update'
-      permited += %i[assigned_at returned_at]
-    end
+  def payload
+    permited = %i[
+      address
+      street_name
+      number
+      block_number
+      latitude
+      longitude
+      last_contacted_at
+    ]
 
     params.require(:location).permit(*permited)
   end
 
   def location
-    @location ||= territory.assignments.find(params[:id])
+    @location ||= territory.locations.find(params[:id])
   end
 
   def show_territory
