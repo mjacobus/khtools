@@ -1,12 +1,18 @@
 
 <%= render breadcrumb.on_index %>
 
-<%= link_to 'Novo', urls.new_location_path(territory:), class: 'btn' %>
+<%= link_to 'Novo', urls.new_location_path(territory:), class: 'btn btn-success' %>
+
+<%= render attribute(territory.name).with_label('Território') %>
 
 <div class="index-list">
   <% locations.each do |location| %>
-    <div>
-      <%= location %>
+    <div class="territory position-relative item">
+      <div class="row">
+        <%= render attribute(location.street_name).with_label('Rua') %>
+        <%= render attribute(location.number).with_label('Número') %>
+        <%= render attribute(location.block_number).with_label('Quadra') %>
+      </div>
     </div>
   <% end %>
 </div>
