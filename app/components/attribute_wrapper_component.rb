@@ -37,6 +37,11 @@ class AttributeWrapperComponent < ApplicationComponent
     self
   end
 
+  def as_boolean
+    @value = t(value.to_s.to_s)
+    self
+  end
+
   def with_icon(icon_name = nil)
     @icon_name = icon_name
     self

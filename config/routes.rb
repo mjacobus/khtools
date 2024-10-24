@@ -42,6 +42,11 @@ Rails.application.routes.draw do
       get :printable, defaults: { format: :pdf }
       get '/token/:token', action: 'public_show'
       resources :assignments
+      resources :locations do
+        member do
+          post :mark_contacted
+        end
+      end
     end
     resources :phone_list_territories do
       resources :assignments

@@ -236,6 +236,13 @@ class Db::Territory < ApplicationRecord
     public_view_token
   end
 
+  # @return [Db::Location]
+  def create_location_by_geolocation(geolocation)
+    geolocation_service = GoogleMaps::GeolocationService.new
+    location_service = LocationService.new(geolocation_service:)
+    location_service.create_by_geolocation(geolocation:, territory: self)
+  end
+
   private
 
   def write_config(attribute, value)
