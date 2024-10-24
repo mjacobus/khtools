@@ -8,10 +8,18 @@
 <div class="index-list">
   <% locations.each do |location| %>
     <div class="territory position-relative item">
+      <%= render DropdownMenuComponent.new(type: :item_options) do |component| %>
+        <% actions(location).each do |action| %>
+          <% component.item do %>
+            <%= action %>
+          <% end %>
+        <% end %>
+      <% end %>
       <div class="row">
         <%= render attribute(location.street_name).with_label('Rua') %>
         <%= render attribute(location.number).with_label('Número') %>
         <%= render attribute(location.block_number).with_label('Quadra') %>
+        <%= render attribute(location.contacted_in_last_assignment?).with_label('Contatado').as_boolean %>
       </div>
     </div>
   <% end %>
