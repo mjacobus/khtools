@@ -8,15 +8,11 @@ class Db::Location < ApplicationRecord
   validates :number, presence: true
 
   def contacted_in_last_assignment?
-    if last_contacted_at.nil?
+    if last_contacted_at.nil? || territory.last_assignment.nil?
       return false
     end
 
     last_assignment = territory.last_assignment
-
-    unless last_assignment
-      return false
-    end
 
     if last_assignment.returned?
       (last_assignment.assigned_at..last_assignment.returned_at).cover?(last_contacted_at)
