@@ -37,10 +37,26 @@ class Territories::LocationsController < ApplicationController
     render Territories::Locations::NewPageComponent.new(territory:, location:)
   end
 
-  def update; end
+  def update
+    @location = territory.locations.find(params[:id])
+    @location.update!(payload)
+    redirect_to(action: :index)
+  rescue ActiveRecord::RecordInvalid => exception
+    @location = exception.record
+    @location = territory.locations.build
+    render Territories::Locations::NewPageComponent.new(territory:, location:)
+  end
 
   def destroy
-    # TODO:
+    @location = territory.locations.find(params[:id])
+    @location.destroy
+    redirect_to(action: :index)
+  end
+
+  def mark_contacted
+    @location = territory.locations.find(params[:id])
+    @location.update(last_contacted_at: Time.current)
+    redirect_to(action: :index)
   end
 
   private
