@@ -22,10 +22,10 @@
           </div>
         <% end %>
 
-        <%= render attribute(location.friendly_address).with_label('Endereço') %>
-        <%= render attribute(location.block_number).with_label('Quadra') %>
-        <%= render attribute(location.contacted_in_last_assignment?).with_label('Contatado').as_boolean %>
-        <%= render attribute(location.notes).with_label('Observações') %>
+        <%= render attribute(location.friendly_address).with_label('Endereço').wrap_with(:div, class: 'col-sm-12 col-md-4 col-lg-4') %>
+        <%= render attribute(location.should_visit?).with_label('Contatar').as_boolean.wrap_with(:div, class: 'col-sm-6 col-md-2 col-lg-2') %>
+        <%= render attribute(location.block_number).with_label('Quadra').wrap_with(:div, class: 'col-sm-6 col-md-2 lg-2') %>
+        <%= render attribute(location.notes).with_label('Observações').wrap_with(:div, class: 'col-sm-12 col-md-4 lg-2') %>
       </div>
     </div>
   <% end %>
