@@ -11,10 +11,13 @@ class Territories::LocationsController < ApplicationController
   def new
     if geolocation
       @location = territory.create_location_by_geolocation(geolocation)
+      if session[:last_location_block]
+        @location.update(block_number: session[:last_location_block])
+      end
       return redirect_to(action: :edit, id: location.id)
     end
 
-    @location = territory.locations.build
+    @location = territory.locations.build(block_number: session[:last_location_block])
     render Territories::Locations::NewPageComponent.new(territory:, location:)
   rescue StandardError
     flash.now[:error] = 'Erro ao criar localização automaticamente'
@@ -85,7 +88,13 @@ class Territories::LocationsController < ApplicationController
       do_not_visit_at
     ]
 
-    params.require(:location).permit(*permited)
+    payload = params.require(:location).permit(*permited)
+
+    if payload[:block_number]
+      session[:last_location_block] = payload[:block_number]
+    end
+
+    payload
   end
 
   def location
