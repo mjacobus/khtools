@@ -58,6 +58,8 @@ pt-BR:
         last_contacted_at: Último contato
         latitude: Latitude
         longitude: Longitude
+        notes: Observações
+        do_not_visit_at: Não visitar
       db/access_token:
         token: Token
         resource: Registro
