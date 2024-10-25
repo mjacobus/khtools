@@ -30,6 +30,7 @@
     <%= f.input :do_not_visit_at,
       label: attribute_name(location, :do_not_visit_at),
       as: :string,
+      hint: "Se pediram para não visitar, preencha a data do pedido",
       input_html: {
         type: 'date',
         value: location.do_not_visit_at&.to_date&.to_fs(:db)
