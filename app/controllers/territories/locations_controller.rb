@@ -80,7 +80,9 @@ class Territories::LocationsController < ApplicationController
       block_number
       latitude
       longitude
+      notes
       last_contacted_at
+      do_not_visit_at
     ]
 
     params.require(:location).permit(*permited)

@@ -16,7 +16,25 @@
   <% end %>
 
   <%= input_wrapper do %>
-    <%= f.input :last_contacted_at, label: attribute_name(location, :last_contacted_at), as: :string, input_html: { type: 'datetime-local', value: location.last_contacted_at&.to_fs(:db) } %>
+    <%= f.input :last_contacted_at,
+      label: attribute_name(location, :last_contacted_at),
+      as: :string,
+      input_html: {
+        type: 'date',
+        value: location.last_contacted_at&.to_date&.to_fs(:db)
+      }
+    %>
+  <% end %>
+
+  <%= input_wrapper do %>
+    <%= f.input :do_not_visit_at,
+      label: attribute_name(location, :do_not_visit_at),
+      as: :string,
+      input_html: {
+        type: 'date',
+        value: location.do_not_visit_at&.to_date&.to_fs(:db)
+      }
+    %>
   <% end %>
 
   <%= input_wrapper do %>
@@ -27,6 +45,9 @@
     <%= f.input :longitude, label: attribute_name(location, :longitude) %>
   <% end %>
 
+  <%= input_wrapper do %>
+    <%= f.input :notes, label: attribute_name(location, :notes) %>
+  <% end %>
 
   <%= input_wrapper do %>
     <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>
