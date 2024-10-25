@@ -47,6 +47,14 @@ class AttributeWrapperComponent < ApplicationComponent
     self
   end
 
+  def as_date
+    if @value.present?
+      @value = l(value.to_date)
+    end
+
+    self
+  end
+
   def call
     render(attribute) { value }
   end
