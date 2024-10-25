@@ -4,7 +4,7 @@ class Territories::LocationsController < ApplicationController
   def index
     render Territories::Locations::IndexPageComponent.new(
       territory:,
-      locations: territory.locations.sorted_by_street_and_number
+      locations: territory.locations.by_block_number.by_friendly_address
     )
   end
 

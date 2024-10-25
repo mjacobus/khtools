@@ -14,6 +14,10 @@ class Territories::Locations::IndexPageComponent < PageComponent
     ]
   end
 
+  def locations_by_block
+    locations.group_by(&:block_number)
+  end
+
   def breadcrumb
     @breadcrumb ||= Territories::Locations::BreadcrumbComponent.new(territory:)
   end
@@ -39,5 +43,10 @@ class Territories::Locations::IndexPageComponent < PageComponent
       data: { method: :delete, confirm: t('app.messages.confirm_delete') },
       class: 'btn'
     )
+  end
+
+  def block_description(block)
+    block = block.presence || '?'
+    "Quadra #{block}"
   end
 end

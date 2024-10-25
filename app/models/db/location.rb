@@ -3,10 +3,15 @@
 class Db::Location < ApplicationRecord
   belongs_to :territory
 
-  scope :sorted_by_street_and_number, lambda {
+  scope :by_block_number, lambda {
+    order(Arel.sql("COALESCE(NULLIF(regexp_replace(block_number, '\\D+', ''), ''), '0')::int")) # Numeric part
+      .order(Arel.sql("COALESCE(regexp_replace(block_number, '\\d+', ''), '')")) # Alphabetic part
+  }
+
+  scope :by_friendly_address, lambda {
     order(:street_name)
-      .order(Arel.sql("regexp_replace(number, '\\D+', '')::int")) # Numeric part
-      .order(Arel.sql("regexp_replace(number, '\\d+', '')")) # Alphabetic part
+      .order(Arel.sql("COALESCE(NULLIF(regexp_replace(number, '\\D+', ''), ''), '0')::int")) # Numeric part
+      .order(Arel.sql("COALESCE(regexp_replace(number, '\\d+', ''), '')")) # Alphabetic part
   }
 
   validates :address, presence: true

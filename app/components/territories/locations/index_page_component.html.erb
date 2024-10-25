@@ -6,27 +6,27 @@
 <%= render attribute(territory.name).with_label('Território') %>
 
 <div class="index-list">
-  <% locations.each do |location| %>
-    <div class="territory position-relative item">
-      <%= render DropdownMenuComponent.new(type: :item_options) do |component| %>
-        <% actions(location).each do |action| %>
-          <% component.item do %>
-            <%= action %>
+  <% locations_by_block.each do |block, locations| %>
+
+    <h5><%= block_description(block) %></h5>
+
+    <% locations.each do |location| %>
+      <div class="position-relative item">
+        <%= render DropdownMenuComponent.new(type: :item_options) do |component| %>
+          <% actions(location).each do |action| %>
+            <% component.item do %>
+              <%= action %>
+            <% end %>
           <% end %>
         <% end %>
-      <% end %>
-      <div class="row">
-        <% if location.do_not_visit_at %>
-          <div class="alert alert-danger" role="alert">
-            Não visitar
-          </div>
-        <% end %>
-
-        <%= render attribute(location.friendly_address).with_label('Endereço').wrap_with(:div, class: 'col-sm-12 col-md-4 col-lg-4') %>
-        <%= render attribute(location.should_visit?).with_label('Contatar').as_boolean.wrap_with(:div, class: 'col-sm-6 col-md-2 col-lg-2') %>
-        <%= render attribute(location.block_number).with_label('Quadra').wrap_with(:div, class: 'col-sm-6 col-md-2 lg-2') %>
-        <%= render attribute(location.notes).with_label('Observações').wrap_with(:div, class: 'col-sm-12 col-md-4 lg-2') %>
+        <div class="row">
+          <%= render attribute(location.friendly_address).with_label('Endereço').wrap_with(:div, class: 'col-sm-12 col-md-4 col-lg-4') %>
+          <%= render attribute(location.should_visit?).with_label('Contatar').as_boolean.wrap_with(:div, class: 'col-sm-6 col-md-2 col-lg-2') %>
+          <%= render attribute(location.block_number).with_label('Quadra').wrap_with(:div, class: 'col-sm-6 col-md-2 lg-2') %>
+          <%= render attribute(location.notes).with_label('Observações').wrap_with(:div, class: 'col-sm-12 col-md-4 lg-2') %>
+          <%= render attribute(location.do_not_visit_at).with_label('Não visitar').as_date %>
+        </div>
       </div>
-    </div>
+    <% end %>
   <% end %>
 </div>
