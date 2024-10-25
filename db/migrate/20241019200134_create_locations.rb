@@ -11,6 +11,8 @@ class CreateLocations < ActiveRecord::Migration[7.1]
       t.string :block_number
       t.references :territory, null: false, foreign_key: true
       t.datetime :last_contacted_at
+      t.datetime :do_not_visit_at
+      t.text :notes
 
       t.timestamps
     end
