@@ -3,6 +3,12 @@
 class Db::Location < ApplicationRecord
   belongs_to :territory
 
+  scope :sorted_by_street_and_number, lambda {
+    order(:street_name)
+      .order(Arel.sql("regexp_replace(number, '\\D+', '')::int")) # Numeric part
+      .order(Arel.sql("regexp_replace(number, '\\d+', '')")) # Alphabetic part
+  }
+
   validates :address, presence: true
   validates :street_name, presence: true
   validates :number, presence: true
