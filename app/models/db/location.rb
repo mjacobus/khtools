@@ -20,4 +20,8 @@ class Db::Location < ApplicationRecord
 
     last_contacted_at > last_assignment.assigned_at
   end
+
+  def friendly_address
+    [street_name, number.presence || '?'].join(' ')
+  end
 end
