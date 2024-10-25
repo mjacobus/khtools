@@ -22,8 +22,7 @@
           </div>
         <% end %>
 
-        <%= render attribute(location.street_name).with_label('Rua') %>
-        <%= render attribute(location.number).with_label('Número') %>
+        <%= render attribute(location.friendly_address).with_label('Endereço') %>
         <%= render attribute(location.block_number).with_label('Quadra') %>
         <%= render attribute(location.contacted_in_last_assignment?).with_label('Contatado').as_boolean %>
         <%= render attribute(location.notes).with_label('Observações') %>
