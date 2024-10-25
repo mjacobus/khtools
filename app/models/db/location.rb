@@ -30,4 +30,16 @@ class Db::Location < ApplicationRecord
   def friendly_address
     [street_name, number.presence || '?'].join(' ')
   end
+
+  def should_visit?
+    if do_not_visit_at.present?
+      return false
+    end
+
+    if contacted_in_last_assignment?
+      return false
+    end
+
+    true
+  end
 end
