@@ -301,6 +301,7 @@ pt-BR:
         one: "%{count} contato"
         other: "%{count} contatos"
     links:
+      locations: 'Localizações'
       log_contact: 'Marcar como contatado'
       create_tokenized_link_to_files: "Criar links para download"
       territories: "Territories"
