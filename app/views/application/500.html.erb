@@ -1,0 +1,11 @@
+<div class="alert alert-danger" role="danger">
+  <%= t('app.messages.error') %>
+
+  <% if current_user.enabled? %>
+    <h1><%= @exception.message %></h1>
+  <% end %>
+</div>
+
+<% if current_user.enabled? && current_user.master? %>
+  <pre><%= @exception.backtrace.join("\n") %></pre>
+<% end %>
