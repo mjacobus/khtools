@@ -7,6 +7,14 @@ class ApplicationController < ActionController::Base
 
   layout :layout
 
+  unless Rails.env.development?
+    rescue_from Exception do |exception|
+      Sentry.capture_exception(exception)
+      @exception = exception
+      render 'application/500', status: :internal_server_error
+    end
+  end
+
   rescue_from ActiveRecord::RecordNotFound, with: :render_page404
 
   rescue_from ActiveRecord::DeleteRestrictionError do |exception|
