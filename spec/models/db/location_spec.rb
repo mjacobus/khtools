@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe Db::Location, type: :model do
-  let(:location) { FactoryBot.create(:location) }
+RSpec.describe Db::Location do
+  let(:location) { create(:location) }
 
   it 'has a valid factory' do
     expect(location).to be_valid
