@@ -132,3 +132,26 @@ async function fetchGoogleMapsApiKey() {
     throw new Error('Request to fetch Google Maps config failed');
   }
 }
+
+
+on("click", "[data-insert-lat-lon]", async (event) => {
+  event.preventDefault();
+  let url = event.target.href;
+
+  if (!navigator.geolocation) {
+    window.location.href = url
+    return
+  }
+
+  navigator.geolocation.getCurrentPosition(async (position) => {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+    if (!url.includes('?')) {
+      url += '?'
+    }
+
+    url += `latitude=${latitude}&longitude=${longitude}`
+    window.location.href = url
+  });
+});

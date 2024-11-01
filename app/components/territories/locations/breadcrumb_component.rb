@@ -19,6 +19,7 @@ class Territories::Locations::BreadcrumbComponent < ApplicationComponent
   end
 
   def on_new
+    breadcrumb.add_item(t('app.attributes.locations'), urls.territory_locations_path(territory:))
     breadcrumb.add_item(t('app.links.new_location'))
     self
   end
