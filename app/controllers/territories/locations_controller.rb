@@ -8,7 +8,7 @@ class Territories::LocationsController < ApplicationController
     )
   end
 
-  def new
+  def new # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     if geolocation
       @location = territory.create_location_by_geolocation(geolocation)
       if session[:last_location_block]
@@ -21,7 +21,7 @@ class Territories::LocationsController < ApplicationController
     render Territories::Locations::NewPageComponent.new(territory:, location:)
   rescue StandardError => exception
     ErrorHandler.new.notify_error(exception)
-    flash.now[:error] = 'Erro ao criar localização automaticamente'
+    flash.now[:error] = I18n.t('messages.could_not_automatically_create_location_error')
     @location = territory.locations.build
     render Territories::Locations::NewPageComponent.new(territory:, location:)
   end
@@ -33,7 +33,6 @@ class Territories::LocationsController < ApplicationController
   def create
     @location = territory.locations.build
     @location.update!(payload)
-    flash[:success] = 'Localização criada com sucesso'
     redirect_to(action: :index)
   rescue ActiveRecord::RecordInvalid => exception
     @location = exception.record
@@ -76,7 +75,7 @@ class Territories::LocationsController < ApplicationController
     @geolocation = nil
   end
 
-  def payload
+  def payload # rubocop:disable Metrics/MethodLength
     permited = %i[
       address
       street_name

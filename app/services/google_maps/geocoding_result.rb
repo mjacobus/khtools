@@ -12,8 +12,16 @@ module GoogleMaps
                 :longitude,
                 :formatted_address
 
-    def initialize(street_number:, street_name:, city:, state:, country:, postal_code:, geolocation:,
-                   formatted_address:)
+    def initialize( # rubocop:disable Metrics/ParameterLists
+      street_number:,
+      street_name:,
+      city:,
+      state:,
+      country:,
+      postal_code:,
+      geolocation:,
+      formatted_address:
+    )
       @street_number = street_number
       @street_name = street_name
       @city = city
@@ -24,7 +32,7 @@ module GoogleMaps
       @formatted_address = formatted_address
     end
 
-    def self.create(result_item)
+    def self.create(result_item) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       address_components = result_item['address_components']
 
       # Extracting meaningful address components
