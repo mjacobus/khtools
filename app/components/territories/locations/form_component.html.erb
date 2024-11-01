@@ -3,9 +3,7 @@
     <%= f.input :block_number, label: attribute_name(location, :block_number) %>
   <% end %>
 
-  <%= input_wrapper do %>
-    <%= f.input :address, label: attribute_name(location, :address) %>
-  <% end %>
+  <%= f.input :address, label: attribute_name(location, :address), as: :hidden %>
 
   <%= input_wrapper do %>
     <%= f.input :street_name, label: attribute_name(location, :street_name) %>

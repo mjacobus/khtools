@@ -14,7 +14,6 @@ class Db::Location < ApplicationRecord
       .order(Arel.sql("COALESCE(regexp_replace(number, '\\d+', ''), '')")) # Alphabetic part
   }
 
-  validates :address, presence: true
   validates :street_name, presence: true
   validates :number, presence: true
 
