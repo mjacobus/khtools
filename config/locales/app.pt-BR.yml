@@ -52,7 +52,7 @@ pt-BR:
         status: Situação
       db/location:
         street_name: Rua
-        street_number: Número
+        number: Número
         block_number: Quadra
         address: Endreço
         last_contacted_at: Último contato
