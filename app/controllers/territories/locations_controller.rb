@@ -19,7 +19,8 @@ class Territories::LocationsController < ApplicationController
 
     @location = territory.locations.build(block_number: session[:last_location_block])
     render Territories::Locations::NewPageComponent.new(territory:, location:)
-  rescue StandardError
+  rescue StandardError => exception
+    Sentry.capture_exception(exception)
     flash.now[:error] = 'Erro ao criar localização automaticamente'
     @location = territory.locations.build
     render Territories::Locations::NewPageComponent.new(territory:, location:)
