@@ -3,17 +3,17 @@
 module GoogleMaps
   class GeocodingResult
     attr_reader :street_number,
-      :street_name,
-      :city,
-      :state,
-      :country,
-      :postal_code,
-      :latitude,
-      :longitude,
-      :formatted_address
+                :street_name,
+                :city,
+                :state,
+                :country,
+                :postal_code,
+                :latitude,
+                :longitude,
+                :formatted_address
 
     def initialize(street_number:, street_name:, city:, state:, country:, postal_code:, geolocation:,
-      formatted_address:)
+                   formatted_address:)
       @street_number = street_number
       @street_name = street_name
       @city = city
