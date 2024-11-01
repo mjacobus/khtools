@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ErrorHandler
   def notify_error(exception)
     Rails.logger.error(exception)
