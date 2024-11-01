@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
   unless Rails.env.development?
     rescue_from Exception do |exception|
-      Sentry.capture_exception(exception)
+      ErrorHandler.new.notify_error(exception)
       @exception = exception
       render 'application/500', status: :internal_server_error
     end

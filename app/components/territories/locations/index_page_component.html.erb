@@ -1,7 +1,7 @@
 
 <%= render breadcrumb.on_index %>
 
-<%= link_to 'Novo', urls.new_location_path(territory:), class: 'btn btn-success' %>
+<%= link_to 'Novo', urls.new_location_path(territory:), class: 'btn btn-success', data: { 'insert-lat-lon' => true } %>
 
 <%= render attribute(territory.name).with_label('Território') %>
 
