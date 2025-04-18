@@ -2,7 +2,7 @@ lock '~> 3.18.0'
 
 set :application, 'khtools'
 set :repo_url, 'git@github.com:mjacobus/khtools.git'
-set :branch, 'main'
+set :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 set :deploy_to, "/home/deploy/apps/#{fetch(:application)}"
 
