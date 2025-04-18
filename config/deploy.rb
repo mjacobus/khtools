@@ -13,7 +13,9 @@ set :default_env, {
   'PATH' => '/home/deploy/.asdf/bin:/home/deploy/.asdf/shims:$PATH'
 }
 
-append :linked_files, '.env'
+append :linked_files, '.env',
+       'config/puma.rb'
+
 append :linked_dirs,
        'log',
        'tmp/pids',
