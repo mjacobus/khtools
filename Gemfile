@@ -61,6 +61,12 @@ group :development do
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.1'
   gem 'web-console', '>= 3.3.0'
+
+  # deployment
+  gem 'capistrano', '~> 3.18'
+  gem 'capistrano-asdf'
+  gem 'capistrano-puma'
+  gem 'capistrano-rails'
 end
 
 group :test do
