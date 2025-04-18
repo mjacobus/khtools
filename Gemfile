@@ -65,8 +65,8 @@ group :development do
   # deployment
   gem 'bcrypt_pbkdf', '~> 1.1'
   gem 'capistrano', '~> 3.18'
+  gem 'capistrano3-puma', '~> 1.2'
   gem 'capistrano-asdf'
-  gem 'capistrano-puma'
   gem 'capistrano-rails'
   gem 'ed25519', '~> 1.2'
 end

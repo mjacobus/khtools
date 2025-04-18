@@ -25,7 +25,7 @@ append :linked_dirs,
        'public/system',
        'storage'
 
-# Puma com systemd --user
-set :puma_user, fetch(:user)
+# Puma with systemd --user
 set :puma_service_unit_name, "puma_#{fetch(:application)}"
 set :puma_systemctl_user, :user
+set :puma_enable_socket_service, false
