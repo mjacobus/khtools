@@ -63,10 +63,12 @@ group :development do
   gem 'web-console', '>= 3.3.0'
 
   # deployment
+  gem 'bcrypt_pbkdf', '~> 1.1'
   gem 'capistrano', '~> 3.18'
   gem 'capistrano-asdf'
   gem 'capistrano-puma'
   gem 'capistrano-rails'
+  gem 'ed25519', '~> 1.2'
 end
 
 group :test do
