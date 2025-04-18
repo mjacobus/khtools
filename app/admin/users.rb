@@ -16,7 +16,7 @@ ActiveAdmin.register User do
   # Add a route to stop impersonation
   collection_action :stop_impersonating, method: :post do
     stop_impersonating_user
-    redirect_to admin_users_path, notice: 'Stopped impersonating the user'
+    redirect_to admin_users_path, notice: 'Stopped impersonating the user' # rubocop:disable Rails/I18nLocaleTexts
   end
 
   index do
