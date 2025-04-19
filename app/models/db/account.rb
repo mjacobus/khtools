@@ -58,6 +58,7 @@ class Db::Account < ApplicationRecord
 
   def write_secret(attribute, value)
     parsed_secrets[attribute.to_s] = value
+    self.secrets = parsed_secrets.to_json
   end
 
   def read_secret(attribute)
@@ -65,6 +66,10 @@ class Db::Account < ApplicationRecord
   end
 
   def parsed_secrets
-    self.secrets ||= {}
+    @parsed_secrets ||= if secrets.is_a?(String)
+                          JSON.parse(secrets)
+                        else
+                          {}
+                        end
   end
 end
