@@ -11,13 +11,13 @@ Metrics/AbcSize:
 
 Metrics/BlockLength:
   Exclude:
-    - 'config/routes.rb'
-    - 'spec/**/*'
-    - 'app/admin/*'
+    - "config/routes.rb"
+    - "spec/**/*"
+    - "app/admin/*"
 
 Metrics/MethodLength:
   Exclude:
-    - 'db/migrate/**.rb'
+    - "db/migrate/**.rb"
     - "app/components/**/*"
 
 Metrics/ParameterLists:
@@ -27,9 +27,9 @@ Metrics/ParameterLists:
 Layout/LineLength:
   Max: 100
   Exclude:
-    - 'db/seeds.rb'
-    - 'app/components/**/*'
-   
+    - "db/seeds.rb"
+    - "app/components/**/*"
+
 Style/AccessorGrouping:
   Enabled: false
 
@@ -43,6 +43,9 @@ Style/GuardClause:
   Enabled: false
 
 Style/IfUnlessModifier:
+  Enabled: false
+
+Style/NegatedIf:
   Enabled: false
 
 Layout/MultilineMethodCallIndentation:
@@ -59,7 +62,7 @@ Lint/MissingSuper:
   Enabled: false
 
 Naming/RescuedExceptionsVariableName:
-  PreferredName: 'exception'
+  PreferredName: "exception"
 
 Naming/PredicateName:
   Enabled: false
@@ -69,7 +72,7 @@ Style/FormatStringToken:
 
 Rails/SkipsModelValidations:
   Exclude:
-    - 'spec/**/*'
+    - "spec/**/*"
 
 Rails/ThreeStateBooleanColumn:
   Exclude:
@@ -86,7 +89,6 @@ Rails/AddColumnIndex:
   Exclude:
     - db/migrate/20210525582813_add_apartment_build_fields_to_territories.rb
     - db/migrate/20210525582813_add_apartment_build_fields_to_territories.rb
-
 
 RSpec/SpecFilePathFormat:
   Exclude:
@@ -105,7 +107,7 @@ RSpec/SpecFilePathFormat:
 
 RSpec:
   Exclude:
-    - 'spec/factories/**/*'
+    - "spec/factories/**/*"
 
 RSpec/ExampleLength:
   Max: 10
@@ -115,7 +117,7 @@ RSpec/ExpectChange:
 
 RSpec/FilePath:
   Exclude:
-    - 'spec/requests/**/*'
+    - "spec/requests/**/*"
 
 RSpec/MultipleExpectations:
   Enabled: false
@@ -134,16 +136,16 @@ RSpec/VerifiedDoubles:
 AllCops:
   NewCops: enable
   Exclude:
-    - 'tmp/**/*'
-    - 'node_modules/**/*'
-    - 'script/**/*'
-    - 'log/**/*'
-    - 'docker/**/*'
-    - 'doc/**/*'
-    - 'bin/**/*'
-    - 'Rakefile'
-    - 'config.ru'
-    - 'config/**/*'
-    - 'db/schema.rb'
-    - 'node_modules/**/*'
-    - 'vendor/**/*'
+    - "tmp/**/*"
+    - "node_modules/**/*"
+    - "script/**/*"
+    - "log/**/*"
+    - "docker/**/*"
+    - "doc/**/*"
+    - "bin/**/*"
+    - "Rakefile"
+    - "config.ru"
+    - "config/**/*"
+    - "db/schema.rb"
+    - "node_modules/**/*"
+    - "vendor/**/*"
