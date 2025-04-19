@@ -40,3 +40,6 @@ yarn-debug.log*
 /config/credentials/production.key
 /config/credentials/test.key
 /config/credentials/development.key
+/db/*.sqlite3
+/db/*.sqlite3-shm
+/db/*.sqlite3-wal

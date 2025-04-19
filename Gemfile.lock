@@ -332,7 +332,6 @@ GEM
     parser (3.3.2.0)
       ast (~> 2.4.1)
       racc
-    pg (1.4.5)
     psych (5.1.2)
       stringio
     public_suffix (5.0.5)
@@ -600,7 +599,6 @@ DEPENDENCIES
   object_comparator
   omniauth (~> 1.9.2)
   omniauth-google-oauth2
-  pg (~> 1.2)
   puma (~> 5.6)
   rails (~> 7.1.0)
   rails-controller-testing
