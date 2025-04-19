@@ -2,6 +2,6 @@
 
 class AddConfigToTerritories < ActiveRecord::Migration[7.0]
   def change
-    add_column :territories, :config, :jsonb
+    add_column :territories, :config, :text
   end
 end

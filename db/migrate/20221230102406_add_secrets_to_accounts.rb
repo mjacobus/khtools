@@ -2,6 +2,6 @@
 
 class AddSecretsToAccounts < ActiveRecord::Migration[6.1]
   def change
-    add_column :accounts, :secrets, :jsonb
+    add_column :accounts, :secrets, :text
   end
 end
