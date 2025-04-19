@@ -12,7 +12,7 @@ module AccountIdMigrationHelper
       unless id
         sql = <<~SQL.squish
           INSERT INTO accounts (congregation_name, created_at, updated_at)#{' '}
-          VALUES ('default_congregation', NOW(), NOW())
+          VALUES ('default_congregation', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
         SQL
         execute(sql)
       end
