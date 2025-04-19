@@ -55,30 +55,6 @@ bundle exec rubocop -a
 - The above step is not installing ruby itself. However you can try to use [asdf for ruby](https://github.com/asdf-vm/asdf-ruby).
 - Same for nodejs and yarn. Try [asdf for nodejs](https://github.com/asdf-vm/asdf-nodejs) and after installing run `npm install -g yarn`.
 
-## Heroku
-
-- [DB Backups](https://data.heroku.com/datastores/1c62666c-2afb-4ea9-a842-2daf5a56eda2#durability)
-
-### Restoring a backup
-
-Download a backup from the above link and then:
-
-```bash
-pg_restore -U pguser -W --no-owner --no-privileges -h localhost -d khtools_development -1 tmp/bkp/jw-khtools-backup-21-01-14
-```
-
-Other tricks
-
-```
-heroku run 'pg_dump $DATABASE_URL' > tmp/my_database.sql
-
-
-./bin/rails db:drop
-./bin/rails db:create
-psql -U pguser -W -h localhost -d khtools_development \
-  -f tmp/my_database.sql
-```
-
 ### Editing credentials
 
 The master key is stored in 1password, and the development key is the same as prod.
