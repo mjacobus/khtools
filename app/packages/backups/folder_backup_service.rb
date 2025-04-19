@@ -13,7 +13,7 @@ module Backups
       @history_dir = @backup_dir.join('.bkp-history')
     end
 
-    def backup(source_dir:, target_path: 'backup-{timestamp}.zip')
+    def backup(source_dir:, target_path: 'backup-{timestamp}.zip') # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       source_dir = Pathname.new(source_dir)
 
       unless source_dir.directory?
@@ -21,9 +21,7 @@ module Backups
               "Source directory does not exist: #{source_dir}"
       end
 
-      timestamp = Time.zone.now.strftime('%Y%m%d%H%M')
-      interpolated_name = target_path.gsub('{timestamp}', timestamp)
-      tmp_path = @backup_dir.join(interpolated_name)
+      tmp_path = File.join(@backup_dir, "tempfile-#{SecureRandom.hex}.zip")
 
       FileUtils.mkdir_p(@backup_dir)
       FileUtils.mkdir_p(@history_dir)
@@ -52,7 +50,8 @@ module Backups
       # Write history and keep the backup
       FileUtils.touch(history_marker)
 
-      final_name = "#{@app_name}_backup_#{timestamp}.zip".gsub('{hash}', hash)
+      timestamp = Time.zone.now.strftime('%Y%m%d%H%M')
+      final_name = target_path.gsub('{timestamp}', timestamp).gsub('{hash}', hash)
       final_path = @backup_dir.join(final_name)
 
       FileUtils.mv(tmp_path, final_path)

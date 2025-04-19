@@ -115,6 +115,9 @@ RSpec/ExampleLength:
 RSpec/ExpectChange:
   Enabled: false
 
+RSpec/MessageChain:
+  Enabled: false
+
 RSpec/FilePath:
   Exclude:
     - "spec/requests/**/*"

@@ -4,6 +4,7 @@ require 'rails_helper'
 require 'fileutils'
 require 'digest'
 
+# rubocop:disable RSpec/ExampleLength
 RSpec.describe Backups::FolderBackupService, type: :service do
   let(:tmp_source_dir) { Rails.root.join('tmp/test_backup_src') }
   let(:backup_dir)     { Rails.root.join('tmp/test_backups') }
@@ -33,19 +34,22 @@ RSpec.describe Backups::FolderBackupService, type: :service do
   end
 
   it 'creates a zip file with timestamp and hash when content is new' do
+    allow(Time).to receive_message_chain(:zone, :now, :strftime).and_return('the-timestamp')
+    allow(Digest::MD5).to receive_message_chain(:file, :hexdigest).and_return('the-hash')
+
     service = described_class.new(app_name:, backup_dir:)
 
     result = nil
     silence_output do
-      result = service.backup(source_dir: tmp_source_dir, target_path: 'backup-{timestamp}.zip')
+      result = service.backup(source_dir: tmp_source_dir,
+                              target_path: 'backup_{timestamp}_{hash}.zip')
     end
 
     expect(result).to be_a(String)
     expect(File.exist?(result)).to be true
-    expect(File.basename(result)).to match(/^#{app_name}_backup_\d{12}_[0-9a-f]{32}\.zip$/)
+    expect(File.basename(result)).to eq('backup_the-timestamp_the-hash.zip')
 
-    hash = result[/([0-9a-f]{32})\.zip$/, 1]
-    expect(File.exist?(history_dir.join("#{hash}.txt"))).to be true
+    expect(File.exist?(history_dir.join('the-hash.txt'))).to be true
   end
 
   it 'returns nil and does not duplicate zip if content has not changed' do
@@ -102,3 +106,4 @@ RSpec.describe Backups::FolderBackupService, type: :service do
     end.to raise_error(Backups::FolderBackupService::InvalidArgumentError)
   end
 end
+# rubocop:enable RSpec/ExampleLength
