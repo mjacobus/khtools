@@ -23,6 +23,7 @@ RSpec.describe Db::Account do
 
     records = ActiveRecord::Base.connection.execute(account.class.all.to_sql)
     expect(records.first['secrets'].to_s).not_to include('a-secret')
+    expect(account.class.find(account.id).cloudinary_cloud_name).to eq('a-secret')
   end
 
   it 'has encrypted cloudinary_api_key' do
