@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'digest'
 require 'fileutils'
 
@@ -19,7 +21,7 @@ module Backups
               "Source directory does not exist: #{source_dir}"
       end
 
-      timestamp = Time.now.strftime('%Y%m%d%H%M')
+      timestamp = Time.zone.now.strftime('%Y%m%d%H%M')
       interpolated_name = target_path.gsub('{timestamp}', timestamp)
       tmp_path = @backup_dir.join(interpolated_name)
 
