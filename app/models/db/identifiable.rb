@@ -22,7 +22,7 @@ module Db::Identifiable
       end
 
       @identifiable_by_fields.each do |_field|
-        query = where('name ILIKE ?', "#{term}%").limit(2)
+        query = where('LOWER(name) LIKE ?', "#{term.downcase}%").limit(2)
         count = query.count
 
         if count > 1
