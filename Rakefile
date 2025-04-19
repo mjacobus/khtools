@@ -35,11 +35,11 @@ namespace :sqlite do
     app_name = Rails.application.class.module_parent_name.underscore
     db_dir  = Rails.root.join('database')
 
-    service = Backups::DatabaseBackupService.new(app_name:)
+    service = Backups::FolderBackupService.new(app_name:)
 
     backup_path = service.backup(
-      db_dir:,
-      db_file: [Rails.env, 'sqlite3'].join('.')
+      source_dir: Rails.root.join('database'),
+      target_path: 'khtools-database-{timestamp}.zip'
     )
 
     if backup_path.nil?
