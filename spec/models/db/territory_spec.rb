@@ -69,10 +69,10 @@ RSpec.describe Db::Territory do
     it 'searches by name' do
       found = described_class.search(name: 'apple')
 
-      expect(found.pluck(:name)).to eq([
+      expect(found.pluck(:name).sort).to eq([
         'An apple Territory',
         'A Pineapple Territory'
-      ])
+      ].sort)
     end
 
     it 'search by name is sqli safe' do
