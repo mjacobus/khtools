@@ -63,6 +63,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.1'
   gem 'web-console', '>= 3.3.0'
 
+  gem 'kamal'
   # deployment
   gem 'bcrypt_pbkdf', '~> 1.1'
   gem 'capistrano', '~> 3.18'
