@@ -19,6 +19,7 @@ append :linked_files, '.env',
        'config/puma.rb'
 
 append :linked_dirs,
+       'database',
        'log',
        'tmp/pids',
        'tmp/cache',
