@@ -7,7 +7,7 @@ A few utilities for Kingdom Hall users.
 [![Maintainability](https://api.codeclimate.com/v1/badges/65fad0b0ff0bed478231/maintainability)](https://codeclimate.com/github/mjacobus/khtools/maintainability)
 [![Coverage Status](https://coveralls.io/repos/github/mjacobus/khtools/badge.svg?branch=master)](https://coveralls.io/github/mjacobus/khtools?branch=master)
 
-### How to run/install the app:
+### How to run/install the app
 
 After installing the ruby version displayed in [this file](https://github.com/mjacobus/khtools/blob/master/.ruby-version).
 Also install `nodejs` and `yarn`.
@@ -27,7 +27,6 @@ yarn install
 # every time you update your project
 
 cd ~/Projects/khtools
-docker-compose up     # start docker. Make sure your local postgress is not running
 bundle install
 ./bin/rake db:create  # create database
 ./bin/rake db:migrate # create tables
@@ -81,7 +80,6 @@ psql -U pguser -W -h localhost -d khtools_development \
 ```
 
 ### Editing credentials
-
 
 The master key is stored in 1password, and the development key is the same as prod.
 
