@@ -271,10 +271,13 @@ RSpec.describe Db::Territory do
   end
 
   it 'has static_map_zoom' do
+    territory = factory.create
+
     expect do
       territory.static_map_zoom = 'foo'
+      territory.save!
     end.to change {
-      territory.static_map_zoom
+      territory.class.find(territory.id).static_map_zoom
     }.from(nil).to('foo')
   end
 

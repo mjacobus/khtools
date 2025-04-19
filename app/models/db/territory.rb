@@ -247,6 +247,7 @@ class Db::Territory < ApplicationRecord
 
   def write_config(attribute, value)
     parsed_config[attribute.to_s] = value
+    self.config = parsed_config.to_json
   end
 
   def read_config(attribute)
@@ -254,7 +255,11 @@ class Db::Territory < ApplicationRecord
   end
 
   def parsed_config
-    self.config ||= {}
+    @parsed_config ||= if config.is_a?(String)
+                         JSON.parse(config)
+                       else
+                         {}
+                       end
   end
 
   def custom_map_params
