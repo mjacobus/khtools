@@ -23,11 +23,13 @@ servers:
 #   # Proxy connects to your container on port 80 by default.
 #   # app_port: 3000
 
-proxy: {}
-env:
-  clear:
-    RAILS_ENV: production
-    PORT: 3001
+proxy:
+  ssl: true
+  host: "central2.pimento.com.br"
+# env:
+#   clear:
+#     RAILS_ENV: production
+#     PORT: 3001
 
 # Credentials for your image host.
 # registry:
