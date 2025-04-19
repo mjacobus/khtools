@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'fileutils'
 require 'digest'
@@ -31,7 +33,7 @@ RSpec.describe Backups::FolderBackupService, type: :service do
   end
 
   it 'creates a zip file with timestamp and hash when content is new' do
-    service = described_class.new(app_name: app_name, backup_dir: backup_dir)
+    service = described_class.new(app_name:, backup_dir:)
 
     result = nil
     silence_output do
@@ -47,7 +49,7 @@ RSpec.describe Backups::FolderBackupService, type: :service do
   end
 
   it 'returns nil and does not duplicate zip if content has not changed' do
-    service = described_class.new(app_name: app_name, backup_dir: backup_dir)
+    service = described_class.new(app_name:, backup_dir:)
 
     first = nil
     second = nil
@@ -73,7 +75,7 @@ RSpec.describe Backups::FolderBackupService, type: :service do
     FileUtils.rm_rf(tmp_source_dir)
     FileUtils.mkdir_p(tmp_source_dir)
 
-    service = described_class.new(app_name: app_name, backup_dir: backup_dir)
+    service = described_class.new(app_name:, backup_dir:)
 
     result = nil
     silence_output do
@@ -91,7 +93,7 @@ RSpec.describe Backups::FolderBackupService, type: :service do
 
   it "raises error if source folder doesn't exist" do
     invalid_path = Rails.root.join('tmp/does_not_exist')
-    service = described_class.new(app_name: app_name, backup_dir: backup_dir)
+    service = described_class.new(app_name:, backup_dir:)
 
     expect do
       silence_output do

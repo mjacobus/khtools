@@ -33,7 +33,7 @@ namespace :sqlite do
   desc 'Backup SQLite DB if changed'
   task backup: :environment do
     app_name = Rails.application.class.module_parent_name.underscore
-    db_dir  = Rails.root.join('database')
+    Rails.root.join('database')
 
     service = Backups::FolderBackupService.new(app_name:)
 
