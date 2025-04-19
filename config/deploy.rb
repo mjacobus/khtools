@@ -19,6 +19,7 @@ append :linked_files, '.env',
        'config/puma.rb'
 
 append :linked_dirs,
+       'backups',
        'database',
        'log',
        'tmp/pids',
@@ -32,3 +33,6 @@ append :linked_dirs,
 set :puma_service_unit_name, "puma_#{fetch(:application)}"
 set :puma_systemctl_user, :user
 set :puma_enable_socket_service, false
+
+# crontab
+set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }

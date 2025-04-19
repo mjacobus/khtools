@@ -18,3 +18,9 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
+set :output, 'log/cron.log'
+set :environment, 'production'
+
+every 1.hour do
+  rake 'sqlite:backup'
+end
