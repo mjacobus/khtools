@@ -1,4 +1,4 @@
 ruby 3.4.3
 nodejs 16.20.2
-postgres 12.5
+postgres 14.13
 python 2.7.2
