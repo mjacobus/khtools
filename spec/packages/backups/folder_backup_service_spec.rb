@@ -1,9 +1,11 @@
 require 'rails_helper'
 require 'fileutils'
+require 'digest'
 
 RSpec.describe Backups::FolderBackupService, type: :service do
   let(:tmp_source_dir) { Rails.root.join('tmp/test_backup_src') }
   let(:backup_dir)     { Rails.root.join('tmp/test_backups') }
+  let(:history_dir)    { backup_dir.join('.bkp-history') }
   let(:app_name)       { 'dummyapp' }
 
   before do
@@ -28,7 +30,7 @@ RSpec.describe Backups::FolderBackupService, type: :service do
     $stderr = original_stderr
   end
 
-  it 'creates a zip file with hash-based name when content changes' do
+  it 'creates a zip file with timestamp and hash when content is new' do
     service = described_class.new(app_name: app_name, backup_dir: backup_dir)
 
     result = nil
@@ -38,7 +40,10 @@ RSpec.describe Backups::FolderBackupService, type: :service do
 
     expect(result).to be_a(String)
     expect(File.exist?(result)).to be true
-    expect(File.basename(result)).to match(/^#{app_name}_backup_[0-9a-f]{32}\.zip$/)
+    expect(File.basename(result)).to match(/^#{app_name}_backup_\d{12}_[0-9a-f]{32}\.zip$/)
+
+    hash = result[/([0-9a-f]{32})\.zip$/, 1]
+    expect(File.exist?(history_dir.join("#{hash}.txt"))).to be true
   end
 
   it 'returns nil and does not duplicate zip if content has not changed' do
@@ -55,7 +60,13 @@ RSpec.describe Backups::FolderBackupService, type: :service do
     expect(first).to be_a(String)
     expect(File.exist?(first)).to be true
     expect(second).to be_nil
-    expect(Dir.children(backup_dir).count { |f| f.end_with?('.zip') }).to eq(1)
+
+    # Deve haver exatamente um .zip e um .txt no histórico
+    zips = Dir.glob(backup_dir.join('*.zip'))
+    markers = Dir.glob(history_dir.join('*.txt'))
+
+    expect(zips.size).to eq(1)
+    expect(markers.size).to eq(1)
   end
 
   it 'returns nil and does not create zip if source folder is empty' do
@@ -70,12 +81,16 @@ RSpec.describe Backups::FolderBackupService, type: :service do
     end
 
     expect(result).to be_nil
-    expect(Dir.children(backup_dir)).to be_empty
+
+    zips = Dir.glob(backup_dir.join('*.zip'))
+    history = Dir.glob(backup_dir.join('.bkp-history', '*.txt'))
+
+    expect(zips).to be_empty
+    expect(history).to be_empty
   end
 
   it "raises error if source folder doesn't exist" do
     invalid_path = Rails.root.join('tmp/does_not_exist')
-
     service = described_class.new(app_name: app_name, backup_dir: backup_dir)
 
     expect do
