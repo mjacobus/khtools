@@ -15,6 +15,7 @@ gem 'omniauth-google-oauth2'
 gem 'pg', '~> 1.2'
 gem 'puma', '~> 5.6'
 gem 'rails', '~> 7.1.0'
+gem 'sqlite3', '~> 1.6'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binpath'
 
