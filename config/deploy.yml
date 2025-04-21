@@ -50,6 +50,7 @@ env:
   clear:
     # DB_HOST: 192.168.0.2
     RAILS_ENV: production
+    RAILS_LOG_TO_STDOUT: "true"
   secret:
     - RAILS_MASTER_KEY
 
