@@ -3,7 +3,7 @@
 class ConfigController < ApplicationController
   def index
     render json: {
-      google_maps_static_api_key: ENV.fetch('GOOGLE_MAPS_STATIC_API_KEY', nil)
+      google_maps_static_api_key: Rails.application.secrets.dig(:google_maps, :static_api_key)
     }
   end
 end
