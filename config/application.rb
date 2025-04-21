@@ -19,10 +19,10 @@ module KhTools
     # the framework and any gems in your application.
 
     config.middleware.use OmniAuth::Builder do
-      if ENV['OAUTH_GOOGLE_KEY']
+      if Rails.application.credentials.dig(:oauth, :google, :key)
         provider :google_oauth2,
-          Rails.application.credentials.dig(:oauth, :google, :key),
-          Rails.application.credentials.dig(:oauth, :google, :secret)
+                 Rails.application.credentials.dig(:oauth, :google, :key),
+                 Rails.application.credentials.dig(:oauth, :google, :secret)
 
       end
     end
