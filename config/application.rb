@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'boot'
 
 require 'rails/all'
@@ -37,7 +39,7 @@ module KhTools
       generate.view_specs false
     end
 
-    config.autoload_paths << "#{Rails.root.join('lib')}"
+    config.autoload_paths << Rails.root.join('lib').to_s
 
     config.add_autoload_paths_to_load_path = true
   end
