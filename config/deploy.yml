@@ -7,7 +7,7 @@ image: mjacobus/khtools
 # Deploy to these servers.
 servers:
   web:
-    - www.mjsoft.com.br
+    - central.mjsoft.com.br
   # job:
   #   hosts:
   #     - 192.168.0.1
