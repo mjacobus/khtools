@@ -10,7 +10,8 @@ RSpec.describe ConfigController do
 
     context 'when logged in and active' do
       it 'includes the google map key config' do
-        allow(Rails.application.secrets).to receive(:dig).with(:google_maps, :static_api_key).and_return('the-key')
+        allow(Rails.application.secrets).to receive(:dig).with(:google_maps, :static_api_key)
+          .and_return('the-key')
 
         make_request
 
