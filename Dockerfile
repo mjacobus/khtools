@@ -13,4 +13,6 @@ RUN yarn install --check-files || true
 # Optional: precompile assets (enable if you’re not using Kamal asset hook)
 # RUN bundle exec rake assets:precompile
 
+RUN mkdir -p tmp/pids
+
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
