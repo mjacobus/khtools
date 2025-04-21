@@ -1,13 +1,13 @@
 # Name of your application. Used to uniquely configure containers.
-service: my-app
+service: khtools
 
 # Name of the container image.
-image: my-user/my-app
+image: mjacobus/khtools
 
 # Deploy to these servers.
 servers:
   web:
-    - 192.168.0.1
+    - www.mjsoft.com.br
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -19,7 +19,7 @@ servers:
 # Note: If using Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
 proxy:
   ssl: true
-  host: app.example.com
+  host: central.mjsoft.com.br
   # Proxy connects to your container on port 80 by default.
   # app_port: 3000
 
@@ -27,7 +27,7 @@ proxy:
 registry:
   # Specify the registry server, if you're not using Docker Hub
   # server: registry.digitalocean.com / ghcr.io / ...
-  username: my-user
+  username: mjacobus
 
   # Always use an access token rather than real password (pulled from .kamal/secrets).
   password:
@@ -39,15 +39,13 @@ builder:
   # Pass in additional build args needed for your Dockerfile.
   # args:
   #   RUBY_VERSION: <%= ENV["RBENV_VERSION"] || ENV["rvm_ruby_string"] || "#{RUBY_ENGINE}-#{RUBY_ENGINE_VERSION}" %>
-
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 #
-# env:
-#   clear:
-#     DB_HOST: 192.168.0.2
-#   secret:
-#     - RAILS_MASTER_KEY
-
+env:
+  # clear:
+  #   DB_HOST: 192.168.0.2
+  secret:
+    - RAILS_MASTER_KEY
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
 # "bin/kamal app logs -r job" will tail logs from the first server in the job section.
 #
@@ -61,9 +59,8 @@ builder:
 
 # Use a persistent storage volume.
 #
-# volumes:
-#   - "app_storage:/app/storage"
-
+volumes:
+  - "/home/deploy/databases:/database"
 # Bridge fingerprinted assets, like JS and CSS, between versions to avoid
 # hitting 404 on in-flight requests. Combines all files from new and old
 # version inside the asset_path.
