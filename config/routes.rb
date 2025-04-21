@@ -2,6 +2,10 @@
 
 Rails.application.routes.draw do
   ActiveAdmin.routes(self)
+
+  # config/routes.rb
+  get '/up', to: proc { [200, {}, ['OK']] }
+
   root to: 'home#index'
 
   if Rails.env.development?
