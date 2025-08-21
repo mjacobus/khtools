@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Territories::LocationsController < ApplicationController
+  skip_before_action :require_authorization, if: -> { params[:token].present? }
+
   def index
     render Territories::Locations::IndexPageComponent.new(
       territory:,
