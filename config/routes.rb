@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   # config/routes.rb
   get '/up', to: proc { [200, {}, ['OK']] }
+  get '/version', to: 'version#show'
 
   root to: 'home#index'
 
