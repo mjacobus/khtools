@@ -71,6 +71,10 @@ Rails.application.routes.draw do
     resources :phone_lists
   end
 
+  namespace :reports do
+    resources :territory_assignments, only: %i[index]
+  end
+
   resources :users, only: %i[index] do
     member do
       patch :enable

@@ -1,0 +1,42 @@
+<div class="<%= bem %> table-responsive">
+  <table class="<%= bem('table') %> table table-bordered table-sm">
+    <thead>
+      <tr>
+        <th rowspan="2" class="<%= bem('territory') %>"><%= label('territory_number') %></th>
+        <th rowspan="2" class="<%= bem('last-completed') %>"><%= label('last_completed_at') %>*</th>
+        <% column_indexes.each do %>
+          <th colspan="2" class="<%= bem('assignee') %>"><%= label('assigned_to') %></th>
+        <% end %>
+      </tr>
+      <tr>
+        <% column_indexes.each do %>
+          <th class="<%= bem('date') %>"><%= label('assigned_at') %></th>
+          <th class="<%= bem('date') %>"><%= label('returned_at') %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <% rows.each do |row| %>
+      <tbody class="<%= bem('territory-rows') %>">
+        <tr>
+          <td rowspan="2" class="<%= bem('territory') %>"><%= territory_cell(row.territory) %></td>
+          <td rowspan="2" class="<%= bem('last-completed') %>"><%= date(row.last_completed_at) %></td>
+          <% column_indexes.each do |index| %>
+            <td colspan="2" class="<%= bem('assignee') %>"><%= assignee_name(row.assignments[index]) %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <% column_indexes.each do |index| %>
+            <td class="<%= bem('date') %>"><%= date(row.assignments[index]&.assigned_at) %></td>
+            <td class="<%= bem('date') %>"><%= date(row.assignments[index]&.returned_at) %></td>
+          <% end %>
+        </tr>
+      </tbody>
+    <% end %>
+  </table>
+
+  <% if empty? %>
+    <div class="alert alert-primary mt-3" role="alert"><%= t('app.messages.no_records_found') %></div>
+  <% end %>
+
+  <p class="<%= bem('footnote') %>"><%= label('footnote') %></p>
+</div>

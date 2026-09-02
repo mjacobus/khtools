@@ -1,0 +1,43 @@
+<style>
+  /* Accents on capitals get clipped when the line box is tight. */
+  .<%= bem('title') %> {
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .<%= bem('service-year') %> {
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+
+  .Reports_TerritoryAssignmentsTableComponent th,
+  .Reports_TerritoryAssignmentsTableComponent td {
+    border: 1px solid #000;
+    font-size: 9px;
+    text-align: center;
+  }
+
+  .Reports_TerritoryAssignmentsTableComponent tbody td {
+    height: 18px;
+  }
+
+  /* A territory spans two rows: never split them across pages. */
+  .Reports_TerritoryAssignmentsTableComponent tbody {
+    page-break-inside: avoid;
+  }
+
+  .Reports_TerritoryAssignmentsTableComponent__footnote {
+    font-size: 8px;
+    margin-top: 6px;
+  }
+</style>
+
+<div class="<%= bem %>">
+  <div class="<%= bem('title') %>"><%= title %></div>
+  <div class="<%= bem('service-year') %>"><%= service_year_label %></div>
+
+  <%= render table %>
+</div>
