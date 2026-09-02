@@ -98,6 +98,7 @@ RSpec/SpecFilePathFormat:
     - spec/requests/public_talks/congregations_request_spec.rb
     - spec/requests/public_talks/speakers_request_spec.rb
     - spec/requests/public_talks/talks_request_spec.rb
+    - spec/requests/reports/territory_assignments_request_spec.rb
     - spec/requests/territories/apartment_building_territories_request_spec.rb
     - spec/requests/territories/assignments_request_spec.rb
     - spec/requests/territories/commercial_territories_request_spec.rb

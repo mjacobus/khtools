@@ -1,0 +1,31 @@
+<div class="<%= bem %>">
+  <%= render breadcrumb %>
+
+  <h1 class="h4 my-3"><%= title %></h1>
+
+  <%= form_with url: urls.reports_territory_assignments_path, method: :get, data: { remote: false } do |form| %>
+    <div class="row">
+      <div class="col-sm-12 col-md-4">
+        <div class="form-wrapper">
+          <label><%= label('service_year') %></label>
+          <%= form.select(:service_year, service_year_options, { selected: service_year.to_param }, class: 'form-control') %>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-md-4">
+        <div class="form-wrapper">
+          <label><%= label('territory_type') %></label>
+          <%= form.select(:type, type_options, { selected: report.type_key }, class: 'form-control') %>
+        </div>
+      </div>
+    </div>
+
+    <div class="my-2">
+      <button class="btn btn-primary" type="submit"><%= icon(:search) { t('app.links.filter') } %></button>
+      <%= link_to(icon(:'file-pdf') { t('app.links.download_pdf') }, pdf_url, class: 'btn btn-primary') %>
+      <%= link_to(icon(:'file-spreadsheet') { t('app.links.download_xls') }, xlsx_url, class: 'btn btn-primary') %>
+    </div>
+  <% end %>
+
+  <%= render table %>
+</div>

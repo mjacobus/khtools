@@ -15,6 +15,7 @@ class Sidebar::SidebarComponent < ApplicationComponent
       public_talks,
       territories_section,
       field_service_section,
+      reports_section,
       admin_section,
       logout
     ].compact
@@ -59,6 +60,18 @@ class Sidebar::SidebarComponent < ApplicationComponent
       section.append_child(field_service_groups)
       section.append_child(publishers)
     end
+  end
+
+  def reports_section
+    entry(t('app.links.reports'), '#', icon: 'file-earmark-bar-graph').tap do |section|
+      section.append_child(territory_assignment_report)
+    end
+  end
+
+  def territory_assignment_report
+    entry(t('app.links.territory_assignment_report'),
+          reports_territory_assignments_url,
+          icon: 'clipboard-data')
   end
 
   def admin_preaching_campaigns(*_args)
