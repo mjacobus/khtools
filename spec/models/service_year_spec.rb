@@ -76,6 +76,14 @@ RSpec.describe ServiceYear do
       end
     end
 
+    it 'does not build the current service year when the param is valid' do
+      allow(described_class).to receive(:current).and_call_original
+
+      described_class.from_param('2025')
+
+      expect(described_class).not_to have_received(:current)
+    end
+
     it 'accepts a custom fallback' do
       fallback = described_class.new(2001)
 

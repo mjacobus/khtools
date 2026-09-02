@@ -19,11 +19,16 @@ class ServiceYear < Range
     new(date.month >= FIRST_MONTH ? date.year : date.year - 1)
   end
 
-  # Falls back to the current service year when the value is not a plausible year.
-  def self.from_param(value, fallback: current)
+  # Falls back to the current service year when the value is not a plausible
+  # year. The fallback is only built when it is actually needed.
+  def self.from_param(value, fallback: nil)
     year = Integer(value.to_s, exception: false)
 
-    year && ACCEPTED_YEARS.cover?(year) ? new(year) : fallback
+    if year && ACCEPTED_YEARS.cover?(year)
+      return new(year)
+    end
+
+    fallback || current
   end
 
   def initialize(year)
