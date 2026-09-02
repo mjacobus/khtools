@@ -24,6 +24,13 @@ RSpec.describe Reports::TerritoryAssignmentsController do
       expect(response.body).to include('20/11/2025')
     end
 
+    it 'labels the download links after the formats they deliver' do
+      get '/reports/territory_assignments'
+
+      expect(response.body).to include('Baixar XLSX')
+      expect(response.body).to include('Baixar PDF')
+    end
+
     it 'defaults to the current service year' do
       travel_to(Date.new(2026, 2, 1)) do
         get '/reports/territory_assignments'

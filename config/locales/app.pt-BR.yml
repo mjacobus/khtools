@@ -307,6 +307,7 @@ pt-BR:
       create_tokenized_link_to_files: "Criar links para download"
       territories: "Territories"
       download_xls: "Baixar XLS"
+      download_xlsx: "Baixar XLSX"
       download_pdf: "Baixar PDF"
       clear_filters: "Limpar filtros"
       filter: "Filtrar"
