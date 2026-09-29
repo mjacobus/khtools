@@ -47,6 +47,53 @@ RSpec.describe Db::Publisher do
     end
   end
 
+  describe 'privileges' do
+    it 'allows a brother to be an elder' do
+      expect(factories.publishers.build(gender: 'm', elder: true)).to be_valid
+    end
+
+    it 'allows a brother to be a ministerial servant' do
+      expect(factories.publishers.build(gender: 'm', ministerial_servant: true)).to be_valid
+    end
+
+    it 'allows a sister to be a pioneer' do
+      expect(factories.publishers.build(gender: 'f', pioneer: true)).to be_valid
+    end
+
+    it 'does not allow a sister to be an elder' do
+      publisher = factories.publishers.build(gender: 'f', elder: true)
+
+      expect(publisher).not_to be_valid
+      expect(publisher.errors[:elder]).to be_present
+    end
+
+    it 'does not allow a sister to be a ministerial servant' do
+      publisher = factories.publishers.build(gender: 'f', ministerial_servant: true)
+
+      expect(publisher).not_to be_valid
+      expect(publisher.errors[:ministerial_servant]).to be_present
+    end
+
+    it 'does not allow being both elder and ministerial servant' do
+      publisher = factories.publishers.build(gender: 'm', elder: true, ministerial_servant: true)
+
+      expect(publisher).not_to be_valid
+      expect(publisher.errors[:ministerial_servant]).to be_present
+    end
+  end
+
+  describe '#privileges' do
+    it 'is empty by default' do
+      expect(factories.publishers.build.privileges).to eq([])
+    end
+
+    it 'lists the privileges held' do
+      publisher = factories.publishers.build(elder: true, pioneer: true)
+
+      expect(publisher.privileges).to eq(%i[elder pioneer])
+    end
+  end
+
   describe '#destroy' do
     it 'is restricted when has territories' do
       factories.territories.create(assignee: publisher)

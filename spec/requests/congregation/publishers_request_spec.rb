@@ -63,6 +63,14 @@ RSpec.describe Congregation::PublishersController do
       expect(response).to be_successful
     end
 
+    it 'shows the privileges' do
+      record.update!(elder: true, pioneer: true)
+
+      perform_request
+
+      expect(response.body).to include('Ancião, Pioneiro')
+    end
+
     it 'renders the correct component' do
       mock_renderer
 
@@ -175,6 +183,14 @@ RSpec.describe Congregation::PublishersController do
 
       it 'creates record' do
         expect { perform_request }.to change { record.reload.name }.to('new name')
+      end
+
+      it 'updates the privileges' do
+        params[key].merge!(elder: '1', pioneer: '1')
+
+        perform_request
+
+        expect(record.reload.privileges).to eq(%i[elder pioneer])
       end
     end
 
