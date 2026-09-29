@@ -22,7 +22,10 @@ RSpec.describe Congregation::PublishersController do
   let(:show_path) { routes.to(record) }
 
   # attributes
-  let(:valid_attributes) { factory.attributes.merge(name: 'new name') }
+  let(:group) { factories.groups.create(account: current_account) }
+  let(:valid_attributes) do
+    factory.attributes(account_id: current_account.id, group_id: group.id).merge(name: 'new name')
+  end
   let(:invalid_attributes) { factory.attributes.merge(name: '') }
 
   before do
@@ -105,6 +108,15 @@ RSpec.describe Congregation::PublishersController do
 
       it 'creates record' do
         expect { perform_request }.to change(model_class, :count).by(1)
+      end
+    end
+
+    context 'when the group belongs to another congregation' do
+      let(:params) { { key => valid_attributes.merge(group_id: factories.groups.create.id) } }
+
+      it 'does not create the record' do
+        expect { perform_request }.not_to change(model_class, :count)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 

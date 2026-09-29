@@ -225,7 +225,20 @@ class TestFactories
       {
         name: "User-#{seq}",
         gender: 'm'
-      }.merge(overrides).merge(associations(%i[account group], overrides))
+      }.merge(overrides).merge(associations([:account], overrides)).then do |attributes|
+        attributes.merge(group_attributes(attributes))
+      end
+    end
+
+    private
+
+    def group_attributes(attributes)
+      if attributes.key?(:group) || attributes.key?(:group_id)
+        return {}
+      end
+
+      account_id = attributes[:account]&.id || attributes[:account_id]
+      { group_id: factories.groups.create(account_id:).id }
     end
   end
 

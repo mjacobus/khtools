@@ -23,9 +23,28 @@ RSpec.describe Db::Publisher do
   it 'belongs to a #group' do
     group = factories.field_service_groups.create(name: 'group')
 
-    factories.publishers.create(group:)
+    factories.publishers.create(group:, account: group.account)
 
     expect(described_class.last.group).to eq(group)
+  end
+
+  describe 'group validation' do
+    let(:account) { factories.accounts.create }
+
+    it 'accepts a group from the same account' do
+      group = factories.groups.create(account:)
+      publisher = factories.publishers.build(account:, group:)
+
+      expect(publisher).to be_valid
+    end
+
+    it 'rejects a group from another account' do
+      group = factories.groups.create
+      publisher = factories.publishers.build(account:, group:)
+
+      expect(publisher).not_to be_valid
+      expect(publisher.errors[:group]).to be_present
+    end
   end
 
   describe '#destroy' do

@@ -20,8 +20,17 @@ class Db::Publisher < ApplicationRecord
 
   validates :name, presence: true
   validates :gender, presence: true
+  validate :group_belongs_to_account
 
   def to_s
     name
+  end
+
+  private
+
+  def group_belongs_to_account
+    if group && group.account_id != account_id
+      errors.add(:group, :invalid)
+    end
   end
 end
