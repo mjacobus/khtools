@@ -15,6 +15,28 @@
     <% end %>
 
     <%= input_wrapper do %>
+      <%= f.input :email %>
+    <% end %>
+
+    <%= input_wrapper do %>
+      <%= f.input :phone %>
+    <% end %>
+
+    <%= input_wrapper do %>
+      <%= f.input :address %>
+    <% end %>
+
+    <%= input_wrapper do %>
+      <%= f.input :primary_emergency_contact_name %>
+      <%= f.input :primary_emergency_contact_phone_number %>
+    <% end %>
+
+    <%= input_wrapper do %>
+      <%= f.input :secondary_emergency_contact_name %>
+      <%= f.input :secondary_emergency_contact_phone_number %>
+    <% end %>
+
+    <%= input_wrapper do %>
       <%= f.input :elder %>
       <%= f.input :ministerial_servant %>
       <%= f.input :pioneer %>

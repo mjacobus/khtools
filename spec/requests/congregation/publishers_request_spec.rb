@@ -27,6 +27,17 @@ RSpec.describe Congregation::PublishersController do
     factory.attributes(account_id: current_account.id, group_id: group.id).merge(name: 'new name')
   end
   let(:invalid_attributes) { factory.attributes.merge(name: '') }
+  let(:contact_details) do
+    {
+      email: 'ana@example.com',
+      phone: '51911112222',
+      address: 'Rua A, 10',
+      primary_emergency_contact_name: 'Maria',
+      primary_emergency_contact_phone_number: '51999998888',
+      secondary_emergency_contact_name: 'João',
+      secondary_emergency_contact_phone_number: '51977776666'
+    }
+  end
 
   before do
     login_user(admin_user)
@@ -42,6 +53,14 @@ RSpec.describe Congregation::PublishersController do
 
       expect(response).to be_successful
       expect(response.body).to include(record.name)
+    end
+
+    it 'shows the phone number' do
+      record.update!(phone: '51911112222')
+
+      perform_request
+
+      expect(response.body).to include('(51) 91111-2222')
     end
 
     it 'renders the correct component' do
@@ -69,6 +88,17 @@ RSpec.describe Congregation::PublishersController do
       perform_request
 
       expect(response.body).to include('Ancião, Pioneiro')
+    end
+
+    it 'shows the contact details' do
+      record.update!(contact_details)
+
+      perform_request
+
+      expect(response.body).to include(
+        'ana@example.com', '(51) 91111-2222', 'Rua A, 10',
+        'Maria - (51) 99999-8888', 'João - (51) 97777-6666'
+      )
     end
 
     it 'renders the correct component' do
@@ -183,6 +213,14 @@ RSpec.describe Congregation::PublishersController do
 
       it 'creates record' do
         expect { perform_request }.to change { record.reload.name }.to('new name')
+      end
+
+      it 'updates the contact details' do
+        params[key].merge!(contact_details)
+
+        perform_request
+
+        expect(record.reload.attributes.symbolize_keys).to include(contact_details)
       end
 
       it 'updates the privileges' do
