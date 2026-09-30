@@ -143,6 +143,13 @@ pt-BR:
         ministerial_servant: Servo Ministerial
         pioneer: Pioneiro
         privileges: Privilégios
+        address: Endereço
+        primary_emergency_contact: Contato de emergência principal
+        primary_emergency_contact_name: Contato de emergência principal
+        primary_emergency_contact_phone_number: Telefone do contato de emergência principal
+        secondary_emergency_contact: Contato de emergência secundário
+        secondary_emergency_contact_name: Contato de emergência secundário
+        secondary_emergency_contact_phone_number: Telefone do contato de emergência secundário
         created_at: Criado em
         updated_at: Atualizado em
       db/field_service_group:
