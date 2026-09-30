@@ -74,6 +74,14 @@ RSpec.describe Db::Publisher do
       expect(publisher.errors[:ministerial_servant]).to be_present
     end
 
+    it 'reports each invalid privilege once for a sister' do
+      publisher = factories.publishers.build(gender: 'f', elder: true, ministerial_servant: true)
+
+      publisher.validate
+
+      expect(publisher.errors.where(:ministerial_servant).size).to eq(1)
+    end
+
     it 'does not allow being both elder and ministerial servant' do
       publisher = factories.publishers.build(gender: 'm', elder: true, ministerial_servant: true)
 

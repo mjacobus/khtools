@@ -42,16 +42,15 @@ class Db::Publisher < ApplicationRecord
   end
 
   def appointed_privileges
-    if elder && ministerial_servant
-      errors.add(:ministerial_servant, :invalid)
-    end
-
-    if gender == 'm'
+    if gender != 'm'
+      %i[elder ministerial_servant].select { |privilege| send(privilege) }.each do |privilege|
+        errors.add(privilege, :invalid)
+      end
       return
     end
 
-    %i[elder ministerial_servant].select { |privilege| send(privilege) }.each do |privilege|
-      errors.add(privilege, :invalid)
+    if elder && ministerial_servant
+      errors.add(:ministerial_servant, :invalid)
     end
   end
 end
