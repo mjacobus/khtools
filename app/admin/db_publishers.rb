@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 ActiveAdmin.register Db::Publisher do
-  permit_params :name, :email, :phone, :gender, :group_id
+  permit_params :name, :email, :phone, :gender, :group_id, :elder, :ministerial_servant, :pioneer
   config.sort_order = 'name_asc'
 
   index do
@@ -20,6 +20,9 @@ ActiveAdmin.register Db::Publisher do
         publisher.gender == 'm' ? 'Masculino' : 'Feminino'
       end
       row :group
+      row :elder
+      row :ministerial_servant
+      row :pioneer
       row :created_at
       row :updated_at
     end
@@ -33,6 +36,9 @@ ActiveAdmin.register Db::Publisher do
       f.input :phone
       f.input :gender, as: :select, collection: [%w[Masculino m], %w[Feminino f]]
       f.input :group, as: :select, collection: Db::FieldServiceGroup.order(:name).pluck(:name, :id)
+      f.input :elder
+      f.input :ministerial_servant
+      f.input :pioneer
     end
     f.actions
   end

@@ -139,6 +139,10 @@ pt-BR:
         gender: Sexo
         group: Grupo
         group_id: Grupo
+        elder: Ancião
+        ministerial_servant: Servo Ministerial
+        pioneer: Pioneiro
+        privileges: Privilégios
         created_at: Criado em
         updated_at: Atualizado em
       db/field_service_group:

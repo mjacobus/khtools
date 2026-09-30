@@ -21,9 +21,16 @@ class Db::Publisher < ApplicationRecord
   validates :name, presence: true
   validates :gender, presence: true
   validate :group_belongs_to_account
+  validate :appointed_privileges
+
+  PRIVILEGES = %i[elder ministerial_servant pioneer].freeze
 
   def to_s
     name
+  end
+
+  def privileges
+    PRIVILEGES.select { |privilege| send(privilege) }
   end
 
   private
@@ -31,6 +38,19 @@ class Db::Publisher < ApplicationRecord
   def group_belongs_to_account
     if group && group.account_id != account_id
       errors.add(:group, :invalid)
+    end
+  end
+
+  def appointed_privileges
+    if gender != 'm'
+      %i[elder ministerial_servant].select { |privilege| send(privilege) }.each do |privilege|
+        errors.add(privilege, :invalid)
+      end
+      return
+    end
+
+    if elder && ministerial_servant
+      errors.add(:ministerial_servant, :invalid)
     end
   end
 end

@@ -6,7 +6,7 @@ module Congregation
     include AccountAwareCrudController
 
     key :publisher
-    permit :name, :gender, :group_id
+    permit :name, :gender, :group_id, :elder, :ministerial_servant, :pioneer
     scope { current_account.publishers.order(:name) }
     component_class_template 'Congregation::Publishers::%{type}PageComponent'
   end
