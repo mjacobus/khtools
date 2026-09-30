@@ -82,6 +82,15 @@ RSpec.describe Congregation::PublishersController do
       expect(response).to be_successful
     end
 
+    it 'shows the linked user' do
+      user = factories.users.create(account: current_account, email: 'ana@example.com')
+      record.update!(user:)
+
+      perform_request
+
+      expect(response.body).to include('ana@example.com')
+    end
+
     it 'shows the privileges' do
       record.update!(elder: true, pioneer: true)
 
@@ -221,6 +230,15 @@ RSpec.describe Congregation::PublishersController do
         perform_request
 
         expect(record.reload.attributes.symbolize_keys).to include(contact_details)
+      end
+
+      it 'links a user' do
+        user = factories.users.create(account: current_account)
+        params[key][:user_id] = user.id
+
+        perform_request
+
+        expect(record.reload.user).to eq(user)
       end
 
       it 'updates the privileges' do

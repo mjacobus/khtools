@@ -102,6 +102,45 @@ RSpec.describe Db::Publisher do
     end
   end
 
+  describe 'user' do
+    let(:account) { factories.accounts.create }
+
+    it 'is optional' do
+      expect(factories.publishers.build(account:, user: nil)).to be_valid
+    end
+
+    it 'accepts a user from the same account' do
+      user = factories.users.create(account:)
+
+      expect(factories.publishers.build(account:, user:)).to be_valid
+    end
+
+    it 'rejects a user from another account' do
+      user = factories.users.create
+      publisher = factories.publishers.build(account:, user:)
+
+      expect(publisher).not_to be_valid
+      expect(publisher.errors[:user]).to be_present
+    end
+
+    it 'rejects a user already linked to another publisher' do
+      user = factories.users.create(account:)
+      factories.publishers.create(account:, user:)
+
+      publisher = factories.publishers.build(account:, user:)
+
+      expect(publisher).not_to be_valid
+      expect(publisher.errors[:user]).to be_present
+    end
+
+    it 'is reachable from the user' do
+      user = factories.users.create(account:)
+      publisher = factories.publishers.create(account:, user:)
+
+      expect(user.reload.publisher).to eq(publisher)
+    end
+  end
+
   describe '#destroy' do
     it 'is restricted when has territories' do
       factories.territories.create(assignee: publisher)

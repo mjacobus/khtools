@@ -6,7 +6,7 @@ module Congregation
     include AccountAwareCrudController
 
     key :publisher
-    permit :name, :gender, :group_id, :elder, :ministerial_servant, :pioneer,
+    permit :name, :gender, :group_id, :user_id, :elder, :ministerial_servant, :pioneer,
            :email, :phone, :address,
            :primary_emergency_contact_name, :primary_emergency_contact_phone_number,
            :secondary_emergency_contact_name, :secondary_emergency_contact_phone_number

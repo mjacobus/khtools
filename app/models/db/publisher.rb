@@ -6,6 +6,7 @@ class Db::Publisher < ApplicationRecord
 
   belongs_to :group, class_name: 'FieldServiceGroup'
   belongs_to :account, class_name: 'Db::Account'
+  belongs_to :user, optional: true
 
   has_many :territories,
            foreign_key: :assignee_id,
@@ -20,7 +21,9 @@ class Db::Publisher < ApplicationRecord
 
   validates :name, presence: true
   validates :gender, presence: true
+  validates :user, uniqueness: true, allow_nil: true
   validate :group_belongs_to_account
+  validate :user_belongs_to_account
   validate :appointed_privileges
 
   PRIVILEGES = %i[elder ministerial_servant pioneer].freeze
@@ -38,6 +41,12 @@ class Db::Publisher < ApplicationRecord
   def group_belongs_to_account
     if group && group.account_id != account_id
       errors.add(:group, :invalid)
+    end
+  end
+
+  def user_belongs_to_account
+    if user && user.account_id != account_id
+      errors.add(:user, :invalid)
     end
   end
 

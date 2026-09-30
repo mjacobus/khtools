@@ -8,6 +8,25 @@ RSpec.describe User do
 
   it { is_expected.to belong_to(:account).class_name('Db::Account').optional }
 
+  describe '.linkable_to' do
+    let(:account) { factories.accounts.create }
+    let(:publisher) { factories.publishers.create(account:) }
+
+    it 'excludes users linked to another publisher' do
+      free = factory.create(account:)
+      factories.publishers.create(account:, user: factory.create(account:))
+
+      expect(account.users.linkable_to(publisher)).to eq([free])
+    end
+
+    it 'includes the user linked to the given publisher' do
+      user = factory.create(account:)
+      publisher.update!(user:)
+
+      expect(account.users.linkable_to(publisher)).to eq([user])
+    end
+  end
+
   describe '#permissions' do
     it 'is initially an empty hash' do
       user.permissions_config = ''

@@ -2,6 +2,16 @@
 
 class User < ApplicationRecord
   belongs_to :account, class_name: 'Db::Account', optional: true
+  has_one :publisher, class_name: 'Db::Publisher', dependent: :nullify
+
+  scope :linkable_to, lambda { |publisher|
+    linked = Db::Publisher.where.not(id: publisher.id).where.not(user_id: nil)
+    where.not(id: linked.select(:user_id))
+  }
+
+  def to_s
+    "#{name} (#{email})"
+  end
 
   def permissions
     @permissions ||= begin
