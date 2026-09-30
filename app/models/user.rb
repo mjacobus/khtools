@@ -9,6 +9,8 @@ class User < ApplicationRecord
     where.not(id: linked.select(:user_id))
   }
 
+  validate :publisher_belongs_to_account
+
   def to_s
     "#{name} (#{email})"
   end
@@ -45,6 +47,12 @@ class User < ApplicationRecord
   end
 
   private
+
+  def publisher_belongs_to_account
+    if publisher && publisher.account_id != account_id
+      errors.add(:account, :invalid)
+    end
+  end
 
   def default_permissions_config
     { controllers: [] }.stringify_keys
