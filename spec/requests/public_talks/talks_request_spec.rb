@@ -195,6 +195,8 @@ RSpec.describe PublicTalks::TalksController do
 
   context 'when the talk belongs to another congregation' do
     it 'is not listed' do
+      foreign_talk
+
       get('/public_talks/talks')
 
       expect(response.body).not_to include(%(/public_talks/talks/#{foreign_talk.id}"))
