@@ -175,6 +175,8 @@ RSpec.describe PublicTalks::SpeakersController do
 
   context 'when the speaker belongs to another congregation' do
     it 'is not listed' do
+      foreign_speaker
+
       get('/public_talks/speakers')
 
       expect(response.body).not_to include(foreign_speaker.name)
