@@ -25,7 +25,28 @@ class Territories::IndexPageComponent < PageComponent
     [new_action]
   end
 
+  def display_my_territories_filter?
+    my_publisher.present?
+  end
+
+  def my_territories_filter_links
+    [
+      filter_link(t('app.links.all'), nil),
+      filter_link(t('app.links.mine'), my_publisher.id.to_s)
+    ]
+  end
+
   private
+
+  def my_publisher
+    current_user.publisher
+  end
+
+  def filter_link(text, publisher_id)
+    active = params[:publisher_id].presence == publisher_id
+    classes = class_names('btn btn-sm', active ? 'btn-primary' : 'btn-outline-primary')
+    link_to(text, url_for(publisher_id:), class: classes, 'aria-current': (active ? 'true' : nil))
+  end
 
   def prototype
     "Db::#{type.to_s.classify}Territory".constantize.new

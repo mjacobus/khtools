@@ -28,6 +28,32 @@ RSpec.describe User do
     end
   end
 
+  describe '#authorized_for?' do
+    it 'is true for a master user' do
+      user.master = true
+
+      expect(user.authorized_for?('territories/regular_territories', 'show')).to be(true)
+    end
+
+    it 'is true when the action was granted' do
+      user.grant_controller_access('territories/regular_territories', action: 'show')
+
+      expect(user.authorized_for?('territories/regular_territories', 'show')).to be(true)
+    end
+
+    it 'is true when every action of the controller was granted' do
+      user.grant_controller_access('territories/regular_territories')
+
+      expect(user.authorized_for?('territories/regular_territories', 'show')).to be(true)
+    end
+
+    it 'is false otherwise' do
+      user.grant_controller_access('territories/regular_territories', action: 'index')
+
+      expect(user.authorized_for?('territories/regular_territories', 'show')).to be(false)
+    end
+  end
+
   describe '.linkable_to' do
     let(:account) { factories.accounts.create }
     let(:publisher) { factories.publishers.create(account:) }

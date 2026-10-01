@@ -35,14 +35,14 @@ For pure logic, stick to RSpec.
 
 ## Harness layout
 
-Everything under `tmp/e2e/` (gitignored). Only screenshots get committed.
+Everything under `tmp/e2e/` (gitignored). Nothing from it gets committed.
 
 ```
 tmp/e2e/
   <feat>_setup.rb     # rails runner — create fictitious data, write state.json
   <feat>_state.json   # ids handed to the driver
   <feat>_run.js       # Playwright — login, navigate, assert UI + DB, screenshot
-  screenshots/        # raw output; copy keepers to docs/screenshots/<pr>-<feature>/
+  screenshots/        # raw output; attach to the PR with gh --attach
 ```
 
 ### Setup (`bin/rails runner tmp/e2e/<feat>_setup.rb`)
@@ -106,11 +106,17 @@ The app uses simple_form, so field names follow `model[attribute]`, for example 
 
 ## Screenshots in the PR
 
-1. **Look at every screenshot** (Read the PNG) before committing it. Confirm it shows the change and no real data.
-2. Commit the keepers to `docs/screenshots/<pr>-<feature>/`. The PR number in the path keeps PRs from colliding.
-3. Reference them in the PR body by **commit SHA**, not branch name. Branches are deleted on merge and branch URLs would break:
-   `https://raw.githubusercontent.com/mjacobus/khtools/<sha>/docs/screenshots/<pr>-<feature>/<file>.png`
-4. Add a "Screenshots" section before "Test plan", and a Test plan line describing the Playwright run.
+**Never commit screenshots.** Upload them as PR attachments with `gh --attach` (gh ≥ 2.101).
+
+1. **Look at every screenshot** (Read the PNG) before uploading it. Confirm it shows the change and no real data.
+2. In the PR body, reference each image by its local path. `--attach` uploads the file and rewrites the reference to point to the uploaded asset:
+   ```bash
+   gh pr create --body-file body.md \
+     --attach 'tmp/e2e/screenshots/<feat>-form.png#Form with the new field'
+   # body.md contains: ![Form with the new field](tmp/e2e/screenshots/<feat>-form.png)
+   ```
+   For an existing PR, use `gh pr edit <n> --body-file body.md --attach ...`. Files the body doesn't reference are appended to the end.
+3. Add a "Screenshots" section before "Test plan", and a Test plan line describing the Playwright run.
 
 ## Checks
 

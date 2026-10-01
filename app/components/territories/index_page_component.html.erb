@@ -8,6 +8,14 @@
     <% end %>
   <% end %>
 
+  <% if display_my_territories_filter? %>
+    <div class="my-territories-filter btn-group my-2" role="group">
+      <% my_territories_filter_links.each do |link| %>
+        <%= link %>
+      <% end %>
+    </div>
+  <% end %>
+
   <%= render search_form %>
 
   <% territories.each do |territory| %>

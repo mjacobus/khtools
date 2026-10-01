@@ -294,6 +294,7 @@ pt-BR:
     titles:
       meeting_attendance: "Contagem de Assistência"
       week_talks: "Discursos da semana"
+      my_territories: "Meus Territórios"
       public_talks: "Discursos"
       assignments: "Designações"
     messages:
@@ -302,6 +303,8 @@ pt-BR:
       unassigned_territory: "Território não designado"
       page_not_found: "Página não encontrada"
       no_records_found: "Nenhum registro encontrado"
+      no_territories_assigned_to_you: "Nenhum território designado para você."
+      assigned_since: "designado em %{date}"
       contact_admin: "Se você já logou mas não tem acesso, contate o admin de sua congregação."
       confirm_delete: 'Tem certeza que quer excluir este registro?'
       confirm_contacted: 'Marcar contato como contatado?'
@@ -331,6 +334,8 @@ pt-BR:
       copy: "Copiar"
       contact_speaker: 'Contatar orador'
       see_all: 'Ver todos'
+      all: "Todos"
+      mine: "Meus"
       actions: "Ações"
       edit: "Edit"
       new: "Novo"

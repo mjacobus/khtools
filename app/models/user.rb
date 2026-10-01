@@ -42,6 +42,14 @@ class User < ApplicationRecord
     permissions['controllers']
   end
 
+  def authorized_for?(controller, action)
+    if master?
+      return true
+    end
+
+    permissions['controllers'].intersect?(["#{controller}##{action}", "#{controller}#*"])
+  end
+
   def congregation_name
     account&.congregation_name
   end

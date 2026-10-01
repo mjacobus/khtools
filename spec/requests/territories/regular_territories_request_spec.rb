@@ -27,6 +27,22 @@ RSpec.describe Territories::RegularTerritoriesController do
     end
   end
 
+  describe '"mine" filter' do
+    it 'is shown with a link to the territories of the publisher linked to the user' do
+      publisher = factories.publishers.create(account: current_account, user: admin_user)
+
+      get '/territories/regular_territories'
+
+      expect(response.body).to include("publisher_id=#{publisher.id}", 'Meus')
+    end
+
+    it 'is not shown when the user is not linked to a publisher' do
+      get '/territories/regular_territories'
+
+      expect(response.body).not_to include('my-territories-filter')
+    end
+  end
+
   describe 'GET #show' do
     let(:territory) { factories.territories.create }
     let(:perform_request) { get "/territories/regular_territories/#{territory.id}" }
