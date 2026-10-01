@@ -289,7 +289,7 @@ class TestFactories
 
   class Db::MeetingAttendance::MeetingFactory < Factory
     def attributes(overrides = {})
-      { title: "Meeting-#{seq}" }.merge(overrides)
+      { title: "Meeting-#{seq}" }.merge(overrides).merge(associations([:account], overrides))
     end
   end
 

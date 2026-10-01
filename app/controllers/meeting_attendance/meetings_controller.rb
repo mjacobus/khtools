@@ -2,11 +2,11 @@
 
 class MeetingAttendance::MeetingsController < ApplicationController
   def index
-    @meetings = Db::MeetingAttendance::Meeting.by_creation_date
+    @meetings = meetings.by_creation_date
   end
 
   def new
-    @form = form.new(model.new)
+    @form = form.new(meetings.new)
   end
 
   def edit
@@ -14,7 +14,7 @@ class MeetingAttendance::MeetingsController < ApplicationController
   end
 
   def create
-    @form = form.new(model.new)
+    @form = form.new(meetings.new)
     @form.params = params
 
     if @form.save
@@ -43,8 +43,8 @@ class MeetingAttendance::MeetingsController < ApplicationController
 
   private
 
-  def model
-    Db::MeetingAttendance::Meeting
+  def meetings
+    current_account.meetings
   end
 
   def form
@@ -52,6 +52,6 @@ class MeetingAttendance::MeetingsController < ApplicationController
   end
 
   def find_meeting
-    model.find(params[:id])
+    meetings.find(params[:id])
   end
 end

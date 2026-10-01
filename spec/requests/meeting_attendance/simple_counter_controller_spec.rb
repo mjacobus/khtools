@@ -3,8 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe MeetingAttendance::SimpleCounterController do
-  let(:factories) { TestFactories.new }
-  let(:meeting) { factories.meetings.create }
+  let(:meeting) { factories.meetings.create(account: current_account) }
 
   before do
     grant_access(current_user)
@@ -24,6 +23,23 @@ RSpec.describe MeetingAttendance::SimpleCounterController do
       expect(response).to be_successful
       expect(response.body).to include(attendee.name)
       expect(response.body).not_to include(other_attendee.name)
+    end
+  end
+
+  context 'when the meeting belongs to another congregation' do
+    let(:other_meeting) { factories.meetings.create }
+
+    it 'does not list its attendees' do
+      get meeting_attendance_meeting_simple_counter_attendees_url(other_meeting)
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'does not add attendees' do
+      post meeting_attendance_meeting_simple_counter_attendees_url(other_meeting),
+           params: { attendee: { names: 'foo' } }
+
+      expect(other_meeting.attendees.count).to eq(0)
     end
   end
 
