@@ -5,7 +5,9 @@ require 'rails_helper'
 RSpec.describe PublicController do
   let(:account) { factories.accounts.create }
   let(:local_congregation) { factories.congregations.create(account:, local: true) }
-  let(:talk) { factories.public_talks.create(account:, congregation: local_congregation) }
+  let(:talk) do
+    factories.public_talks.create(account:, congregation: local_congregation, theme: '1')
+  end
   let(:skip_login) { true }
 
   describe 'GET #public_talks' do
@@ -34,14 +36,14 @@ RSpec.describe PublicController do
     it 'does not show local talks of other congregations' do
       other_account = factories.accounts.create
       other_local = factories.congregations.create(account: other_account, local: true)
-      speaker = factories.public_speakers.create(
-        account: other_account, name: 'Orador de outra congregação'
+      foreign_talk = factories.public_talks.create(
+        account: other_account, congregation: other_local, theme: '3', date: talk.date
       )
-      factories.public_talks.create(account: other_account, congregation: other_local, speaker:)
 
       perform_request
 
-      expect(response.body).not_to include('Orador de outra congregação')
+      expect(response.body).to include(CGI.escapeHTML(talk.theme_object.theme))
+      expect(response.body).not_to include(CGI.escapeHTML(foreign_talk.theme_object.theme))
     end
 
     it 'responds with 404 for an unknown congregation' do
