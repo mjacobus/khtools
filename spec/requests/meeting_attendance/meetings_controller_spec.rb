@@ -4,7 +4,8 @@ require 'rails_helper'
 
 RSpec.describe MeetingAttendance::MeetingsController do
   let(:model) { Db::MeetingAttendance::Meeting }
-  let(:meeting) { TestFactories.new.meetings.create }
+  let(:meeting) { factories.meetings.create(account: current_account) }
+  let(:other_congregation_meeting) { factories.meetings.create }
 
   before do
     grant_access(current_user)
@@ -27,6 +28,14 @@ RSpec.describe MeetingAttendance::MeetingsController do
       perform_request
 
       expect(response.body).to include(meeting.title)
+    end
+
+    it 'does not list meetings of other congregations' do
+      other_congregation_meeting
+
+      perform_request
+
+      expect(response.body).not_to include(other_congregation_meeting.title)
     end
   end
 
@@ -64,6 +73,12 @@ RSpec.describe MeetingAttendance::MeetingsController do
       expect { perform_request }.to change(model, :count).by(1)
     end
 
+    it 'assigns the meeting to the current congregation' do
+      perform_request
+
+      expect(model.last.account).to eq(current_account)
+    end
+
     context 'when payload is invalid' do
       before do
         params[:meeting][:title] = ''
@@ -75,6 +90,29 @@ RSpec.describe MeetingAttendance::MeetingsController do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include(I18n.t('simple_form.error_notification.default_message'))
       end
+    end
+  end
+
+  context 'when the meeting belongs to another congregation' do
+    it 'does not edit it' do
+      get edit_meeting_attendance_meeting_url(other_congregation_meeting)
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'does not update it' do
+      patch meeting_attendance_meeting_url(other_congregation_meeting),
+            params: { meeting: { title: 'x' } }
+
+      expect(response).to have_http_status(:not_found)
+      expect(other_congregation_meeting.reload.title).not_to eq('x')
+    end
+
+    it 'does not delete it' do
+      other_congregation_meeting
+
+      expect { delete meeting_attendance_meeting_url(other_congregation_meeting) }
+        .not_to change(model, :count)
     end
   end
 

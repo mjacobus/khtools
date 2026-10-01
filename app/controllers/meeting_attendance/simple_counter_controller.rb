@@ -22,7 +22,7 @@ class MeetingAttendance::SimpleCounterController < ApplicationController
   private
 
   def meeting
-    @meeting ||= Db::MeetingAttendance::Meeting.find(params[:meeting_id])
+    @meeting ||= current_account.meetings.find(params[:meeting_id])
   end
 
   def form_class

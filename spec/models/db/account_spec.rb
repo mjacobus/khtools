@@ -8,6 +8,7 @@ RSpec.describe Db::Account do
   it { is_expected.to validate_uniqueness_of(:congregation_name).case_insensitive }
   it { is_expected.to have_many(:users) }
   it { is_expected.to have_many(:publishers).class_name('Db::Publisher') }
+  it { is_expected.to have_many(:meetings).class_name('Db::MeetingAttendance::Meeting') }
   it { is_expected.to have_many(:field_service_groups).class_name('Db::FieldServiceGroup') }
   it { is_expected.to have_many(:territories).class_name('Db::Territory') }
   it { is_expected.to have_many(:preaching_campaigns).class_name('Db::PreachingCampaign') }

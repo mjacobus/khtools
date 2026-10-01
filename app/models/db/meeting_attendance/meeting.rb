@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Db::MeetingAttendance::Meeting < ApplicationRecord
+  belongs_to :account, class_name: 'Db::Account'
+
   has_many :attendees,
            class_name: 'Db::MeetingAttendance::SimpleCounterAttendee',
            dependent: :destroy
