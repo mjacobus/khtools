@@ -52,6 +52,20 @@ RSpec.describe Backups::FolderBackupService, type: :service do
     expect(File.exist?(history_dir.join('the-hash.txt'))).to be true
   end
 
+  it 'ignores file access times when deciding whether content changed' do
+    service = described_class.new(app_name:, backup_dir:)
+    file = tmp_source_dir.join('file.txt')
+
+    second = :not_run
+    silence_output do
+      service.backup(source_dir: tmp_source_dir, target_path: 'backup-{timestamp}.zip')
+      File.utime(File.atime(file) + 120, File.mtime(file), file)
+      second = service.backup(source_dir: tmp_source_dir, target_path: 'backup-{timestamp}.zip')
+    end
+
+    expect(second).to be_nil
+  end
+
   it 'returns nil and does not duplicate zip if content has not changed' do
     service = described_class.new(app_name:, backup_dir:)
 
