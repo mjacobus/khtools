@@ -2,11 +2,11 @@
 
 class PublicTalks::CongregationsController < ApplicationController
   include CrudController
+  include AccountAwareCrudController
 
   key :congregation
 
-  model_class Db::Congregation
-  scope { Db::Congregation.order(:name) }
+  scope { current_account.congregations.order(:name) }
 
   permit :name,
          :address,

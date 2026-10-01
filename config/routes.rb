@@ -13,7 +13,8 @@ Rails.application.routes.draw do
     get '/dev/login', to: 'development#login'
   end
 
-  get '/discursos', to: 'public#public_talks'
+  get '/discursos', to: 'public#default_public_talks'
+  get '/discursos/:account_id', to: 'public#public_talks', as: :public_talks
   get '/config', to: 'config#index'
 
   namespace :field_service do

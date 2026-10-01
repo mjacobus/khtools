@@ -29,11 +29,11 @@ class PublicTalks::Talks::FormPageComponent < PageComponent
   end
 
   def collection_for_congregation
-    Db::Congregation.order(:name).pluck(:name, :id)
+    current_account.congregations.order(:name).pluck(:name, :id)
   end
 
   def collection_for_speaker
-    query = Db::PublicSpeaker.order(:name).includes(:congregation)
+    query = current_account.public_speakers.order(:name).includes(:congregation)
     query.pluck(:id, :name, 'congregations.name').map do |fields|
       ["#{fields[1]} (#{fields[2]})", fields[0]]
     end
@@ -62,7 +62,7 @@ class PublicTalks::Talks::FormPageComponent < PageComponent
   private
 
   def guess_date
-    last = Db::PublicTalk.reorder(created_at: :desc).limit(1).first
+    last = talk.account&.public_talks&.reorder(created_at: :desc)&.first
 
     if last
       last.date + 7.days

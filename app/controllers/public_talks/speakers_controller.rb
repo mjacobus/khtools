@@ -2,11 +2,11 @@
 
 class PublicTalks::SpeakersController < ApplicationController
   include CrudController
+  include AccountAwareCrudController
 
   key :speaker
 
-  model_class Db::PublicSpeaker
-  scope { Db::PublicSpeaker.with_dependencies.order(:name) }
+  scope { current_account.public_speakers.with_dependencies.order(:name) }
 
   permit :name,
          :phone,
@@ -14,4 +14,10 @@ class PublicTalks::SpeakersController < ApplicationController
          :congregation_id
 
   component_class_template 'PublicTalks::Speakers::%{type}PageComponent', use_key: false
+
+  private
+
+  def find_scope
+    current_account.public_speakers
+  end
 end

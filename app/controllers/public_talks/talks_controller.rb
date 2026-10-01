@@ -2,11 +2,11 @@
 
 class PublicTalks::TalksController < ApplicationController
   include CrudController
+  include AccountAwareCrudController
 
   key :talk
 
-  model_class Db::PublicTalk
-  scope { Db::PublicTalk.filter(params).with_dependencies }
+  scope { current_account.public_talks.search(params).with_dependencies }
 
   permit :congregation_id,
          :speaker_id,
@@ -19,6 +19,10 @@ class PublicTalks::TalksController < ApplicationController
   component_class_template 'PublicTalks::Talks::%{type}PageComponent', use_key: false
 
   private
+
+  def find_scope
+    current_account.public_talks
+  end
 
   def redirect
     redirect_to(action: :index, since: MeetingWeek.new.first_day)

@@ -39,7 +39,7 @@ class PublicTalks::ContactSpeakerMessageComponent < ApplicationComponent
   end
 
   def local_congregation_name
-    Db::Congregation.local.first&.name
+    current_account.congregations.local.first&.name
   end
 
   def replace(message, values)

@@ -21,6 +21,10 @@ class PublicTalks::Talks::IndexPageComponent < PageComponent
     link_to(t('app.links.new'), new_public_talks_talk_path)
   end
 
+  def public_page_link
+    link_to(t('app.links.public_view'), public_talks_path(current_account), target: :_blank, rel: :noopener)
+  end
+
   def grouped_by_week
     @talks.group_by do |talk|
       MeetingWeek.new(talk.date).first_day

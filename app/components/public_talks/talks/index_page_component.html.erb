@@ -4,6 +4,9 @@
   <% component.item do %>
     <%= new_link %>
   <% end %>
+  <% component.item do %>
+    <%= public_page_link %>
+  <% end %>
 <% end %>
 
 <%= render PublicTalks::Talks::FilterComponent.new(params) %>

@@ -10,4 +10,6 @@ RSpec.describe Db::Congregation do
   end
 
   it { is_expected.to validate_presence_of(:name) }
+
+  it { is_expected.to belong_to(:account).class_name('Db::Account') }
 end
