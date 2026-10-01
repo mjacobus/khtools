@@ -174,6 +174,8 @@ RSpec.describe PublicTalks::CongregationsController do
 
   context 'when the congregation belongs to another congregation' do
     it 'is not listed' do
+      foreign_congregation
+
       get('/public_talks/congregations')
 
       expect(response.body).not_to include(foreign_congregation.name)
