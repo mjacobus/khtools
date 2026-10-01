@@ -29,6 +29,51 @@ RSpec.describe TerritoryAssignmentService do
     end
   end
 
+  describe '#delete_assignment' do
+    let(:territory) { factories.territories.create }
+    let(:publisher) { factories.publishers.create }
+    let(:other_publisher) { factories.publishers.create }
+
+    it 'removes an old assignment and keeps the current one' do
+      old = service.assign(territory:, to: other_publisher)
+      territory.return
+      current = service.assign(territory: territory.reload, to: publisher)
+
+      service.delete_assignment(assignment: old)
+
+      territory.reload
+      expect(territory.assignments).to eq([current])
+      expect(territory.last_assignment).to eq(current)
+      expect(territory.assignee).to eq(publisher)
+    end
+
+    it 'falls back to the previous assignment when deleting the current one' do
+      previous = service.assign(territory:, to: other_publisher)
+      territory.return
+      current = service.assign(territory: territory.reload, to: publisher)
+
+      service.delete_assignment(assignment: current)
+
+      territory.reload
+      expect(territory.assignments).to eq([previous.reload])
+      expect(territory.last_assignment).to eq(previous)
+      expect(territory.assignee).to be_nil
+      expect(territory.assigned_at).to be_nil
+    end
+
+    it 'leaves the territory unassigned when deleting its only assignment' do
+      assignment = service.assign(territory:, to: publisher)
+
+      service.delete_assignment(assignment:)
+
+      territory.reload
+      expect(territory.assignments).to be_empty
+      expect(territory.last_assignment).to be_nil
+      expect(territory.assignee).to be_nil
+      expect(territory.assigned_at).to be_nil
+    end
+  end
+
   describe '#assign' do
     let(:territory) { factories.territories.create }
     let(:publisher) { factories.publishers.create }

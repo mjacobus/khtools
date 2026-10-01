@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Territories::AssignmentsController < ApplicationController
+  # DELETE .../assignments/unassign returns the territory instead of deleting an assignment.
+  RETURN_TERRITORY_ID = 'unassign'
+
   def index
     render Territories::Assignments::IndexPageComponent.new(
       territory:,
@@ -54,7 +57,12 @@ class Territories::AssignmentsController < ApplicationController
   end
 
   def destroy
-    territory.return
+    if params[:id] == RETURN_TERRITORY_ID
+      territory.return
+    else
+      assignment_service.delete_assignment(assignment:)
+    end
+
     show_territory
   end
 
