@@ -23,6 +23,31 @@
     </div>
   <% end %>
 
+  <% if display_my_territories? %>
+    <div class="index-list mt-3 dashboard-section">
+      <div class="item">
+        <h2 class="h5 mb-4"> <%= my_territories_title %> </h2>
+        <% if my_territories.any? %>
+          <div class="row">
+            <% my_territories.each do |territory| %>
+              <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+                <div><%= territory_link(territory) %></div>
+                <div class="small text-muted">
+                  <%= territory_type(territory) %>
+                  <% if assigned_since(territory) %>
+                    · <%= assigned_since(territory) %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="mb-0"><%= t('app.messages.no_territories_assigned_to_you') %></p>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="index-list mt-3 dashboard-section">
     <div class="item">
       <h2 class="h5 mb-4"> <%= publishers_title %> </h2>
