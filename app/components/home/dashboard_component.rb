@@ -30,7 +30,7 @@ class Home::DashboardComponent < PageComponent
   end
 
   def my_territories
-    @my_territories ||= my_publisher.territories.order(:name)
+    @my_territories ||= current_account.territories.where(assignee: my_publisher).order(:name)
   end
 
   def territory_link(territory)

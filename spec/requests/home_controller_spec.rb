@@ -18,6 +18,14 @@ RSpec.describe HomeController do
       expect(response.body).not_to include(other.name)
     end
 
+    it 'ignores territories of other congregations assigned to the publisher' do
+      foreign = factories.territories.create(assignee: publisher)
+
+      perform_request
+
+      expect(response.body).not_to include(foreign.name)
+    end
+
     it 'says so when no territory is assigned' do
       publisher
 
