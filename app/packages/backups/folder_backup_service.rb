@@ -26,8 +26,9 @@ module Backups
       FileUtils.mkdir_p(@backup_dir)
       FileUtils.mkdir_p(@history_dir)
 
-      # Create zip
-      system("zip -r -q #{tmp_path} #{source_dir}")
+      # Create zip. -X leaves out extra attributes such as access times,
+      # which change on every read and would make identical content hash differently.
+      system("zip -X -r -q #{tmp_path} #{source_dir}")
 
       # Check if zip contains real files
       output = `zipinfo -1 #{tmp_path}`

@@ -3,7 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe PublicTalks::TalksController do
-  let(:talk) { factories.public_talks.create }
+  let(:talk) { factories.public_talks.create(account: current_account) }
+  let(:foreign_talk) { factories.public_talks.create }
+  let(:attributes) { factories.public_talks.attributes(account: current_account) }
   let(:index_page) do
     public_talks_talks_path(since: MeetingWeek.new.first_day.to_fs(:db))
   end
@@ -28,7 +30,7 @@ RSpec.describe PublicTalks::TalksController do
 
       perform_request
 
-      scope = Db::PublicTalk.order(:date).limit(100).offset(0)
+      scope = current_account.public_talks.order(:date).limit(100).offset(0)
       expected_component = PublicTalks::Talks::IndexPageComponent.new(scope)
       expect(renderer).to have_rendered_component(expected_component)
     end
@@ -38,7 +40,7 @@ RSpec.describe PublicTalks::TalksController do
 
       get('/public_talks/talks', params: { since: '2021-02-01' })
 
-      scope = Db::PublicTalk.order(:date).limit(100).offset(0).since('2021-02-01')
+      scope = current_account.public_talks.order(:date).limit(100).offset(0).since('2021-02-01')
       expected_component = PublicTalks::Talks::IndexPageComponent.new(scope)
 
       expect(renderer).to have_rendered_component(expected_component)
@@ -66,7 +68,7 @@ RSpec.describe PublicTalks::TalksController do
 
   describe 'GET #new' do
     let(:perform_request) { get('/public_talks/talks/new') }
-    let(:talk) { Db::PublicTalk.new }
+    let(:talk) { current_account.public_talks.new }
 
     it 'returns with success' do
       perform_request
@@ -88,7 +90,7 @@ RSpec.describe PublicTalks::TalksController do
     let(:perform_request) { post('/public_talks/talks', params:) }
 
     context 'when payload is valid' do
-      let(:params) { { talk: factories.public_talks.attributes } }
+      let(:params) { { talk: attributes } }
 
       it 'redirects to index' do
         perform_request
@@ -98,6 +100,12 @@ RSpec.describe PublicTalks::TalksController do
 
       it 'creates record' do
         expect { perform_request }.to change(Db::PublicTalk, :count).by(1)
+      end
+
+      it 'assigns the talk to the current congregation' do
+        perform_request
+
+        expect(Db::PublicTalk.unscoped.last.account).to eq(current_account)
       end
     end
 
@@ -116,7 +124,7 @@ RSpec.describe PublicTalks::TalksController do
         perform_request
 
         expected_component = PublicTalks::Talks::FormPageComponent.new(
-          Db::PublicTalk.new(date: '')
+          current_account.public_talks.new(date: '')
         )
         expect(renderer).to have_rendered_component(expected_component)
       end
@@ -148,7 +156,9 @@ RSpec.describe PublicTalks::TalksController do
     end
 
     context 'when payload is valid' do
-      let(:params) { { talk: factories.public_talks.attributes.merge(date: '2001-01-02') } }
+      let(:params) do
+        { talk: attributes.merge(date: '2001-01-02') }
+      end
 
       it 'responds with 422' do
         perform_request
@@ -180,6 +190,29 @@ RSpec.describe PublicTalks::TalksController do
         expected_component = PublicTalks::Talks::FormPageComponent.new(talk)
         expect(renderer).to have_rendered_component(expected_component)
       end
+    end
+  end
+
+  context 'when the talk belongs to another congregation' do
+    it 'is not listed' do
+      foreign_talk
+
+      get('/public_talks/talks')
+
+      expect(response.body).not_to include(%(/public_talks/talks/#{foreign_talk.id}"))
+    end
+
+    it 'is not shown' do
+      get("/public_talks/talks/#{foreign_talk.id}")
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'is not deleted' do
+      foreign_talk
+
+      expect { delete("/public_talks/talks/#{foreign_talk.id}") }
+        .not_to change(Db::PublicTalk, :count)
     end
   end
 

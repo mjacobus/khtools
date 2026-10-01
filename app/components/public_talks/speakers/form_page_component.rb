@@ -28,6 +28,6 @@ class PublicTalks::Speakers::FormPageComponent < PageComponent
   end
 
   def collection_for_congregation
-    Db::Congregation.pluck(:name, :id)
+    current_account.congregations.pluck(:name, :id)
   end
 end

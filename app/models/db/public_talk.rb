@@ -3,6 +3,7 @@
 class Db::PublicTalk < ApplicationRecord
   STATUSES = %w[scheduled confirmed draft].freeze
 
+  belongs_to :account, class_name: 'Db::Account'
   belongs_to :congregation, class_name: 'Congregation', optional: true
   belongs_to :speaker, class_name: 'Db::PublicSpeaker', optional: true
 
@@ -18,6 +19,7 @@ class Db::PublicTalk < ApplicationRecord
   validates :theme, presence: { if: :theme_required? }
   validates :date, presence: true
   validates :status, { inclusion: { in: STATUSES } }
+  validate :associations_belong_to_account
 
   def theme_object
     @theme_object ||= PublicTalks::Themes.new.find(theme)
@@ -45,7 +47,7 @@ class Db::PublicTalk < ApplicationRecord
 
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/AbcSize
-  def self.filter(params)
+  def self.search(params)
     query = all
 
     if params[:speaker_id].present?
@@ -75,6 +77,16 @@ class Db::PublicTalk < ApplicationRecord
   end
 
   private
+
+  def associations_belong_to_account
+    %i[congregation speaker].each do |association|
+      record = send(association)
+
+      if record && record.account_id != account_id
+        errors.add(association, :invalid)
+      end
+    end
+  end
 
   def speaker_required?
     !(legacy? || draft? || special?)

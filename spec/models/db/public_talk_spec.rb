@@ -70,12 +70,34 @@ RSpec.describe Db::PublicTalk do
     end
   end
 
-  describe '.filter' do
+  describe 'account ownership' do
+    let(:account) { factories.accounts.create }
+
+    it 'accepts a congregation and speaker from the same account' do
+      expect(talks.build(account:)).to be_valid
+    end
+
+    it 'rejects a congregation from another account' do
+      talk = talks.build(account:, congregation: factories.congregations.create)
+
+      expect(talk).not_to be_valid
+      expect(talk.errors[:congregation]).to be_present
+    end
+
+    it 'rejects a speaker from another account' do
+      talk = talks.build(account:, speaker: factories.public_speakers.create)
+
+      expect(talk).not_to be_valid
+      expect(talk.errors[:speaker]).to be_present
+    end
+  end
+
+  describe '.search' do
     it 'filters by theme' do
       talks.create
       talk2 = talks.create(theme: 'the-theme')
 
-      result = described_class.filter(theme: 'the-theme')
+      result = described_class.search(theme: 'the-theme')
       result_ids = result.map(&:id)
 
       expect(result_ids).to eq([talk2.id])
@@ -85,9 +107,9 @@ RSpec.describe Db::PublicTalk do
       talks.create
 
       congregation = factories.congregations.create
-      talk2 = talks.create(congregation_id: congregation.id)
+      talk2 = talks.create(congregation_id: congregation.id, account_id: congregation.account_id)
 
-      result = described_class.filter(congregation_id: congregation.id)
+      result = described_class.search(congregation_id: congregation.id)
       result_ids = result.map(&:id)
 
       expect(result_ids).to eq([talk2.id])
@@ -97,9 +119,9 @@ RSpec.describe Db::PublicTalk do
       talks.create
 
       speaker = factories.public_speakers.create
-      talk2 = talks.create(speaker_id: speaker.id)
+      talk2 = talks.create(speaker_id: speaker.id, account_id: speaker.account_id)
 
-      result = described_class.filter(speaker_id: speaker.id)
+      result = described_class.search(speaker_id: speaker.id)
       result_ids = result.map(&:id)
 
       expect(result_ids).to eq([talk2.id])
@@ -109,7 +131,7 @@ RSpec.describe Db::PublicTalk do
       talk1 = talks.create
       talk2 = talks.create
 
-      result = described_class.filter({})
+      result = described_class.search({})
       result_ids = result.map(&:id)
 
       expect(result_ids).to eq([talk1.id, talk2.id])
@@ -119,7 +141,7 @@ RSpec.describe Db::PublicTalk do
       talk1 = talks.create
       talk2 = talks.create
 
-      result = described_class.filter(speaker_id: '')
+      result = described_class.search(speaker_id: '')
       result_ids = result.map(&:id)
 
       expect(result_ids).to eq([talk1.id, talk2.id])
@@ -137,13 +159,13 @@ RSpec.describe Db::PublicTalk do
       end
 
       it 'only returns data from since argument' do
-        result = described_class.filter(since: a.date.strftime('%Y-%m-%d'))
+        result = described_class.search(since: a.date.strftime('%Y-%m-%d'))
 
         expect(result.pluck(:id)).to eq([a.id, b.id])
       end
 
       it 'takes date objects' do
-        result = described_class.filter(since: a.date)
+        result = described_class.search(since: a.date)
 
         expect(result.pluck(:id)).to eq([a.id, b.id])
       end

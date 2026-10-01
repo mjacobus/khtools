@@ -125,6 +125,16 @@ class TestFactories
       added_values
     end
 
+    # Creates the association in the same account as the record being built.
+    def owned_by_account(attributes, association, factory_name)
+      if attributes.key?(association) || attributes.key?(:"#{association}_id")
+        return {}
+      end
+
+      account_id = attributes[:account]&.id || attributes[:account_id]
+      { "#{association}_id": factories.send(factory_name).create(account_id:).id }
+    end
+
     def random
       model_class.order('RANDOM()').first
     end
@@ -180,7 +190,9 @@ class TestFactories
         name: "Br. John #{seq}",
         phone: "(51) 1234-123#{seq}",
         email: "person#{seq}@email.com"
-      }.merge(overrides).merge(associations([:congregation], overrides))
+      }.merge(overrides).merge(associations([:account], overrides)).then do |attributes|
+        attributes.merge(owned_by_account(attributes, :congregation, :congregations))
+      end
     end
   end
 
@@ -189,7 +201,11 @@ class TestFactories
       {
         theme: seq,
         date: seq.days.from_now.round
-      }.merge(overrides).merge(associations(%i[congregation speaker], overrides))
+      }.merge(overrides).merge(associations([:account], overrides)).then do |attributes|
+        attributes
+          .merge(owned_by_account(attributes, :congregation, :congregations))
+          .merge(owned_by_account(attributes, :speaker, :public_speakers))
+      end
     end
   end
 
@@ -203,7 +219,7 @@ class TestFactories
         primary_contact_email: "person#{seq}@email.com",
         weekend_meeting_time: "Saturday seq o'clock",
         local: false
-      }.merge(overrides)
+      }.merge(overrides).merge(associations([:account], overrides))
     end
   end
 
@@ -226,19 +242,8 @@ class TestFactories
         name: "User-#{seq}",
         gender: 'm'
       }.merge(overrides).merge(associations([:account], overrides)).then do |attributes|
-        attributes.merge(group_attributes(attributes))
+        attributes.merge(owned_by_account(attributes, :group, :groups))
       end
-    end
-
-    private
-
-    def group_attributes(attributes)
-      if attributes.key?(:group) || attributes.key?(:group_id)
-        return {}
-      end
-
-      account_id = attributes[:account]&.id || attributes[:account_id]
-      { group_id: factories.groups.create(account_id:).id }
     end
   end
 

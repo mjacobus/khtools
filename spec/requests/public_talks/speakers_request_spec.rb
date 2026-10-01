@@ -3,7 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe PublicTalks::SpeakersController do
-  let(:speaker) { factories.public_speakers.create }
+  let(:speaker) { factories.public_speakers.create(account: current_account) }
+  let(:foreign_speaker) { factories.public_speakers.create }
+  let(:attributes) { factories.public_speakers.attributes(account: current_account) }
 
   before do
     login_user(admin_user)
@@ -25,7 +27,8 @@ RSpec.describe PublicTalks::SpeakersController do
 
       perform_request
 
-      expected_component = PublicTalks::Speakers::IndexPageComponent.new(Db::PublicSpeaker.all)
+      speakers = current_account.public_speakers.order(:name)
+      expected_component = PublicTalks::Speakers::IndexPageComponent.new(speakers)
       expect(renderer).to have_rendered_component(expected_component)
     end
   end
@@ -51,7 +54,7 @@ RSpec.describe PublicTalks::SpeakersController do
 
   describe 'GET #new' do
     let(:perform_request) { get('/public_talks/speakers/new') }
-    let(:speaker) { Db::PublicSpeaker.new }
+    let(:speaker) { current_account.public_speakers.new }
 
     it 'returns with success' do
       perform_request
@@ -73,7 +76,7 @@ RSpec.describe PublicTalks::SpeakersController do
     let(:perform_request) { post('/public_talks/speakers', params:) }
 
     context 'when payload is valid' do
-      let(:params) { { speaker: factories.public_speakers.attributes } }
+      let(:params) { { speaker: attributes } }
 
       it 'returns with success' do
         perform_request
@@ -101,7 +104,7 @@ RSpec.describe PublicTalks::SpeakersController do
         perform_request
 
         expected_component = PublicTalks::Speakers::FormPageComponent.new(
-          Db::PublicSpeaker.new(name: '')
+          current_account.public_speakers.new(name: '')
         )
         expect(renderer).to have_rendered_component(expected_component)
       end
@@ -133,7 +136,9 @@ RSpec.describe PublicTalks::SpeakersController do
     end
 
     context 'when payload is valid' do
-      let(:params) { { speaker: factories.public_speakers.attributes.merge(name: 'new name') } }
+      let(:params) do
+        { speaker: attributes.merge(name: 'new name') }
+      end
 
       it 'redirects to index' do
         perform_request
@@ -165,6 +170,29 @@ RSpec.describe PublicTalks::SpeakersController do
         expected_component = PublicTalks::Speakers::FormPageComponent.new(speaker)
         expect(renderer).to have_rendered_component(expected_component)
       end
+    end
+  end
+
+  context 'when the speaker belongs to another congregation' do
+    it 'is not listed' do
+      foreign_speaker
+
+      get('/public_talks/speakers')
+
+      expect(response.body).not_to include(foreign_speaker.name)
+    end
+
+    it 'is not shown' do
+      get("/public_talks/speakers/#{foreign_speaker.id}")
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'is not deleted' do
+      foreign_speaker
+
+      expect { delete("/public_talks/speakers/#{foreign_speaker.id}") }
+        .not_to change(Db::PublicSpeaker, :count)
     end
   end
 
