@@ -21,6 +21,10 @@ module Congregation
         current_account.field_service_groups.order(:name).pluck(:name, :id)
       end
 
+      def users
+        current_account.users.linkable_to(publisher).order(:name).map { |user| [user.to_s, user.id] }
+      end
+
       private
 
       def setup_breadcrumb

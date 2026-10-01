@@ -2,6 +2,18 @@
 
 class User < ApplicationRecord
   belongs_to :account, class_name: 'Db::Account', optional: true
+  has_one :publisher, class_name: 'Db::Publisher', dependent: :nullify
+
+  scope :linkable_to, lambda { |publisher|
+    linked = Db::Publisher.where.not(id: publisher.id).where.not(user_id: nil)
+    where.not(id: linked.select(:user_id))
+  }
+
+  validate :publisher_belongs_to_account
+
+  def to_s
+    "#{name} (#{email})"
+  end
 
   def permissions
     @permissions ||= begin
@@ -35,6 +47,12 @@ class User < ApplicationRecord
   end
 
   private
+
+  def publisher_belongs_to_account
+    if publisher && publisher.account_id != account_id
+      errors.add(:account, :invalid)
+    end
+  end
 
   def default_permissions_config
     { controllers: [] }.stringify_keys

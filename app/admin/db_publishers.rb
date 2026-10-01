@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 ActiveAdmin.register Db::Publisher do
-  permit_params :name, :email, :phone, :gender, :group_id, :elder, :ministerial_servant, :pioneer,
+  permit_params :name, :email, :phone, :gender, :group_id, :user_id,
+                :elder, :ministerial_servant, :pioneer,
                 :address,
                 :primary_emergency_contact_name, :primary_emergency_contact_phone_number,
                 :secondary_emergency_contact_name, :secondary_emergency_contact_phone_number
@@ -28,6 +29,7 @@ ActiveAdmin.register Db::Publisher do
         publisher.gender == 'm' ? 'Masculino' : 'Feminino'
       end
       row :group
+      row :user
       row :elder
       row :ministerial_servant
       row :pioneer
@@ -49,6 +51,7 @@ ActiveAdmin.register Db::Publisher do
       f.input :secondary_emergency_contact_phone_number
       f.input :gender, as: :select, collection: [%w[Masculino m], %w[Feminino f]]
       f.input :group, as: :select, collection: Db::FieldServiceGroup.order(:name).pluck(:name, :id)
+      f.input :user, as: :select, collection: User.order(:name).map { |user| [user.to_s, user.id] }
       f.input :elder
       f.input :ministerial_servant
       f.input :pioneer

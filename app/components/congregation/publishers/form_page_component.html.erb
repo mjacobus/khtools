@@ -15,6 +15,10 @@
     <% end %>
 
     <%= input_wrapper do %>
+      <%= f.input :user_id, as: :select, collection: users %>
+    <% end %>
+
+    <%= input_wrapper do %>
       <%= f.input :email %>
     <% end %>
 
