@@ -26,6 +26,24 @@ RSpec.describe HomeController do
       expect(response.body).not_to include(foreign.name)
     end
 
+    it 'links to the territory when the user can see it' do
+      mine = factories.territories.create(account: current_account, assignee: publisher)
+      current_user.grant_controller_access('territories/regular_territories', action: 'show')
+
+      perform_request
+
+      expect(response.body).to include(%(href="#{routes.territory_path(mine)}"))
+    end
+
+    it 'shows the territory name without a link when the user cannot see it' do
+      mine = factories.territories.create(account: current_account, assignee: publisher)
+
+      perform_request
+
+      expect(response.body).to include(mine.name)
+      expect(response.body).not_to include(%(href="#{routes.territory_path(mine)}"))
+    end
+
     it 'says so when no territory is assigned' do
       publisher
 

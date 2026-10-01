@@ -34,6 +34,12 @@ class Home::DashboardComponent < PageComponent
   end
 
   def territory_link(territory)
+    controller = "territories/#{territory.type_key}_territories"
+
+    unless current_user.authorized_for?(controller, 'show')
+      return territory.name
+    end
+
     link_to(territory.name, urls.territory_path(territory))
   end
 

@@ -34,11 +34,7 @@ class ControllerAcl
   private
 
   def authorized_controller_action(user)
-    allowed_items = [
-      "#{@request.params[:controller]}##{@request.params[:action]}",
-      "#{@request.params[:controller]}#*"
-    ]
-    user.permissions['controllers'].intersect?(allowed_items)
+    user.authorized_for?(@request.params[:controller], @request.params[:action])
   end
 
   def requested_config?
