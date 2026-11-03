@@ -9,7 +9,7 @@ set :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 set :deploy_to, "/home/deploy/apps/#{fetch(:application)}"
 
 # ASDF
-set :asdf_version, '3.4.3'
+set :asdf_version, '3.4.12'
 set :default_env, {
   'ASDF_DIR' => '/home/deploy/.asdf',
   'PATH' => '/home/deploy/.asdf/bin:/home/deploy/.asdf/shims:$PATH'
