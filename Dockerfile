@@ -1,4 +1,4 @@
-FROM ruby:3.4.12
+FROM ruby:3.4.12-bookworm
 
 WORKDIR /app
 
@@ -23,4 +23,5 @@ RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rake assets:precompile
 
 RUN mkdir -p tmp/pids
 
+ENTRYPOINT ["bin/docker-entrypoint"]
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]

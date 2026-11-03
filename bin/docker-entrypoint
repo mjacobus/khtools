@@ -1,0 +1,10 @@
+#!/bin/bash -e
+
+# Migrate before the web server starts, so a deploy never serves new code
+# against the old schema. Other commands (kamal app exec "bin/rails console",
+# one-off rake tasks) run as-is.
+if [[ "$*" == *puma* ]]; then
+  bundle exec rails db:migrate
+fi
+
+exec "$@"
