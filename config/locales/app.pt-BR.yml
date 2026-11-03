@@ -307,6 +307,7 @@ pt-BR:
       assigned_since: "designado em %{date}"
       contact_admin: "Se você já logou mas não tem acesso, contate o admin de sua congregação."
       confirm_delete: 'Tem certeza que quer excluir este registro?'
+      confirm_delete_assignment: 'Excluir esta designação? Ela some do histórico do território. Para devolver o território, use "Devolver".'
       confirm_contacted: 'Marcar contato como contatado?'
       confirm_unassignment: 'Tem certeza que este território foi devolvido?'
       confirm_delete_x: 'Tem certeza que quer excluir "%{record}"?'

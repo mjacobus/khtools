@@ -68,6 +68,27 @@ RSpec.describe Territories::AssignmentsController do
     end
   end
 
+  describe 'DELETE an assignment' do
+    it 'deletes that assignment and redirects to the territory' do
+      assignment = territory.assign_to(publisher)
+
+      expect { delete routes.territory_assignment_path(assignment) }
+        .to change(Db::TerritoryAssignment, :count).by(-1)
+      expect(response).to redirect_to(routes.territory_path(territory))
+      expect(territory.reload.assignee).to be_nil
+    end
+
+    it 'does not delete assignments of another territory' do
+      other_territory = factories.territories.create(account: territory.account)
+      assignment = other_territory.assign_to(publisher)
+
+      delete "#{routes.territory_assignments_path(territory)}/#{assignment.id}"
+
+      expect(response).to have_http_status(:not_found)
+      expect(Db::TerritoryAssignment.exists?(assignment.id)).to be(true)
+    end
+  end
+
   describe '#destroy' do
     let(:perform_request) { delete routes.return_territory_path(territory) }
 

@@ -65,6 +65,21 @@ class TerritoryAssignmentService
     territory.save!
   end
 
+  def delete_assignment(assignment:)
+    territory = assignment.territory
+
+    territory.class.transaction do
+      territory.update!(last_assignment: nil)
+      assignment.destroy!
+
+      if territory.assignments.reload.any?
+        update_last_assignment(territory:)
+      else
+        territory.update!(assignee_id: nil, assigned_at: nil)
+      end
+    end
+  end
+
   def return_territory(territory:)
     assignments_to_return = territory.assignments.where(assignee_id: territory.assignee_id)
 

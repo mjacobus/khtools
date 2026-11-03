@@ -25,7 +25,8 @@ module Territories
 
     def actions
       [
-        edit_action
+        edit_action,
+        delete_action
       ]
     end
 
@@ -35,6 +36,15 @@ module Territories
       link_to(
         t('app.links.edit'),
         urls.edit_territory_assignment_path(assignment),
+        class: 'btn'
+      )
+    end
+
+    def delete_action
+      link_to(
+        t('app.links.delete'),
+        urls.territory_assignment_path(assignment),
+        data: { method: :delete, confirm: t('app.messages.confirm_delete_assignment') },
         class: 'btn'
       )
     end
