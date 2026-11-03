@@ -4,6 +4,54 @@ import { on } from "delegated-events";
 
 Rails.start();
 
+// Searchable selects
+//
+// Selects with more than SEARCHABLE_SELECT_MIN_OPTIONS options get a text
+// filter. data-searchable="true" forces it, data-searchable="false" opts out.
+// The original <select> keeps its value, so form submissions don't change.
+// TomSelect is loaded from the CDN in the layout.
+const SEARCHABLE_SELECT_MIN_OPTIONS = 8;
+
+// Rails date/time selects name their parts like "talk[date(3i)]".
+const DATE_PART_SELECT = /\(\di\)\]$/;
+
+function shouldBeSearchable(select) {
+  if (select.multiple || select.tomselect || DATE_PART_SELECT.test(select.name)) {
+    return false;
+  }
+
+  const flag = select.dataset.searchable;
+
+  if (flag === "true") {
+    return true;
+  }
+
+  if (flag === "false") {
+    return false;
+  }
+
+  return select.options.length > SEARCHABLE_SELECT_MIN_OPTIONS;
+}
+
+function makeSearchable(select) {
+  new window.TomSelect(select, {
+    allowEmptyOption: true,
+    maxOptions: null,
+    placeholder: "Digite para filtrar…",
+    render: {
+      no_results: () => '<div class="no-results">Nenhum resultado</div>',
+    },
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll("select").forEach((select) => {
+    if (shouldBeSearchable(select)) {
+      makeSearchable(select);
+    }
+  });
+});
+
 // Sidebar
 on("click", "[data-toggle-sidebar]", () => {
   const content = document.getElementById("content");
