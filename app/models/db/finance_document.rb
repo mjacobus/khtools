@@ -16,6 +16,15 @@ class Db::FinanceDocument < ApplicationRecord
 
   scope :stuck, -> { where(state: %w[received confirmed]).where(updated_at: ...10.minutes.ago) }
 
+  # Moves from one state to another only if nobody else did first (Telegram delivers
+  # updates in parallel, so two taps can race).
+  def claim(from:, **changes)
+    claimed = self.class.where(id:, state: from)
+      .update_all(changes.merge(updated_at: Time.current)) == 1 # rubocop:disable Rails/SkipsModelValidations
+    reload if claimed
+    claimed
+  end
+
   # Remittances are dated on the last day of the month they belong to (S-27b par. 27).
   def assign_competence(period: nil)
     self.competence = Finance::Competence.default_for(kind:, document_date:, period:)

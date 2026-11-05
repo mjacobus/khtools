@@ -8,7 +8,7 @@ module Finance
 
     def perform(document_id)
       @document = Db::FinanceDocument.find(document_id)
-      return unless @document.state == 'confirmed'
+      return unless @document.state == 'confirmed' && claim
 
       archive
     rescue StandardError => exception
@@ -21,6 +21,14 @@ module Finance
 
     def account
       @document.account
+    end
+
+    # Two jobs for the same document (retry sweep, double enqueue): only the one that bumps
+    # updated_at from the value it read gets to upload.
+    def claim
+      Db::FinanceDocument.where(id: @document.id, state: 'confirmed',
+                                updated_at: @document.updated_at)
+        .update_all(updated_at: Time.current) == 1 # rubocop:disable Rails/SkipsModelValidations
     end
 
     def archive

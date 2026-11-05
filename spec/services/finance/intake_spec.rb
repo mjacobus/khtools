@@ -117,6 +117,22 @@ RSpec.describe Finance::Intake do
     expect(telegram.answers.last[:text]).to eq(Finance::Messages::ALREADY_HANDLED)
   end
 
+  it 'claims the confirmation atomically when another tap got there first' do
+    document = suggested
+    # rubocop:disable RSpec/AnyInstance
+    allow_any_instance_of(Db::FinanceDocument)
+      .to receive(:competence).and_wrap_original do |original|
+      Db::FinanceDocument.where(id: document.id).update_all(state: 'confirmed')
+      original.call
+    end
+    # rubocop:enable RSpec/AnyInstance
+
+    intake.call(update: callback('confirm', document))
+
+    expect(Finance::ArchiveJob).not_to have_been_enqueued
+    expect(telegram.answers.last[:text]).to eq(Finance::Messages::ALREADY_HANDLED)
+  end
+
   it 'discards' do
     document = suggested
 

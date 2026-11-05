@@ -68,17 +68,18 @@ module Finance
       return Messages::ALREADY_HANDLED unless document.state == 'suggested'
       return Messages::NEEDS_MONTH if document.competence.blank?
 
-      document.update!(state: 'confirmed', confirmed_by: query.dig('from', 'first_name'),
-                       confirmed_at: Time.current)
+      confirmed = document.claim(from: 'suggested', state: 'confirmed', confirmed_at: Time.current,
+                                 confirmed_by: query.dig('from', 'first_name'))
+      return Messages::ALREADY_HANDLED unless confirmed
+
       edit_bot_message(document, Messages::ARCHIVING)
       ArchiveJob.perform_later(document.id)
       nil
     end
 
     def discard(document, _query)
-      return Messages::ALREADY_HANDLED unless document.state == 'suggested'
+      return Messages::ALREADY_HANDLED unless document.claim(from: 'suggested', state: 'discarded')
 
-      document.update!(state: 'discarded')
       edit_bot_message(document, Messages::DISCARDED)
       nil
     end

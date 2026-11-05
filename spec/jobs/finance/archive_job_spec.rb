@@ -151,6 +151,18 @@ RSpec.describe Finance::ArchiveJob do
     expect(File).not_to exist("#{document.local_path}.decrypted.pdf")
   end
 
+  it 'does not upload when another job claimed the document first' do
+    allow(Db::FinanceDocument).to receive(:find).and_wrap_original do |original, id|
+      original.call(id).tap do
+        Db::FinanceDocument.where(id:).update_all(updated_at: 1.minute.from_now)
+      end
+    end
+
+    run
+
+    expect(drive.uploads).to be_empty
+  end
+
   it 'ignores documents that are not confirmed' do
     document.update!(state: 'archived')
 
