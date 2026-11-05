@@ -298,6 +298,7 @@ pt-BR:
       public_talks: "Discursos"
       assignments: "Designações"
     messages:
+      finance_drive_connected: 'Drive conectado'
       could_not_automatically_create_location_error: 'Erro ao criar localização automaticamente'
       page_x_of_y: "Página %{x} de %{y}"
       unassigned_territory: "Território não designado"

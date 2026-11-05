@@ -23,6 +23,12 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :finance do
+    resource :drive_connection, only: %i[show] do
+      get :callback
+    end
+  end
+
   namespace :congregation do
     resources :publishers
   end

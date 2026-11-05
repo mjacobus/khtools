@@ -1,0 +1,17 @@
+<h1>Drive das contas</h1>
+
+<% if notice %>
+  <div class="alert alert-success" role="alert"><%= notice %></div>
+<% end %>
+
+<p>
+  <% if @connected %>
+    O Drive da congregação está conectado. O bot das contas grava os documentos confirmados nele.
+  <% else %>
+    O Drive da congregação ainda não está conectado.
+  <% end %>
+</p>
+
+<p>Entre com a conta Google da congregação (a dona da pasta Contas Central).</p>
+
+<%= link_to 'Conectar Drive da congregação', @authorize_url, class: 'btn btn-primary' %>
