@@ -41,4 +41,35 @@ RSpec.describe Db::FinanceDocument do
       expect(described_class.stuck).to contain_exactly(old_received, old_confirmed)
     end
   end
+
+  describe '#assign_competence' do
+    it 'uses the default rules' do
+      doc = described_class.new(kind: 's24', document_date: Date.new(2026, 11, 4))
+
+      expect { doc.assign_competence }.to change(doc, :competence).to('2026-11')
+    end
+
+    it 'dates remittances on the last day of their month' do
+      doc = described_class.new(kind: 'remittance_receipt', document_date: Date.new(2026, 11, 2))
+      doc.assign_competence
+
+      expect(doc).to have_attributes(competence: '2026-10', document_date: Date.new(2026, 10, 31))
+    end
+
+    it 'keeps the period of monthly documents' do
+      doc = described_class.new(kind: 'statement')
+      doc.assign_competence(period: '2026-10')
+
+      expect(doc.competence).to eq('2026-10')
+    end
+  end
+
+  it 'manages flags' do
+    doc = described_class.new
+    doc.add_flag('encrypted_original')
+    doc.add_flag('encrypted_original')
+
+    expect(doc.flags).to eq('encrypted_original')
+    expect(doc).to be_flagged('encrypted_original')
+  end
 end

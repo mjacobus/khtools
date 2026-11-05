@@ -16,6 +16,24 @@ class Db::FinanceDocument < ApplicationRecord
 
   scope :stuck, -> { where(state: %w[received confirmed]).where(updated_at: ...10.minutes.ago) }
 
+  # Remittances are dated on the last day of the month they belong to (S-27b par. 27).
+  def assign_competence(period: nil)
+    self.competence = Finance::Competence.default_for(kind:, document_date:, period:)
+    return unless competence && Finance::Competence::REMITTANCE.include?(kind)
+
+    self.document_date = Finance::Competence.remittance_date(competence:)
+  end
+
+  # Original bytes kept only until archived. Not a persistent volume: if a deploy wipes it,
+  # the file is downloaded from Telegram again.
+  def local_path
+    Rails.root.join('storage/finance', "#{id}#{Finance::Naming.extension(self)}")
+  end
+
+  def pdf?
+    mime_type == 'application/pdf' || File.extname(original_filename.to_s).casecmp?('.pdf')
+  end
+
   def flag_list
     flags.to_s.split(',')
   end

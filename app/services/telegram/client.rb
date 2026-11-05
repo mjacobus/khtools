@@ -1,0 +1,77 @@
+# frozen_string_literal: true
+
+module Telegram
+  # Minimal Telegram Bot API client: only the calls the finance bot uses.
+  class Client
+    class Error < StandardError; end
+
+    BASE_URL = 'https://api.telegram.org'
+
+    def initialize(token:)
+      @token = token
+    end
+
+    def get_updates(offset:, timeout: 30)
+      call('getUpdates', offset:, timeout:, allowed_updates: %w[message callback_query])
+    end
+
+    def download(file_id:)
+      path = call('getFile', file_id:).fetch('file_path')
+      response = Net::HTTP.get_response(URI("#{BASE_URL}/file/bot#{@token}/#{path}"))
+      unless response.code.to_s.start_with?('2')
+        raise Error,
+              "download failed with HTTP #{response.code}"
+      end
+
+      response.body
+    end
+
+    def send_message(chat_id:, text:, reply_to: nil, buttons: nil, force_reply: false)
+      params = { chat_id:, text:, reply_markup: markup(buttons, force_reply) }
+      if reply_to
+        params[:reply_parameters] =
+          { message_id: reply_to, allow_sending_without_reply: true }
+      end
+      call('sendMessage', **params.compact).fetch('message_id')
+    end
+
+    def edit_message(chat_id:, message_id:, text:, buttons: nil)
+      call('editMessageText', chat_id:, message_id:, text:, reply_markup: markup(buttons, false))
+    end
+
+    def answer_callback(id:, text: nil)
+      call('answerCallbackQuery', **{ callback_query_id: id, text: }.compact)
+    end
+
+    def set_webhook(url:, secret:)
+      call('setWebhook', url:, secret_token: secret, allowed_updates: %w[message callback_query])
+    end
+
+    def delete_webhook
+      call('deleteWebhook')
+    end
+
+    private
+
+    def markup(buttons, force_reply)
+      return { force_reply: true, selective: true } if force_reply
+      # an empty keyboard removes the buttons when editing
+      return { inline_keyboard: [] } unless buttons
+
+      { inline_keyboard: buttons.map do |row|
+                           row.map do |text, data|
+                             { text:, callback_data: data }
+                           end
+                         end }
+    end
+
+    def call(method, **params)
+      response = Net::HTTP.post(URI("#{BASE_URL}/bot#{@token}/#{method}"), params.to_json,
+                                'Content-Type' => 'application/json')
+      body = JSON.parse(response.body)
+      raise Error, "#{method}: #{body['description']}" unless body['ok']
+
+      body['result']
+    end
+  end
+end
