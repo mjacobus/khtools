@@ -10,7 +10,7 @@ ENV RAILS_ENV=production \
     BUNDLE_WITHOUT="development test"
 
 RUN apt-get update -qq && \
-    apt-get install -y build-essential libsqlite3-dev nodejs yarn
+    apt-get install -y build-essential libsqlite3-dev nodejs yarn poppler-utils qpdf
 
 COPY . .
 
