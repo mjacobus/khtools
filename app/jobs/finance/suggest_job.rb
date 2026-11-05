@@ -8,7 +8,8 @@ module Finance
       return unless @document.state == 'received'
 
       bytes = download
-      @document.sha256 = Digest::SHA256.hexdigest(bytes)
+      # saved now so a job running in parallel for the same bytes sees it
+      @document.update!(sha256: Digest::SHA256.hexdigest(bytes))
       return reject_duplicate(duplicate) if duplicate
 
       @document.pdf? ? read_pdf : read_photo(bytes)
@@ -33,8 +34,9 @@ module Finance
     end
 
     def duplicate
+      # only earlier documents count, so exactly one of two simultaneous uploads wins
       @duplicate ||= account.finance_documents.where(sha256: @document.sha256)
-        .where.not(id: @document.id).where.not(state: 'discarded').first
+        .where(id: ...@document.id).where.not(state: 'discarded').first
     end
 
     def reject_duplicate(original)

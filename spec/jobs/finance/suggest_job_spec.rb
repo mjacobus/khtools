@@ -70,6 +70,24 @@ RSpec.describe Finance::SuggestJob do
     expect(telegram.sent.last).to include(reply_to: 10, text: 'Este arquivo já foi arquivado: https://drive/x')
   end
 
+  it 'stores the hash right after downloading, so a parallel job sees it' do
+    allow(reader).to receive(:call).and_return(nil)
+    allow(telegram).to receive(:send_message).and_raise(Telegram::Client::Error, 'down')
+    document = received
+
+    expect { described_class.perform_now(document.id) }.to raise_error(Telegram::Client::Error)
+    expect(document.reload.sha256).to eq(Digest::SHA256.hexdigest('photo-bytes'))
+  end
+
+  it 'lets the earlier of two identical files win' do
+    allow(reader).to receive(:call).and_return(nil)
+    first = received
+    received(telegram_message_id: 11, telegram_file_id: 'f9',
+             sha256: Digest::SHA256.hexdigest('photo-bytes'))
+
+    expect(run(first).state).to eq('suggested')
+  end
+
   it 'does nothing for documents already past received' do
     document = run(received(state: 'suggested'))
 
