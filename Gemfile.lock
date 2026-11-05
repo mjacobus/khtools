@@ -92,6 +92,11 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
+    anthropic (2.6.0)
+      base64 (~> 0.1)
+      connection_pool (>= 2, < 4)
+      opentelemetry-api (>= 1.2.4, < 2)
+      standardwebhooks (~> 1.0)
     arbre (1.7.0)
       activesupport (>= 3.0.0)
       ruby2_keywords (>= 0.0.2)
@@ -317,6 +322,8 @@ GEM
     omniauth-oauth2 (1.7.1)
       oauth2 (~> 1.4)
       omniauth (>= 1.9, < 3)
+    opentelemetry-api (1.11.1)
+      logger
     ostruct (0.6.1)
     parallel (1.24.0)
     parser (3.3.2.0)
@@ -535,6 +542,7 @@ GEM
       ostruct
     ssrf_filter (1.5.0)
     stackprof (0.2.26)
+    standardwebhooks (1.1.0)
     thor (1.5.0)
     tilt (2.0.10)
     timeout (0.6.1)
@@ -580,6 +588,7 @@ PLATFORMS
 
 DEPENDENCIES
   activeadmin
+  anthropic
   awesome_print
   bcrypt_pbkdf (~> 1.1)
   bootsnap
