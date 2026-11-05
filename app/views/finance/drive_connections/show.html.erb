@@ -1,7 +1,7 @@
 <h1>Drive das contas</h1>
 
-<% if notice %>
-  <div class="alert alert-success" role="alert"><%= notice %></div>
+<% if flash[:notice] %>
+  <div class="alert alert-success" role="alert"><%= flash[:notice] %></div>
 <% end %>
 
 <p>

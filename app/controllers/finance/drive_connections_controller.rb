@@ -11,17 +11,32 @@ module Finance
       @authorize_url = "#{AUTH_URL}?#{authorize_params.to_query}"
     end
 
+    # The signed state must name the account of whoever finishes the flow, so a link
+    # started by someone else can't attach this Google account to theirs.
     def callback
-      account = Db::Account.find(verifier.verify(params[:state].to_s))
-      refresh_token = GoogleDrive::Client.exchange_code(code: params[:code],
-                                                        redirect_uri: callback_url, **oauth_client)
-      account.update!(finance_google_refresh_token: refresh_token)
-      redirect_to finance_drive_connection_path, notice: t('app.messages.finance_drive_connected')
+      return head :bad_request unless state_for_current_account?
+      return redirect_back_with(error: t('app.messages.finance_drive_cancelled')) if params[:error]
+
+      current_account.update!(finance_google_refresh_token: exchange_code)
+      redirect_back_with(notice: t('app.messages.finance_drive_connected'))
     rescue ActiveSupport::MessageVerifier::InvalidSignature
       head :bad_request
     end
 
     private
+
+    def state_for_current_account?
+      verifier.verify(params[:state].to_s) == current_account.id
+    end
+
+    def exchange_code
+      GoogleDrive::Client.exchange_code(code: params[:code], redirect_uri: callback_url,
+                                        **oauth_client)
+    end
+
+    def redirect_back_with(flash)
+      redirect_to finance_drive_connection_path, flash:
+    end
 
     def authorize_params
       { client_id: oauth_client[:client_id], redirect_uri: callback_url, response_type: 'code',

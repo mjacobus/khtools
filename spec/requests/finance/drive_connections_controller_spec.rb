@@ -45,6 +45,27 @@ RSpec.describe Finance::DriveConnectionsController do
     expect(GoogleDrive::Client).not_to have_received(:exchange_code)
   end
 
+  it 'rejects a state signed for another account' do
+    allow(GoogleDrive::Client).to receive(:exchange_code)
+    other = factories.accounts.create
+
+    get '/finance/drive_connection/callback',
+        params: { code: 'CODE', state: signed_state(other.id) }
+
+    expect(response).to have_http_status(:bad_request)
+    expect(GoogleDrive::Client).not_to have_received(:exchange_code)
+  end
+
+  it 'explains when the Google consent was cancelled' do
+    allow(GoogleDrive::Client).to receive(:exchange_code)
+
+    get '/finance/drive_connection/callback',
+        params: { error: 'access_denied', state: signed_state(current_account.id) }
+
+    expect(response).to redirect_to('/finance/drive_connection')
+    expect(GoogleDrive::Client).not_to have_received(:exchange_code)
+  end
+
   context 'without access' do
     let(:access) { false }
 
