@@ -77,11 +77,15 @@ module Finance
       @document.kind = 'statement'
     end
 
+    # Owner-password PDFs (print/copy limits) open without a password; only files that
+    # need a user password get the account's statement password.
     def pdf_text
       path = @document.local_path.to_s
-      return Pdf.text(path:) unless Pdf.encrypted?(path:)
-
-      raise Pdf::PasswordError, 'no password' if account.finance_statement_password.blank?
+      begin
+        return Pdf.text(path:)
+      rescue Pdf::PasswordError
+        raise if account.finance_statement_password.blank?
+      end
 
       Pdf.text(path:, password: account.finance_statement_password).tap do
         @document.add_flag(:decryptable)

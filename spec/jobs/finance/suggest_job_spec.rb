@@ -97,6 +97,15 @@ RSpec.describe Finance::SuggestJob do
       end
     end
 
+    def owner_only(bytes)
+      Dir.mktmpdir do |dir|
+        File.binwrite("#{dir}/in.pdf", bytes)
+        system('qpdf', '--encrypt', '', 'owner', '256', '--', "#{dir}/in.pdf", "#{dir}/out.pdf",
+               exception: true)
+        File.binread("#{dir}/out.pdf")
+      end
+    end
+
     def pdf_document
       received(mime_type: 'application/pdf', original_filename: 'comprovante.pdf')
     end
@@ -117,6 +126,15 @@ RSpec.describe Finance::SuggestJob do
       document = run(pdf_document)
 
       expect(document).to have_attributes(kind: 'payment_receipt', flags: 'decryptable')
+    end
+
+    it 'reads PDFs that only have an owner password (print/copy limits) without any password' do
+      account.update!(finance_statement_password: '')
+      telegram.files['f1'] = owner_only(receipt_pdf)
+
+      document = run(pdf_document)
+
+      expect(document).to have_attributes(kind: 'payment_receipt', amount_cents: 7449, flags: nil)
     end
 
     it 'flags encrypted PDFs it cannot open and warns' do
