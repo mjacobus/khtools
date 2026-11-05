@@ -18,6 +18,19 @@ class Db::Account < ApplicationRecord
                          class_name: 'Db::Territory'
   has_many :preaching_campaigns, dependent: :restrict_with_exception,
                                  class_name: 'Db::PreachingCampaign'
+  has_many :finance_documents, dependent: :restrict_with_exception,
+                               class_name: 'Db::FinanceDocument'
+
+  FINANCE_SECRETS = %i[
+    finance_telegram_bot_token finance_telegram_webhook_secret finance_telegram_chat_id
+    finance_confirmer_telegram_ids finance_google_refresh_token finance_drive_root_folder_id
+    finance_statement_password anthropic_api_key
+  ].freeze
+
+  FINANCE_SECRETS.each do |name|
+    define_method(name) { read_secret(name) }
+    define_method(:"#{name}=") { |value| write_secret(name, value) }
+  end
 
   def to_s
     congregation_name
@@ -57,6 +70,15 @@ class Db::Account < ApplicationRecord
 
   def supports_uploads?
     [cloudinary_cloud_name, cloudinary_api_key, cloudinary_api_secret].all?(&:present?)
+  end
+
+  def finance_confirmer?(telegram_user_id)
+    finance_confirmer_telegram_ids.to_s.split(',').map(&:strip).include?(telegram_user_id.to_s)
+  end
+
+  def finance_enabled?
+    [finance_telegram_bot_token, finance_telegram_chat_id,
+     finance_drive_root_folder_id].all?(&:present?)
   end
 
   private

@@ -93,6 +93,10 @@ class TestFactories
     @phone_providers ||= Db::PhoneProviderFactory.new(self)
   end
 
+  def finance_documents
+    @finance_documents ||= Db::FinanceDocumentFactory.new(self)
+  end
+
   class Factory
     attr_reader :factories
 
@@ -172,6 +176,16 @@ class TestFactories
   class Db::AccountFactory < Factory
     def attributes(overrides = {})
       { congregation_name: "Congregation-#{seq}" }.merge(overrides)
+    end
+  end
+
+  class Db::FinanceDocumentFactory < Factory
+    def attributes(overrides = {})
+      {
+        telegram_chat_id: -100_123,
+        telegram_message_id: 1000 + seq,
+        telegram_file_id: "file-#{seq}"
+      }.merge(overrides).merge(associations([:account], overrides))
     end
   end
 
