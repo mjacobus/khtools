@@ -75,7 +75,8 @@ RSpec.describe Finance::SuggestJob do
     allow(telegram).to receive(:send_message).and_raise(Telegram::Client::Error, 'down')
     document = received
 
-    expect { described_class.perform_now(document.id) }.to raise_error(Telegram::Client::Error)
+    described_class.perform_now(document.id)
+
     expect(document.reload.sha256).to eq(Digest::SHA256.hexdigest('photo-bytes'))
   end
 
@@ -86,6 +87,38 @@ RSpec.describe Finance::SuggestJob do
              sha256: Digest::SHA256.hexdigest('photo-bytes'))
 
     expect(run(first).state).to eq('suggested')
+  end
+
+  describe 'when the file cannot be processed' do
+    before { allow(reader).to receive(:call).and_return(nil) }
+
+    it 'keeps the document received with the error, to retry later' do
+      allow(telegram).to receive(:download).and_raise(Telegram::Client::Error, 'getFile: timeout')
+
+      document = run(received)
+
+      expect(document).to have_attributes(state: 'received', last_error: include('timeout'))
+      expect(telegram.sent).to be_empty
+    end
+
+    it 'gives up at once on files Telegram will never hand over' do
+      allow(telegram).to receive(:download)
+        .and_raise(Telegram::Client::Error, 'getFile: Bad Request: file is too big')
+
+      document = run(received)
+
+      expect(document.state).to eq('failed')
+      expect(telegram.sent.last).to include(reply_to: 10, text: Finance::Messages::UNREADABLE)
+    end
+
+    it 'gives up after an hour of failures' do
+      allow(telegram).to receive(:download).and_raise(Telegram::Client::Error, 'getFile: timeout')
+
+      document = run(received(created_at: 2.hours.ago))
+
+      expect(document.state).to eq('failed')
+      expect(telegram.sent.last[:text]).to eq(Finance::Messages::UNREADABLE)
+    end
   end
 
   it 'does nothing for documents already past received' do

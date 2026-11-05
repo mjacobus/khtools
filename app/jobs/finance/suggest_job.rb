@@ -10,17 +10,18 @@ module Finance
       bytes = download
       # saved now so a job running in parallel for the same bytes sees it
       @document.update!(sha256: Digest::SHA256.hexdigest(bytes))
-      return reject_duplicate(duplicate) if duplicate
+      original = @document.earlier_duplicate
+      return reject_duplicate(original) if original
 
       @document.pdf? ? read_pdf : read_photo(bytes)
       reply
+    rescue StandardError => exception
+      handle_failure(exception)
     end
 
     private
 
-    def account
-      @document.account
-    end
+    delegate :account, to: :@document
 
     def telegram
       @telegram ||= Telegram::Client.new(token: account.finance_telegram_bot_token)
@@ -28,21 +29,12 @@ module Finance
 
     def download
       telegram.download(file_id: @document.telegram_file_id).tap do |bytes|
-        FileUtils.mkdir_p(File.dirname(@document.local_path))
-        File.binwrite(@document.local_path, bytes)
+        @document.store_local_copy(bytes)
       end
     end
 
-    def duplicate
-      # only earlier documents count, so exactly one of two simultaneous uploads wins
-      @duplicate ||= account.finance_documents.where(sha256: @document.sha256)
-        .where(id: ...@document.id).where.not(state: 'discarded').first
-    end
-
     def reject_duplicate(original)
-      telegram.send_message(chat_id: @document.telegram_chat_id,
-                            text: Messages.duplicate(original:),
-                            reply_to: @document.telegram_message_id)
+      answer(Messages.duplicate(original:))
       @document.update!(state: 'discarded')
       FileUtils.rm_f(@document.local_path)
     end
@@ -107,6 +99,30 @@ module Finance
                                                        text:, buttons:,
                                                        reply_to: @document.telegram_message_id)
       @document.save!
+    end
+
+    # ponytail: age-based give-up instead of an attempts counter; retries come from Intake's
+    # stuck sweep. Files over Telegram's 20 MB bot limit never download, so give up at once.
+    GIVE_UP_AFTER = 1.hour
+
+    def handle_failure(error)
+      ErrorHandler.new.notify_error(error)
+      return unless @document
+
+      @document.update!(last_error: "#{error.class}: #{error.message}")
+      too_big = error.message.match?(/file is too big/i)
+      give_up if too_big || @document.created_at < GIVE_UP_AFTER.ago
+    end
+
+    def give_up
+      @document.update!(state: 'failed')
+      FileUtils.rm_f(@document.local_path)
+      answer(Messages::UNREADABLE)
+    end
+
+    def answer(text)
+      telegram.send_message(chat_id: @document.telegram_chat_id, text:,
+                            reply_to: @document.telegram_message_id)
     end
 
     def parse_date(text)

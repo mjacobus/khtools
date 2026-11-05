@@ -10,6 +10,7 @@ module Finance
     ARCHIVE_FAILED = 'Não consegui arquivar agora; vou tentar de novo.'
     NEEDS_MONTH = 'Falta o mês: use ✏️ Corrigir antes de confirmar.'
     ALREADY_HANDLED = 'Este documento já foi tratado.'
+    UNREADABLE = 'Não consegui ler este arquivo. Envie de novo ou arquive à mão.'
     EDIT_PROMPT = 'Responda a esta mensagem com os campos a mudar, por exemplo: ' \
                   "data 2026-11-05 local 120 mundial 30\nCampos: %{keys}"
 

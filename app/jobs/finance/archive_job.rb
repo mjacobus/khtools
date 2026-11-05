@@ -71,10 +71,9 @@ module Finance
 
     def local_file
       path = @document.local_path
-      unless File.exist?(path)
-        FileUtils.mkdir_p(File.dirname(path))
-        File.binwrite(path, telegram.download(file_id: @document.telegram_file_id))
-      end
+      return path.to_s if File.exist?(path)
+
+      @document.store_local_copy(telegram.download(file_id: @document.telegram_file_id))
       path.to_s
     end
 

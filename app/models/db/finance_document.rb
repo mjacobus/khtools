@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Db::FinanceDocument < ApplicationRecord
-  STATES = %w[received suggested confirmed archived discarded].freeze
+  STATES = %w[received suggested confirmed archived discarded failed].freeze
   KINDS = %w[
     s24 payment_receipt bill statement s26 s30 remittance_record remittance_receipt
     thank_you_letter audit_report unknown
@@ -37,6 +37,16 @@ class Db::FinanceDocument < ApplicationRecord
   # the file is downloaded from Telegram again.
   def local_path
     Rails.root.join('storage/finance', "#{id}#{Finance::Naming.extension(self)}")
+  end
+
+  def store_local_copy(bytes)
+    FileUtils.mkdir_p(File.dirname(local_path))
+    File.binwrite(local_path, bytes)
+  end
+
+  # Only earlier documents count, so exactly one of two simultaneous uploads wins.
+  def earlier_duplicate
+    account.finance_documents.where(sha256:).where(id: ...id).where.not(state: 'discarded').first
   end
 
   def pdf?
