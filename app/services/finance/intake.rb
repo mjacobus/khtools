@@ -70,8 +70,8 @@ module Finance
 
       document.update!(state: 'confirmed', confirmed_by: query.dig('from', 'first_name'),
                        confirmed_at: Time.current)
-      ArchiveJob.perform_later(document.id)
       edit_bot_message(document, Messages::ARCHIVING)
+      ArchiveJob.perform_later(document.id)
       nil
     end
 

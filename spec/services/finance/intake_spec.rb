@@ -88,6 +88,17 @@ RSpec.describe Finance::Intake do
     expect(telegram.edits.last).to include(message_id: 300, text: Finance::Messages::ARCHIVING)
   end
 
+  it 'shows "archiving" before the archive job can report its result' do
+    document = suggested
+    allow(Finance::ArchiveJob).to receive(:perform_later) do
+      telegram.edit_message(chat_id:, message_id: 300, text: 'Arquivado: x')
+    end
+
+    intake.call(update: callback('confirm', document))
+
+    expect(telegram.edits.last[:text]).to eq('Arquivado: x')
+  end
+
   it 'does not confirm without a month' do
     document = suggested(competence: nil)
 
