@@ -21,6 +21,18 @@ RSpec.describe Finance::Money do
       it("parses #{text}") { expect(described_class.parse(text:)).to eq(cents) }
     end
 
+    it('accepts a dot as decimal separator') {
+      expect(described_class.parse(text: '120.50')).to eq(12_050)
+    }
+
+    it('accepts a one-digit dot decimal') { expect(described_class.parse(text: '1.5')).to eq(150) }
+
+    %w[12,345 -50 10abc 1.2.3].each do |text|
+      it("rejects #{text} instead of truncating it") {
+        expect(described_class.parse(text:)).to be_nil
+      }
+    end
+
     it('returns nil for garbage') { expect(described_class.parse(text: 'abc')).to be_nil }
     it('returns nil for blank') { expect(described_class.parse(text: '')).to be_nil }
   end
