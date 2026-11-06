@@ -13,7 +13,8 @@ RSpec.describe Finance::SuggestJob do
   let(:reader) { instance_double(Finance::ReceiptReader) }
   let(:s24_result) do
     Finance::ReceiptReader::Result.new(is_s24: true, date: '2026-11-04',
-                                       congregation_cents: 12_000, worldwide_cents: 3000)
+                                       congregation_cents: 12_000, worldwide_cents: 3000,
+                                       total_cents: 16_000)
   end
 
   before do
@@ -41,8 +42,8 @@ RSpec.describe Finance::SuggestJob do
     document = run(received)
 
     expect(document).to have_attributes(state: 'suggested', kind: 's24', competence: '2026-11',
-                                        amount_cents: 15_000, value_source: 'ai',
-                                        bot_message_id: 501)
+                                        amount_cents: 15_000, written_total_cents: 16_000,
+                                        value_source: 'ai', bot_message_id: 501)
     expect(document.sha256).to eq(Digest::SHA256.hexdigest('photo-bytes'))
     expect(telegram.sent.last).to include(reply_to: 10,
                                           text: start_with('2026-11-04 - R$ 150,00 - S-24.jpg'))

@@ -19,6 +19,21 @@ RSpec.describe Finance::Messages do
                             ['🗑️ Não é das contas', 'fin:discard:9']]])
   end
 
+  it 'warns when the total written on the S-24 does not match its split' do
+    text = described_class.suggestion(document: document(written_total_cents: 16_000)).first
+
+    expect(text).to include('⚠️ Total escrito no recibo (R$ 160,00) ' \
+                            'não confere com a soma (R$ 150,00)')
+  end
+
+  it 'does not warn when the written total matches or was not read' do
+    matching = described_class.suggestion(document: document(written_total_cents: 15_000)).first
+    unread = described_class.suggestion(document: document(written_total_cents: nil)).first
+
+    expect(matching).not_to include('Total escrito')
+    expect(unread).not_to include('Total escrito')
+  end
+
   it 'warns when confirming replaces the file already archived for the month' do
     doc = document(kind: 's26', competence: '2026-09', mime_type: 'application/pdf')
     allow(doc).to receive(:replaced_document).and_return(document(id: 3))

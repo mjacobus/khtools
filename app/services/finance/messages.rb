@@ -26,6 +26,7 @@ module Finance
       [
         "#{Naming.filename(document:)} → Arquivo Corrente/#{document.competence || '?'}/",
         s24_split(document),
+        s24_total_mismatch(document),
         ORIGINS[document.value_source] && "(#{ORIGINS[document.value_source]})",
         document.flagged?(:encrypted_original) && '⚠️ PDF com senha: não consegui abrir',
         missing?(document) && 'Não consegui ler tudo: use ✏️ Corrigir.',
@@ -72,6 +73,16 @@ module Finance
 
       "Congregação #{Money.format(cents: document.congregation_cents.to_i)} · " \
         "Obra mundial #{Money.format(cents: document.worldwide_cents.to_i)}"
+    end
+
+    # People have added the S-24 up wrong before; the split is what gets archived.
+    def s24_total_mismatch(document)
+      written = document.written_total_cents
+      sum = document.congregation_cents.to_i + document.worldwide_cents.to_i
+      if document.kind == 's24' && written && written != sum
+        "⚠️ Total escrito no recibo (#{Money.format(cents: written)}) " \
+          "não confere com a soma (#{Money.format(cents: sum)})"
+      end
     end
 
     def missing?(document)

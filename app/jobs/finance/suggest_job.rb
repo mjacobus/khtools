@@ -60,7 +60,8 @@ module Finance
       @document.assign_attributes(
         kind: 's24', value_source: 'ai', document_date: parse_date(result.date),
         congregation_cents: result.congregation_cents, worldwide_cents: result.worldwide_cents,
-        amount_cents: result.congregation_cents.to_i + result.worldwide_cents.to_i
+        amount_cents: result.congregation_cents.to_i + result.worldwide_cents.to_i,
+        written_total_cents: result.total_cents.to_i.nonzero?
       )
       @document.assign_competence
     end
