@@ -55,6 +55,22 @@ RSpec.describe Finance::Intake do
                                                                sent_by_name: 'Bia Lima')
   end
 
+  it 'remembers who writes in the group, by name' do
+    text = { 'update_id' => 3, 'message' => { 'message_id' => 11, 'chat' => { 'id' => chat_id },
+                                              'from' => { 'id' => 7, 'first_name' => 'Bia' },
+                                              'text' => 'oi' } }
+    intake.handle(update: text)
+    intake.handle(update: photo_update)
+
+    expect(account.finance_telegram_members.pluck(:telegram_id, :name)).to eq([[7, 'Bia Lima']])
+  end
+
+  it 'ignores people from other chats' do
+    intake.handle(update: photo_update(chat: -1))
+
+    expect(account.finance_telegram_members).to be_empty
+  end
+
   it 'accepts documents with their file name and type' do
     document = { 'file_id' => 'pdf1', 'file_name' => 'x.pdf', 'mime_type' => 'application/pdf' }
     chat = { 'id' => chat_id }

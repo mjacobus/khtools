@@ -1,0 +1,77 @@
+<h1>Integrações das contas</h1>
+
+<% if flash[:notice] %>
+  <div class="alert alert-success" role="alert"><%= flash[:notice] %></div>
+<% end %>
+
+<% if @integration.errors.any? %>
+  <div class="alert alert-danger" role="alert">
+    <% @integration.errors.map(&:message).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<%= form_with model: @integration, url: finance_integration_path, method: :patch do |f| %>
+  <h2 class="h4 mt-4">Telegram</h2>
+
+  <div class="mb-3">
+    <%= f.label :telegram_bot_token, 'Token do bot', class: 'form-label' %>
+    <%= f.password_field :telegram_bot_token, value: nil, class: 'form-control', autocomplete: 'off',
+                         placeholder: @integration.secret_set?(:telegram_bot_token) ? 'configurado — deixe em branco para manter' : '' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :telegram_chat_id, 'ID do grupo', class: 'form-label' %>
+    <%= f.text_field :telegram_chat_id, class: 'form-control', placeholder: '-1001234567890' %>
+  </div>
+
+  <fieldset class="mb-3">
+    <legend class="h6">Quem pode confirmar documentos</legend>
+    <% if @integration.people.empty? %>
+      <p class="text-muted">Ninguém apareceu no grupo ainda. Peça para cada pessoa mandar uma mensagem lá.</p>
+    <% end %>
+    <%= hidden_field_tag 'integration[confirmer_telegram_ids][]', '' %>
+    <% @integration.people.each do |id, name| %>
+      <div>
+        <label>
+          <%= check_box_tag 'integration[confirmer_telegram_ids][]', id,
+                            @integration.confirmer_telegram_ids.include?(id), id: "confirmer_#{id}" %>
+          <%= name || 'Sem nome' %> <small class="text-muted">(<%= id %>)</small>
+        </label>
+      </div>
+    <% end %>
+  </fieldset>
+
+  <h2 class="h4 mt-4">Google Drive</h2>
+
+  <p>
+    <%= @integration.drive_connected? ? 'Conectado.' : 'Ainda não conectado.' %>
+    <%= link_to 'Conectar Drive', finance_drive_connection_path %>
+  </p>
+
+  <div class="mb-3">
+    <%= f.label :drive_root_folder_id, 'Pasta Contas Central (link ou ID)', class: 'form-label' %>
+    <%= f.text_field :drive_root_folder_id, class: 'form-control' %>
+    <div class="form-text">Ela precisa ter a pasta "Arquivo Corrente" dentro.</div>
+  </div>
+
+  <h2 class="h4 mt-4">Outros</h2>
+
+  <div class="mb-3">
+    <%= f.label :ai_api_key, 'Chave da OpenAI (leitura do S-24)', class: 'form-label' %>
+    <%= f.password_field :ai_api_key, value: nil, class: 'form-control', autocomplete: 'off',
+                         placeholder: @integration.secret_set?(:ai_api_key) ? 'configurada — deixe em branco para manter' : '' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :statement_password, 'Senha dos extratos', class: 'form-label' %>
+    <%= f.password_field :statement_password, value: nil, class: 'form-control', autocomplete: 'off',
+                         placeholder: @integration.secret_set?(:statement_password) ? 'configurada — deixe em branco para manter' : '' %>
+  </div>
+
+  <%= f.submit 'Salvar', class: 'btn btn-primary' %>
+<% end %>
+
+<%= button_to 'Buscar administradores do grupo', members_finance_integration_path,
+              class: 'btn btn-outline-secondary mt-3' %>
