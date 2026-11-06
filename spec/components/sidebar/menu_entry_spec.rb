@@ -46,6 +46,13 @@ RSpec.describe Sidebar::MenuEntry do
       expect(entry).not_to be_active('http://localhost:3001/territories/commercial_territories/634/contacts')
     end
 
+    it 'tells apart entries of the same controller by their params' do
+      entry = described_class.new('Telegram', '/finance/integrations/telegram')
+
+      expect(entry).to be_active('http://localhost:3001/finance/integrations/telegram')
+      expect(entry).not_to be_active('http://localhost:3001/finance/integrations/drive')
+    end
+
     it 'returns false when no child is active' do
       entry = described_class.new('Something', '').tap do |e|
         e.append_child(described_class.new('Users', '/users'))
