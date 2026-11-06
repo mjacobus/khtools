@@ -11,6 +11,8 @@ module Finance
     NEEDS_MONTH = 'Falta o mês: use ✏️ Corrigir antes de confirmar.'
     ALREADY_HANDLED = 'Este documento já foi tratado.'
     UNREADABLE = 'Não consegui ler este arquivo. Envie de novo ou arquive à mão.'
+    REPLACES = '⚠️ Substitui o arquivo já arquivado ' \
+               '(a versão anterior fica no histórico do Drive)'
     EDIT_PROMPT = 'Responda a esta mensagem com os campos a mudar, por exemplo: ' \
                   "data 2026-11-05 local 120 mundial 30\nCampos: %{keys}"
 
@@ -26,7 +28,8 @@ module Finance
         s24_split(document),
         ORIGINS[document.value_source] && "(#{ORIGINS[document.value_source]})",
         document.flagged?(:encrypted_original) && '⚠️ PDF com senha: não consegui abrir',
-        missing?(document) && 'Não consegui ler tudo: use ✏️ Corrigir.'
+        missing?(document) && 'Não consegui ler tudo: use ✏️ Corrigir.',
+        document.replaced_document && REPLACES
       ].select(&:present?).join("\n")
     end
 
@@ -45,8 +48,9 @@ module Finance
     end
 
     # HTML (parse_mode), like duplicate.
-    def archived(document:)
-      "Arquivado: #{drive_link(document)} → Arquivo Corrente/#{document.competence}/"
+    def archived(document:, replaced: false)
+      verb = replaced ? 'Substituído' : 'Arquivado'
+      "#{verb}: #{drive_link(document)} → Arquivo Corrente/#{document.competence}/"
     end
 
     def drive_link(document)

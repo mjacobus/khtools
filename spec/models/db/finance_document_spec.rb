@@ -42,6 +42,46 @@ RSpec.describe Db::FinanceDocument do
     end
   end
 
+  describe '#replaced_document' do
+    let(:account) { factories.accounts.create }
+
+    def archived(**attributes)
+      factories.finance_documents.create(account:, state: 'archived', kind: 's26',
+                                         competence: '2026-09', mime_type: 'application/pdf',
+                                         drive_file_id: 'OLD', **attributes)
+    end
+
+    def incoming(**attributes)
+      factories.finance_documents.build(account:, state: 'confirmed', kind: 's26',
+                                        competence: '2026-09', mime_type: 'application/pdf',
+                                        **attributes)
+    end
+
+    it 'is the archived file of the same monthly kind and month' do
+      previous = archived
+
+      expect(incoming.replaced_document).to eq(previous)
+    end
+
+    it 'is nil for other months, other names and kinds that are not monthly' do
+      archived(competence: '2026-08')
+      archived(mime_type: 'image/jpeg')
+      archived(kind: 'bill', competence: '2026-09', document_date: Date.new(2026, 9, 1),
+               amount_cents: 100)
+
+      expect(incoming.replaced_document).to be_nil
+      expect(incoming(kind: 'bill', document_date: Date.new(2026, 9, 1), amount_cents: 100)
+        .replaced_document).to be_nil
+    end
+
+    it 'ignores documents of other accounts and files the bot did not upload' do
+      archived(account: factories.accounts.create)
+      archived(drive_file_id: nil)
+
+      expect(incoming.replaced_document).to be_nil
+    end
+  end
+
   describe '#assign_competence' do
     it 'uses the default rules' do
       doc = described_class.new(kind: 's24', document_date: Date.new(2026, 11, 4))

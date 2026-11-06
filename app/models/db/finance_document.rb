@@ -51,6 +51,20 @@ class Db::FinanceDocument < ApplicationRecord
     account.finance_documents.where(sha256:).where(id: ...id).where.not(state: 'discarded').first
   end
 
+  # Monthly documents have one file per month: a corrected S-26 replaces the one the bot
+  # archived before (same name). Files the bot did not upload are never replaced.
+  def replaced_document
+    if Finance::Competence::MONTHLY.include?(kind) && competence
+      name = Finance::Naming.filename(document: self)
+      archived_same_month.find { |document| Finance::Naming.filename(document:) == name }
+    end
+  end
+
+  def archived_same_month
+    self.class.where(account_id:, state: 'archived', kind:, competence:)
+      .where.not(id:).where.not(drive_file_id: nil).order(id: :desc)
+  end
+
   def pdf?
     mime_type == 'application/pdf' || File.extname(original_filename.to_s).casecmp?('.pdf')
   end

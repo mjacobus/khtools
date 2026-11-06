@@ -6,13 +6,23 @@ RSpec.describe Finance::ArchiveJob do
   # In-memory Drive: folders and files by parent id.
   let(:drive) do
     Class.new do
-      attr_reader :folders, :files, :uploads
-      attr_accessor :fail_upload
+      attr_reader :folders, :files, :uploads, :updates
+      attr_accessor :fail_upload, :fail_update
 
       def initialize
         @folders = { ['ROOT', 'Arquivo Corrente'] => 'CURRENT' }
         @files = {}
         @uploads = []
+        @updates = []
+      end
+
+      def update_file(**args)
+        if fail_update
+          raise GoogleDrive::Client::Error, fail_update
+        end
+
+        updates << args.merge(bytes: File.binread(args[:path]))
+        { id: args[:id], web_view_link: "https://drive/#{args[:id]}" }
       end
 
       def find_folder(name:, parent_id:) = folders[[parent_id, name]]
@@ -87,6 +97,39 @@ RSpec.describe Finance::ArchiveJob do
       text: 'Arquivado: <a href="https://drive/FILE">2026-11-04 - R$ 150,00 - S-24.jpg</a> ' \
             '→ Arquivo Corrente/2026-11/'
     )
+  end
+
+  context 'when a monthly file was already archived for the month' do
+    let(:previous) do
+      factories.finance_documents.create(account:, state: 'archived', kind: 's26',
+                                         competence: '2026-11', mime_type: 'application/pdf',
+                                         drive_file_id: 'OLD', drive_url: 'https://drive/OLD')
+    end
+    let(:document) do
+      factories.finance_documents.create(account:, state: 'confirmed', kind: 's26',
+                                         competence: '2026-11', mime_type: 'application/pdf',
+                                         bot_message_id: 300)
+    end
+
+    before { previous }
+
+    it 'uploads a new version of that file instead of a copy' do
+      run
+
+      expect(drive.uploads).to be_empty
+      expect(drive.updates.last).to include(id: 'OLD', bytes: 'photo')
+      expect(document).to have_attributes(state: 'archived', drive_file_id: 'OLD')
+      expect(telegram.edits.last[:text]).to start_with('Substituído: <a href="https://drive/OLD">')
+    end
+
+    it 'uploads a new file when the old one is gone from Drive' do
+      drive.fail_update = 'Drive HTTP 404: File not found'
+
+      run
+
+      expect(drive.uploads.last).to include(name: '2026-11 - S-26.pdf', parent_id: 'NOV')
+      expect(document).to have_attributes(state: 'archived', drive_file_id: 'FILE')
+    end
   end
 
   it 'creates the month folder when missing' do

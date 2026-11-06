@@ -7,8 +7,10 @@ module GoogleDrive
 
     TOKEN_URL = 'https://oauth2.googleapis.com/token'
     FILES_URL = 'https://www.googleapis.com/drive/v3/files'
-    UPLOAD_URL = 'https://www.googleapis.com/upload/drive/v3/files' \
-                 '?uploadType=multipart&fields=id,webViewLink&supportsAllDrives=true'
+    UPLOAD_BASE = 'https://www.googleapis.com/upload/drive/v3/files'
+    UPLOAD_QUERY = 'uploadType=multipart&fields=id,webViewLink&supportsAllDrives=true'
+    UPLOAD_URL = "#{UPLOAD_BASE}?#{UPLOAD_QUERY}".freeze
+    UPDATE_QUERY = "#{UPLOAD_QUERY}&keepRevisionForever=true".freeze
     FOLDER = 'application/vnd.google-apps.folder'
 
     def initialize(client_id:, client_secret:, refresh_token: nil)
@@ -49,15 +51,25 @@ module GoogleDrive
     def upload(path:, name:, parent_id:, mime_type:, description:, app_properties:) # rubocop:disable Metrics/ParameterLists
       metadata = { name:, parents: [parent_id], description:,
                    appProperties: app_properties.compact.transform_values(&:to_s) }
-      boundary = "khtools-#{SecureRandom.hex(12)}"
-      post = Net::HTTP::Post.new(URI(UPLOAD_URL))
-      post.content_type = "multipart/related; boundary=#{boundary}"
-      post.body = multipart(boundary, metadata, mime_type, File.binread(path))
-      body = request(post)
-      { id: body.fetch('id'), web_view_link: body['webViewLink'] }
+      send_file(Net::HTTP::Post.new(URI(UPLOAD_URL)), metadata, mime_type, path)
+    end
+
+    # New version of the same file (same id and link); the old one stays in its history.
+    def update_file(id:, path:, mime_type:, description:, app_properties:)
+      metadata = { description:, appProperties: app_properties.compact.transform_values(&:to_s) }
+      patch = Net::HTTP::Patch.new(URI("#{UPLOAD_BASE}/#{id}?#{UPDATE_QUERY}"))
+      send_file(patch, metadata, mime_type, path)
     end
 
     private
+
+    def send_file(http_request, metadata, mime_type, path)
+      boundary = "khtools-#{SecureRandom.hex(12)}"
+      http_request.content_type = "multipart/related; boundary=#{boundary}"
+      http_request.body = multipart(boundary, metadata, mime_type, File.binread(path))
+      body = request(http_request)
+      { id: body.fetch('id'), web_view_link: body['webViewLink'] }
+    end
 
     def token(**params)
       post = Net::HTTP::Post.new(URI(TOKEN_URL))

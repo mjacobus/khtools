@@ -3,7 +3,7 @@
 module Finance
   # Uploads a confirmed document to Contas Central/Arquivo Corrente/<competence>/.
   # On failure the document stays confirmed and Intake retries it later.
-  class ArchiveJob < ApplicationJob
+  class ArchiveJob < ApplicationJob # rubocop:disable Metrics/ClassLength -- upload or replace, metadata, failure
     CURRENT_FOLDER = 'Arquivo Corrente'
 
     def perform(document_id)
@@ -32,13 +32,29 @@ module Finance
     end
 
     def archive
-      folder = month_folder
-      result = drive.upload(path: upload_path, name: free_name(folder), parent_id: folder,
-                            mime_type:, description:, app_properties:)
+      previous = @document.replaced_document
+      result = (previous && replace(previous)) || upload
       @document.update!(state: 'archived', drive_file_id: result[:id],
                         drive_url: result[:web_view_link], last_error: nil)
       FileUtils.rm_f(@document.local_path)
-      edit_bot_message(Messages.archived(document: @document), html: true)
+      replaced = result[:id] == previous&.drive_file_id
+      edit_bot_message(Messages.archived(document: @document, replaced:), html: true)
+    end
+
+    def upload
+      folder = month_folder
+      drive.upload(path: upload_path, name: free_name(folder), parent_id: folder,
+                   mime_type:, description:, app_properties:)
+    end
+
+    # nil when the old file was deleted from Drive: then it goes up as a new file.
+    def replace(previous)
+      drive.update_file(id: previous.drive_file_id, path: upload_path, mime_type:, description:,
+                        app_properties:)
+    rescue GoogleDrive::Client::Error => exception
+      unless exception.message.include?('HTTP 404')
+        raise
+      end
     end
 
     def month_folder

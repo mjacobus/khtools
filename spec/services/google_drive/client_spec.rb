@@ -94,6 +94,35 @@ RSpec.describe GoogleDrive::Client do
     end
   end
 
+  describe '#update_file' do
+    let(:result) do
+      client.update_file(id: 'FILE', path: upload_path, mime_type: 'application/pdf',
+                         description: 'desc', app_properties: { kind: 's26' })
+    end
+
+    before do
+      File.binwrite(upload_path, '%PDF-new')
+      responses.push(response(200, access_token: 'a', expires_in: 3600),
+                     response(200, id: 'FILE', webViewLink: 'https://drive/FILE'))
+    end
+
+    after { FileUtils.rm_f(upload_path) }
+
+    def upload_path
+      Rails.root.join('tmp/drive-update-spec.pdf')
+    end
+
+    it 'uploads a new version of the same file, keeping the old one forever' do
+      expect(result).to eq(id: 'FILE', web_view_link: 'https://drive/FILE')
+      expect(requests.last).to be_a(Net::HTTP::Patch)
+      expect(requests.last.path).to start_with('/upload/drive/v3/files/FILE?uploadType=multipart')
+      expect(requests.last.path).to include('keepRevisionForever=true')
+      expect(requests.last.body)
+        .to include('"description":"desc"', '"appProperties":{"kind":"s26"}', '%PDF-new')
+      expect(requests.last.body).not_to include('"parents"')
+    end
+  end
+
   it 'raises on HTTP errors' do
     responses.push(response(200, access_token: 'a', expires_in: 3600), response(404, error: 'nope'))
 

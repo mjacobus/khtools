@@ -19,6 +19,21 @@ RSpec.describe Finance::Messages do
                             ['🗑️ Não é das contas', 'fin:discard:9']]])
   end
 
+  it 'warns when confirming replaces the file already archived for the month' do
+    doc = document(kind: 's26', competence: '2026-09', mime_type: 'application/pdf')
+    allow(doc).to receive(:replaced_document).and_return(document(id: 3))
+
+    expect(described_class.suggestion(document: doc).first)
+      .to include('⚠️ Substitui o arquivo já arquivado ' \
+                  '(a versão anterior fica no histórico do Drive)')
+  end
+
+  it 'says the file was replaced' do
+    expect(described_class.archived(document: document(drive_url: 'https://drive/x'),
+                                    replaced: true))
+      .to start_with('Substituído: <a href="https://drive/x">')
+  end
+
   it 'labels the origin of rule-read and human values' do
     rules = described_class.suggestion(document: document(value_source: 'rules')).first
     human = described_class.suggestion(document: document(value_source: 'human')).first
