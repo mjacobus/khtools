@@ -32,6 +32,17 @@ RSpec.describe Telegram::Client do
     end
   end
 
+  it 'sends and edits HTML when asked' do
+    respond_with(ok: true, result: { message_id: 79 })
+
+    client.send_message(chat_id: -100, text: '<a href="x">y</a>', html: true)
+    client.edit_message(chat_id: -100, message_id: 79, text: '<b>z</b>', html: true)
+
+    expect(Net::HTTP).to have_received(:post).twice do |_uri, body, _headers|
+      expect(JSON.parse(body)).to include('parse_mode' => 'HTML')
+    end
+  end
+
   it 'asks for a forced reply' do
     respond_with(ok: true, result: { message_id: 78 })
 

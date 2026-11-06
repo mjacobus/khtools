@@ -35,16 +35,23 @@ module Finance
         ['🗑️ Não é das contas', "fin:discard:#{document.id}"]]]
     end
 
+    # HTML (parse_mode): the file name links to the archived file on Drive.
     def duplicate(original:)
       if original.drive_url.blank?
-        return 'Este arquivo já foi enviado antes.'
+        'Este arquivo já foi enviado antes.'
+      else
+        "Este arquivo já foi arquivado: #{drive_link(original)}"
       end
-
-      "Este arquivo já foi arquivado: #{original.drive_url}"
     end
 
+    # HTML (parse_mode), like duplicate.
     def archived(document:)
-      "Arquivado: #{Naming.filename(document:)} → Arquivo Corrente/#{document.competence}/"
+      "Arquivado: #{drive_link(document)} → Arquivo Corrente/#{document.competence}/"
+    end
+
+    def drive_link(document)
+      url = CGI.escapeHTML(document.drive_url)
+      %(<a href="#{url}">#{CGI.escapeHTML(Naming.filename(document:))}</a>)
     end
 
     def edit_prompt

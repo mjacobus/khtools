@@ -42,8 +42,22 @@ RSpec.describe Finance::Messages do
     expect(described_class.suggestion(document: doc).first).to include('use ✏️ Corrigir')
   end
 
-  it 'gives the duplicate notice' do
+  it 'gives the duplicate notice with the archived file name as a link (HTML)' do
     expect(described_class.duplicate(original: document(drive_url: 'https://drive/x')))
-      .to eq('Este arquivo já foi arquivado: https://drive/x')
+      .to eq('Este arquivo já foi arquivado: ' \
+             '<a href="https://drive/x">2026-11-04 - R$ 150,00 - S-24.jpg</a>')
+  end
+
+  it 'links the archived file name (HTML)' do
+    expect(described_class.archived(document: document(drive_url: 'https://drive/x')))
+      .to eq('Arquivado: <a href="https://drive/x">2026-11-04 - R$ 150,00 - S-24.jpg</a> ' \
+             '→ Arquivo Corrente/2026-11/')
+  end
+
+  it 'escapes HTML in linked file names' do
+    doc = document(kind: 'bill', description: 'Luz & <Água>', drive_url: 'https://drive/x?a=1&b=2')
+
+    expect(described_class.archived(document: doc))
+      .to include('<a href="https://drive/x?a=1&amp;b=2">', 'Luz &amp; &lt;Água&gt;')
   end
 end

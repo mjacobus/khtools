@@ -26,8 +26,9 @@ module Telegram
       response.body
     end
 
-    def send_message(chat_id:, text:, reply_to: nil, buttons: nil, force_reply: false)
-      params = { chat_id:, text:, reply_markup: markup(buttons, force_reply) }
+    def send_message(chat_id:, text:, reply_to: nil, buttons: nil, force_reply: false, html: false) # rubocop:disable Metrics/ParameterLists
+      params = { chat_id:, text:, reply_markup: markup(buttons, force_reply),
+                 parse_mode: parse_mode(html) }
       if reply_to
         params[:reply_parameters] =
           { message_id: reply_to, allow_sending_without_reply: true }
@@ -35,8 +36,10 @@ module Telegram
       call('sendMessage', **params.compact).fetch('message_id')
     end
 
-    def edit_message(chat_id:, message_id:, text:, buttons: nil)
-      call('editMessageText', chat_id:, message_id:, text:, reply_markup: markup(buttons, false))
+    def edit_message(chat_id:, message_id:, text:, buttons: nil, html: false)
+      params = { chat_id:, message_id:, text:, reply_markup: markup(buttons, false),
+                 parse_mode: parse_mode(html) }
+      call('editMessageText', **params.compact)
     end
 
     def answer_callback(id:, text: nil)
@@ -60,6 +63,12 @@ module Telegram
         { inline_keyboard: buttons.map { |row| keyboard_row(row) } }
       else
         { inline_keyboard: [] } # an empty keyboard removes the buttons when editing
+      end
+    end
+
+    def parse_mode(html)
+      if html
+        'HTML'
       end
     end
 

@@ -40,7 +40,7 @@ module Finance
     end
 
     def reject_duplicate(original)
-      answer(Messages.duplicate(original:))
+      answer(Messages.duplicate(original:), html: true)
       @document.update!(state: 'discarded')
       FileUtils.rm_f(@document.local_path)
     end
@@ -137,8 +137,8 @@ module Finance
       answer(Messages::UNREADABLE)
     end
 
-    def answer(text)
-      telegram.send_message(chat_id: @document.telegram_chat_id, text:,
+    def answer(text, html: false)
+      telegram.send_message(chat_id: @document.telegram_chat_id, text:, html:,
                             reply_to: @document.telegram_message_id)
     end
 

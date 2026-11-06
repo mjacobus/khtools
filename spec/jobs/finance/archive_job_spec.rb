@@ -83,8 +83,9 @@ RSpec.describe Finance::ArchiveJob do
                                         drive_url: 'https://drive/FILE')
     expect(File).not_to exist(document.local_path)
     expect(telegram.edits.last).to include(
-      message_id: 300,
-      text: 'Arquivado: 2026-11-04 - R$ 150,00 - S-24.jpg → Arquivo Corrente/2026-11/'
+      message_id: 300, html: true,
+      text: 'Arquivado: <a href="https://drive/FILE">2026-11-04 - R$ 150,00 - S-24.jpg</a> ' \
+            '→ Arquivo Corrente/2026-11/'
     )
   end
 

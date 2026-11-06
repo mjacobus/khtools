@@ -38,7 +38,7 @@ module Finance
       @document.update!(state: 'archived', drive_file_id: result[:id],
                         drive_url: result[:web_view_link], last_error: nil)
       FileUtils.rm_f(@document.local_path)
-      edit_bot_message(Messages.archived(document: @document))
+      edit_bot_message(Messages.archived(document: @document), html: true)
     end
 
     def month_folder
@@ -108,9 +108,9 @@ module Finance
       ErrorHandler.new.notify_error(exception)
     end
 
-    def edit_bot_message(text)
+    def edit_bot_message(text, html: false)
       telegram.edit_message(chat_id: @document.telegram_chat_id,
-                            message_id: @document.bot_message_id, text:)
+                            message_id: @document.bot_message_id, text:, html:)
     end
 
     def drive

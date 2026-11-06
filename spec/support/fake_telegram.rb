@@ -13,13 +13,13 @@ class FakeTelegram
     @next_id = 500
   end
 
-  def send_message(chat_id:, text:, reply_to: nil, buttons: nil, force_reply: false)
-    @sent << { chat_id:, text:, reply_to:, buttons:, force_reply: }
+  def send_message(chat_id:, text:, reply_to: nil, buttons: nil, force_reply: false, html: false) # rubocop:disable Metrics/ParameterLists
+    @sent << { chat_id:, text:, reply_to:, buttons:, force_reply:, html: }
     @next_id += 1
   end
 
-  def edit_message(chat_id:, message_id:, text:, buttons: nil)
-    @edits << { chat_id:, message_id:, text:, buttons: }
+  def edit_message(chat_id:, message_id:, text:, buttons: nil, html: false)
+    @edits << { chat_id:, message_id:, text:, buttons:, html: }
   end
 
   def answer_callback(id:, text: nil)

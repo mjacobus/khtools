@@ -67,7 +67,9 @@ RSpec.describe Finance::SuggestJob do
     document = run(received(telegram_file_id: 'f2'))
 
     expect(document.state).to eq('discarded')
-    expect(telegram.sent.last).to include(reply_to: 10, text: 'Este arquivo já foi arquivado: https://drive/x')
+    expect(telegram.sent.last).to include(reply_to: 10, html: true,
+                                          text: start_with('Este arquivo já foi arquivado: ' \
+                                                           '<a href="https://drive/x">'))
   end
 
   it 'stores the hash right after downloading, so a parallel job sees it' do
