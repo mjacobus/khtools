@@ -38,7 +38,9 @@ RSpec.describe Telegram::Client do
     client.send_message(chat_id: -100, text: 'corrija', force_reply: true)
 
     expect(Net::HTTP).to have_received(:post) do |_uri, body, _headers|
-      expect(JSON.parse(body)['reply_markup']).to eq('force_reply' => true, 'selective' => true)
+      # not selective: the prompt replies to the bot's own message, so selective would
+      # target the bot and open the reply box for nobody
+      expect(JSON.parse(body)['reply_markup']).to eq('force_reply' => true)
     end
   end
 

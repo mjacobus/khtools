@@ -55,7 +55,7 @@ module Telegram
 
     def markup(buttons, force_reply)
       if force_reply
-        { force_reply: true, selective: true }
+        { force_reply: true }
       elsif buttons
         { inline_keyboard: buttons.map { |row| keyboard_row(row) } }
       else
