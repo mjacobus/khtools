@@ -22,7 +22,7 @@ namespace :finance do
           offset = update['update_id'] + 1
           puts "update #{update['update_id']}: #{(update.keys - ['update_id']).join(', ')}"
           begin
-            intake.call(update:)
+            intake.handle(update:)
           rescue StandardError => exception
             puts "  error: #{exception.class}: #{exception.message}"
           end

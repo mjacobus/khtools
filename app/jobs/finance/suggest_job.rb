@@ -68,12 +68,12 @@ module Finance
     def read_receipt(bytes)
       if account.anthropic_api_key.present?
         ReceiptReader.new(api_key: account.anthropic_api_key)
-          .call(image_bytes: bytes, mime_type: @document.mime_type || 'image/jpeg')
+          .read(image_bytes: bytes, mime_type: @document.mime_type || 'image/jpeg')
       end
     end
 
     def read_pdf
-      result = Classifier.call(text: pdf_text, filename: @document.original_filename)
+      result = Classifier.new.classify(text: pdf_text)
       @document.assign_attributes(result.to_h.except(:period))
       @document.value_source = 'rules' if [result.amount_cents, result.document_date,
                                            result.period].any?

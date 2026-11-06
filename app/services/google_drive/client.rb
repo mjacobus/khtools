@@ -11,12 +11,7 @@ module GoogleDrive
                  '?uploadType=multipart&fields=id,webViewLink&supportsAllDrives=true'
     FOLDER = 'application/vnd.google-apps.folder'
 
-    def self.exchange_code(code:, redirect_uri:, client_id:, client_secret:)
-      new(refresh_token: nil, client_id:, client_secret:)
-        .token(grant_type: 'authorization_code', code:, redirect_uri:).fetch('refresh_token')
-    end
-
-    def initialize(refresh_token:, client_id:, client_secret:)
+    def initialize(client_id:, client_secret:, refresh_token: nil)
       @refresh_token = refresh_token
       @client_id = client_id
       @client_secret = client_secret
@@ -32,10 +27,8 @@ module GoogleDrive
       @access_token = body.fetch('access_token')
     end
 
-    def token(**params)
-      post = Net::HTTP::Post.new(URI(TOKEN_URL))
-      post.set_form_data(params.merge(client_id: @client_id, client_secret: @client_secret))
-      request(post, authorize: false)
+    def exchange_code(code:, redirect_uri:)
+      token(grant_type: 'authorization_code', code:, redirect_uri:).fetch('refresh_token')
     end
 
     def find_folder(name:, parent_id:)
@@ -65,6 +58,12 @@ module GoogleDrive
     end
 
     private
+
+    def token(**params)
+      post = Net::HTTP::Post.new(URI(TOKEN_URL))
+      post.set_form_data(params.merge(client_id: @client_id, client_secret: @client_secret))
+      request(post, authorize: false)
+    end
 
     def find(name, parent_id, type_condition)
       query = "name = '#{escape(name)}' and '#{escape(parent_id)}' in parents " \

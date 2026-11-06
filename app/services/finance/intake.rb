@@ -9,7 +9,7 @@ module Finance
       @telegram = telegram
     end
 
-    def call(update:)
+    def handle(update:)
       update = update.to_h.deep_stringify_keys
       if update['callback_query']
         callback(update['callback_query'])

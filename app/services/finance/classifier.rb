@@ -31,16 +31,8 @@ module Finance
       [/Vencimento|Fatura|Boleto|Nota Fiscal|NF-e/i, :bill]
     ].freeze
 
-    def self.call(text:, filename: nil)
-      new(text.to_s, filename.to_s).call
-    end
-
-    def initialize(text, filename)
-      @text = text
-      @filename = filename
-    end
-
-    def call
+    def classify(text:)
+      @text = text.to_s
       rule = RULES.find { |pattern, _| @text.match?(pattern) }
       (rule && send(rule.last)) || Result.new(kind: 'unknown')
     end

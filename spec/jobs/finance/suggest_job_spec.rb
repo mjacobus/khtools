@@ -35,7 +35,7 @@ RSpec.describe Finance::SuggestJob do
   end
 
   it 'reads an S-24 photo, replies with the suggestion and keeps the original locally' do
-    allow(reader).to receive(:call)
+    allow(reader).to receive(:read)
       .with(image_bytes: 'photo-bytes', mime_type: 'image/jpeg').and_return(s24_result)
 
     document = run(received)
@@ -50,7 +50,7 @@ RSpec.describe Finance::SuggestJob do
   end
 
   it 'still suggests when the AI fails, asking for a correction' do
-    allow(reader).to receive(:call).and_return(nil)
+    allow(reader).to receive(:read).and_return(nil)
 
     document = run(received)
 
@@ -71,7 +71,7 @@ RSpec.describe Finance::SuggestJob do
   end
 
   it 'stores the hash right after downloading, so a parallel job sees it' do
-    allow(reader).to receive(:call).and_return(nil)
+    allow(reader).to receive(:read).and_return(nil)
     allow(telegram).to receive(:send_message).and_raise(Telegram::Client::Error, 'down')
     document = received
 
@@ -81,7 +81,7 @@ RSpec.describe Finance::SuggestJob do
   end
 
   it 'lets the earlier of two identical files win' do
-    allow(reader).to receive(:call).and_return(nil)
+    allow(reader).to receive(:read).and_return(nil)
     first = received
     received(telegram_message_id: 11, telegram_file_id: 'f9',
              sha256: Digest::SHA256.hexdigest('photo-bytes'))
@@ -90,7 +90,7 @@ RSpec.describe Finance::SuggestJob do
   end
 
   describe 'when the file cannot be processed' do
-    before { allow(reader).to receive(:call).and_return(nil) }
+    before { allow(reader).to receive(:read).and_return(nil) }
 
     it 'keeps the document received with the error, to retry later' do
       allow(telegram).to receive(:download).and_raise(Telegram::Client::Error, 'getFile: timeout')

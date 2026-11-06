@@ -39,7 +39,7 @@ RSpec.describe Finance::Intake do
   end
 
   it 'creates one document per message even if Telegram repeats the update' do
-    2.times { intake.call(update: photo_update) }
+    2.times { intake.handle(update: photo_update) }
 
     expect(account.finance_documents.count).to eq(1)
     expect(account.finance_documents.first).to have_attributes(
@@ -54,16 +54,16 @@ RSpec.describe Finance::Intake do
     update = { 'update_id' => 3,
                'message' => { 'message_id' => 11, 'chat' => chat, 'document' => document } }
 
-    intake.call(update:)
+    intake.handle(update:)
 
     expect(account.finance_documents.last).to have_attributes(original_filename: 'x.pdf',
                                                               mime_type: 'application/pdf')
   end
 
   it 'ignores other chats and messages without files' do
-    intake.call(update: photo_update(chat: -1))
-    intake.call(update: { 'message' => { 'message_id' => 12, 'chat' => { 'id' => chat_id },
-                                         'text' => 'oi' } })
+    intake.handle(update: photo_update(chat: -1))
+    intake.handle(update: { 'message' => { 'message_id' => 12, 'chat' => { 'id' => chat_id },
+                                           'text' => 'oi' } })
 
     expect(account.finance_documents.count).to eq(0)
   end
@@ -71,7 +71,7 @@ RSpec.describe Finance::Intake do
   it 'ignores buttons tapped by someone who cannot confirm' do
     document = suggested
 
-    intake.call(update: callback('confirm', document, from: 8))
+    intake.handle(update: callback('confirm', document, from: 8))
 
     expect(document.reload.state).to eq('suggested')
     expect(telegram.answers).to eq([{ id: 'cb1', text: Finance::Messages::NOT_A_CONFIRMER }])
@@ -80,7 +80,7 @@ RSpec.describe Finance::Intake do
   it 'confirms and enqueues the archive' do
     document = suggested
 
-    intake.call(update: callback('confirm', document))
+    intake.handle(update: callback('confirm', document))
 
     expect(document.reload).to have_attributes(state: 'confirmed', confirmed_by: 'Ana')
     expect(document.confirmed_at).to be_present
@@ -94,7 +94,7 @@ RSpec.describe Finance::Intake do
       telegram.edit_message(chat_id:, message_id: 300, text: 'Arquivado: x')
     end
 
-    intake.call(update: callback('confirm', document))
+    intake.handle(update: callback('confirm', document))
 
     expect(telegram.edits.last[:text]).to eq('Arquivado: x')
   end
@@ -102,7 +102,7 @@ RSpec.describe Finance::Intake do
   it 'does not confirm without a month' do
     document = suggested(competence: nil)
 
-    intake.call(update: callback('confirm', document))
+    intake.handle(update: callback('confirm', document))
 
     expect(document.reload.state).to eq('suggested')
     expect(telegram.answers.last[:text]).to eq(Finance::Messages::NEEDS_MONTH)
@@ -111,7 +111,7 @@ RSpec.describe Finance::Intake do
   it 'does not confirm twice' do
     document = suggested(state: 'confirmed')
 
-    intake.call(update: callback('confirm', document))
+    intake.handle(update: callback('confirm', document))
 
     expect(Finance::ArchiveJob).not_to have_been_enqueued
     expect(telegram.answers.last[:text]).to eq(Finance::Messages::ALREADY_HANDLED)
@@ -127,7 +127,7 @@ RSpec.describe Finance::Intake do
     end
     # rubocop:enable RSpec/AnyInstance
 
-    intake.call(update: callback('confirm', document))
+    intake.handle(update: callback('confirm', document))
 
     expect(Finance::ArchiveJob).not_to have_been_enqueued
     expect(telegram.answers.last[:text]).to eq(Finance::Messages::ALREADY_HANDLED)
@@ -136,7 +136,7 @@ RSpec.describe Finance::Intake do
   it 'discards' do
     document = suggested
 
-    intake.call(update: callback('discard', document))
+    intake.handle(update: callback('discard', document))
 
     expect(document.reload.state).to eq('discarded')
     expect(telegram.edits.last).to include(text: Finance::Messages::DISCARDED)
@@ -145,7 +145,7 @@ RSpec.describe Finance::Intake do
   describe 'corrections' do
     let(:document) { suggested }
 
-    before { intake.call(update: callback('edit', document)) }
+    before { intake.handle(update: callback('edit', document)) }
 
     def reply(text, from: 42)
       prompt_id = document.reload.edit_prompt_message_id
@@ -161,7 +161,7 @@ RSpec.describe Finance::Intake do
     end
 
     it 'applies the reply and shows the suggestion again' do
-      intake.call(update: reply('local 120 mundial 30 data 2026-11-05'))
+      intake.handle(update: reply('local 120 mundial 30 data 2026-11-05'))
 
       expect(document.reload).to have_attributes(amount_cents: 15_000, congregation_cents: 12_000,
                                                  worldwide_cents: 3000, value_source: 'human',
@@ -171,13 +171,13 @@ RSpec.describe Finance::Intake do
     end
 
     it 'explains unknown keys' do
-      intake.call(update: reply('preco 10'))
+      intake.handle(update: reply('preco 10'))
 
       expect(telegram.sent.last).to include(reply_to: 20, text: include('Campo desconhecido'))
     end
 
     it 'ignores replies from people who cannot confirm' do
-      intake.call(update: reply('local 1', from: 8))
+      intake.handle(update: reply('local 1', from: 8))
 
       expect(document.reload.congregation_cents).to be_nil
     end
@@ -188,7 +188,7 @@ RSpec.describe Finance::Intake do
     stuck = factories.finance_documents.create(old.merge(state: 'received'))
     confirmed = factories.finance_documents.create(old.merge(state: 'confirmed'))
 
-    intake.call(update: { 'update_id' => 9 })
+    intake.handle(update: { 'update_id' => 9 })
 
     expect(Finance::SuggestJob).to have_been_enqueued.with(stuck.id)
     expect(Finance::ArchiveJob).to have_been_enqueued.with(confirmed.id)

@@ -105,8 +105,8 @@ RSpec.describe GoogleDrive::Client do
   it 'exchanges an authorization code for a refresh token' do
     responses.push(response(200, access_token: 'a', expires_in: 3600, refresh_token: 'R'))
 
-    token = described_class.exchange_code(code: 'C', redirect_uri: 'https://x/cb', client_id: 'id',
-                                          client_secret: 's')
+    token = described_class.new(client_id: 'id', client_secret: 's')
+      .exchange_code(code: 'C', redirect_uri: 'https://x/cb')
 
     expect(token).to eq('R')
     expect(URI.decode_www_form(requests.last.body).to_h)

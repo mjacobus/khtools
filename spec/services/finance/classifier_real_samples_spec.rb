@@ -19,7 +19,7 @@ RSpec.describe Finance::Classifier, :real_samples do
     YAML.safe_load_file(File.join(dir, 'manifest.yml'), permitted_classes: [Date]).each do |sample|
       it "classifies #{sample['file']}" do
         path = files.fetch(File.join(dir, sample['file']).unicode_normalize)
-        result = described_class.call(text: Finance::Pdf.text(path:), filename: File.basename(path))
+        result = described_class.new.classify(text: Finance::Pdf.text(path:))
 
         expected = { kind: sample['kind'], document_date: sample['date'],
                      amount_cents: sample['amount_cents'], period: sample['period'] }.compact

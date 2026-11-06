@@ -21,7 +21,7 @@ module Finance
     private
 
     def process_update
-      Intake.new(account:).call(update: JSON.parse(request.raw_post))
+      Intake.new(account:).handle(update: JSON.parse(request.raw_post))
     rescue StandardError => exception
       # Telegram retries failed deliveries forever; stuck items are retried by Intake instead.
       ErrorHandler.new.notify_error(exception)

@@ -32,7 +32,7 @@ module Finance
       @client = client || Anthropic::Client.new(api_key:)
     end
 
-    def call(image_bytes:, mime_type:)
+    def read(image_bytes:, mime_type:)
       message = @client.messages.create(**request(image_bytes, mime_type))
       if message.stop_reason == :refusal
         return log_nil('refused')

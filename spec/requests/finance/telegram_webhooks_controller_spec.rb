@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Finance::TelegramWebhooksController do
   let(:skip_login) { true }
-  let(:intake) { instance_double(Finance::Intake, call: nil) }
+  let(:intake) { instance_double(Finance::Intake, handle: nil) }
   let(:account) do
     factories.accounts.create.tap do |account|
       account.update!(finance_telegram_bot_token: 'token', finance_telegram_chat_id: '-100',
@@ -28,14 +28,14 @@ RSpec.describe Finance::TelegramWebhooksController do
     deliver
 
     expect(response).to have_http_status(:ok)
-    expect(intake).to have_received(:call).with(update: hash_including(update))
+    expect(intake).to have_received(:handle).with(update: hash_including(update))
   end
 
   it 'rejects a wrong secret' do
     deliver(secret: 'nope')
 
     expect(response).to have_http_status(:unauthorized)
-    expect(intake).not_to have_received(:call)
+    expect(intake).not_to have_received(:handle)
   end
 
   it 'is not found for unknown or unconfigured accounts' do
@@ -48,7 +48,7 @@ RSpec.describe Finance::TelegramWebhooksController do
   end
 
   it 'answers ok and reports when the intake fails, so Telegram does not retry forever' do
-    allow(intake).to receive(:call).and_raise('boom')
+    allow(intake).to receive(:handle).and_raise('boom')
     allow(ErrorHandler).to receive(:new).and_return(instance_double(ErrorHandler,
                                                                     notify_error: nil))
 

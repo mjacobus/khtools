@@ -34,8 +34,8 @@ module Finance
     end
 
     def exchange_code
-      GoogleDrive::Client.exchange_code(code: params[:code], redirect_uri: callback_url,
-                                        **oauth_client)
+      GoogleDrive::Client.new(**oauth_client)
+        .exchange_code(code: params[:code], redirect_uri: callback_url)
     end
 
     def redirect_back_with(flash)

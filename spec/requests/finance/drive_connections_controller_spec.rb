@@ -4,8 +4,10 @@ require 'rails_helper'
 
 RSpec.describe Finance::DriveConnectionsController do
   let(:access) { true }
+  let(:drive) { instance_double(GoogleDrive::Client, exchange_code: nil) }
 
   before do
+    allow(GoogleDrive::Client).to receive(:new).and_return(drive)
     grant_access(current_user) if access
     current_user.save!
   end
@@ -24,7 +26,7 @@ RSpec.describe Finance::DriveConnectionsController do
   end
 
   it 'stores the refresh token for the signed account' do
-    allow(GoogleDrive::Client).to receive(:exchange_code)
+    allow(drive).to receive(:exchange_code)
       .with(hash_including(code: 'CODE', redirect_uri: 'http://www.example.com/finance/drive_connection/callback'))
       .and_return('REFRESH')
 
@@ -37,33 +39,28 @@ RSpec.describe Finance::DriveConnectionsController do
   end
 
   it 'rejects a bad state' do
-    allow(GoogleDrive::Client).to receive(:exchange_code)
-
     get '/finance/drive_connection/callback', params: { code: 'CODE', state: 'forged' }
 
     expect(response).to have_http_status(:bad_request)
-    expect(GoogleDrive::Client).not_to have_received(:exchange_code)
+    expect(drive).not_to have_received(:exchange_code)
   end
 
   it 'rejects a state signed for another account' do
-    allow(GoogleDrive::Client).to receive(:exchange_code)
     other = factories.accounts.create
 
     get '/finance/drive_connection/callback',
         params: { code: 'CODE', state: signed_state(other.id) }
 
     expect(response).to have_http_status(:bad_request)
-    expect(GoogleDrive::Client).not_to have_received(:exchange_code)
+    expect(drive).not_to have_received(:exchange_code)
   end
 
   it 'explains when the Google consent was cancelled' do
-    allow(GoogleDrive::Client).to receive(:exchange_code)
-
     get '/finance/drive_connection/callback',
         params: { error: 'access_denied', state: signed_state(current_account.id) }
 
     expect(response).to redirect_to('/finance/drive_connection')
-    expect(GoogleDrive::Client).not_to have_received(:exchange_code)
+    expect(drive).not_to have_received(:exchange_code)
   end
 
   context 'without access' do

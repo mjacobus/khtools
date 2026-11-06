@@ -4,8 +4,8 @@ require 'rails_helper'
 
 # All texts are invented; they only follow the shape of the real documents.
 RSpec.describe Finance::Classifier do
-  def classify(text, filename = nil)
-    described_class.call(text:, filename:)
+  def classify(text)
+    described_class.new.classify(text:)
   end
 
   it 'reads an S-30 period' do

@@ -16,7 +16,7 @@ RSpec.describe Finance::ReceiptReader do
   end
 
   def read
-    reader.call(image_bytes: 'jpeg-bytes', mime_type: 'image/jpeg')
+    reader.read(image_bytes: 'jpeg-bytes', mime_type: 'image/jpeg')
   end
 
   it 'returns the values read from the photo' do
