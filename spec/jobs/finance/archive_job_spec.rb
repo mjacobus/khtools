@@ -6,12 +6,13 @@ RSpec.describe Finance::ArchiveJob do
   # In-memory Drive: folders and files by parent id.
   let(:drive) do
     Class.new do
-      attr_reader :folders, :files, :uploads, :updates
+      attr_reader :folders, :files, :uploads, :updates, :tagged
       attr_accessor :fail_upload, :fail_update
 
       def initialize
         @folders = { ['ROOT', 'Arquivo Corrente'] => 'CURRENT' }
         @files = {}
+        @tagged = {}
         @uploads = []
         @updates = []
       end
@@ -27,8 +28,11 @@ RSpec.describe Finance::ArchiveJob do
 
       def find_folder(name:, parent_id:) = folders[[parent_id, name]]
       def find_file(name:, parent_id:) = files[[parent_id, name]]
+      def find_tagged_folder(tags:) = tagged.key(tags)
+      def tag(id:, tags:) = tagged.store(id, tags)
 
-      def create_folder(name:, parent_id:)
+      def create_folder(name:, parent_id:, tags: {})
+        tag(id: "NEW-#{name}", tags:)
         folders[[parent_id, name]] = "NEW-#{name}"
       end
 
@@ -129,6 +133,32 @@ RSpec.describe Finance::ArchiveJob do
 
       expect(drive.uploads.last).to include(name: '2026-11 - S-26.pdf', parent_id: 'NOV')
       expect(document).to have_attributes(state: 'archived', drive_file_id: 'FILE')
+    end
+  end
+
+  describe 'month folder' do
+    let(:tags) { { khtools_root: 'ROOT', khtools_competence: '2026-11' } }
+
+    it 'finds the month folder by its tags even after it was renamed or moved' do
+      drive.tag(id: 'MOVED', tags:)
+
+      run
+
+      expect(drive.uploads.last[:parent_id]).to eq('MOVED')
+    end
+
+    it 'tags the month folder it finds by name' do
+      run
+
+      expect(drive.tagged).to eq('NOV' => tags)
+    end
+
+    it 'tags the month folder it creates' do
+      drive.folders.delete(%w[CURRENT 2026-11])
+
+      run
+
+      expect(drive.tagged).to eq('NEW-2026-11' => tags)
     end
   end
 

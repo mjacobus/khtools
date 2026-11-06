@@ -2,7 +2,7 @@
 
 module GoogleDrive
   # Minimal Drive v3 client using a stored OAuth refresh token.
-  class Client
+  class Client # rubocop:disable Metrics/ClassLength -- OAuth, lookup, folders, uploads
     class Error < StandardError; end
 
     TOKEN_URL = 'https://oauth2.googleapis.com/token'
@@ -43,11 +43,21 @@ module GoogleDrive
       find(name, parent_id, "mimeType != '#{FOLDER}'")
     end
 
-    def create_folder(name:, parent_id:)
-      post = Net::HTTP::Post.new(URI("#{FILES_URL}?fields=id&supportsAllDrives=true"))
-      post.content_type = 'application/json'
-      post.body = { name:, parents: [parent_id], mimeType: FOLDER }.to_json
-      request(post).fetch('id')
+    # Tags are appProperties: only this app sees them, and they survive renames and moves.
+    def find_tagged_folder(tags:)
+      conditions = tags.map do |key, value|
+        "appProperties has { key='#{escape(key)}' and value='#{escape(value)}' }"
+      end
+      query(conditions + ["mimeType = '#{FOLDER}'", 'trashed = false'])
+    end
+
+    def create_folder(name:, parent_id:, tags: {})
+      metadata = { name:, parents: [parent_id], mimeType: FOLDER, appProperties: tags.presence }
+      json_request(Net::HTTP::Post, FILES_URL, metadata.compact).fetch('id')
+    end
+
+    def tag(id:, tags:)
+      json_request(Net::HTTP::Patch, "#{FILES_URL}/#{id}", { appProperties: tags })
     end
 
     def upload(path:, name:, parent_id:, mime_type:, description:, app_properties:) # rubocop:disable Metrics/ParameterLists
@@ -73,6 +83,13 @@ module GoogleDrive
       { id: body.fetch('id'), web_view_link: body['webViewLink'] }
     end
 
+    def json_request(http_class, url, body)
+      http_request = http_class.new(URI("#{url}?fields=id&supportsAllDrives=true"))
+      http_request.content_type = 'application/json'
+      http_request.body = body.to_json
+      request(http_request)
+    end
+
     def token(**params)
       post = Net::HTTP::Post.new(URI(TOKEN_URL))
       post.set_form_data(params.merge(client_id: @client_id, client_secret: @client_secret))
@@ -80,10 +97,13 @@ module GoogleDrive
     end
 
     def find(name, parent_id, type_condition)
-      query = "name = '#{escape(name)}' and '#{escape(parent_id)}' in parents " \
-              "and #{type_condition} and trashed = false"
-      params = URI.encode_www_form(q: query, fields: 'files(id)', supportsAllDrives: true,
-                                   includeItemsFromAllDrives: true)
+      query(["name = '#{escape(name)}'", "'#{escape(parent_id)}' in parents", type_condition,
+             'trashed = false'])
+    end
+
+    def query(conditions)
+      params = URI.encode_www_form(q: conditions.join(' and '), fields: 'files(id)',
+                                   supportsAllDrives: true, includeItemsFromAllDrives: true)
       files = request(Net::HTTP::Get.new(URI("#{FILES_URL}?#{params}"))).fetch('files')
       files.first&.fetch('id')
     end

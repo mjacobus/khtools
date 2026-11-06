@@ -57,15 +57,32 @@ module Finance
       end
     end
 
+    # Tagged, so it is still found after someone renames or moves it.
     def month_folder
+      tags = { khtools_root: account.finance_drive_root_folder_id,
+               khtools_competence: @document.competence }
+      drive.find_tagged_folder(tags:) || named_month_folder(tags)
+    end
+
+    def named_month_folder(tags)
+      current = current_folder
+      folder = drive.find_folder(name: @document.competence, parent_id: current)
+      if folder
+        drive.tag(id: folder, tags:)
+        folder
+      else
+        drive.create_folder(name: @document.competence, parent_id: current, tags:)
+      end
+    end
+
+    def current_folder
       current = drive.find_folder(name: CURRENT_FOLDER,
                                   parent_id: account.finance_drive_root_folder_id)
       unless current
         raise "Pasta \"#{CURRENT_FOLDER}\" não encontrada na raiz configurada"
       end
 
-      drive.find_folder(name: @document.competence, parent_id: current) ||
-        drive.create_folder(name: @document.competence, parent_id: current)
+      current
     end
 
     def free_name(folder)

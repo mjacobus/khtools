@@ -61,6 +61,39 @@ RSpec.describe GoogleDrive::Client do
              'mimeType' => 'application/vnd.google-apps.folder')
   end
 
+  it 'creates folders with tags' do
+    responses.push(response(200, access_token: 'a', expires_in: 3600), response(200, id: 'NEW'))
+
+    client.create_folder(name: '2026-11', parent_id: 'P1', tags: { khtools_competence: '2026-11' })
+
+    expect(JSON.parse(requests.last.body))
+      .to include('appProperties' => { 'khtools_competence' => '2026-11' })
+  end
+
+  it 'finds a folder by its tags wherever it is and whatever its name' do
+    responses.push(response(200, access_token: 'a', expires_in: 3600),
+                   response(200, files: [{ id: 'F1' }]))
+
+    expect(client.find_tagged_folder(tags: { khtools_root: "R'1", khtools_competence: '2026-11' }))
+      .to eq('F1')
+
+    query = URI.decode_www_form(URI(requests.last.path).query).to_h['q']
+    expect(query).to eq("appProperties has { key='khtools_root' and value='R\\'1' } and " \
+                        "appProperties has { key='khtools_competence' and value='2026-11' } and " \
+                        "mimeType = 'application/vnd.google-apps.folder' and trashed = false")
+  end
+
+  it 'tags an existing file' do
+    responses.push(response(200, access_token: 'a', expires_in: 3600), response(200, id: 'F1'))
+
+    client.tag(id: 'F1', tags: { khtools_competence: '2026-11' })
+
+    expect(requests.last).to be_a(Net::HTTP::Patch)
+    expect(requests.last.path).to start_with('/drive/v3/files/F1?')
+    expect(JSON.parse(requests.last.body))
+      .to eq('appProperties' => { 'khtools_competence' => '2026-11' })
+  end
+
   describe '#upload' do
     let(:result) do
       client.upload(path: upload_path, name: 'a.pdf', parent_id: 'P1', mime_type: 'application/pdf',
