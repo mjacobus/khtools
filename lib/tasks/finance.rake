@@ -3,6 +3,8 @@
 # rubocop:disable Metrics/BlockLength -- rake namespaces are long blocks by nature
 namespace :finance do
   namespace :telegram do
+    $stdout.sync = true # these tasks print live while looping, often into a log file
+
     finance_account = lambda do |args|
       id = args.fetch(:account_id) { abort 'usage: rake "finance:telegram:<task>[ACCOUNT_ID]"' }
       Db::Account.find(id)
