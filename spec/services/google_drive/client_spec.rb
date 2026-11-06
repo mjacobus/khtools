@@ -87,6 +87,8 @@ RSpec.describe GoogleDrive::Client do
       result
 
       expect(requests.last.path).to start_with('/upload/drive/v3/files?uploadType=multipart')
+      # a later replacement must not let Drive purge this first version after 30 days
+      expect(requests.last.path).to include('keepRevisionForever=true')
       expect(requests.last.body).to include(
         '"name":"a.pdf"', '"parents":["P1"]', '"description":"desc"',
         '"appProperties":{"kind":"bill","amount_cents":"10"}', '%PDF-bytes'

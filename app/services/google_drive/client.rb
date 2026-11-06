@@ -8,9 +8,11 @@ module GoogleDrive
     TOKEN_URL = 'https://oauth2.googleapis.com/token'
     FILES_URL = 'https://www.googleapis.com/drive/v3/files'
     UPLOAD_BASE = 'https://www.googleapis.com/upload/drive/v3/files'
-    UPLOAD_QUERY = 'uploadType=multipart&fields=id,webViewLink&supportsAllDrives=true'
+    # Every version is kept forever: Drive purges unpinned old versions after 30 days, and a
+    # replaced monthly file must keep the version it replaced.
+    UPLOAD_QUERY = 'uploadType=multipart&fields=id,webViewLink&supportsAllDrives=true' \
+                   '&keepRevisionForever=true'
     UPLOAD_URL = "#{UPLOAD_BASE}?#{UPLOAD_QUERY}".freeze
-    UPDATE_QUERY = "#{UPLOAD_QUERY}&keepRevisionForever=true".freeze
     FOLDER = 'application/vnd.google-apps.folder'
 
     def initialize(client_id:, client_secret:, refresh_token: nil)
@@ -57,7 +59,7 @@ module GoogleDrive
     # New version of the same file (same id and link); the old one stays in its history.
     def update_file(id:, path:, mime_type:, description:, app_properties:)
       metadata = { description:, appProperties: app_properties.compact.transform_values(&:to_s) }
-      patch = Net::HTTP::Patch.new(URI("#{UPLOAD_BASE}/#{id}?#{UPDATE_QUERY}"))
+      patch = Net::HTTP::Patch.new(URI("#{UPLOAD_BASE}/#{id}?#{UPLOAD_QUERY}"))
       send_file(patch, metadata, mime_type, path)
     end
 
