@@ -69,6 +69,14 @@ class Db::FinanceDocument < ApplicationRecord
     mime_type == 'application/pdf' || File.extname(original_filename.to_s).casecmp?('.pdf')
   end
 
+  # Call after applying a correction and before saving: the pending changes are what it changed.
+  def record_correction(by_telegram_id:, by_name:, text:)
+    changed = changes_to_save.except('value_source', 'corrections', 'updated_at')
+    entry = { 'at' => Time.current.iso8601, 'by_telegram_id' => by_telegram_id,
+              'by_name' => by_name, 'text' => text, 'changes' => changed }
+    self.corrections = corrections + [entry]
+  end
+
   def flag_list
     flags.to_s.split(',')
   end

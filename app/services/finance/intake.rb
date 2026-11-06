@@ -45,7 +45,8 @@ module Finance
     end
 
     def receive(message, file)
-      document = documents.create_with(file).find_or_create_by!(
+      sender = { sent_by_telegram_id: message.dig('from', 'id'), sent_by_name: name(message) }
+      document = documents.create_with(file.merge(sender)).find_or_create_by!(
         telegram_chat_id: message.dig('chat', 'id'), telegram_message_id: message['message_id']
       )
       SuggestJob.perform_later(document.id) if document.previously_new_record?
@@ -72,14 +73,18 @@ module Finance
     def confirm(document, query)
       if document.state == 'suggested' && document.competence.blank?
         Messages::NEEDS_MONTH
-      elsif document.claim(from: 'suggested', state: 'confirmed', confirmed_at: Time.current,
-                           confirmed_by: query.dig('from', 'first_name'))
+      elsif document.claim(from: 'suggested', state: 'confirmed', **confirmation(query))
         edit_bot_message(document, Messages::ARCHIVING)
         ArchiveJob.perform_later(document.id)
         nil
       else
         Messages::ALREADY_HANDLED
       end
+    end
+
+    def confirmation(query)
+      { confirmed_at: Time.current, confirmed_by: query.dig('from', 'first_name'),
+        confirmed_by_telegram_id: query.dig('from', 'id') }
     end
 
     def discard(document, _query)
@@ -105,8 +110,7 @@ module Finance
 
     def correct(document, message)
       if confirmer?(message) && document.state == 'suggested'
-        Correction.apply(document:, text: message['text'])
-        document.save!
+        apply_correction(document, message)
         text, buttons = Messages.suggestion(document:)
         telegram.edit_message(chat_id: document.telegram_chat_id,
                               message_id: document.bot_message_id, text:, buttons:)
@@ -116,9 +120,20 @@ module Finance
                             reply_to: message['message_id'])
     end
 
+    def apply_correction(document, message)
+      Correction.apply(document:, text: message['text'])
+      document.record_correction(by_telegram_id: message.dig('from', 'id'),
+                                 by_name: name(message), text: message['text'])
+      document.save!
+    end
+
     def edit_bot_message(document, text)
       telegram.edit_message(chat_id: document.telegram_chat_id,
                             message_id: document.bot_message_id, text:)
+    end
+
+    def name(payload)
+      payload['from'].to_h.values_at('first_name', 'last_name').compact.join(' ').presence
     end
 
     def confirmer?(payload)

@@ -17,7 +17,7 @@ RSpec.describe Finance::Intake do
   def photo_update(message_id: 10, chat: chat_id, update_id: 1)
     { 'update_id' => update_id,
       'message' => { 'message_id' => message_id, 'chat' => { 'id' => chat },
-                     'from' => { 'id' => 7 },
+                     'from' => { 'id' => 7, 'first_name' => 'Bia', 'last_name' => 'Lima' },
                      'photo' => [{ 'file_id' => 'small', 'file_size' => 10 },
                                  { 'file_id' => 'big', 'file_size' => 900 }] } }
   end
@@ -46,6 +46,13 @@ RSpec.describe Finance::Intake do
       telegram_file_id: 'big', mime_type: 'image/jpeg', telegram_message_id: 10, state: 'received'
     )
     expect(enqueued_jobs.count { |job| job['job_class'] == 'Finance::SuggestJob' }).to eq(1)
+  end
+
+  it 'records who sent the file' do
+    intake.handle(update: photo_update)
+
+    expect(account.finance_documents.first).to have_attributes(sent_by_telegram_id: 7,
+                                                               sent_by_name: 'Bia Lima')
   end
 
   it 'accepts documents with their file name and type' do
@@ -82,7 +89,8 @@ RSpec.describe Finance::Intake do
 
     intake.handle(update: callback('confirm', document))
 
-    expect(document.reload).to have_attributes(state: 'confirmed', confirmed_by: 'Ana')
+    expect(document.reload).to have_attributes(state: 'confirmed', confirmed_by: 'Ana',
+                                               confirmed_by_telegram_id: 42)
     expect(document.confirmed_at).to be_present
     expect(Finance::ArchiveJob).to have_been_enqueued.with(document.id)
     expect(telegram.edits.last).to include(message_id: 300, text: Finance::Messages::ARCHIVING)
@@ -151,7 +159,7 @@ RSpec.describe Finance::Intake do
       prompt_id = document.reload.edit_prompt_message_id
       { 'update_id' => 4,
         'message' => { 'message_id' => 20, 'chat' => { 'id' => chat_id },
-                       'from' => { 'id' => from }, 'text' => text,
+                       'from' => { 'id' => from, 'first_name' => 'Ana' }, 'text' => text,
                        'reply_to_message' => { 'message_id' => prompt_id } } }
     end
 
@@ -168,6 +176,18 @@ RSpec.describe Finance::Intake do
                                                  document_date: Date.new(2026, 11, 5))
       expect(telegram.edits.last).to include(message_id: 300,
                                              text: include('2026-11-05 - R$ 150,00 - S-24'))
+    end
+
+    it 'keeps a history of who changed what' do
+      freeze_time do
+        intake.handle(update: reply('local 120 mundial 30'))
+
+        changes = { 'congregation_cents' => [nil, 12_000], 'worldwide_cents' => [nil, 3000] }
+        expect(document.reload.corrections).to eq(
+          [{ 'at' => Time.current.iso8601, 'by_telegram_id' => 42, 'by_name' => 'Ana',
+             'text' => 'local 120 mundial 30', 'changes' => changes }]
+        )
+      end
     end
 
     it 'explains unknown keys' do
