@@ -1,0 +1,23 @@
+<%= render 'secret', f:, name: :telegram_bot_token, label: 'Token do bot' %>
+
+<div class="mb-3">
+  <%= f.label :telegram_chat_id, 'ID do grupo', class: 'form-label' %>
+  <%= f.text_field :telegram_chat_id, class: 'form-control', placeholder: '-1001234567890' %>
+</div>
+
+<fieldset class="mb-3">
+  <legend class="h6">Quem pode confirmar documentos</legend>
+  <% if @integration.people.empty? %>
+    <p class="text-muted">Ninguém apareceu no grupo ainda. Peça para cada pessoa mandar uma mensagem lá.</p>
+  <% end %>
+  <%= hidden_field_tag 'integration[confirmer_telegram_ids][]', '' %>
+  <% @integration.people.each do |id, name| %>
+    <div>
+      <label>
+        <%= check_box_tag 'integration[confirmer_telegram_ids][]', id,
+                          @integration.confirmer_telegram_ids.include?(id), id: "confirmer_#{id}" %>
+        <%= name || 'Sem nome' %> <small class="text-muted">(<%= id %>)</small>
+      </label>
+    </div>
+  <% end %>
+</fieldset>

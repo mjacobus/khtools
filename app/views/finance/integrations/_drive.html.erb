@@ -1,0 +1,13 @@
+<p>
+  <%= @integration.drive_connected? ? 'Conectado.' : 'Ainda não conectado.' %>
+  <%= link_to 'Conectar Drive', finance_drive_connection_path %>
+</p>
+
+<div class="mb-3">
+  <%= f.label :drive_root_folder_id, 'Pasta Contas Central (link ou ID)', class: 'form-label' %>
+  <%= f.text_field :drive_root_folder_id, class: 'form-control' %>
+  <div class="form-text">Ela precisa ter a pasta "Arquivo Corrente" dentro.</div>
+</div>
+
+<%= render 'secret', f:, name: :statement_password, label: 'Senha dos extratos' %>
+<p class="form-text">Os extratos sobem para o Drive já sem a senha.</p>

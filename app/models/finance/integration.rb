@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Finance
-  # The finance bot settings of an account, as edited on the integrations page.
+  # The finance bot settings of an account, as edited on the integrations pages.
   class Integration
     include ActiveModel::Model
 
@@ -28,10 +28,9 @@ module Finance
       @confirmer_telegram_ids = account.finance_confirmer_telegram_ids.to_s.split(',')
     end
 
+    # Only the fields sent are touched: each section's page sends its own.
     def update(params)
-      @telegram_chat_id = params[:telegram_chat_id].to_s.strip.delete_suffix('.')
-      @drive_root_folder_id = folder_id(params[:drive_root_folder_id].to_s.strip)
-      @confirmer_telegram_ids = Array(params[:confirmer_telegram_ids]).compact_blank
+      assign(params)
       if valid?
         save(params)
         true
@@ -55,6 +54,18 @@ module Finance
     end
 
     private
+
+    def assign(params)
+      if params.key?(:telegram_chat_id)
+        @telegram_chat_id = params[:telegram_chat_id].to_s.strip.delete_suffix('.')
+      end
+      if params.key?(:drive_root_folder_id)
+        @drive_root_folder_id = folder_id(params[:drive_root_folder_id].to_s.strip)
+      end
+      if params.key?(:confirmer_telegram_ids)
+        @confirmer_telegram_ids = Array(params[:confirmer_telegram_ids]).compact_blank
+      end
+    end
 
     def save(params)
       account.assign_attributes(finance_telegram_chat_id: telegram_chat_id,

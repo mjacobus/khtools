@@ -39,7 +39,7 @@ module Finance
     end
 
     def redirect_back_with(flash)
-      redirect_to finance_drive_connection_path, flash:
+      redirect_to finance_integration_path('drive'), flash:
     end
 
     def authorize_params

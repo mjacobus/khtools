@@ -299,7 +299,7 @@ pt-BR:
       assignments: "Designações"
     messages:
       finance_drive_connected: 'Drive conectado'
-      finance_integration_saved: 'Integrações salvas'
+      finance_integration_saved: 'Configurações salvas'
       finance_chat_id: 'O ID do grupo deve ser um número, como -1001234567890'
       finance_drive_cancelled: 'A conexão com o Drive foi cancelada.'
       could_not_automatically_create_location_error: 'Erro ao criar localização automaticamente'
@@ -323,8 +323,10 @@ pt-BR:
         one: "%{count} contato"
         other: "%{count} contatos"
     links:
-      finance: 'Contas'
-      finance_integration: 'Integrações'
+      finance_integrations: 'Integrações'
+      finance_integration_telegram: 'Telegram'
+      finance_integration_drive: 'Google Drive'
+      finance_integration_ai: 'OpenAI'
       locations: 'Localizações'
       log_contact: 'Marcar como contatado'
       create_tokenized_link_to_files: "Criar links para download"

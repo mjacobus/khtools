@@ -16,7 +16,7 @@ class Sidebar::SidebarComponent < ApplicationComponent
       territories_section,
       field_service_section,
       reports_section,
-      finance_section,
+      integrations_section,
       admin_section,
       logout
     ].compact
@@ -69,10 +69,13 @@ class Sidebar::SidebarComponent < ApplicationComponent
     end
   end
 
-  def finance_section
-    entry(t('app.links.finance'), '#', icon: 'cash-coin').tap do |section|
-      section.append_child(entry(t('app.links.finance_integration'), finance_integration_path,
-                                 icon: 'plug'))
+  def integrations_section
+    icons = { 'telegram' => 'telegram', 'drive' => 'google', 'ai' => 'cpu' }
+    entry(t('app.links.finance_integrations'), '#', icon: 'plug').tap do |section|
+      icons.each do |key, icon|
+        section.append_child(entry(t("app.links.finance_integration_#{key}"),
+                                   finance_integration_path(key), icon:))
+      end
     end
   end
 
