@@ -119,6 +119,7 @@ module Finance
     def description
       [
         Messages.s24_split(@document),
+        Messages.s24_total_mismatch(@document),
         "competência #{@document.competence}",
         @document.confirmed_by && "confirmado por #{@document.confirmed_by} em " \
                                   "#{@document.confirmed_at&.strftime('%d/%m/%Y')}"

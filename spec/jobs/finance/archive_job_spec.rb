@@ -90,6 +90,15 @@ RSpec.describe Finance::ArchiveJob do
                                                amount_cents: 15_000, khtools_id: document.id)
   end
 
+  it 'records in the description when the written S-24 total does not match' do
+    document.update!(written_total_cents: 16_000)
+
+    run
+
+    expect(drive.uploads.last[:description])
+      .to include('⚠️ Total escrito no recibo (R$ 160,00) não confere com a soma (R$ 150,00)')
+  end
+
   it 'marks the document archived, deletes the local copy and tells the group' do
     run
 
