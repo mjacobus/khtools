@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 module Finance
-  # Reads a photo of form S-24 with Claude vision. Returns nil whenever the answer
+  # Reads a photo of form S-24 with OpenAI vision. Returns nil whenever the answer
   # can't be trusted to be well-formed; a human confirms every value anyway.
   class ReceiptReader
-    MODEL = :'claude-opus-5-5'
+    URL = URI('https://api.openai.com/v1/responses')
+    MODEL = 'gpt-5'
     Result = Struct.new(:is_s24, :date, :congregation_cents, :worldwide_cents, keyword_init: true)
 
     PROMPT = <<~TEXT
@@ -28,35 +29,47 @@ module Finance
       additionalProperties: false
     }.freeze
 
-    def initialize(api_key:, client: nil)
-      @client = client || Anthropic::Client.new(api_key:)
+    def initialize(api_key:)
+      @api_key = api_key
     end
 
     def read(image_bytes:, mime_type:)
-      message = @client.messages.create(**request(image_bytes, mime_type))
-      if message.stop_reason == :refusal
-        return log_nil('refused')
+      response = Net::HTTP.post(URL, request(image_bytes, mime_type).to_json,
+                                'Content-Type' => 'application/json',
+                                'Authorization' => "Bearer #{@api_key}")
+      if response.is_a?(Net::HTTPSuccess)
+        parse(JSON.parse(response.body))
+      else
+        log_nil("HTTP #{response.code}: #{response.body.to_s.truncate(300)}")
       end
-
-      parse(message.content.find { |block| block.type == :text }&.text)
-    rescue Anthropic::Errors::Error, JSON::ParserError => exception
+    rescue StandardError => exception
       log_nil("#{exception.class}: #{exception.message}")
     end
 
     private
 
-    def parse(text)
-      Result.new(**JSON.parse(text.to_s).slice(*Result.members.map(&:to_s)).symbolize_keys)
+    # Reasoning models put a reasoning item before the message; a refusal has no output_text.
+    def parse(body)
+      content = body['output'].to_a.flat_map { |item| item['content'].to_a }
+      text = content.find { |part| part['type'] == 'output_text' }&.dig('text')
+      if text
+        result(JSON.parse(text))
+      else
+        log_nil("no answer: #{content.to_json.truncate(300)}")
+      end
+    end
+
+    def result(values)
+      Result.new(**values.slice(*Result.members.map(&:to_s)).symbolize_keys)
     end
 
     def request(image_bytes, mime_type)
-      image = { type: :base64, media_type: mime_type, data: Base64.strict_encode64(image_bytes) }
+      image = "data:#{mime_type};base64,#{Base64.strict_encode64(image_bytes)}"
       {
         model: MODEL,
-        max_tokens: 1024,
-        messages: [{ role: :user,
-                     content: [{ type: :image, source: image }, { type: :text, text: PROMPT }] }],
-        output_config: { format: { type: :json_schema, schema: SCHEMA } }
+        input: [{ role: 'user', content: [{ type: 'input_image', image_url: image },
+                                          { type: 'input_text', text: PROMPT }] }],
+        text: { format: { type: 'json_schema', name: 's24', schema: SCHEMA, strict: true } }
       }
     end
 

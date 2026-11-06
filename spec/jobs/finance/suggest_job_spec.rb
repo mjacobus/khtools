@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Finance::SuggestJob do
   let(:account) do
     factories.accounts.create.tap do |account|
-      account.update!(finance_telegram_bot_token: 'token', anthropic_api_key: 'key',
+      account.update!(finance_telegram_bot_token: 'token', ai_api_key: 'key',
                       finance_statement_password: 'senha')
     end
   end

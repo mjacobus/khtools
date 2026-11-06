@@ -66,8 +66,8 @@ module Finance
     end
 
     def read_receipt(bytes)
-      if account.anthropic_api_key.present?
-        ReceiptReader.new(api_key: account.anthropic_api_key)
+      if account.ai_api_key.present?
+        ReceiptReader.new(api_key: account.ai_api_key)
           .read(image_bytes: bytes, mime_type: @document.mime_type || 'image/jpeg')
       end
     end
