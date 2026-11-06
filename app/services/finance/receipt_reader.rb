@@ -5,7 +5,7 @@ module Finance
   # can't be trusted to be well-formed; a human confirms every value anyway.
   class ReceiptReader
     URL = URI('https://api.openai.com/v1/responses')
-    MODEL = 'gpt-5'
+    MODEL = 'gpt-6-luna'
     Result = Struct.new(:is_s24, :date, :congregation_cents, :worldwide_cents, keyword_init: true)
 
     PROMPT = <<~TEXT
