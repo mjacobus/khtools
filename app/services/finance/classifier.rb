@@ -84,9 +84,14 @@ module Finance
                  amount_cents: money(@text[/^\s*Valor:\s*([\d.,]+)/, 1]))
     end
 
+    # The last complete month covered: banks put the previous day's balance and the
+    # emission date around the month, so the latest date decides.
     def statement
-      start = @text[/Movimenta[çc][ãa]o entre:\s*(#{DATE})/o, 1] || @text[DATE]
-      Result.new(kind: 'statement', period: date(start)&.strftime('%Y-%m'))
+      last = @text.scan(DATE).filter_map { |day| date(day.join('/')) }.max
+      if last && last != last.end_of_month
+        last = last.prev_month
+      end
+      Result.new(kind: 'statement', period: last&.strftime('%Y-%m'))
     end
 
     def bill

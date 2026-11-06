@@ -64,6 +64,19 @@ RSpec.describe Finance::Classifier do
     expect(classify(text)).to have_attributes(kind: 'statement', period: '2026-10')
   end
 
+  it 'files a statement under the last complete month it covers' do
+    text = "Extrato\nPeríodo: 30/09/2026 a 03/11/2026\n30/09/2026 Saldo Anterior\n" \
+           "15/10/2026 Pix recebido\n03/11/2026 Saldo do dia"
+
+    expect(classify(text)).to have_attributes(kind: 'statement', period: '2026-10')
+  end
+
+  it 'files a statement ending on the last day of a month under that month' do
+    text = "Extrato\n30/09/2026 Saldo Anterior\n31/10/2026 Saldo final"
+
+    expect(classify(text)).to have_attributes(kind: 'statement', period: '2026-10')
+  end
+
   it 'reads a Pix payment receipt with the payee, not the payer' do
     text = "Comprovante de transação Pix\nPagamento\nData da operação: 26/10/2026 20:20:32\n" \
            "Dados do pagador\nNome: FULANO PAGADOR\nDados do recebedor\n" \
