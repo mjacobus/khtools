@@ -2,19 +2,12 @@
 
 module Finance
   # Downloads a received document, reads it and replies in the group with a suggestion.
-  class SuggestJob < ApplicationJob
+  class SuggestJob < ApplicationJob # rubocop:disable Metrics/ClassLength -- download, read, reply, give up
     def perform(document_id)
       @document = Db::FinanceDocument.find(document_id)
-      return unless @document.state == 'received'
-
-      bytes = download
-      # saved now so a job running in parallel for the same bytes sees it
-      @document.update!(sha256: Digest::SHA256.hexdigest(bytes))
-      original = @document.earlier_duplicate
-      return reject_duplicate(original) if original
-
-      @document.pdf? ? read_pdf : read_photo(bytes)
-      reply
+      if @document.state == 'received'
+        suggest
+      end
     rescue StandardError => exception
       handle_failure(exception)
     end
@@ -33,6 +26,19 @@ module Finance
       end
     end
 
+    def suggest
+      bytes = download
+      # saved now so a job running in parallel for the same bytes sees it
+      @document.update!(sha256: Digest::SHA256.hexdigest(bytes))
+      original = @document.earlier_duplicate
+      if original
+        reject_duplicate(original)
+      else
+        @document.pdf? ? read_pdf : read_photo(bytes)
+        reply
+      end
+    end
+
     def reject_duplicate(original)
       answer(Messages.duplicate(original:))
       @document.update!(state: 'discarded')
@@ -41,9 +47,16 @@ module Finance
 
     def read_photo(bytes)
       result = read_receipt(bytes)
-      return @document.kind = 's24' unless result # AI down: ask a human for the values
-      return @document.kind = 'unknown' unless result.is_s24
+      if result.nil? # AI down: ask a human for the values
+        @document.kind = 's24'
+      elsif result.is_s24
+        assign_receipt(result)
+      else
+        @document.kind = 'unknown'
+      end
+    end
 
+    def assign_receipt(result)
       @document.assign_attributes(
         kind: 's24', value_source: 'ai', document_date: parse_date(result.date),
         congregation_cents: result.congregation_cents, worldwide_cents: result.worldwide_cents,
@@ -53,10 +66,10 @@ module Finance
     end
 
     def read_receipt(bytes)
-      return if account.anthropic_api_key.blank?
-
-      ReceiptReader.new(api_key: account.anthropic_api_key)
-        .call(image_bytes: bytes, mime_type: @document.mime_type || 'image/jpeg')
+      if account.anthropic_api_key.present?
+        ReceiptReader.new(api_key: account.anthropic_api_key)
+          .call(image_bytes: bytes, mime_type: @document.mime_type || 'image/jpeg')
+      end
     end
 
     def read_pdf
@@ -83,7 +96,9 @@ module Finance
 
     def unlocked_text
       password = account.finance_statement_password
-      raise Pdf::PasswordError, 'no password' if password.blank?
+      if password.blank?
+        raise Pdf::PasswordError, 'no password'
+      end
 
       Pdf.text(path: @document.local_path.to_s, password:).tap { @document.add_flag(:decryptable) }
     rescue Pdf::PasswordError
@@ -107,7 +122,9 @@ module Finance
 
     def handle_failure(error)
       ErrorHandler.new.notify_error(error)
-      return unless @document
+      unless @document
+        return
+      end
 
       @document.update!(last_error: "#{error.class}: #{error.message}")
       too_big = error.message.match?(/file is too big/i)

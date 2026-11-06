@@ -23,7 +23,9 @@ module GoogleDrive
     end
 
     def access_token
-      return @access_token if @access_token && Time.current < @expires_at
+      if @access_token && Time.current < @expires_at
+        return @access_token
+      end
 
       body = token(grant_type: 'refresh_token', refresh_token: @refresh_token)
       @expires_at = Time.current + body.fetch('expires_in').to_i.seconds - 1.minute
@@ -89,7 +91,9 @@ module GoogleDrive
       response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         http.request(http_request)
       end
-      return JSON.parse(response.body) if response.code.start_with?('2')
+      if response.code.start_with?('2')
+        return JSON.parse(response.body)
+      end
 
       raise Error, "Drive HTTP #{response.code}: #{response.body.to_s[0, 300]}"
     end

@@ -23,7 +23,9 @@ RSpec.describe Finance::ArchiveJob do
       end
 
       def upload(**args)
-        raise GoogleDrive::Client::Error, 'Drive HTTP 500' if fail_upload
+        if fail_upload
+          raise GoogleDrive::Client::Error, 'Drive HTTP 500'
+        end
 
         uploads << args.merge(bytes: File.binread(args[:path]))
         files[[args[:parent_id], args[:name]]] = 'FILE'

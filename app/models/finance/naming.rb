@@ -38,7 +38,9 @@ module Finance
 
     def extension(document)
       ext = File.extname(document.original_filename.to_s).downcase
-      return ext if ext.present?
+      if ext.present?
+        return ext
+      end
 
       document.mime_type == 'application/pdf' ? '.pdf' : '.jpg'
     end

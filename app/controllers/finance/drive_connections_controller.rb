@@ -14,8 +14,12 @@ module Finance
     # The signed state must name the account of whoever finishes the flow, so a link
     # started by someone else can't attach this Google account to theirs.
     def callback
-      return head :bad_request unless state_for_current_account?
-      return redirect_back_with(error: t('app.messages.finance_drive_cancelled')) if params[:error]
+      unless state_for_current_account?
+        return head :bad_request
+      end
+      if params[:error]
+        return redirect_back_with(error: t('app.messages.finance_drive_cancelled'))
+      end
 
       current_account.update!(finance_google_refresh_token: exchange_code)
       redirect_back_with(notice: t('app.messages.finance_drive_connected'))

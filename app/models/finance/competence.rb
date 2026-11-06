@@ -10,9 +10,15 @@ module Finance
     # ponytail: bills stay in their due month; moving them to the payment month needs
     # bill<->payment matching (next plan).
     def default_for(kind:, document_date:, period:)
-      return period.presence || month(document_date) if MONTHLY.include?(kind)
-      return nil unless document_date
-      return month(document_date.prev_month) if REMITTANCE.include?(kind) && document_date.day <= 10
+      if MONTHLY.include?(kind)
+        return period.presence || month(document_date)
+      end
+      unless document_date
+        return nil
+      end
+      if REMITTANCE.include?(kind) && document_date.day <= 10
+        return month(document_date.prev_month)
+      end
 
       month(document_date)
     end

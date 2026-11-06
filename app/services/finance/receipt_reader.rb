@@ -34,7 +34,9 @@ module Finance
 
     def call(image_bytes:, mime_type:)
       message = @client.messages.create(**request(image_bytes, mime_type))
-      return log_nil('refused') if message.stop_reason == :refusal
+      if message.stop_reason == :refusal
+        return log_nil('refused')
+      end
 
       parse(message.content.find { |block| block.type == :text }&.text)
     rescue Anthropic::Errors::Error, JSON::ParserError => exception

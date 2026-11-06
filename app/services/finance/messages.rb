@@ -36,7 +36,9 @@ module Finance
     end
 
     def duplicate(original:)
-      return 'Este arquivo já foi enviado antes.' if original.drive_url.blank?
+      if original.drive_url.blank?
+        return 'Este arquivo já foi enviado antes.'
+      end
 
       "Este arquivo já foi arquivado: #{original.drive_url}"
     end
@@ -50,16 +52,24 @@ module Finance
     end
 
     def s24_split(document)
-      return unless document.kind == 's24'
-      return unless document.congregation_cents || document.worldwide_cents
+      unless document.kind == 's24'
+        return
+      end
+      unless document.congregation_cents || document.worldwide_cents
+        return
+      end
 
       "Congregação #{Money.format(cents: document.congregation_cents.to_i)} · " \
         "Obra mundial #{Money.format(cents: document.worldwide_cents.to_i)}"
     end
 
     def missing?(document)
-      return true if document.competence.blank? || document.kind == 'unknown'
-      return false if Competence::MONTHLY.include?(document.kind)
+      if document.competence.blank? || document.kind == 'unknown'
+        return true
+      end
+      if Competence::MONTHLY.include?(document.kind)
+        return false
+      end
 
       document.document_date.nil? || document.amount_cents.nil?
     end

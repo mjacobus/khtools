@@ -54,22 +54,26 @@ module Telegram
     private
 
     def markup(buttons, force_reply)
-      return { force_reply: true, selective: true } if force_reply
-      # an empty keyboard removes the buttons when editing
-      return { inline_keyboard: [] } unless buttons
+      if force_reply
+        { force_reply: true, selective: true }
+      elsif buttons
+        { inline_keyboard: buttons.map { |row| keyboard_row(row) } }
+      else
+        { inline_keyboard: [] } # an empty keyboard removes the buttons when editing
+      end
+    end
 
-      { inline_keyboard: buttons.map do |row|
-                           row.map do |text, data|
-                             { text:, callback_data: data }
-                           end
-                         end }
+    def keyboard_row(row)
+      row.map { |text, data| { text:, callback_data: data } }
     end
 
     def call(method, **params)
       response = Net::HTTP.post(URI("#{BASE_URL}/bot#{@token}/#{method}"), params.to_json,
                                 'Content-Type' => 'application/json')
       body = JSON.parse(response.body)
-      raise Error, "#{method}: #{body['description']}" unless body['ok']
+      unless body['ok']
+        raise Error, "#{method}: #{body['description']}"
+      end
 
       body['result']
     end

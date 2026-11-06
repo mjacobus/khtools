@@ -2,7 +2,7 @@
 
 module Finance
   # Handles one Telegram update for the finance bot of an account.
-  class Intake
+  class Intake # rubocop:disable Metrics/ClassLength -- one update type per small method
     def initialize(account:,
                    telegram: Telegram::Client.new(token: account.finance_telegram_bot_token))
       @account = account
@@ -27,9 +27,11 @@ module Finance
     def message(message)
       prompt_id = message.dig('reply_to_message', 'message_id')
       document = prompt_id && documents.find_by(edit_prompt_message_id: prompt_id)
-      return correct(document, message) if document
-
-      file_of(message)&.then { |file| receive(message, file) }
+      if document
+        correct(document, message)
+      else
+        file_of(message)&.then { |file| receive(message, file) }
+      end
     end
 
     def file_of(message)
@@ -58,50 +60,57 @@ module Finance
     end
 
     def callback_answer(action, document, query)
-      return {} unless document
-      return { text: Messages::NOT_A_CONFIRMER } unless confirmer?(query)
-
-      { text: send(action, document, query) }
+      if document.nil?
+        {}
+      elsif confirmer?(query)
+        { text: send(action, document, query) }
+      else
+        { text: Messages::NOT_A_CONFIRMER }
+      end
     end
 
     def confirm(document, query)
-      return Messages::ALREADY_HANDLED unless document.state == 'suggested'
-      return Messages::NEEDS_MONTH if document.competence.blank?
-
-      confirmed = document.claim(from: 'suggested', state: 'confirmed', confirmed_at: Time.current,
-                                 confirmed_by: query.dig('from', 'first_name'))
-      return Messages::ALREADY_HANDLED unless confirmed
-
-      edit_bot_message(document, Messages::ARCHIVING)
-      ArchiveJob.perform_later(document.id)
-      nil
+      if document.state == 'suggested' && document.competence.blank?
+        Messages::NEEDS_MONTH
+      elsif document.claim(from: 'suggested', state: 'confirmed', confirmed_at: Time.current,
+                           confirmed_by: query.dig('from', 'first_name'))
+        edit_bot_message(document, Messages::ARCHIVING)
+        ArchiveJob.perform_later(document.id)
+        nil
+      else
+        Messages::ALREADY_HANDLED
+      end
     end
 
     def discard(document, _query)
-      return Messages::ALREADY_HANDLED unless document.claim(from: 'suggested', state: 'discarded')
-
-      edit_bot_message(document, Messages::DISCARDED)
-      nil
+      if document.claim(from: 'suggested', state: 'discarded')
+        edit_bot_message(document, Messages::DISCARDED)
+        nil
+      else
+        Messages::ALREADY_HANDLED
+      end
     end
 
     def edit(document, _query)
-      return Messages::ALREADY_HANDLED unless document.state == 'suggested'
-
-      prompt_id = telegram.send_message(chat_id: document.telegram_chat_id,
-                                        text: Messages.edit_prompt,
-                                        reply_to: document.bot_message_id, force_reply: true)
-      document.update!(edit_prompt_message_id: prompt_id)
-      nil
+      if document.state == 'suggested'
+        prompt_id = telegram.send_message(chat_id: document.telegram_chat_id,
+                                          text: Messages.edit_prompt,
+                                          reply_to: document.bot_message_id, force_reply: true)
+        document.update!(edit_prompt_message_id: prompt_id)
+        nil
+      else
+        Messages::ALREADY_HANDLED
+      end
     end
 
     def correct(document, message)
-      return unless confirmer?(message) && document.state == 'suggested'
-
-      Correction.apply(document:, text: message['text'])
-      document.save!
-      text, buttons = Messages.suggestion(document:)
-      telegram.edit_message(chat_id: document.telegram_chat_id,
-                            message_id: document.bot_message_id, text:, buttons:)
+      if confirmer?(message) && document.state == 'suggested'
+        Correction.apply(document:, text: message['text'])
+        document.save!
+        text, buttons = Messages.suggestion(document:)
+        telegram.edit_message(chat_id: document.telegram_chat_id,
+                              message_id: document.bot_message_id, text:, buttons:)
+      end
     rescue Correction::Error => exception
       telegram.send_message(chat_id: document.telegram_chat_id, text: exception.message,
                             reply_to: message['message_id'])

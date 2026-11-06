@@ -14,7 +14,9 @@ module Finance
       value = text.to_s.strip.sub(/\AR\$\s*/, '')
       match = value.match(/\A(\d{1,3}(?:\.\d{3})+|\d+)(?:,(\d{1,2}))?\z/) ||
         value.match(/\A(\d+)\.(\d{1,2})\z/) # "120.50" typed on a phone keypad
-      return nil unless match
+      unless match
+        return nil
+      end
 
       (match[1].delete('.').to_i * 100) + match[2].to_s.ljust(2, '0').to_i
     end

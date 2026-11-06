@@ -28,7 +28,9 @@ class Db::FinanceDocument < ApplicationRecord
   # Remittances are dated on the last day of the month they belong to (S-27b par. 27).
   def assign_competence(period: nil)
     self.competence = Finance::Competence.default_for(kind:, document_date:, period:)
-    return unless competence && Finance::Competence::REMITTANCE.include?(kind)
+    unless competence && Finance::Competence::REMITTANCE.include?(kind)
+      return
+    end
 
     self.document_date = Finance::Competence.remittance_date(competence:)
   end

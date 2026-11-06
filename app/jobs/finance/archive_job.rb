@@ -8,9 +8,9 @@ module Finance
 
     def perform(document_id)
       @document = Db::FinanceDocument.find(document_id)
-      return unless @document.state == 'confirmed' && claim
-
-      archive
+      if @document.state == 'confirmed' && claim
+        archive
+      end
     rescue StandardError => exception
       fail_with(exception)
     ensure
@@ -44,7 +44,9 @@ module Finance
     def month_folder
       current = drive.find_folder(name: CURRENT_FOLDER,
                                   parent_id: account.finance_drive_root_folder_id)
-      raise "Pasta \"#{CURRENT_FOLDER}\" não encontrada na raiz configurada" unless current
+      unless current
+        raise "Pasta \"#{CURRENT_FOLDER}\" não encontrada na raiz configurada"
+      end
 
       drive.find_folder(name: @document.competence, parent_id: current) ||
         drive.create_folder(name: @document.competence, parent_id: current)
@@ -53,9 +55,7 @@ module Finance
     def free_name(folder)
       name = Naming.filename(document: @document)
       ext = File.extname(name)
-      candidates = [name] + (2..).lazy.map do |n|
-                              "#{File.basename(name, ext)} (#{n})#{ext}"
-                            end.first(98)
+      candidates = [name] + (2..99).map { |n| "#{File.basename(name, ext)} (#{n})#{ext}" }
       candidates.find { |candidate| !drive.find_file(name: candidate, parent_id: folder) } ||
         raise("No free name for #{name}")
     end
@@ -63,17 +63,19 @@ module Finance
     # Decryptable statements go up without the password; ones we couldn't open go as-is.
     def upload_path
       path = local_file
-      return path unless @document.flagged?(:decryptable)
-
-      Pdf.decrypt(path:, password: account.finance_statement_password,
-                  output: "#{path}.decrypted.pdf")
+      if @document.flagged?(:decryptable)
+        Pdf.decrypt(path:, password: account.finance_statement_password,
+                    output: "#{path}.decrypted.pdf")
+      else
+        path
+      end
     end
 
     def local_file
       path = @document.local_path
-      return path.to_s if File.exist?(path)
-
-      @document.store_local_copy(telegram.download(file_id: @document.telegram_file_id))
+      unless File.exist?(path)
+        @document.store_local_copy(telegram.download(file_id: @document.telegram_file_id))
+      end
       path.to_s
     end
 
@@ -98,10 +100,10 @@ module Finance
 
     def fail_with(error)
       ErrorHandler.new.notify_error(error)
-      return unless @document
-
-      @document.update!(last_error: "#{error.class}: #{error.message}")
-      edit_bot_message(Messages::ARCHIVE_FAILED)
+      if @document
+        @document.update!(last_error: "#{error.class}: #{error.message}")
+        edit_bot_message(Messages::ARCHIVE_FAILED)
+      end
     rescue StandardError => exception
       ErrorHandler.new.notify_error(exception)
     end

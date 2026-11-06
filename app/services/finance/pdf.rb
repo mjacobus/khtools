@@ -28,8 +28,12 @@ module Finance
     def run(*args)
       out, err, status = Open3.capture3(*args)
       # qpdf exits 3 for warnings with a usable result
-      return out if status.success? || (args.first == 'qpdf' && status.exitstatus == 3)
-      raise PasswordError, err.strip if err.match?(/password/i)
+      if status.success? || (args.first == 'qpdf' && status.exitstatus == 3)
+        return out
+      end
+      if err.match?(/password/i)
+        raise PasswordError, err.strip
+      end
 
       raise Error, err.strip.presence || "#{args.first} failed"
     end

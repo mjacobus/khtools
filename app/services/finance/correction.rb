@@ -24,7 +24,9 @@ module Finance
 
     def parse(text)
       tokens = text.to_s.split
-      raise Error, "Diga o que mudar. Campos: #{KEYS.join(', ')}" if tokens.empty?
+      if tokens.empty?
+        raise Error, "Diga o que mudar. Campos: #{KEYS.join(', ')}"
+      end
 
       group(tokens).transform_values { |words| words.join(' ') }
     end

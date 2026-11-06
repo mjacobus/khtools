@@ -60,13 +60,17 @@ module Finance
     end
 
     def thank_you_letter
-      return unless @text.match?(/obra mundial/i)
+      unless @text.match?(/obra mundial/i)
+        return
+      end
 
       Result.new(kind: 'thank_you_letter', period: first_period)
     end
 
     def remittance_record
-      return unless @text.match?(/N[úu]mero de confirma[çc][ãa]o/i)
+      unless @text.match?(/N[úu]mero de confirma[çc][ãa]o/i)
+        return
+      end
 
       date = @text[/Data do dep[óo]sito\s+(#{LONG_DATE})/o, 1] || @text[LONG_DATE]
       amount = @text[/(?:Total\s*R\$|TOTAL DE FUNDOS ENVIADOS:)\s*(#{BR_MONEY})/io, 1]
@@ -130,7 +134,9 @@ module Finance
     def due_date
       lines = @text.lines
       lines.each_index.lazy.filter_map do |index|
-        next unless lines[index].match?(/\bvenc/i)
+        unless lines[index].match?(/\bvenc/i)
+          next
+        end
 
         lines[index, 3].find { |line| line.match?(DATE) }&.scan(DATE)&.last&.join('/')
       end.first
@@ -155,9 +161,13 @@ module Finance
     end
 
     def money(value)
-      return nil unless value
+      unless value
+        return nil
+      end
       # next prints "1,639.00" (US format); others print "1.639,00"
-      return Money.parse(text: value.delete(',').tr('.', ',')) if value.match?(/\.\d{2}\z/)
+      if value.match?(/\.\d{2}\z/)
+        return Money.parse(text: value.delete(',').tr('.', ','))
+      end
 
       Money.parse(text: value)
     end
@@ -171,7 +181,9 @@ module Finance
     end
 
     def period(match)
-      return nil unless match
+      unless match
+        return nil
+      end
 
       "#{match[2]}-#{(MONTHS.index(match[1].downcase) + 1).to_s.rjust(2, '0')}"
     end
