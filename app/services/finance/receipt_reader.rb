@@ -11,8 +11,10 @@ module Finance
 
     PROMPT = <<~TEXT
       Esta é a foto de um formulário S-24 "Recibo" de donativos de uma congregação.
-      Leia a data do recolhimento e os valores escritos em "Despesas da congregação local"
-      e "Obra mundial", e o total escrito no recibo, sem somar você mesmo.
+      Leia a data do recolhimento (no formato AAAA-MM-DD) e os valores escritos em
+      "Despesas da congregação local" e "Obra mundial".
+      Em total_cents, transcreva exatamente o número escrito à mão no campo "TOTAL".
+      Não calcule nem corrija: recibos com a soma errada existem e queremos detectá-los.
       Informe os valores em centavos (R$ 120,00 = 12000).
       Se um valor estiver em branco, use 0. Se a data não estiver legível, use "".
       Se a foto não for de um S-24, responda is_s24 = false.
@@ -23,12 +25,13 @@ module Finance
       type: 'object',
       properties: {
         is_s24: { type: 'boolean' },
+        # First, so it is transcribed before the model has the two values to add up.
+        total_cents: { type: 'integer', description: 'número no campo TOTAL, 0 se em branco' },
         date: { type: 'string', description: 'YYYY-MM-DD ou vazio' },
         congregation_cents: { type: 'integer' },
-        worldwide_cents: { type: 'integer' },
-        total_cents: { type: 'integer', description: 'total escrito no recibo, 0 se em branco' }
+        worldwide_cents: { type: 'integer' }
       },
-      required: %w[is_s24 date congregation_cents worldwide_cents total_cents],
+      required: %w[is_s24 total_cents date congregation_cents worldwide_cents],
       additionalProperties: false
     }.freeze
 
@@ -70,7 +73,7 @@ module Finance
       image = "data:#{mime_type};base64,#{Base64.strict_encode64(image_bytes)}"
       {
         model: MODEL,
-        input: [{ role: 'user', content: [{ type: 'input_image', image_url: image },
+        input: [{ role: 'user', content: [{ type: 'input_image', image_url: image, detail: 'high' },
                                           { type: 'input_text', text: PROMPT }] }],
         text: { format: { type: 'json_schema', name: 's24', schema: SCHEMA, strict: true } }
       }

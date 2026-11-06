@@ -47,8 +47,8 @@ RSpec.describe Finance::ReceiptReader do
       params = JSON.parse(body)
       expect(params).to include('model' => described_class::MODEL)
       expect(params.dig('text', 'format')).to include('type' => 'json_schema', 'strict' => true)
-      expect(params['input'].first['content'].first).to eq('type' => 'input_image',
-                                                           'image_url' => image)
+      expect(params['input'].first['content'].first)
+        .to eq('type' => 'input_image', 'image_url' => image, 'detail' => 'high')
     end
   end
 
