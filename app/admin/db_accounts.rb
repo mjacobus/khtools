@@ -6,7 +6,8 @@ ActiveAdmin.register Db::Account do
                 :cloudinary_cloud_name,
                 :cloudinary_api_key,
                 :cloudinary_api_secret,
-                :google_api_key_for_static_maps
+                :google_api_key_for_static_maps,
+                *Db::Account::FINANCE_SECRETS
 
   form do |f|
     f.semantic_errors
@@ -17,6 +18,8 @@ ActiveAdmin.register Db::Account do
       f.input :cloudinary_api_key
       f.input :cloudinary_api_secret
       f.input :google_api_key_for_static_maps
+      # ponytail: plain strings like cloudinary; :password inputs blank the value on edit
+      Db::Account::FINANCE_SECRETS.each { |name| f.input name, as: :string }
     end
     f.actions
   end
