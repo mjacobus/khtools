@@ -2,7 +2,7 @@
 
 module Finance
   # Once a day (config/recurring.yml): bring in what changed in Drive, then remind the bills
-  # due soon, for every account with the finance bot on.
+  # due soon and what the month checklist is missing, for every account with the bot on.
   class DailyJob < ApplicationJob
     def perform
       Db::Account.find_each do |account|
@@ -22,6 +22,7 @@ module Finance
       end
       telegram = Telegram::Client.new(token: account.finance_telegram_bot_token)
       BillReminders.new(account:, telegram:).remind
+      ChecklistReminders.new(account:, telegram:).remind
     end
 
     def drive(account)
