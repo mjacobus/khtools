@@ -22,10 +22,11 @@ RSpec.describe Finance::ReceiptReader do
 
   it 'returns the values read from the photo' do
     answer('{"is_s24":true,"date":"2026-11-04","congregation_cents":12000,' \
-           '"worldwide_cents":3000,"total_cents":15000}')
+           '"worldwide_cents":3000,"total_cents":15000,"collector_name":"BIA LIMA"}')
 
     expect(read).to have_attributes(is_s24: true, date: '2026-11-04', congregation_cents: 12_000,
-                                    worldwide_cents: 3000, total_cents: 15_000)
+                                    worldwide_cents: 3000, total_cents: 15_000,
+                                    collector_name: 'BIA LIMA')
   end
 
   it 'authenticates with the account key' do

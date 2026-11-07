@@ -90,6 +90,38 @@ RSpec.describe Finance::ArchiveJob do
                                                amount_cents: 15_000, khtools_id: document.id)
   end
 
+  describe 'who holds the cash, from the name printed on the S-24' do
+    before do
+      document.update!(sent_by_telegram_id: 7, sent_by_name: 'Bia Lima')
+      Db::FinanceTelegramMember.remember(account: document.account, telegram_id: 8,
+                                         name: 'Caio Souza')
+      Db::FinanceTelegramMember.remember(account: document.account, telegram_id: 9,
+                                         name: 'Caio Prado')
+    end
+
+    def holder_after_run(collector_name)
+      document.update!(collector_name:)
+      run
+      document.slice(:cash_holder_telegram_id, :cash_holder_name).values
+    end
+
+    it 'is the group member with that name, accents and case aside' do
+      expect(holder_after_run('CAIO SOUZÁ')).to eq([8, 'Caio Souza'])
+    end
+
+    it 'takes initials and short names' do
+      expect(holder_after_run('Caio S.')).to eq([8, 'Caio Souza'])
+    end
+
+    it 'is just the name when nobody in the group matches it alone' do
+      expect(holder_after_run('Caio')).to eq([nil, 'Caio'])
+    end
+
+    it 'is whoever sent it when no name was printed' do
+      expect(holder_after_run(nil)).to eq([7, 'Bia Lima'])
+    end
+  end
+
   it 'asks the group who holds the cash of an archived S-24, starting with who sent it' do
     document.update!(sent_by_telegram_id: 7, sent_by_name: 'Bia Lima')
 
