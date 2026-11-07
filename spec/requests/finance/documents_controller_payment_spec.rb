@@ -109,5 +109,6 @@ RSpec.describe Finance::DocumentsController do
 
     expect(page.at('li .badge').text).to eq('vencida em 05/10')
     expect(page.at('#open-bills').text).to include('Luz')
+    expect(page.at('#open-bills summary').text.squish).to eq('1 fatura em aberto · 1 vencida')
   end
 end

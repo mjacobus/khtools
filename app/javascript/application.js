@@ -1,8 +1,20 @@
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
 import Rails from "@rails/ujs";
+import { Turbo } from "@hotwired/turbo-rails";
 import { on } from "delegated-events";
 
 Rails.start();
+
+// Turbo Drive only where a page opts in with data-turbo="true" (the finance pages): the
+// other forms still render errors with status 200, which Turbo Drive does not show.
+Turbo.session.drive = false;
+
+// A page refresh (morph) must not close the <details> panels the user opened.
+document.addEventListener("turbo:before-morph-attribute", (event) => {
+  if (event.target.tagName === "DETAILS" && event.detail.attributeName === "open") {
+    event.preventDefault();
+  }
+});
 
 // Searchable selects
 //
@@ -44,12 +56,19 @@ function makeSearchable(select) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+// turbo:load also fires on the first page load.
+document.addEventListener("turbo:load", () => {
   document.querySelectorAll("select").forEach((select) => {
     if (shouldBeSearchable(select)) {
       makeSearchable(select);
     }
   });
+});
+
+// Turbo caches the page to show it again on "back"; a TomSelect left in the copy would be
+// set up a second time on top of itself.
+document.addEventListener("turbo:before-cache", () => {
+  document.querySelectorAll("select.tomselected").forEach((select) => select.tomselect.destroy());
 });
 
 // Sidebar

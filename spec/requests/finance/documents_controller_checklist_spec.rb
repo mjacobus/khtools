@@ -22,6 +22,14 @@ RSpec.describe Finance::DocumentsController do
                                  a_string_starting_with('✗ S-26'))
   end
 
+  it 'sums it up in a panel that opens on click' do
+    get '/finance/documents', params: { month: '2026-09' }
+    html = Nokogiri::HTML(response.body)
+
+    expect(html.at('details#checklist-panel summary').text.squish).to eq('Checklist 1/7')
+    expect(html.at('[data-turbo="true"] details#checklist-panel #checklist')).to be_present
+  end
+
   it 'marks a meeting without collection, and undoes it' do
     post '/finance/documents/meeting_exceptions', params: { date: '2026-09-05' }
 
