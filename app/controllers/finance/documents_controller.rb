@@ -2,6 +2,8 @@
 
 module Finance
   class DocumentsController < ApplicationController
+    include BillPayments
+
     MONTH = /\A\d{4}-\d{2}\z/
 
     def index
@@ -9,6 +11,7 @@ module Finance
       @month = requested_month || months.max
       @months = (months | [@month]).compact.sort.reverse
       @groups = groups
+      @paid_bills = paid_bills
     end
 
     def edit
@@ -44,6 +47,15 @@ module Finance
     def groups
       documents.where(competence: @month).order(:document_date, :id).group_by(&:kind)
         .sort_by { |kind, _| Db::FinanceDocument::KINDS.index(kind) }
+    end
+
+    helper_method def open_bills
+      documents.open_bills.order(:due_date)
+    end
+
+    # The bills paid by this month's receipts, by id.
+    def paid_bills
+      documents.where(id: @groups.flat_map(&:last).filter_map(&:bill_id)).index_by(&:id)
     end
 
     def assign_and_validate

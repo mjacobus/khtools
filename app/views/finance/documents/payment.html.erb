@@ -1,0 +1,36 @@
+<h1 class="h3">Pagamento da fatura</h1>
+<p class="text-muted">
+  <%= link_to @bill.drive_name, @bill.drive_url, target: '_blank', rel: 'noopener' %>
+  <% if @bill.amount_cents %>· <%= Finance::Money.format(cents: @bill.amount_cents) %><% end %>
+</p>
+
+<%= form_with scope: :payment, url: payment_finance_document_path(@bill), method: :patch,
+              html: { style: 'max-width: 32rem' } do |f| %>
+  <div class="row">
+    <div class="col mb-3">
+      <%= f.label :due_date, 'Vencimento', class: 'form-label' %>
+      <%= f.date_field :due_date, value: @bill.due_date, class: 'form-control' %>
+    </div>
+    <div class="col mb-3">
+      <%= f.label :paid_on, 'Pago em', class: 'form-label' %>
+      <%= f.date_field :paid_on, value: @bill.paid_on, class: 'form-control' %>
+    </div>
+  </div>
+  <div class="mb-3">
+    <%= f.label :receipt_id, 'Comprovante', class: 'form-label' %>
+    <%= f.select :receipt_id,
+                 @receipts.map { |receipt|
+                   label = [receipt.document_date&.strftime('%d/%m/%Y'),
+                            receipt.amount_cents && Finance::Money.format(cents: receipt.amount_cents),
+                            receipt.drive_name].compact.join(' · ')
+                   [same_amount?(receipt) ? "✓ #{label}" : label, receipt.id]
+                 },
+                 { include_blank: 'Sem comprovante', selected: @bill.payments.first&.id }, class: 'form-select' %>
+    <div class="form-text">
+      Comprovantes de até dois meses antes ou depois, os de mesmo valor (✓) primeiro.
+      Sem "Pago em", vale a data do comprovante.
+    </div>
+  </div>
+  <%= f.submit 'Salvar', class: 'btn btn-primary' %>
+  <%= link_to 'Cancelar', finance_documents_path(month: @bill.competence), class: 'btn btn-link' %>
+<% end %>

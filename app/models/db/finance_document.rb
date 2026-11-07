@@ -8,6 +8,10 @@ class Db::FinanceDocument < ApplicationRecord
   ].freeze
 
   belongs_to :account, class_name: 'Db::Account'
+  # A payment receipt points to the bill it paid.
+  belongs_to :bill, class_name: 'Db::FinanceDocument', optional: true
+  has_many :payments, class_name: 'Db::FinanceDocument', foreign_key: :bill_id,
+                      inverse_of: :bill, dependent: :nullify
 
   validates :telegram_chat_id, :telegram_message_id, :telegram_file_id, presence: true,
                                                                         unless: :backfilled?
@@ -17,6 +21,10 @@ class Db::FinanceDocument < ApplicationRecord
   validates :telegram_message_id, uniqueness: { scope: %i[account_id telegram_chat_id] },
                                   allow_nil: true
 
+  # Bills without a due date (most from the backfill) are never counted as open.
+  scope :open_bills, lambda {
+    where(kind: 'bill', paid_on: nil).where.not(due_date: nil).where.not(state: 'discarded')
+  }
   scope :stuck, -> { where(state: %w[received confirmed]).where(updated_at: ...10.minutes.ago) }
 
   # Moves from one state to another only if nobody else did first (Telegram delivers
@@ -76,6 +84,15 @@ class Db::FinanceDocument < ApplicationRecord
       original_filename
     else
       Finance::Naming.filename(document: self)
+    end
+  end
+
+  # paid, paid_late, open, overdue, or nil when the due date is unknown.
+  def payment_status(today: Date.current)
+    if paid_on
+      due_date && paid_on > due_date ? 'paid_late' : 'paid'
+    elsif due_date
+      due_date < today ? 'overdue' : 'open'
     end
   end
 

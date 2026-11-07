@@ -300,6 +300,7 @@ pt-BR:
     messages:
       finance_drive_connected: 'Drive conectado'
       finance_integration_saved: 'Configurações salvas'
+      finance_payment_saved: 'Pagamento salvo'
       finance_chat_id: 'O ID do grupo deve ser um número, como -1001234567890'
       finance_drive_cancelled: 'A conexão com o Drive foi cancelada.'
       could_not_automatically_create_location_error: 'Erro ao criar localização automaticamente'
