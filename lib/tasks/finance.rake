@@ -66,6 +66,18 @@ namespace :finance do
     end
   end
 
+  desc 'Remind each finance group of bills due in the next days or overdue (daily, from cron)'
+  task remind_bills: :environment do
+    Db::Account.find_each do |account|
+      if account.finance_enabled?
+        telegram = Telegram::Client.new(token: account.finance_telegram_bot_token)
+        Finance::BillReminders.new(account:, telegram:).remind
+      end
+    rescue StandardError => exception
+      ErrorHandler.new.notify_error(exception) # one account failing must not skip the others
+    end
+  end
+
   desc 'Register the files already in Drive (report only; [ACCOUNT_ID,apply] writes)'
   task :backfill, %i[account_id apply] => :environment do |_task, args|
     id = args.fetch(:account_id) { abort 'usage: rake "finance:backfill[ACCOUNT_ID(,apply)]"' }
