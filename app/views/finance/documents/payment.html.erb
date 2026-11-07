@@ -4,6 +4,10 @@
   <% if @bill.amount_cents %>· <%= Finance::Money.format(cents: @bill.amount_cents) %><% end %>
 </p>
 
+<% if flash[:alert] %>
+  <div class="alert alert-danger" role="alert"><%= flash[:alert] %></div>
+<% end %>
+
 <%= form_with scope: :payment, url: payment_finance_document_path(@bill), method: :patch,
               html: { style: 'max-width: 32rem' } do |f| %>
   <div class="row">
