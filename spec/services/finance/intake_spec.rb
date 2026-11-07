@@ -263,7 +263,7 @@ RSpec.describe Finance::Intake do
       expect(document.reload).to have_attributes(cash_holder_telegram_id: 8,
                                                  cash_holder_name: 'Ana')
       expect(telegram.edits.last).to include(message_id: 900,
-                                             text: a_string_including('está com Ana'))
+                                             text: a_string_including('Está com: Ana'))
     end
 
     it 'tells whoever already has it that it is with them' do
