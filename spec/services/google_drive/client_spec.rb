@@ -176,4 +176,22 @@ RSpec.describe GoogleDrive::Client do
     expect(URI.decode_www_form(requests.last.body).to_h)
       .to include('grant_type' => 'authorization_code', 'code' => 'C', 'redirect_uri' => 'https://x/cb')
   end
+
+  def listed(id, name, mime_type, sha256 = nil)
+    link = sha256 && "https://drive/#{id}"
+    { id:, name:, mimeType: mime_type, sha256Checksum: sha256, webViewLink: link }.compact
+  end
+
+  it "lists a folder's children across pages" do
+    responses.push(response(200, access_token: 'a', expires_in: 3600),
+                   response(200, files: [listed('F1', '2026-09', described_class::FOLDER)],
+                                 nextPageToken: 'NEXT'),
+                   response(200, files: [listed('F2', 'Extrato.pdf', 'application/pdf', 'abc')]))
+
+    expect(client.children(parent_id: 'P1').map { |child| child.values_at(:id, :folder, :sha256) })
+      .to eq([['F1', true, nil], ['F2', false, 'abc']])
+    query = URI.decode_www_form(URI(requests.last.path).query).to_h
+    expect(query).to include('pageToken' => 'NEXT')
+    expect(query['q']).to include("'P1' in parents", 'trashed = false')
+  end
 end

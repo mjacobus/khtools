@@ -78,6 +78,14 @@ RSpec.describe Finance::Messages do
              '<a href="https://drive/x">2026-11-04 - R$ 150,00 - S-24.jpg</a>')
   end
 
+  it 'names a file found by the backfill as it is called in Drive' do
+    original = document(drive_url: 'https://drive/x', flags: 'backfill',
+                        original_filename: 'Recibo 04-11.jpg')
+
+    expect(described_class.duplicate(original:))
+      .to eq('Este arquivo já foi arquivado: <a href="https://drive/x">Recibo 04-11.jpg</a>')
+  end
+
   it 'links the archived file name (HTML)' do
     expect(described_class.archived(document: document(drive_url: 'https://drive/x')))
       .to eq('Arquivado: <a href="https://drive/x">2026-11-04 - R$ 150,00 - S-24.jpg</a> ' \

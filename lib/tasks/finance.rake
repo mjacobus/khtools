@@ -65,5 +65,24 @@ namespace :finance do
       end
     end
   end
+
+  desc 'Register the files already in Drive (report only; APPLY=1 writes)'
+  task :backfill, [:account_id] => :environment do |_task, args|
+    id = args.fetch(:account_id) { abort 'usage: rake "finance:backfill[ACCOUNT_ID]" [APPLY=1]' }
+    account = Db::Account.find(id)
+    drive = GoogleDrive::Client.new(
+      refresh_token: account.finance_google_refresh_token,
+      client_id: Rails.application.credentials.dig(:oauth, :google, :key),
+      client_secret: Rails.application.credentials.dig(:oauth, :google, :secret)
+    )
+    apply = ENV['APPLY'] == '1'
+    report = Finance::Backfill.new(account:, drive:).run(apply:)
+    report.each { |row| puts [row.status, row.kind, row.competence, row.path].compact.join("\t") }
+    puts
+    puts report.map(&:status).tally.map { |status, count| "#{status}: #{count}" }.join(' · ')
+    puts report.reject { |row| row.status == 'ignored' }.map(&:kind).tally.sort
+      .map { |kind, count| "#{kind}: #{count}" }.join(' · ')
+    puts apply ? 'Registrado.' : 'Nada foi gravado. Rode com APPLY=1 para registrar.'
+  end
 end
 # rubocop:enable Metrics/BlockLength

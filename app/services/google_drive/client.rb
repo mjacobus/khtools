@@ -56,6 +56,14 @@ module GoogleDrive
       json_request(Net::HTTP::Post, FILES_URL, metadata.compact).fetch('id')
     end
 
+    def children(parent_id:)
+      pages = [children_page(parent_id, nil)]
+      while (token = pages.last['nextPageToken'])
+        pages << children_page(parent_id, token)
+      end
+      pages.flat_map { |page| page.fetch('files') }.map { |file| child(file) }
+    end
+
     def tag(id:, tags:)
       json_request(Net::HTTP::Patch, "#{FILES_URL}/#{id}", { appProperties: tags })
     end
@@ -106,6 +114,21 @@ module GoogleDrive
                                    supportsAllDrives: true, includeItemsFromAllDrives: true)
       files = request(Net::HTTP::Get.new(URI("#{FILES_URL}?#{params}"))).fetch('files')
       files.first&.fetch('id')
+    end
+
+    def children_page(parent_id, token)
+      params = URI.encode_www_form(
+        { q: "'#{escape(parent_id)}' in parents and trashed = false", pageSize: 1000,
+          fields: 'nextPageToken,files(id,name,mimeType,sha256Checksum,webViewLink)',
+          pageToken: token, supportsAllDrives: true, includeItemsFromAllDrives: true }.compact
+      )
+      request(Net::HTTP::Get.new(URI("#{FILES_URL}?#{params}")))
+    end
+
+    def child(file)
+      { id: file['id'], name: file['name'], mime_type: file['mimeType'],
+        folder: file['mimeType'] == FOLDER, sha256: file['sha256Checksum'],
+        web_view_link: file['webViewLink'] }
     end
 
     def escape(value)
