@@ -166,18 +166,18 @@ RSpec.describe Finance::Intake do
     expect(telegram.edits.last).to include(text: Finance::Messages::DISCARDED)
   end
 
+  def reply(text, from: 42)
+    prompt_id = document.reload.edit_prompt_message_id
+    { 'update_id' => 4,
+      'message' => { 'message_id' => 20, 'chat' => { 'id' => chat_id },
+                     'from' => { 'id' => from, 'first_name' => 'Ana' }, 'text' => text,
+                     'reply_to_message' => { 'message_id' => prompt_id } } }
+  end
+
   describe 'corrections' do
     let(:document) { suggested }
 
     before { intake.handle(update: callback('edit', document)) }
-
-    def reply(text, from: 42)
-      prompt_id = document.reload.edit_prompt_message_id
-      { 'update_id' => 4,
-        'message' => { 'message_id' => 20, 'chat' => { 'id' => chat_id },
-                       'from' => { 'id' => from, 'first_name' => 'Ana' }, 'text' => text,
-                       'reply_to_message' => { 'message_id' => prompt_id } } }
-    end
 
     it 'asks for the correction with a forced reply' do
       expect(telegram.sent.last).to include(force_reply: true, reply_to: 300)
@@ -212,10 +212,31 @@ RSpec.describe Finance::Intake do
       expect(telegram.sent.last).to include(reply_to: 20, text: include('Campo desconhecido'))
     end
 
-    it 'ignores replies from people who cannot confirm' do
+    it 'says it was corrected, under the reply' do
+      intake.handle(update: reply('local 120 mundial 30'))
+
+      expect(telegram.sent.last).to include(reply_to: 20, text: Finance::Messages::CORRECTED)
+    end
+
+    it 'tells others they cannot correct it' do
       intake.handle(update: reply('local 1', from: 8))
 
       expect(document.reload.congregation_cents).to be_nil
+      expect(telegram.sent.last).to include(reply_to: 20, text: Finance::Messages::NOT_AN_EDITOR)
+    end
+  end
+
+  # Whoever collected the offering (signature 1) usually sends the photo; the second signer
+  # confirms it, so only confirmers can confirm.
+  describe 'corrections by whoever sent the file' do
+    let(:document) { suggested(sent_by_telegram_id: 7) }
+
+    it 'lets them ask for and send a correction, but not confirm' do
+      intake.handle(update: callback('edit', document, from: 7))
+      intake.handle(update: reply('local 120', from: 7))
+      intake.handle(update: callback('confirm', document, from: 7))
+
+      expect(document.reload).to have_attributes(congregation_cents: 12_000, state: 'suggested')
     end
   end
 

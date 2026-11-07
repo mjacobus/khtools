@@ -5,6 +5,8 @@ module Finance
   module Messages
     ORIGINS = { 'ai' => 'lido por IA', 'rules' => 'lido do PDF', 'human' => 'informado' }.freeze
     NOT_A_CONFIRMER = 'Só quem confirma as contas pode usar estes botões.'
+    NOT_AN_EDITOR = 'Só quem enviou o arquivo ou quem confirma as contas pode corrigir.'
+    CORRECTED = '✏️ Corrigido. Confira a sugestão acima e confirme.'
     ARCHIVING = 'Arquivando…'
     DISCARDED = 'Ignorado (não é das contas).'
     ARCHIVE_FAILED = 'Não consegui arquivar agora; vou tentar de novo.'

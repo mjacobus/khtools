@@ -65,11 +65,24 @@ module Finance
     def callback_answer(action, document, query)
       if document.nil?
         {}
-      elsif action == 'cash_holder' || confirmer?(query) # anyone can say they have the cash
+      elsif allowed?(action, document, query)
         { text: send(action, document, query) }
       else
-        { text: Messages::NOT_A_CONFIRMER }
+        { text: action == 'edit' ? Messages::NOT_AN_EDITOR : Messages::NOT_A_CONFIRMER }
       end
+    end
+
+    # Anyone can say they have the cash; whoever sent the file can correct it.
+    def allowed?(action, document, query)
+      case action
+      when 'cash_holder' then true
+      when 'edit' then editor?(document, query)
+      else confirmer?(query)
+      end
+    end
+
+    def editor?(document, payload)
+      confirmer?(payload) || payload.dig('from', 'id') == document.sent_by_telegram_id
     end
 
     def confirm(document, query)
@@ -111,14 +124,25 @@ module Finance
     end
 
     def correct(document, message)
-      if confirmer?(message) && document.state == 'suggested'
+      if !editor?(document, message)
+        reply(message, Messages::NOT_AN_EDITOR)
+      elsif document.state == 'suggested'
         apply_correction(document, message)
-        text, buttons = Messages.suggestion(document:)
-        telegram.edit_message(chat_id: document.telegram_chat_id,
-                              message_id: document.bot_message_id, text:, buttons:)
+        show_suggestion(document)
+        reply(message, Messages::CORRECTED)
       end
     rescue Correction::Error => exception
-      telegram.send_message(chat_id: document.telegram_chat_id, text: exception.message,
+      reply(message, exception.message)
+    end
+
+    def show_suggestion(document)
+      text, buttons = Messages.suggestion(document:)
+      telegram.edit_message(chat_id: document.telegram_chat_id,
+                            message_id: document.bot_message_id, text:, buttons:)
+    end
+
+    def reply(message, text)
+      telegram.send_message(chat_id: message.dig('chat', 'id'), text:,
                             reply_to: message['message_id'])
     end
 
