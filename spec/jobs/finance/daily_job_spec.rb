@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Finance::DailyJob do
   let(:sync) { instance_double(Finance::DriveSync, sync: nil) }
   let(:reminders) { instance_double(Finance::BillReminders, remind: nil) }
+  let(:checklist) { instance_double(Finance::ChecklistReminders, remind: nil) }
 
   def account(enabled: true)
     factories.accounts.create.tap do |account|
@@ -18,6 +19,7 @@ RSpec.describe Finance::DailyJob do
   before do
     allow(Finance::DriveSync).to receive(:new).and_return(sync)
     allow(Finance::BillReminders).to receive(:new).and_return(reminders)
+    allow(Finance::ChecklistReminders).to receive(:new).and_return(checklist)
   end
 
   it 'syncs Drive and reminds the bills of each account with the bot on' do
@@ -28,6 +30,7 @@ RSpec.describe Finance::DailyJob do
 
     expect(sync).to have_received(:sync).once
     expect(reminders).to have_received(:remind).once
+    expect(checklist).to have_received(:remind).once
   end
 
   it 'goes on with the other accounts when one fails' do
