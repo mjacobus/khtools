@@ -68,6 +68,11 @@ class Db::FinanceDocument < ApplicationRecord
       .reject(&:backfilled?)
   end
 
+  # The name the file has in Drive: the bot names what it uploads, the backfill keeps names.
+  def drive_name
+    backfilled? ? original_filename : Finance::Naming.filename(document: self)
+  end
+
   # Registered from a file already in Drive, not received through Telegram.
   def backfilled?
     flagged?(:backfill)

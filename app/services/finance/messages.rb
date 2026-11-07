@@ -56,8 +56,7 @@ module Finance
 
     def drive_link(document)
       url = CGI.escapeHTML(document.drive_url)
-      name = document.backfilled? ? document.original_filename : Naming.filename(document:)
-      %(<a href="#{url}">#{CGI.escapeHTML(name)}</a>)
+      %(<a href="#{url}">#{CGI.escapeHTML(document.drive_name)}</a>)
     end
 
     def edit_prompt
