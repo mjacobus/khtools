@@ -7,6 +7,9 @@ class Db::FinanceDocument < ApplicationRecord
     thank_you_letter audit_report unknown
   ].freeze
 
+  # Files deleted in Drive are soft deleted; Finance::DriveSync brings them back if restored.
+  default_scope { where(deleted_at: nil) }
+
   belongs_to :account, class_name: 'Db::Account'
   # A payment receipt points to the bill it paid.
   belongs_to :bill, class_name: 'Db::FinanceDocument', optional: true

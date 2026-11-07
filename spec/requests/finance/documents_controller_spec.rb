@@ -76,12 +76,12 @@ RSpec.describe Finance::DocumentsController do
     expect(page.at('li .badge').text).to eq('aguardando confirmação')
   end
 
-  it 'warns about files deleted in Drive' do
-    document(kind: 's26', flags: 'trashed', drive_url: 'https://drive/gone')
+  it 'hides files deleted in Drive' do
+    document(kind: 's26', deleted_at: Time.current, original_filename: 'apagado.pdf')
 
     get '/finance/documents', params: { month: '2026-09' }
 
-    expect(page.at('li .badge').text).to eq('apagado no Drive')
+    expect(response.body).not_to include('apagado')
   end
 
   describe 'cash of an S-24' do

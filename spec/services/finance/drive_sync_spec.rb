@@ -16,7 +16,7 @@ RSpec.describe Finance::DriveSync do
   def sync(*changes)
     allow(drive).to receive(:changes).with(page_token: 'T1').and_return([changes, 'T2'])
     described_class.new(account:, drive:).sync
-    document.reload
+    Db::FinanceDocument.unscoped.find(document.id)
   end
 
   def change(**attributes)
@@ -51,8 +51,19 @@ RSpec.describe Finance::DriveSync do
     expect(sync(change(parents: ['X'])).competence).to eq('2026-09')
   end
 
-  it 'flags files deleted or trashed in Drive' do
-    expect(sync(change(trashed: true))).to be_flagged(:trashed)
+  it 'soft deletes files deleted or trashed in Drive, and hides them' do
+    sync(change(trashed: true))
+
+    expect(Db::FinanceDocument.unscoped.find(document.id).deleted_at).to be_present
+    expect(account.finance_documents).to be_empty
+  end
+
+  it 'brings back a file restored from the trash' do
+    document.update!(deleted_at: 1.day.ago)
+
+    sync(change)
+
+    expect(account.finance_documents.find(document.id).deleted_at).to be_nil
   end
 
   it 'ignores files it does not know' do

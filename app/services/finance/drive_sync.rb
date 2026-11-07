@@ -25,7 +25,9 @@ module Finance
     private
 
     def apply(changes)
-      documents = @account.finance_documents.where(drive_file_id: changes.pluck(:id))
+      # Soft deleted ones too, so a file restored from the trash comes back.
+      documents = @account.finance_documents.unscope(where: :deleted_at)
+        .where(drive_file_id: changes.pluck(:id))
         .index_by(&:drive_file_id)
       changes.each do |change|
         document = documents[change[:id]]
@@ -37,8 +39,9 @@ module Finance
 
     def update(document, change)
       if change[:removed] || change[:trashed]
-        document.add_flag(:trashed)
+        document.deleted_at ||= Time.current
       else
+        document.deleted_at = nil
         document.drive_filename = change[:name]
         document.competence = month(change[:parents]) || document.competence
       end
