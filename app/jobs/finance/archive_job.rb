@@ -4,8 +4,6 @@ module Finance
   # Uploads a confirmed document to Contas Central/Arquivo Corrente/<competence>/.
   # On failure the document stays confirmed and Intake retries it later.
   class ArchiveJob < ApplicationJob # rubocop:disable Metrics/ClassLength -- upload or replace, metadata, failure
-    CURRENT_FOLDER = 'Arquivo Corrente'
-
     def perform(document_id)
       @document = Db::FinanceDocument.find(document_id)
       if @document.state == 'confirmed' && claim
@@ -57,32 +55,8 @@ module Finance
       end
     end
 
-    # Tagged, so it is still found after someone renames or moves it.
     def month_folder
-      tags = { khtools_root: account.finance_drive_root_folder_id,
-               khtools_competence: @document.competence }
-      drive.find_tagged_folder(tags:) || named_month_folder(tags)
-    end
-
-    def named_month_folder(tags)
-      current = current_folder
-      folder = drive.find_folder(name: @document.competence, parent_id: current)
-      if folder
-        drive.tag(id: folder, tags:)
-        folder
-      else
-        drive.create_folder(name: @document.competence, parent_id: current, tags:)
-      end
-    end
-
-    def current_folder
-      current = drive.find_folder(name: CURRENT_FOLDER,
-                                  parent_id: account.finance_drive_root_folder_id)
-      unless current
-        raise "Pasta \"#{CURRENT_FOLDER}\" não encontrada na raiz configurada"
-      end
-
-      current
+      MonthFolder.new(account:, drive:).find_or_create(competence: @document.competence)
     end
 
     def free_name(folder)

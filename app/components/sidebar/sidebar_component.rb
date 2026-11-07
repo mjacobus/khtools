@@ -17,7 +17,6 @@ class Sidebar::SidebarComponent < ApplicationComponent
       field_service_section,
       reports_section,
       finance_section,
-      integrations_section,
       admin_section,
       logout
     ].compact
@@ -70,16 +69,12 @@ class Sidebar::SidebarComponent < ApplicationComponent
     end
   end
 
+  # Contas: the documents, then the settings of the bot that files them.
   def finance_section
+    icons = { 'telegram' => 'telegram', 'drive' => 'google', 'ai' => 'cpu' }
     entry(t('app.links.finance'), '#', icon: 'cash-stack').tap do |section|
       section.append_child(entry(t('app.links.finance_documents'), finance_documents_path,
                                  icon: 'folder2-open'))
-    end
-  end
-
-  def integrations_section
-    icons = { 'telegram' => 'telegram', 'drive' => 'google', 'ai' => 'cpu' }
-    entry(t('app.links.finance_integrations'), '#', icon: 'plug').tap do |section|
       icons.each do |key, icon|
         section.append_child(entry(t("app.links.finance_integration_#{key}"),
                                    finance_integration_path(key), icon:))

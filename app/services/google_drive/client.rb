@@ -81,6 +81,18 @@ module GoogleDrive
       send_file(patch, metadata, mime_type, path)
     end
 
+    # Rename and move keep the file id, so links and registered ids stay valid.
+    def move(id:, name:, parent_id:, app_properties:)
+      parents = parents(id)
+      params = { fields: 'id,webViewLink' }
+      unless parents.include?(parent_id)
+        params.update(addParents: parent_id, removeParents: parents.join(','))
+      end
+      body = { name:, appProperties: app_properties.compact.transform_values(&:to_s) }
+      file = json_request(Net::HTTP::Patch, "#{FILES_URL}/#{id}", body, **params)
+      { id: file.fetch('id'), web_view_link: file['webViewLink'] }
+    end
+
     private
 
     def send_file(http_request, metadata, mime_type, path)
@@ -91,8 +103,9 @@ module GoogleDrive
       { id: body.fetch('id'), web_view_link: body['webViewLink'] }
     end
 
-    def json_request(http_class, url, body)
-      http_request = http_class.new(URI("#{url}?fields=id&supportsAllDrives=true"))
+    def json_request(http_class, url, body, fields: 'id', **params)
+      query = URI.encode_www_form(fields:, supportsAllDrives: true, **params)
+      http_request = http_class.new(URI("#{url}?#{query}"))
       http_request.content_type = 'application/json'
       http_request.body = body.to_json
       request(http_request)
@@ -114,6 +127,11 @@ module GoogleDrive
                                    supportsAllDrives: true, includeItemsFromAllDrives: true)
       files = request(Net::HTTP::Get.new(URI("#{FILES_URL}?#{params}"))).fetch('files')
       files.first&.fetch('id')
+    end
+
+    def parents(id)
+      request(Net::HTTP::Get.new(URI("#{FILES_URL}/#{id}?fields=parents&supportsAllDrives=true")))
+        .fetch('parents', [])
     end
 
     def children_page(parent_id, token)

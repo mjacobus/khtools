@@ -1,46 +1,81 @@
-<h1><%= t('app.links.finance_documents') %></h1>
+<% month_label = ->(month) { l(Date.parse("#{month}-01"), format: '%B de %Y').capitalize } %>
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+  <h1 class="h3 mb-0"><%= t('app.links.finance_documents') %></h1>
+
+  <% if @month %>
+    <% first_day = Date.parse("#{@month}-01") %>
+    <%= form_with url: finance_documents_path, method: :get, class: 'd-flex align-items-center gap-1' do %>
+      <%= link_to finance_documents_path(month: first_day.prev_month.strftime('%Y-%m')),
+                  class: 'btn btn-outline-secondary', title: 'Mês anterior', aria: { label: 'Mês anterior' } do %>
+        <i class="bi bi-chevron-left"></i>
+      <% end %>
+      <%= select_tag :month, options_for_select(@months.map { |month| [month_label.call(month), month] }, @month),
+                     class: 'form-select', style: 'width: 13rem', aria: { label: 'Mês' },
+                     onchange: 'this.form.requestSubmit()' %>
+      <%= link_to finance_documents_path(month: first_day.next_month.strftime('%Y-%m')),
+                  class: 'btn btn-outline-secondary', title: 'Próximo mês', aria: { label: 'Próximo mês' } do %>
+        <i class="bi bi-chevron-right"></i>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+
+<% if flash[:notice] %>
+  <div class="alert alert-success" role="alert"><%= flash[:notice] %></div>
+<% end %>
 
 <% if @months.empty? %>
   <p class="text-muted">Nenhum documento arquivado ainda.</p>
-<% else %>
-  <%= form_with url: finance_documents_path, method: :get, class: 'mb-4' do %>
-    <label for="month" class="form-label">Mês</label>
-    <%= select_tag :month, options_for_select(@months, @month), class: 'form-select', style: 'max-width: 12rem',
-                           onchange: 'this.form.requestSubmit()' %>
-  <% end %>
+<% elsif @groups.empty? %>
+  <p class="text-muted">Nada arquivado em <%= month_label.call(@month).downcase %>.</p>
+<% end %>
 
-  <% @groups.each do |kind, documents| %>
-    <section class="mb-4">
-      <% if kind == 'unknown' %>
-        <h2 class="h5"><i class="bi bi-exclamation-triangle text-warning"></i> Não identificados</h2>
-      <% else %>
-        <h2 class="h5"><%= Finance::Naming::LABELS.fetch(kind) %></h2>
+<% @groups.each do |kind, documents| %>
+  <% unknown = kind == 'unknown' %>
+  <% total = documents.filter_map(&:amount_cents).sum %>
+  <section class="card mb-3 <%= 'border-warning' if unknown %>">
+    <div class="card-header d-flex align-items-center gap-2">
+      <h2 class="h6 mb-0">
+        <% if unknown %>
+          <i class="bi bi-exclamation-triangle text-warning"></i> Não identificados
+        <% else %>
+          <%= Finance::Naming::LABELS.fetch(kind) %>
+        <% end %>
+      </h2>
+      <span class="badge rounded-pill bg-secondary"><%= documents.size %></span>
+      <% if total.positive? %>
+        <span class="ms-auto text-muted small">Total <%= Finance::Money.format(cents: total) %></span>
       <% end %>
-      <table class="table table-sm" style="table-layout: fixed">
-        <colgroup>
-          <col style="width: 7rem">
-          <col>
-          <col style="width: 8rem">
-        </colgroup>
-        <tbody>
-          <% documents.each do |document| %>
-            <tr>
-              <td class="text-nowrap"><%= document.document_date&.strftime('%d/%m/%Y') %></td>
-              <td class="text-break">
-                <% if document.drive_url %>
-                  <%= link_to document.drive_name, document.drive_url, target: '_blank', rel: 'noopener' %>
-                <% else %>
-                  <%= document.drive_name %>
-                  <span class="badge bg-secondary"><%= t("app.finance_document_states.#{document.state}") %></span>
-                <% end %>
-              </td>
-              <td class="text-end text-nowrap">
-                <%= document.amount_cents && Finance::Money.format(cents: document.amount_cents) %>
-              </td>
-            </tr>
+    </div>
+    <ul class="list-group list-group-flush">
+      <% documents.each do |document| %>
+        <li class="list-group-item d-flex align-items-center gap-3">
+          <span class="text-muted small text-nowrap" style="width: 5.5rem">
+            <%= document.document_date&.strftime('%d/%m/%Y') %>
+          </span>
+          <% icon = { '.pdf' => 'bi-file-earmark-pdf text-danger', '.jpg' => 'bi-file-earmark-image text-primary',
+                      '.jpeg' => 'bi-file-earmark-image text-primary', '.png' => 'bi-file-earmark-image text-primary' } %>
+          <i class="bi <%= icon.fetch(File.extname(document.drive_name.to_s).downcase, 'bi-file-earmark text-muted') %>"></i>
+          <span class="flex-grow-1 text-break">
+            <% if document.drive_url %>
+              <%= link_to document.drive_name, document.drive_url, target: '_blank', rel: 'noopener' %>
+            <% else %>
+              <%= document.drive_name %>
+              <span class="badge bg-secondary"><%= t("app.finance_document_states.#{document.state}") %></span>
+            <% end %>
+          </span>
+          <span class="text-nowrap">
+            <%= document.amount_cents && Finance::Money.format(cents: document.amount_cents) %>
+          </span>
+          <% if document.drive_file_id %>
+            <%= link_to edit_finance_document_path(document), class: 'btn btn-sm btn-outline-secondary',
+                                                              title: 'Editar', aria: { label: 'Editar' } do %>
+              <i class="bi bi-pencil"></i>
+            <% end %>
           <% end %>
-        </tbody>
-      </table>
-    </section>
-  <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </section>
 <% end %>
