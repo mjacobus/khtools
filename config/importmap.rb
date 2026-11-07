@@ -12,3 +12,6 @@ pin 'application'
 pin "@rails/ujs", to: "@rails--ujs.js" # @7.1.3
 pin "delegated-events" # @1.1.2
 pin "selector-set" # @1.1.5
+pin "@hotwired/turbo-rails", to: "@hotwired--turbo-rails.js" # @8.0.23
+pin "@hotwired/turbo", to: "@hotwired--turbo.js" # @8.0.23
+pin "@rails/actioncable/src", to: "@rails--actioncable--src.js" # @8.1.401

@@ -1,35 +1,47 @@
 <% month_label = ->(month) { l(Date.parse("#{month}-01"), format: '%B de %Y').capitalize } %>
+<% turbo_refreshes_with method: :morph, scroll: :preserve %>
 
+<div data-turbo="true">
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
   <h1 class="h3 mb-0"><%= t('app.links.finance_documents') %></h1>
 
-  <% if @month %>
-    <% first_day = Date.parse("#{@month}-01") %>
-    <%= form_with url: finance_documents_path, method: :get, class: 'd-flex align-items-center gap-1' do %>
-      <%= link_to finance_documents_path(month: first_day.prev_month.strftime('%Y-%m')),
-                  class: 'btn btn-outline-secondary', title: 'Mês anterior', aria: { label: 'Mês anterior' } do %>
-        <i class="bi bi-chevron-left"></i>
-      <% end %>
-      <%= select_tag :month, options_for_select(@months.map { |month| [month_label.call(month), month] }, @month),
-                     class: 'form-select', style: 'width: 13rem', aria: { label: 'Mês' },
-                     onchange: 'this.form.requestSubmit()' %>
-      <%= link_to finance_documents_path(month: first_day.next_month.strftime('%Y-%m')),
-                  class: 'btn btn-outline-secondary', title: 'Próximo mês', aria: { label: 'Próximo mês' } do %>
-        <i class="bi bi-chevron-right"></i>
+  <div class="d-flex flex-wrap align-items-center gap-2">
+    <%= link_to archive_finance_documents_path, class: 'btn btn-outline-secondary', title: 'Arquivar meses auditados' do %>
+      <i class="bi bi-archive"></i> Arquivar
+    <% end %>
+    <% if @month %>
+      <% first_day = Date.parse("#{@month}-01") %>
+      <%= form_with url: finance_documents_path, method: :get, class: 'd-flex align-items-center gap-1' do %>
+        <%= link_to finance_documents_path(month: first_day.prev_month.strftime('%Y-%m')),
+                    class: 'btn btn-outline-secondary', title: 'Mês anterior', aria: { label: 'Mês anterior' } do %>
+          <i class="bi bi-chevron-left"></i>
+        <% end %>
+        <%= select_tag :month, options_for_select(@months.map { |month| [month_label.call(month), month] }, @month),
+                       class: 'form-select', style: 'width: 13rem', aria: { label: 'Mês' },
+                       data: { searchable: false }, onchange: 'this.form.requestSubmit()' %>
+        <%= link_to finance_documents_path(month: first_day.next_month.strftime('%Y-%m')),
+                    class: 'btn btn-outline-secondary', title: 'Próximo mês', aria: { label: 'Próximo mês' } do %>
+          <i class="bi bi-chevron-right"></i>
+        <% end %>
       <% end %>
     <% end %>
-  <% end %>
+  </div>
 </div>
-
-<p class="mb-3 small"><%= link_to 'Arquivar meses auditados', archive_finance_documents_path %></p>
 
 <% if flash[:notice] %>
   <div class="alert alert-success" role="alert"><%= flash[:notice] %></div>
 <% end %>
 
 <% if open_bills.any? %>
-  <section id="open-bills" class="card border-danger mb-3">
-    <div class="card-header"><h2 class="h6 mb-0"><i class="bi bi-alarm text-danger"></i> Faturas em aberto</h2></div>
+  <% overdue = open_bills.count { |bill| bill.payment_status == 'overdue' } %>
+  <details id="open-bills" class="card mb-2 <%= overdue.positive? ? 'border-danger' : '' %>">
+    <summary class="card-header">
+      <i class="bi bi-alarm <%= 'text-danger' if overdue.positive? %>"></i>
+      <%= pluralize(open_bills.size, 'fatura', plural: 'faturas') %> em aberto
+      <% if overdue.positive? %>
+        · <span class="text-danger"><%= pluralize(overdue, 'vencida', plural: 'vencidas') %></span>
+      <% end %>
+    </summary>
     <ul class="list-group list-group-flush">
       <% open_bills.each do |bill| %>
         <li class="list-group-item d-flex align-items-center gap-3">
@@ -39,11 +51,18 @@
         </li>
       <% end %>
     </ul>
-  </section>
+  </details>
 <% end %>
 
 <% if @month %>
-  <%= render 'checklist' %>
+  <% done = checklist.count(&:done) %>
+  <details id="checklist-panel" class="card mb-3">
+    <summary class="card-header">
+      <i class="bi bi-list-check <%= done == checklist.size ? 'text-success' : '' %>"></i>
+      Checklist <%= done %>/<%= checklist.size %>
+    </summary>
+    <%= render 'checklist' %>
+  </details>
 <% end %>
 
 <% if @months.empty? %>
@@ -122,3 +141,4 @@
     </ul>
   </section>
 <% end %>
+</div>
