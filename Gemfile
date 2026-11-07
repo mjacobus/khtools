@@ -12,7 +12,7 @@ gem 'dotenv-rails'
 gem 'matrix'
 gem 'omniauth', '~> 1.9.2'
 gem 'omniauth-google-oauth2'
-gem 'puma', '~> 5.6'
+gem 'puma', '~> 6.6'
 gem 'rails', '~> 7.1.0'
 gem 'sqlite3', '~> 1.6'
 gem 'whenever', require: false
@@ -76,3 +76,5 @@ group :test do
   gem 'shoulda-matchers', '~> 4.0'
   gem 'webdrivers'
 end
+
+gem 'solid_queue', '~> 1.7'
