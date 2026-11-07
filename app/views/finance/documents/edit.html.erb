@@ -30,7 +30,7 @@
     </div>
     <div class="col mb-3">
       <%= f.label :document_date, 'Data', class: 'form-label' %>
-      <%= f.date_field :document_date, class: 'form-control' %>
+      <%= f.text_field :document_date, class: 'form-control', **br_date_options(@document.document_date) %>
     </div>
   </div>
   <div class="mb-3">
