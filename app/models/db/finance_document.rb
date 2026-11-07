@@ -13,6 +13,7 @@ class Db::FinanceDocument < ApplicationRecord
                                                                         unless: :backfilled?
   validates :state, inclusion: { in: STATES }
   validates :kind, inclusion: { in: KINDS }
+  validates :competence, format: { with: /\A\d{4}-(0[1-9]|1[0-2])\z/ }, allow_nil: true
   validates :telegram_message_id, uniqueness: { scope: %i[account_id telegram_chat_id] },
                                   allow_nil: true
 
@@ -68,9 +69,14 @@ class Db::FinanceDocument < ApplicationRecord
       .reject(&:backfilled?)
   end
 
-  # The name the file has in Drive: the bot names what it uploads, the backfill keeps names.
+  # The name the file has in Drive: the bot names what it uploads, the backfill keeps names
+  # until someone edits the file in khtools.
   def drive_name
-    backfilled? ? original_filename : Finance::Naming.filename(document: self)
+    if backfilled? && !flagged?(:renamed)
+      original_filename
+    else
+      Finance::Naming.filename(document: self)
+    end
   end
 
   # Registered from a file already in Drive, not received through Telegram.

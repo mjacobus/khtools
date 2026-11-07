@@ -194,4 +194,30 @@ RSpec.describe GoogleDrive::Client do
     expect(query).to include('pageToken' => 'NEXT')
     expect(query['q']).to include("'P1' in parents", 'trashed = false')
   end
+
+  describe '#move' do
+    before do
+      responses.push(response(200, access_token: 'a', expires_in: 3600),
+                     response(200, parents: %w[OLD]),
+                     response(200, id: 'F1', webViewLink: 'https://drive/F1'))
+    end
+
+    it 'renames the file and moves it to the new folder, keeping its id' do
+      result = client.move(id: 'F1', name: 'novo.pdf', parent_id: 'NEW',
+                           app_properties: { kind: 's26' })
+
+      expect(result).to eq(id: 'F1', web_view_link: 'https://drive/F1')
+      query = URI.decode_www_form(URI(requests.last.path).query).to_h
+      expect(query).to include('addParents' => 'NEW', 'removeParents' => 'OLD')
+      expect(JSON.parse(requests.last.body))
+        .to eq('name' => 'novo.pdf', 'appProperties' => { 'kind' => 's26' })
+    end
+
+    it 'only renames when the file is already in the folder' do
+      client.move(id: 'F1', name: 'novo.pdf', parent_id: 'OLD', app_properties: {})
+
+      query = URI.decode_www_form(URI(requests.last.path).query).to_h
+      expect(query.keys).not_to include('addParents', 'removeParents')
+    end
+  end
 end

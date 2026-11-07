@@ -1,0 +1,50 @@
+<h1 class="h3">Editar documento</h1>
+<p class="text-muted">
+  <%= link_to @document.drive_name, @document.drive_url, target: '_blank', rel: 'noopener' %>
+</p>
+
+<% if flash[:alert] %>
+  <div class="alert alert-danger" role="alert"><%= flash[:alert] %></div>
+<% end %>
+<% if @document.errors.any? %>
+  <div class="alert alert-danger" role="alert">
+    <% @document.errors.full_messages.each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<%= form_with model: @document, scope: :document, url: finance_document_path(@document), method: :patch,
+              html: { style: 'max-width: 32rem' } do |f| %>
+  <div class="mb-3">
+    <%= f.label :kind, 'Tipo', class: 'form-label' %>
+    <%= f.select :kind, Finance::Naming::LABELS.map { |kind, label| [kind == 'unknown' ? 'Não identificado' : label, kind] },
+                 {}, class: 'form-select' %>
+  </div>
+  <div class="row">
+    <div class="col mb-3">
+      <%= f.label :competence, 'Mês', class: 'form-label' %>
+      <%= f.month_field :competence, value: @document.competence, required: true, placeholder: 'AAAA-MM',
+                                               pattern: '\d{4}-\d{2}', class: 'form-control' %>
+    </div>
+    <div class="col mb-3">
+      <%= f.label :document_date, 'Data', class: 'form-label' %>
+      <%= f.date_field :document_date, class: 'form-control' %>
+    </div>
+  </div>
+  <div class="mb-3">
+    <%= f.label :amount, 'Valor', class: 'form-label' %>
+    <%= f.text_field :amount, inputmode: 'decimal', placeholder: '0,00', class: 'form-control',
+                              value: @document.amount_cents && Finance::Money.format(cents: @document.amount_cents) %>
+  </div>
+  <div class="mb-3">
+    <%= f.label :description, 'Descrição', class: 'form-label' %>
+    <%= f.text_field :description, placeholder: 'Ex.: Luz, Água, Internet', class: 'form-control' %>
+  </div>
+  <p class="form-text">
+    O arquivo será renomeado no padrão do bot e movido para a pasta do mês no Drive.
+    O link e o histórico do arquivo continuam os mesmos.
+  </p>
+  <%= f.submit 'Salvar', class: 'btn btn-primary' %>
+  <%= link_to 'Cancelar', finance_documents_path(month: @document.competence_was), class: 'btn btn-link' %>
+<% end %>
