@@ -15,9 +15,13 @@ module Finance
 
     def update_payment
       @bill = bills.find(params[:id])
-      save_payment(params.require(:payment).permit(:due_date, :paid_on, :receipt_id))
-      redirect_to finance_documents_path(month: @bill.competence),
-                  notice: t('app.messages.finance_payment_saved')
+      if save_payment(params.require(:payment).permit(:due_date, :paid_on, :receipt_id))
+        redirect_to finance_documents_path(month: @bill.competence),
+                    notice: t('app.messages.finance_payment_saved')
+      else
+        @receipts = candidate_receipts
+        render :payment, status: :unprocessable_entity
+      end
     end
 
     private
@@ -35,9 +39,24 @@ module Finance
       receipt = fields[:receipt_id].presence && receipts.find(fields[:receipt_id])
       Db::FinanceDocument.transaction do
         link(receipt)
-        @bill.update!(due_date: fields[:due_date],
-                      paid_on: fields[:paid_on].presence || receipt&.document_date)
+        @bill.assign_attributes(due_date: fields[:due_date],
+                                paid_on: fields[:paid_on].presence || receipt&.document_date)
+        file_in_paid_month
+        @bill.save!
       end
+    end
+
+    # A bill belongs to the month it was paid, which is when it shows in the statement and the
+    # S-26 (S-27b par. 20), even when it was due the month after.
+    def file_in_paid_month
+      month = Competence.month(@bill.paid_on)
+      if month && month != @bill.competence
+        @bill.competence = month
+        @bill.drive_url = move_in_drive(@bill, name: @bill.drive_name)[:web_view_link]
+      end
+    rescue GoogleDrive::Client::Error => exception
+      flash.now[:alert] = "O Drive recusou a mudança: #{exception.message}"
+      raise ActiveRecord::Rollback # nothing saved: the transaction returns nil
     end
 
     def link(receipt)

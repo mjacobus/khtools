@@ -7,8 +7,8 @@ module Finance
 
     module_function
 
-    # ponytail: bills stay in their due month; moving them to the payment month needs
-    # bill<->payment matching (next plan).
+    # Bills start in their own month; marking one paid in khtools moves it to the month it was
+    # paid (Finance::BillPayments).
     def default_for(kind:, document_date:, period:)
       if MONTHLY.include?(kind)
         return period.presence || month(document_date)

@@ -82,16 +82,16 @@ module Finance
       false
     end
 
-    def move_in_drive
+    def move_in_drive(document = @document, name: Naming.filename(document:))
       folder = MonthFolder.new(account: current_account, drive:)
-        .find_or_create(competence: @document.competence)
-      drive.move(id: @document.drive_file_id, name: Naming.filename(document: @document),
-                 parent_id: folder, app_properties:)
+        .find_or_create(competence: document.competence)
+      drive.move(id: document.drive_file_id, name:, parent_id: folder,
+                 app_properties: app_properties(document))
     end
 
-    def app_properties
-      @document.slice(:kind, :competence, :amount_cents).symbolize_keys
-        .merge(khtools_id: @document.id)
+    def app_properties(document)
+      document.slice(:kind, :competence, :amount_cents).symbolize_keys
+        .merge(khtools_id: document.id)
     end
 
     def drive
