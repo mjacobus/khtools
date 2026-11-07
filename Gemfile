@@ -38,6 +38,7 @@ gem 'kaminari'
 gem 'rqrcode', '~> 2.0'
 gem 'sass-rails', '>= 6'
 gem 'simple_form'
+gem 'turbo-rails'
 gem 'view_component', require: 'view_component/engine'
 
 group :development, :test do

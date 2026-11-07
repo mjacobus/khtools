@@ -76,6 +76,13 @@ RSpec.describe Finance::DocumentsController do
     expect(page.at('li .badge').text).to eq('aguardando confirmação')
   end
 
+  it 'refreshes in place, keeping the scroll, after an action' do
+    get '/finance/documents'
+
+    expect(page.at('meta[name="turbo-refresh-method"]')['content']).to eq('morph')
+    expect(page.at('meta[name="turbo-refresh-scroll"]')['content']).to eq('preserve')
+  end
+
   it 'hides files deleted in Drive' do
     document(kind: 's26', deleted_at: Time.current, original_filename: 'apagado.pdf')
 
