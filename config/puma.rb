@@ -38,3 +38,10 @@ pidfile ENV.fetch('PIDFILE', 'tmp/pids/server.pid')
 
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
+
+# Background jobs and recurring tasks (config/recurring.yml) run next to the web server.
+# Threads inside the Puma process (async mode): no extra processes on the small server.
+if ENV['SOLID_QUEUE_IN_PUMA']
+  plugin :solid_queue
+  solid_queue_mode :async
+end
