@@ -59,6 +59,27 @@ module Finance
       %(<a href="#{url}">#{CGI.escapeHTML(document.drive_name)}</a>)
     end
 
+    WEEKDAYS = %w[dom seg ter qua qui sex sáb].freeze
+
+    # The cash of an S-24 stays with whoever counted it until the treasurer deposits it.
+    def cash(document)
+      date = document.document_date
+      day = date && "#{WEEKDAYS[date.wday]} #{date.strftime('%d/%m')}"
+      what = "💵 Dinheiro do S-24 de #{day} (#{Money.format(cents: document.amount_cents.to_i)})"
+      if document.cash_received_at
+        "#{what}: recebido por #{document.cash_received_by}."
+      else
+        "#{what} está com #{document.cash_holder_name}. Entregue a quem faz o Pix."
+      end
+    end
+
+    def cash_buttons(document)
+      unless document.cash_received_at
+        [[['👤 Está comigo', "fin:cash_holder:#{document.id}"],
+          ['✅ Recebi', "fin:cash_received:#{document.id}"]]]
+      end
+    end
+
     def edit_prompt
       format(EDIT_PROMPT, keys: Correction::KEYS.join(', '))
     end

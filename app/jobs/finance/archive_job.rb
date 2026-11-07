@@ -37,6 +37,22 @@ module Finance
       FileUtils.rm_f(@document.local_path)
       replaced = result[:id] == previous&.drive_file_id
       edit_bot_message(Messages.archived(document: @document, replaced:), html: true)
+      start_cash_handover
+    end
+
+    # The cash of a meeting stays with someone until the treasurer gets it; whoever sent the
+    # S-24 is the first guess, and "Está comigo" corrects it.
+    def start_cash_handover
+      if @document.kind == 's24' && @document.cash_holder_name.nil? && @document.sent_by_name
+        @document.assign_attributes(cash_holder_telegram_id: @document.sent_by_telegram_id,
+                                    cash_holder_name: @document.sent_by_name)
+        @document.update!(cash_message_id: telegram.send_message(
+          chat_id: @document.telegram_chat_id, text: Messages.cash(@document),
+          buttons: Messages.cash_buttons(@document)
+        ))
+      end
+    rescue StandardError => exception
+      ErrorHandler.new.notify_error(exception) # the file is archived; only the cash note failed
     end
 
     def upload

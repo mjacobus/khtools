@@ -20,6 +20,8 @@ RSpec.describe Finance::DailyJob do
     allow(Finance::DriveSync).to receive(:new).and_return(sync)
     allow(Finance::BillReminders).to receive(:new).and_return(reminders)
     allow(Finance::ChecklistReminders).to receive(:new).and_return(checklist)
+    allow(Finance::CashReminders).to receive(:new)
+      .and_return(instance_double(Finance::CashReminders, remind: nil))
   end
 
   it 'syncs Drive and reminds the bills of each account with the bot on' do

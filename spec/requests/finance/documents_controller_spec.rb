@@ -84,6 +84,33 @@ RSpec.describe Finance::DocumentsController do
     expect(page.at('li .badge').text).to eq('apagado no Drive')
   end
 
+  describe 'cash of an S-24' do
+    let(:telegram) { FakeTelegram.new }
+    let(:s24) do
+      document(kind: 's24', drive_url: 'https://drive/s24', cash_holder_name: 'Bia',
+               cash_message_id: 900)
+    end
+
+    before { allow(Telegram::Client).to receive(:new).and_return(telegram) }
+
+    it 'shows who holds it' do
+      s24
+
+      get '/finance/documents', params: { month: '2026-09' }
+
+      expect(page.at('li .badge').text).to eq('💵 com Bia')
+    end
+
+    it 'marks it received and updates the message in the group' do
+      post "/finance/documents/#{s24.id}/cash_received"
+
+      expect(s24.reload).to have_attributes(cash_received_by: current_user.name,
+                                            cash_received_at: be_present)
+      expect(telegram.edits.last).to include(message_id: 900, buttons: nil)
+      expect(response).to redirect_to('/finance/documents?month=2026-09')
+    end
+  end
+
   describe 'editing' do
     let(:drive) { instance_double(GoogleDrive::Client) }
     let(:month_folder) { instance_double(Finance::MonthFolder, find_or_create: 'OCT') }

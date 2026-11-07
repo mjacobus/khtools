@@ -23,6 +23,7 @@ module Finance
       telegram = Telegram::Client.new(token: account.finance_telegram_bot_token)
       BillReminders.new(account:, telegram:).remind
       ChecklistReminders.new(account:, telegram:).remind
+      CashReminders.new(account:, telegram:).remind
     end
 
     def drive(account)

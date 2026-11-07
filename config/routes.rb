@@ -30,6 +30,7 @@ Rails.application.routes.draw do
       member do
         get :payment
         patch :payment, action: :update_payment
+        post :cash_received
       end
       collection do
         post :meeting_exceptions, action: :create_meeting_exception
