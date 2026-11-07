@@ -20,6 +20,8 @@ class Db::Account < ApplicationRecord
                                  class_name: 'Db::PreachingCampaign'
   has_many :finance_documents, dependent: :restrict_with_exception,
                                class_name: 'Db::FinanceDocument'
+  has_many :finance_meeting_exceptions, dependent: :delete_all,
+                                        class_name: 'Db::FinanceMeetingException'
   has_many :finance_telegram_members, dependent: :delete_all,
                                       class_name: 'Db::FinanceTelegramMember'
 

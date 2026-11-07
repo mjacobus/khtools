@@ -31,6 +31,10 @@ Rails.application.routes.draw do
         get :payment
         patch :payment, action: :update_payment
       end
+      collection do
+        post :meeting_exceptions, action: :create_meeting_exception
+        delete :meeting_exceptions, action: :destroy_meeting_exception
+      end
     end
     resources :integrations, only: %i[show update], param: :section do
       post :members, on: :member

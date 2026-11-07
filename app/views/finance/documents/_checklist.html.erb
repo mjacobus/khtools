@@ -1,0 +1,43 @@
+<% weekday = %w[dom seg ter qua qui sex sáb] %>
+<section id="checklist" class="card mb-3">
+  <div class="card-header"><h2 class="h6 mb-0"><i class="bi bi-list-check"></i> Checklist do mês</h2></div>
+  <div class="row g-0">
+    <ul class="list-group list-group-flush col-md-7">
+      <% checklist.select { |item| item.kind == 's24' }.each do |item| %>
+        <li class="list-group-item d-flex flex-wrap align-items-center gap-2">
+          <span class="<%= item.done ? 'text-success' : 'text-danger' %>"><%= item.done ? '✓' : '✗' %></span>
+          <span>S-24 <%= weekday[item.date.wday] %> <%= item.date.strftime('%d/%m') %></span>
+          <% unless item.done %>
+            <span class="ms-auto d-flex gap-1">
+              <%= button_to 'Sem reunião', meeting_exceptions_finance_documents_path, params: { date: item.date },
+                                                                                       class: 'btn btn-sm btn-outline-secondary' %>
+              <%= form_with url: meeting_exceptions_finance_documents_path, class: 'd-flex gap-1' do %>
+                <%= hidden_field_tag :date, item.date %>
+                <%= date_field_tag :moved_to, nil, required: true, class: 'form-control form-control-sm', aria: { label: 'Mudou para' } %>
+                <%= submit_tag 'Mudou', class: 'btn btn-sm btn-outline-secondary' %>
+              <% end %>
+            </span>
+          <% end %>
+        </li>
+      <% end %>
+      <% meeting_exceptions.each do |exception| %>
+        <li class="list-group-item d-flex align-items-center gap-2 text-muted">
+          <span>—</span>
+          <span><%= exception.date.strftime('%d/%m') %>
+            <%= exception.moved_to ? "mudou para #{exception.moved_to.strftime('%d/%m')}" : 'sem reunião' %></span>
+          <%= button_to 'desfazer', meeting_exceptions_finance_documents_path, method: :delete,
+                                                                               params: { date: exception.date },
+                                                                               class: 'btn btn-sm btn-link ms-auto' %>
+        </li>
+      <% end %>
+    </ul>
+    <ul class="list-group list-group-flush col-md-5 border-start">
+      <% checklist.reject { |item| item.kind == 's24' }.each do |item| %>
+        <li class="list-group-item d-flex align-items-center gap-2">
+          <span class="<%= item.done ? 'text-success' : 'text-danger' %>"><%= item.done ? '✓' : '✗' %></span>
+          <span><%= Finance::Naming::LABELS.fetch(item.kind) %></span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</section>

@@ -40,6 +40,10 @@
   </section>
 <% end %>
 
+<% if @month %>
+  <%= render 'checklist' %>
+<% end %>
+
 <% if @months.empty? %>
   <p class="text-muted">Nenhum documento arquivado ainda.</p>
 <% elsif @groups.empty? %>
@@ -49,7 +53,7 @@
 <% @groups.each do |kind, documents| %>
   <% unknown = kind == 'unknown' %>
   <% total = documents.filter_map(&:amount_cents).sum %>
-  <section class="card mb-3 <%= 'border-warning' if unknown %>">
+  <section class="card mb-3 <%= 'border-warning' if unknown %>" data-kind="<%= kind %>">
     <div class="card-header d-flex align-items-center gap-2">
       <h2 class="h6 mb-0">
         <% if unknown %>
