@@ -330,7 +330,8 @@ pt-BR:
       discarded: 'descartado'
       failed: 'falhou'
     links:
-      finance_documents: 'Documentos das contas'
+      finance: 'Contas'
+      finance_documents: 'Documentos'
       finance_integrations: 'Integrações'
       finance_integration_telegram: 'Telegram'
       finance_integration_drive: 'Google Drive'

@@ -16,7 +16,7 @@ class Sidebar::SidebarComponent < ApplicationComponent
       territories_section,
       field_service_section,
       reports_section,
-      finance_documents,
+      finance_section,
       integrations_section,
       admin_section,
       logout
@@ -70,8 +70,11 @@ class Sidebar::SidebarComponent < ApplicationComponent
     end
   end
 
-  def finance_documents
-    entry(t('app.links.finance_documents'), finance_documents_path, icon: 'cash-stack')
+  def finance_section
+    entry(t('app.links.finance'), '#', icon: 'cash-stack').tap do |section|
+      section.append_child(entry(t('app.links.finance_documents'), finance_documents_path,
+                                 icon: 'folder2-open'))
+    end
   end
 
   def integrations_section
