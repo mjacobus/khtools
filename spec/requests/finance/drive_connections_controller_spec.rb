@@ -34,8 +34,8 @@ RSpec.describe Finance::DriveConnectionsController do
         params: { code: 'CODE', state: signed_state(current_account.id) }
 
     expect(current_account.reload.finance_google_refresh_token).to eq('REFRESH')
-    follow_redirect!
-    expect(response.body).to include('Drive conectado')
+    expect(response).to redirect_to('/finance/integrations/drive')
+    expect(flash[:notice]).to eq('Drive conectado')
   end
 
   it 'rejects a bad state' do
@@ -59,7 +59,7 @@ RSpec.describe Finance::DriveConnectionsController do
     get '/finance/drive_connection/callback',
         params: { error: 'access_denied', state: signed_state(current_account.id) }
 
-    expect(response).to redirect_to('/finance/drive_connection')
+    expect(response).to redirect_to('/finance/integrations/drive')
     expect(drive).not_to have_received(:exchange_code)
   end
 

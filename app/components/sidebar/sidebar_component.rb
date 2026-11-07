@@ -16,6 +16,7 @@ class Sidebar::SidebarComponent < ApplicationComponent
       territories_section,
       field_service_section,
       reports_section,
+      integrations_section,
       admin_section,
       logout
     ].compact
@@ -65,6 +66,16 @@ class Sidebar::SidebarComponent < ApplicationComponent
   def reports_section
     entry(t('app.links.reports'), '#', icon: 'file-earmark-bar-graph').tap do |section|
       section.append_child(territory_assignment_report)
+    end
+  end
+
+  def integrations_section
+    icons = { 'telegram' => 'telegram', 'drive' => 'google', 'ai' => 'cpu' }
+    entry(t('app.links.finance_integrations'), '#', icon: 'plug').tap do |section|
+      icons.each do |key, icon|
+        section.append_child(entry(t("app.links.finance_integration_#{key}"),
+                                   finance_integration_path(key), icon:))
+      end
     end
   end
 

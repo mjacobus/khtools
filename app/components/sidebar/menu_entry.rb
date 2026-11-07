@@ -28,15 +28,15 @@ module Sidebar
         return children.any? { |child| child.active?(url) }
       end
 
-      url_controller = Rails.application.routes.recognize_path(url)[:controller]
-      controller = Rails.application.routes.recognize_path(@url)[:controller]
+      current = Rails.application.routes.recognize_path(url)
+      own = Rails.application.routes.recognize_path(@url)
 
-      if url_controller == controller
-        Rails.logger.debug([url_controller, controller].inspect)
+      # Same controller and, for entries like /finance/integrations/telegram, same params.
+      if own.except(:action) <= current
         return true
       end
 
-      controller != 'home' && url.include?(@url)
+      own[:controller] != 'home' && url.include?(@url)
     rescue ActionController::RoutingError
       false
     end

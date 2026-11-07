@@ -15,6 +15,13 @@ module Telegram
       call('getUpdates', offset:, timeout:, allowed_updates: %w[message callback_query])
     end
 
+    def chat_administrators(chat_id:)
+      users = call('getChatAdministrators', chat_id:).pluck('user').reject { |user| user['is_bot'] }
+      users.map do |user|
+        { id: user['id'], name: user.values_at('first_name', 'last_name').compact.join(' ') }
+      end
+    end
+
     def download(file_id:)
       path = call('getFile', file_id:).fetch('file_path')
       response = Net::HTTP.get_response(URI("#{BASE_URL}/file/bot#{@token}/#{path}"))

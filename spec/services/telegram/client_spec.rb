@@ -76,4 +76,14 @@ RSpec.describe Telegram::Client do
 
     expect(client.get_updates(offset: 1, timeout: 0)).to eq([{ 'update_id' => 1 }])
   end
+
+  it 'lists the people administering a chat, without bots' do
+    respond_with(ok: true, result: [{ user: { id: 1, first_name: 'Ana', last_name: 'Reis' } },
+                                    { user: { id: 2, first_name: 'Robô', is_bot: true } }])
+
+    expect(client.chat_administrators(chat_id: -5)).to eq([{ id: 1, name: 'Ana Reis' }])
+    expect(Net::HTTP).to have_received(:post)
+      .with(URI('https://api.telegram.org/botTOKEN/getChatAdministrators'), { chat_id: -5 }.to_json,
+            anything)
+  end
 end

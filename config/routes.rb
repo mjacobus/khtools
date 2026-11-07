@@ -26,6 +26,9 @@ Rails.application.routes.draw do
   post '/finance/telegram/:account_id', to: 'finance/telegram_webhooks#create'
 
   namespace :finance do
+    resources :integrations, only: %i[show update], param: :section do
+      post :members, on: :member
+    end
     resource :drive_connection, only: %i[show] do
       get :callback
     end

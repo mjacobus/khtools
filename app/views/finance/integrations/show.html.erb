@@ -1,0 +1,23 @@
+<h1><%= t("app.links.finance_integration_#{@section}") %></h1>
+
+<% if flash[:notice] %>
+  <div class="alert alert-success" role="alert"><%= flash[:notice] %></div>
+<% end %>
+
+<% if @integration.errors.any? %>
+  <div class="alert alert-danger" role="alert">
+    <% @integration.errors.map(&:message).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<%= form_with model: @integration, url: finance_integration_path(@section), method: :patch do |f| %>
+  <%= render @section, f: %>
+  <%= f.submit 'Salvar', class: 'btn btn-primary' %>
+<% end %>
+
+<% if @section == 'telegram' %>
+  <%= button_to 'Buscar administradores do grupo', members_finance_integration_path(@section),
+                class: 'btn btn-outline-secondary mt-3' %>
+<% end %>

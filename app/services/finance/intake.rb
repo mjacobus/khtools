@@ -15,6 +15,7 @@ module Finance
         callback(update['callback_query'])
       elsif update['message'] && update.dig('message', 'chat',
                                             'id').to_s == @account.finance_telegram_chat_id.to_s
+        remember(update['message'])
         message(update['message'])
       end
       retry_stuck
@@ -130,6 +131,13 @@ module Finance
     def edit_bot_message(document, text)
       telegram.edit_message(chat_id: document.telegram_chat_id,
                             message_id: document.bot_message_id, text:)
+    end
+
+    def remember(payload)
+      telegram_id = payload.dig('from', 'id')
+      if telegram_id
+        Db::FinanceTelegramMember.remember(account:, telegram_id:, name: name(payload))
+      end
     end
 
     def name(payload)
