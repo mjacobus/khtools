@@ -47,6 +47,11 @@ module Telegram
       params = { chat_id:, message_id:, text:, reply_markup: markup(buttons, false),
                  parse_mode: parse_mode(html) }
       call('editMessageText', **params.compact)
+    rescue Error => exception
+      # Telegram refuses an edit to the same text and buttons; that is done already.
+      unless exception.message.include?('message is not modified')
+        raise
+      end
     end
 
     def answer_callback(id:, text: nil)

@@ -5,7 +5,7 @@ module Finance
   module Correction
     class Error < StandardError; end
 
-    KEYS = %w[tipo data valor local mundial mes desc].freeze
+    KEYS = %w[tipo data valor local mundial total mes desc].freeze
 
     module_function
 
@@ -62,7 +62,8 @@ module Finance
     end
 
     CENTS_ATTRIBUTES = {
-      'valor' => :amount_cents, 'local' => :congregation_cents, 'mundial' => :worldwide_cents
+      'valor' => :amount_cents, 'local' => :congregation_cents, 'mundial' => :worldwide_cents,
+      'total' => :written_total_cents # what is written on the S-24, only checked against the sum
     }.freeze
 
     def assign_cents(document, key, value)

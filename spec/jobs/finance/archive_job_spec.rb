@@ -97,8 +97,9 @@ RSpec.describe Finance::ArchiveJob do
 
     expect(document).to have_attributes(cash_holder_telegram_id: 7, cash_holder_name: 'Bia Lima',
                                         cash_message_id: telegram.sent.size + 500)
-    expect(telegram.sent.last[:text]).to eq('💵 Dinheiro do S-24 de qua 04/11 (R$ 150,00) está ' \
-                                            'com Bia Lima. Entregue a quem faz o Pix.')
+    expect(telegram.sent.last[:text]).to eq("💵 Dinheiro do S-24 de qua 04/11 (R$ 150,00)\n" \
+                                            "Está com: Bia Lima\n" \
+                                            'O irmão que faz o Pix já recebeu este dinheiro?')
   end
 
   it 'records in the description when the written S-24 total does not match' do

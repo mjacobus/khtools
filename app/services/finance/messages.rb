@@ -5,6 +5,9 @@ module Finance
   module Messages
     ORIGINS = { 'ai' => 'lido por IA', 'rules' => 'lido do PDF', 'human' => 'informado' }.freeze
     NOT_A_CONFIRMER = 'Só quem confirma as contas pode usar estes botões.'
+    NOT_AN_EDITOR = 'Só quem enviou o arquivo ou quem confirma as contas pode corrigir.'
+    ALREADY_WITH_YOU = 'Já está com você.'
+    CORRECTED = '✏️ Corrigido. Confira a sugestão acima e confirme.'
     ARCHIVING = 'Arquivando…'
     DISCARDED = 'Ignorado (não é das contas).'
     ARCHIVE_FAILED = 'Não consegui arquivar agora; vou tentar de novo.'
@@ -69,14 +72,15 @@ module Finance
       if document.cash_received_at
         "#{what}: recebido por #{document.cash_received_by}."
       else
-        "#{what} está com #{document.cash_holder_name}. Entregue a quem faz o Pix."
+        "#{what}\nEstá com: #{document.cash_holder_name}\n" \
+          'O irmão que faz o Pix já recebeu este dinheiro?'
       end
     end
 
     def cash_buttons(document)
       unless document.cash_received_at
-        [[['👤 Está comigo', "fin:cash_holder:#{document.id}"],
-          ['✅ Recebi', "fin:cash_received:#{document.id}"]]]
+        [[['🙋 Está comigo', "fin:cash_holder:#{document.id}"],
+          ['✅ Já recebi (faço o Pix)', "fin:cash_received:#{document.id}"]]]
       end
     end
 

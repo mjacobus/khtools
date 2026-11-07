@@ -32,6 +32,13 @@ RSpec.describe Telegram::Client do
     end
   end
 
+  it 'takes editing a message to what it already says as done' do
+    respond_with(ok: false, description: 'Bad Request: message is not modified: specified new ' \
+                                         'message content and reply markup are exactly the same')
+
+    expect { client.edit_message(chat_id: -100, message_id: 79, text: 'z') }.not_to raise_error
+  end
+
   it 'sends and edits HTML when asked' do
     respond_with(ok: true, result: { message_id: 79 })
 
