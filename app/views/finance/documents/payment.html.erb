@@ -14,11 +14,11 @@
   <div class="row">
     <div class="col mb-3">
       <%= f.label :due_date, 'Vencimento', class: 'form-label' %>
-      <%= f.date_field :due_date, value: @bill.due_date, class: 'form-control' %>
+      <%= f.text_field :due_date, class: 'form-control', **br_date_options(@bill.due_date) %>
     </div>
     <div class="col mb-3">
       <%= f.label :paid_on, 'Pago em', class: 'form-label' %>
-      <%= f.date_field :paid_on, value: @bill.paid_on, class: 'form-control' %>
+      <%= f.text_field :paid_on, class: 'form-control', **br_date_options(@bill.paid_on) %>
     </div>
   </div>
   <div class="mb-3">

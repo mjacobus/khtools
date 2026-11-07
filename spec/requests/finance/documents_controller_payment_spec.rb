@@ -83,6 +83,18 @@ RSpec.describe Finance::DocumentsController do
     expect(response.body).to include('Drive HTTP 500')
   end
 
+  it 'takes and shows dates as day/month/year, whatever the browser language' do
+    pay(due_date: '10/06/2026', paid_on: '05/06/2026', receipt_id: '')
+    get "/finance/documents/#{bill.id}/payment"
+
+    expect(bill.reload).to have_attributes(due_date: Date.new(2026, 6, 10),
+                                           paid_on: Date.new(2026, 6, 5))
+    field = page.at('input[name="payment[due_date]"]').attributes.transform_values(&:value)
+    expect(field).to include(
+      'type' => 'text', 'value' => '10/06/2026', 'placeholder' => 'dd/mm/aaaa'
+    )
+  end
+
   it 'marks a bill paid without a receipt' do
     pay(paid_on: '2026-10-08', receipt_id: '')
 

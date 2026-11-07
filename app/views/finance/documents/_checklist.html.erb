@@ -17,7 +17,8 @@
                                                                                               class: 'btn btn-sm btn-outline-secondary w-100 mb-2' %>
                 <%= form_with url: meeting_exceptions_finance_documents_path, class: 'd-flex gap-1' do %>
                   <%= hidden_field_tag :date, item.date %>
-                  <%= date_field_tag :moved_to, nil, required: true, class: 'form-control form-control-sm', aria: { label: 'Mudou para' } %>
+                  <%= text_field_tag :moved_to, nil, required: true, class: 'form-control form-control-sm', aria: { label: 'Mudou para' },
+                                                       **br_date_options(nil).except(:value) %>
                   <%= submit_tag 'Mudou', class: 'btn btn-sm btn-outline-secondary' %>
                 <% end %>
               </div>

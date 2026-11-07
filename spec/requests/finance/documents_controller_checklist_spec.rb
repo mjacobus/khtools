@@ -43,7 +43,7 @@ RSpec.describe Finance::DocumentsController do
 
   it 'expects the S-24 of a moved meeting on its new day' do
     post '/finance/documents/meeting_exceptions',
-         params: { date: '2026-09-05', moved_to: '2026-09-04' }
+         params: { date: '2026-09-05', moved_to: '04/09/2026' }
 
     expect(checklist).to include(a_string_starting_with('✗ S-24 sex 04/09'),
                                  a_string_starting_with('— 05/09 mudou para 04/09'))
