@@ -29,5 +29,5 @@ end
 
 # Server time; the reminder is about due dates, so any morning hour works.
 every 1.day, at: '11:00 am' do
-  rake 'finance:remind_bills'
+  rake 'finance:daily'
 end

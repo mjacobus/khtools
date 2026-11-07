@@ -79,6 +79,9 @@
               <%= document.drive_name %>
               <span class="badge bg-secondary"><%= t("app.finance_document_states.#{document.state}") %></span>
             <% end %>
+            <% if document.flagged?(:trashed) %>
+              <span class="badge bg-danger">apagado no Drive</span>
+            <% end %>
             <% if kind == 'bill' %>
               <%= render 'payment_badge', bill: document %>
             <% elsif (paid = @paid_bills[document.bill_id]) %>

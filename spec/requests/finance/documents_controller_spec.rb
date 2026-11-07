@@ -76,6 +76,14 @@ RSpec.describe Finance::DocumentsController do
     expect(page.at('li .badge').text).to eq('aguardando confirmação')
   end
 
+  it 'warns about files deleted in Drive' do
+    document(kind: 's26', flags: 'trashed', drive_url: 'https://drive/gone')
+
+    get '/finance/documents', params: { month: '2026-09' }
+
+    expect(page.at('li .badge').text).to eq('apagado no Drive')
+  end
+
   describe 'editing' do
     let(:drive) { instance_double(GoogleDrive::Client) }
     let(:month_folder) { instance_double(Finance::MonthFolder, find_or_create: 'OCT') }

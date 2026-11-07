@@ -14,6 +14,9 @@ module GoogleDrive
                    '&keepRevisionForever=true'
     UPLOAD_URL = "#{UPLOAD_BASE}?#{UPLOAD_QUERY}".freeze
     FOLDER = 'application/vnd.google-apps.folder'
+    CHANGES_URL = 'https://www.googleapis.com/drive/v3/changes'
+    CHANGE_FIELDS = 'nextPageToken,newStartPageToken,' \
+                    'changes(fileId,removed,file(name,parents,trashed))'
 
     def initialize(client_id:, client_secret:, refresh_token: nil)
       @refresh_token = refresh_token
@@ -93,7 +96,41 @@ module GoogleDrive
       { id: file.fetch('id'), web_view_link: file['webViewLink'] }
     end
 
+    def start_page_token
+      get("#{CHANGES_URL}/startPageToken", {}).fetch('startPageToken')
+    end
+
+    def name(id:)
+      get("#{FILES_URL}/#{id}", fields: 'name').fetch('name')
+    end
+
+    # Everything changed since page_token, and the token to ask from next time.
+    def changes(page_token:)
+      pages = [changes_page(page_token)]
+      while (token = pages.last['nextPageToken'])
+        pages << changes_page(token)
+      end
+      [pages.flat_map { |page| page.fetch('changes') }.map { |change| change(change) },
+       pages.last.fetch('newStartPageToken')]
+    end
+
     private
+
+    def changes_page(token)
+      get(CHANGES_URL, pageToken: token, pageSize: 1000, includeItemsFromAllDrives: true,
+                       fields: CHANGE_FIELDS)
+    end
+
+    def change(change)
+      file = change['file'] || {}
+      { id: change['fileId'], removed: change['removed'], name: file['name'],
+        parents: file['parents'], trashed: file['trashed'] }
+    end
+
+    def get(url, params)
+      query = URI.encode_www_form(params.merge(supportsAllDrives: true))
+      request(Net::HTTP::Get.new(URI("#{url}?#{query}")))
+    end
 
     def send_file(http_request, metadata, mime_type, path)
       boundary = "khtools-#{SecureRandom.hex(12)}"
