@@ -78,9 +78,11 @@ class Db::FinanceDocument < ApplicationRecord
   end
 
   # The name the file has in Drive: the bot names what it uploads, the backfill keeps names
-  # until someone edits the file in khtools.
+  # until someone edits the file in khtools, and a rename in Drive itself wins over both.
   def drive_name
-    if backfilled? && !flagged?(:renamed)
+    if drive_filename.present? # renamed in Drive itself (DriveSync)
+      drive_filename
+    elsif backfilled? && !flagged?(:renamed)
       original_filename
     else
       Finance::Naming.filename(document: self)

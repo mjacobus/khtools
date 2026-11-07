@@ -78,6 +78,25 @@ namespace :finance do
     end
   end
 
+  desc 'Bring in names, months and deletions changed directly in Drive (daily, from cron)'
+  task sync_drive: :environment do
+    Db::Account.find_each do |account|
+      if account.finance_enabled? && account.finance_google_refresh_token.present?
+        drive = GoogleDrive::Client.new(
+          refresh_token: account.finance_google_refresh_token,
+          client_id: Rails.application.credentials.dig(:oauth, :google, :key),
+          client_secret: Rails.application.credentials.dig(:oauth, :google, :secret)
+        )
+        Finance::DriveSync.new(account:, drive:).sync
+      end
+    rescue StandardError => exception
+      ErrorHandler.new.notify_error(exception) # one account failing must not skip the others
+    end
+  end
+
+  desc 'Everything the finance bot does once a day'
+  task daily: %i[sync_drive remind_bills]
+
   desc 'Register the files already in Drive (report only; [ACCOUNT_ID,apply] writes)'
   task :backfill, %i[account_id apply] => :environment do |_task, args|
     id = args.fetch(:account_id) { abort 'usage: rake "finance:backfill[ACCOUNT_ID(,apply)]"' }

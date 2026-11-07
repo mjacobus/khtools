@@ -72,7 +72,8 @@ module Finance
     end
 
     def refile
-      @document.assign_attributes(drive_url: move_in_drive[:web_view_link], value_source: 'human')
+      @document.assign_attributes(drive_url: move_in_drive[:web_view_link], value_source: 'human',
+                                  drive_filename: nil)
       @document.add_flag(:renamed)
       @document.record_correction(by_telegram_id: nil, by_name: current_user.name, text: 'khtools')
       @document.save!

@@ -220,4 +220,28 @@ RSpec.describe GoogleDrive::Client do
       expect(query.keys).not_to include('addParents', 'removeParents')
     end
   end
+
+  describe 'changes' do
+    it 'gives the token to start listing changes from' do
+      responses.push(response(200, access_token: 'a', expires_in: 3600),
+                     response(200, startPageToken: '41'))
+
+      expect(client.start_page_token).to eq('41')
+    end
+
+    it 'lists the changes across pages and returns the token for next time' do
+      renamed = { fileId: 'F1', removed: false, file: { name: 'a.pdf', parents: ['P'] } }
+      removed = { fileId: 'F2', removed: true }
+      responses.push(response(200, access_token: 'a', expires_in: 3600),
+                     response(200, changes: [renamed], nextPageToken: '42'),
+                     response(200, changes: [removed], newStartPageToken: '43'))
+
+      changes, token = client.changes(page_token: '41')
+
+      expect(changes)
+        .to eq([{ id: 'F1', removed: false, name: 'a.pdf', parents: ['P'], trashed: nil },
+                { id: 'F2', removed: true, name: nil, parents: nil, trashed: nil }])
+      expect(token).to eq('43')
+    end
+  end
 end
