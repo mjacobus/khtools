@@ -9,6 +9,17 @@ RSpec.describe Db::FinanceDocument do
   it { is_expected.to validate_presence_of(:telegram_chat_id) }
   it { is_expected.to validate_presence_of(:telegram_message_id) }
   it { is_expected.to validate_presence_of(:telegram_file_id) }
+
+  it 'needs no Telegram message when it came from the backfill, however many there are' do
+    account = factories.accounts.create
+    2.times do
+      backfilled = described_class.new(account:, state: 'archived', flags: 'backfill',
+                                       drive_file_id: SecureRandom.hex)
+
+      expect(backfilled.save).to be(true)
+    end
+  end
+
   it { is_expected.to validate_inclusion_of(:state).in_array(described_class::STATES) }
   it { is_expected.to validate_inclusion_of(:kind).in_array(described_class::KINDS) }
 
@@ -77,6 +88,8 @@ RSpec.describe Db::FinanceDocument do
     it 'ignores documents of other accounts and files the bot did not upload' do
       archived(account: factories.accounts.create)
       archived(drive_file_id: nil)
+      archived(flags: 'backfill', telegram_message_id: nil, telegram_chat_id: nil,
+               telegram_file_id: nil)
 
       expect(incoming.replaced_document).to be_nil
     end

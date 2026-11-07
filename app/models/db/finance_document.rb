@@ -9,10 +9,12 @@ class Db::FinanceDocument < ApplicationRecord
 
   belongs_to :account, class_name: 'Db::Account'
 
-  validates :telegram_chat_id, :telegram_message_id, :telegram_file_id, presence: true
+  validates :telegram_chat_id, :telegram_message_id, :telegram_file_id, presence: true,
+                                                                        unless: :backfilled?
   validates :state, inclusion: { in: STATES }
   validates :kind, inclusion: { in: KINDS }
-  validates :telegram_message_id, uniqueness: { scope: %i[account_id telegram_chat_id] }
+  validates :telegram_message_id, uniqueness: { scope: %i[account_id telegram_chat_id] },
+                                  allow_nil: true
 
   scope :stuck, -> { where(state: %w[received confirmed]).where(updated_at: ...10.minutes.ago) }
 
@@ -52,7 +54,7 @@ class Db::FinanceDocument < ApplicationRecord
   end
 
   # Monthly documents have one file per month: a corrected S-26 replaces the one the bot
-  # archived before (same name). Files the bot did not upload are never replaced.
+  # archived before (same name). Files the bot did not upload (backfill) are never replaced.
   def replaced_document
     if Finance::Competence::MONTHLY.include?(kind) && competence
       name = Finance::Naming.filename(document: self)
@@ -63,6 +65,12 @@ class Db::FinanceDocument < ApplicationRecord
   def archived_same_month
     self.class.where(account_id:, state: 'archived', kind:, competence:)
       .where.not(id:).where.not(drive_file_id: nil).order(id: :desc)
+      .reject(&:backfilled?)
+  end
+
+  # Registered from a file already in Drive, not received through Telegram.
+  def backfilled?
+    flagged?(:backfill)
   end
 
   def pdf?
