@@ -44,11 +44,10 @@ module Finance
       kinds.map { |kind| Item.new(kind:, done: present.include?(kind)) }
     end
 
-    # Only what is filed in Drive counts (not a suggestion waiting for confirmation, nor a file
-    # deleted there). S-24s are found by their date, wherever they were filed.
+    # Only what is filed in Drive counts (not a suggestion waiting for confirmation; files
+    # deleted there are hidden by the default scope). S-24s are found by their date.
     def documents
       @account.finance_documents.where(state: 'archived')
-        .where("COALESCE(flags, '') NOT LIKE ?", '%trashed%')
     end
   end
 end

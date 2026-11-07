@@ -46,7 +46,7 @@ RSpec.describe Finance::MonthChecklist do
 
   it 'only counts what is filed in Drive' do
     document('s26', state: 'suggested')
-    document('s30', flags: 'trashed')
+    document('s30', deleted_at: Time.current)
 
     expect(items.to_h { |item| [item.kind, item.done] }).to include('s26' => false, 's30' => false)
   end
