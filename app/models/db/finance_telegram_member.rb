@@ -11,4 +11,19 @@ class Db::FinanceTelegramMember < ApplicationRecord
   rescue ActiveRecord::RecordNotUnique
     nil # the same person arrived twice at the same time
   end
+
+  # The only member whose name has every word of a hand-printed name ("CAIO S." finds
+  # "Caio Souza"), accents and case aside; nil when none or several match.
+  def self.matching(account:, name:)
+    words = words(name)
+    found = account.finance_telegram_members.select do |member|
+      member_words = words(member.name)
+      words.any? && words.all? { |word| member_words.any? { |other| other.start_with?(word) } }
+    end
+    found.one? ? found.first : nil
+  end
+
+  def self.words(text)
+    I18n.transliterate(text.to_s).downcase.scan(/[a-z]+/)
+  end
 end

@@ -7,7 +7,7 @@ module Finance
     URL = URI('https://api.openai.com/v1/responses')
     MODEL = 'gpt-6-luna'
     Result = Struct.new(:is_s24, :date, :congregation_cents, :worldwide_cents, :total_cents,
-                        keyword_init: true)
+                        :collector_name, keyword_init: true)
 
     PROMPT = <<~TEXT
       Esta é a foto de um formulário S-24 "Recibo" de donativos de uma congregação.
@@ -18,7 +18,9 @@ module Finance
       Informe os valores em centavos (R$ 120,00 = 12000).
       Se um valor estiver em branco, use 0. Se a data não estiver legível, use "".
       Se a foto não for de um S-24, responda is_s24 = false.
-      Não transcreva nomes nem assinaturas.
+      Em collector_name, transcreva o nome escrito em letra de forma junto à primeira
+      assinatura (quem recolheu o dinheiro); use "" se não houver nome legível em letra de
+      forma. Não transcreva as assinaturas em si.
     TEXT
 
     SCHEMA = {
@@ -29,9 +31,10 @@ module Finance
         total_cents: { type: 'integer', description: 'número no campo TOTAL, 0 se em branco' },
         date: { type: 'string', description: 'YYYY-MM-DD ou vazio' },
         congregation_cents: { type: 'integer' },
-        worldwide_cents: { type: 'integer' }
+        worldwide_cents: { type: 'integer' },
+        collector_name: { type: 'string', description: 'nome em letra de forma ou vazio' }
       },
-      required: %w[is_s24 total_cents date congregation_cents worldwide_cents],
+      required: %w[is_s24 total_cents date congregation_cents worldwide_cents collector_name],
       additionalProperties: false
     }.freeze
 

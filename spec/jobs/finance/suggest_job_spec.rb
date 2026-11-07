@@ -14,7 +14,7 @@ RSpec.describe Finance::SuggestJob do
   let(:s24_result) do
     Finance::ReceiptReader::Result.new(is_s24: true, date: '2026-11-04',
                                        congregation_cents: 12_000, worldwide_cents: 3000,
-                                       total_cents: 16_000)
+                                       total_cents: 16_000, collector_name: 'BIA LIMA')
   end
 
   before do
@@ -48,6 +48,12 @@ RSpec.describe Finance::SuggestJob do
     expect(telegram.sent.last).to include(reply_to: 10,
                                           text: start_with('2026-11-04 - R$ 150,00 - S-24.jpg'))
     expect(File.binread(document.local_path)).to eq('photo-bytes')
+  end
+
+  it 'keeps the name printed by whoever collected the S-24' do
+    allow(reader).to receive(:read).and_return(s24_result)
+
+    expect(run(received).collector_name).to eq('BIA LIMA')
   end
 
   it 'still suggests when the AI fails, asking for a correction' do
