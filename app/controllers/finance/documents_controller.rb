@@ -4,6 +4,7 @@ module Finance
   class DocumentsController < ApplicationController
     include BillPayments
     include MeetingExceptions
+    include CashHandover
 
     MONTH = /\A\d{4}-\d{2}\z/
 

@@ -86,6 +86,11 @@
             <% if document.flagged?(:trashed) %>
               <span class="badge bg-danger">apagado no Drive</span>
             <% end %>
+            <% if document.cash_received_at %>
+              <span class="badge bg-success">💵 recebido</span>
+            <% elsif document.cash_holder_name %>
+              <span class="badge bg-warning text-dark">💵 com <%= document.cash_holder_name %></span>
+            <% end %>
             <% if kind == 'bill' %>
               <%= render 'payment_badge', bill: document %>
             <% elsif (paid = @paid_bills[document.bill_id]) %>
@@ -95,6 +100,12 @@
           <span class="text-nowrap">
             <%= document.amount_cents && Finance::Money.format(cents: document.amount_cents) %>
           </span>
+          <% if document.cash_holder_name && !document.cash_received_at %>
+            <%= button_to cash_received_finance_document_path(document), class: 'btn btn-sm btn-outline-success',
+                                                                         title: 'Recebi o dinheiro' do %>
+              <i class="bi bi-cash"></i> Recebi
+            <% end %>
+          <% end %>
           <% if kind == 'bill' && document.drive_file_id %>
             <%= link_to payment_finance_document_path(document), class: 'btn btn-sm btn-outline-secondary',
                                                                  title: 'Pagamento', aria: { label: 'Pagamento' } do %>

@@ -229,4 +229,36 @@ RSpec.describe Finance::Intake do
     expect(Finance::SuggestJob).to have_been_enqueued.with(stuck.id)
     expect(Finance::ArchiveJob).to have_been_enqueued.with(confirmed.id)
   end
+
+  describe 'cash of an S-24' do
+    let(:document) do
+      suggested(state: 'archived', cash_holder_telegram_id: 7, cash_holder_name: 'Bia Lima',
+                cash_message_id: 900, drive_url: 'https://drive/x')
+    end
+
+    it 'lets whoever has the cash say so' do
+      intake.handle(update: callback('cash_holder', document, from: 8))
+
+      expect(document.reload).to have_attributes(cash_holder_telegram_id: 8,
+                                                 cash_holder_name: 'Ana')
+      expect(telegram.edits.last).to include(message_id: 900,
+                                             text: a_string_including('está com Ana'))
+    end
+
+    it 'lets the treasurer say the cash arrived' do
+      intake.handle(update: callback('cash_received', document))
+
+      expect(document.reload).to have_attributes(cash_received_by: 'Ana',
+                                                 cash_received_at: be_present)
+      expect(telegram.edits.last).to include(text: a_string_including('recebido por Ana'),
+                                             buttons: nil)
+    end
+
+    it 'only lets confirmers say the cash arrived' do
+      intake.handle(update: callback('cash_received', document, from: 8))
+
+      expect(document.reload.cash_received_at).to be_nil
+      expect(telegram.answers.last[:text]).to eq(Finance::Messages::NOT_A_CONFIRMER)
+    end
+  end
 end

@@ -56,7 +56,8 @@ module Finance
     end
 
     def callback(query)
-      action, id = query['data'].to_s.match(/\Afin:(confirm|edit|discard):(\d+)\z/)&.captures
+      action, id = query['data'].to_s
+        .match(/\Afin:(confirm|edit|discard|cash_holder|cash_received):(\d+)\z/)&.captures
       document = id && documents.find_by(id:)
       telegram.answer_callback(id: query['id'], **callback_answer(action, document, query))
     end
@@ -64,7 +65,7 @@ module Finance
     def callback_answer(action, document, query)
       if document.nil?
         {}
-      elsif confirmer?(query)
+      elsif action == 'cash_holder' || confirmer?(query) # anyone can say they have the cash
         { text: send(action, document, query) }
       else
         { text: Messages::NOT_A_CONFIRMER }
@@ -126,6 +127,29 @@ module Finance
       document.record_correction(by_telegram_id: message.dig('from', 'id'),
                                  by_name: name(message), text: message['text'])
       document.save!
+    end
+
+    def cash_holder(document, query)
+      cash_update(document, cash_holder_telegram_id: query.dig('from', 'id'),
+                            cash_holder_name: name(query))
+    end
+
+    def cash_received(document, query)
+      cash_update(document, cash_received_at: Time.current,
+                            cash_received_by: query.dig('from', 'first_name'))
+    end
+
+    def cash_update(document, changes)
+      if document.cash_received_at
+        Messages::ALREADY_HANDLED
+      else
+        document.update!(changes)
+        telegram.edit_message(chat_id: document.telegram_chat_id,
+                              message_id: document.cash_message_id,
+                              text: Messages.cash(document),
+                              buttons: Messages.cash_buttons(document))
+        nil
+      end
     end
 
     def edit_bot_message(document, text)
