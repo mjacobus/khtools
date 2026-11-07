@@ -26,7 +26,7 @@ RSpec.describe Finance::DocumentsController do
 
     get '/finance/documents', params: { month: '2026-09' }
 
-    expect(page.css('h2').map { |h2| h2.text.strip }).to eq(%w[S-24 S-26])
+    expect(page.css('[data-kind] h2').map { |h2| h2.text.strip }).to eq(%w[S-24 S-26])
     expect(page.at('a[href="https://drive/s24"]').text).to eq('2026-09-02 - R$ 220,00 - S-24.jpg')
     expect(response.body).to include('02/09/2026', 'R$ 220,00')
   end
@@ -47,7 +47,7 @@ RSpec.describe Finance::DocumentsController do
 
     get '/finance/documents', params: { month: '2026-09' }
 
-    expect(page.css('h2')).to be_empty
+    expect(page.css('[data-kind] h2')).to be_empty
   end
 
   it 'opens on the latest month with documents and offers the others' do
@@ -65,7 +65,7 @@ RSpec.describe Finance::DocumentsController do
 
     get '/finance/documents', params: { month: '2026-09' }
 
-    expect(page.at('h2').text.strip).to eq('Não identificados')
+    expect(page.at('[data-kind] h2').text.strip).to eq('Não identificados')
   end
 
   it 'shows where the documents not archived yet stand' do

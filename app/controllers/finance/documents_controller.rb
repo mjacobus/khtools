@@ -3,6 +3,7 @@
 module Finance
   class DocumentsController < ApplicationController
     include BillPayments
+    include MeetingExceptions
 
     MONTH = /\A\d{4}-\d{2}\z/
 
@@ -47,6 +48,15 @@ module Finance
     def groups
       documents.where(competence: @month).order(:document_date, :id).group_by(&:kind)
         .sort_by { |kind, _| Db::FinanceDocument::KINDS.index(kind) }
+    end
+
+    helper_method def checklist
+      MonthChecklist.new(account: current_account, month: @month).items
+    end
+
+    helper_method def meeting_exceptions
+      first = Date.parse("#{@month}-01")
+      current_account.finance_meeting_exceptions.where(date: first..first.end_of_month).order(:date)
     end
 
     helper_method def open_bills
