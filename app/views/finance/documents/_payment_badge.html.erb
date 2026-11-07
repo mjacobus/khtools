@@ -1,0 +1,11 @@
+<% day = ->(date) { date.strftime('%d/%m') } %>
+<% case bill.payment_status %>
+<% when 'paid' %>
+  <span class="badge bg-success">paga em <%= day.call(bill.paid_on) %></span>
+<% when 'paid_late' %>
+  <span class="badge bg-warning text-dark">paga com atraso em <%= day.call(bill.paid_on) %></span>
+<% when 'open' %>
+  <span class="badge bg-info text-dark">vence em <%= day.call(bill.due_date) %></span>
+<% when 'overdue' %>
+  <span class="badge bg-danger">vencida em <%= day.call(bill.due_date) %></span>
+<% end %>

@@ -125,4 +125,26 @@ RSpec.describe Db::FinanceDocument do
     expect(doc.flags).to eq('encrypted_original')
     expect(doc).to be_flagged('encrypted_original')
   end
+
+  describe 'bill payment' do
+    let(:today) { Date.new(2026, 10, 10) }
+
+    def bill(**attributes)
+      described_class.new(kind: 'bill', **attributes)
+    end
+
+    it 'is paid once it has a payment date, late when after the due date' do
+      expect(bill(due_date: today, paid_on: today).payment_status(today:)).to eq('paid')
+      expect(bill(due_date: today, paid_on: today + 1).payment_status(today:)).to eq('paid_late')
+    end
+
+    it 'is open until the due date and overdue after it' do
+      expect(bill(due_date: today).payment_status(today:)).to eq('open')
+      expect(bill(due_date: today - 1).payment_status(today:)).to eq('overdue')
+    end
+
+    it 'has no status without a due date (old bills from the backfill)' do
+      expect(bill.payment_status(today:)).to be_nil
+    end
+  end
 end

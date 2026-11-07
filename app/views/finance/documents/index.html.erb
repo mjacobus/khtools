@@ -25,6 +25,21 @@
   <div class="alert alert-success" role="alert"><%= flash[:notice] %></div>
 <% end %>
 
+<% if open_bills.any? %>
+  <section id="open-bills" class="card border-danger mb-3">
+    <div class="card-header"><h2 class="h6 mb-0"><i class="bi bi-alarm text-danger"></i> Faturas em aberto</h2></div>
+    <ul class="list-group list-group-flush">
+      <% open_bills.each do |bill| %>
+        <li class="list-group-item d-flex align-items-center gap-3">
+          <%= render 'payment_badge', bill: %>
+          <%= link_to bill.drive_name, payment_finance_document_path(bill), class: 'flex-grow-1 text-break' %>
+          <span class="text-nowrap"><%= bill.amount_cents && Finance::Money.format(cents: bill.amount_cents) %></span>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+<% end %>
+
 <% if @months.empty? %>
   <p class="text-muted">Nenhum documento arquivado ainda.</p>
 <% elsif @groups.empty? %>
@@ -64,10 +79,21 @@
               <%= document.drive_name %>
               <span class="badge bg-secondary"><%= t("app.finance_document_states.#{document.state}") %></span>
             <% end %>
+            <% if kind == 'bill' %>
+              <%= render 'payment_badge', bill: document %>
+            <% elsif (paid = @paid_bills[document.bill_id]) %>
+              <small class="text-muted">· pagou <%= link_to paid.drive_name, payment_finance_document_path(paid) %></small>
+            <% end %>
           </span>
           <span class="text-nowrap">
             <%= document.amount_cents && Finance::Money.format(cents: document.amount_cents) %>
           </span>
+          <% if kind == 'bill' && document.drive_file_id %>
+            <%= link_to payment_finance_document_path(document), class: 'btn btn-sm btn-outline-secondary',
+                                                                 title: 'Pagamento', aria: { label: 'Pagamento' } do %>
+              <i class="bi bi-cash-coin"></i>
+            <% end %>
+          <% end %>
           <% if document.drive_file_id %>
             <%= link_to edit_finance_document_path(document), class: 'btn btn-sm btn-outline-secondary',
                                                               title: 'Editar', aria: { label: 'Editar' } do %>

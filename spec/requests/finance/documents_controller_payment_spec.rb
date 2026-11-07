@@ -1,0 +1,83 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+
+RSpec.describe Finance::DocumentsController do
+  let(:bill) do
+    document(kind: 'bill', description: 'Luz', document_date: Date.new(2026, 9, 20),
+             amount_cents: 7412)
+  end
+  let(:receipt) do
+    document(kind: 'payment_receipt', document_date: Date.new(2026, 10, 3), amount_cents: 7412)
+  end
+
+  before do
+    grant_access(current_user)
+    current_user.save!
+    travel_to Date.new(2026, 10, 10)
+  end
+
+  def document(**attributes)
+    factories.finance_documents.create(account: current_account, state: 'archived',
+                                       competence: '2026-09', drive_url: 'https://drive/x',
+                                       drive_file_id: SecureRandom.hex(4),
+                                       **attributes)
+  end
+
+  def page
+    Nokogiri::HTML(response.body)
+  end
+
+  def pay(**fields)
+    patch "/finance/documents/#{bill.id}/payment",
+          params: { payment: { due_date: '2026-10-05', paid_on: '',
+                               receipt_id: receipt.id }.merge(fields) }
+  end
+
+  it 'offers the unlinked receipts, the ones with the same amount first' do
+    document(kind: 'payment_receipt', original_filename: 'outro.pdf', amount_cents: 100,
+             document_date: Date.new(2026, 10, 1))
+    receipt
+
+    get "/finance/documents/#{bill.id}/payment"
+
+    options = page.css('select[name="payment[receipt_id]"] option').pluck('value')
+    expect(options).to eq(['', receipt.id.to_s, options.last])
+  end
+
+  it 'links the receipt and takes its date as the payment date' do
+    pay
+
+    expect(bill.reload).to have_attributes(due_date: Date.new(2026, 10, 5),
+                                           paid_on: Date.new(2026, 10, 3), payments: [receipt])
+    expect(response).to redirect_to('/finance/documents?month=2026-09')
+  end
+
+  it 'marks a bill paid without a receipt' do
+    pay(paid_on: '2026-10-08', receipt_id: '')
+
+    expect(bill.reload).to have_attributes(paid_on: Date.new(2026, 10, 8), payments: [])
+  end
+
+  it 'unlinks the receipt and reopens the bill' do
+    pay
+    pay(receipt_id: '', paid_on: '')
+
+    expect(bill.reload).to have_attributes(paid_on: nil, payments: [])
+  end
+
+  it 'only handles bills' do
+    get "/finance/documents/#{receipt.id}/payment"
+
+    expect(response).to have_http_status(:not_found)
+  end
+
+  it 'shows on the month page what is paid, late or open' do
+    bill.update!(due_date: Date.new(2026, 10, 5))
+
+    get '/finance/documents', params: { month: '2026-09' }
+
+    expect(page.at('li .badge').text).to eq('vencida em 05/10')
+    expect(page.at('#open-bills').text).to include('Luz')
+  end
+end

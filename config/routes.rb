@@ -26,7 +26,12 @@ Rails.application.routes.draw do
   post '/finance/telegram/:account_id', to: 'finance/telegram_webhooks#create'
 
   namespace :finance do
-    resources :documents, only: %i[index edit update]
+    resources :documents, only: %i[index edit update] do
+      member do
+        get :payment
+        patch :payment, action: :update_payment
+      end
+    end
     resources :integrations, only: %i[show update], param: :section do
       post :members, on: :member
     end
