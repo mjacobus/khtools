@@ -322,7 +322,15 @@ pt-BR:
       x_contacts:
         one: "%{count} contato"
         other: "%{count} contatos"
+    finance_document_states:
+      received: 'recebido'
+      suggested: 'aguardando confirmação'
+      confirmed: 'arquivando'
+      archived: 'arquivado'
+      discarded: 'descartado'
+      failed: 'falhou'
     links:
+      finance_documents: 'Documentos das contas'
       finance_integrations: 'Integrações'
       finance_integration_telegram: 'Telegram'
       finance_integration_drive: 'Google Drive'

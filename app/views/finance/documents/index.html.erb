@@ -1,0 +1,46 @@
+<h1><%= t('app.links.finance_documents') %></h1>
+
+<% if @months.empty? %>
+  <p class="text-muted">Nenhum documento arquivado ainda.</p>
+<% else %>
+  <%= form_with url: finance_documents_path, method: :get, class: 'mb-4' do %>
+    <label for="month" class="form-label">Mês</label>
+    <%= select_tag :month, options_for_select(@months, @month), class: 'form-select', style: 'max-width: 12rem',
+                           onchange: 'this.form.requestSubmit()' %>
+  <% end %>
+
+  <% @groups.each do |kind, documents| %>
+    <section class="mb-4">
+      <% if kind == 'unknown' %>
+        <h2 class="h5"><i class="bi bi-exclamation-triangle text-warning"></i> Não identificados</h2>
+      <% else %>
+        <h2 class="h5"><%= Finance::Naming::LABELS.fetch(kind) %></h2>
+      <% end %>
+      <table class="table table-sm" style="table-layout: fixed">
+        <colgroup>
+          <col style="width: 7rem">
+          <col>
+          <col style="width: 8rem">
+        </colgroup>
+        <tbody>
+          <% documents.each do |document| %>
+            <tr>
+              <td class="text-nowrap"><%= document.document_date&.strftime('%d/%m/%Y') %></td>
+              <td class="text-break">
+                <% if document.drive_url %>
+                  <%= link_to document.drive_name, document.drive_url, target: '_blank', rel: 'noopener' %>
+                <% else %>
+                  <%= document.drive_name %>
+                  <span class="badge bg-secondary"><%= t("app.finance_document_states.#{document.state}") %></span>
+                <% end %>
+              </td>
+              <td class="text-end text-nowrap">
+                <%= document.amount_cents && Finance::Money.format(cents: document.amount_cents) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </section>
+  <% end %>
+<% end %>

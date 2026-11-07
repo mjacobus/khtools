@@ -22,4 +22,12 @@ RSpec.describe Sidebar::SidebarComponent, type: :component do
     expect(links).to include('/finance/integrations/telegram', '/finance/integrations/drive',
                              '/finance/integrations/ai')
   end
+
+  it 'shows the account documents only to people with access to them' do
+    expect(links).not_to include('/finance/documents')
+
+    user.grant_controller_access('finance/documents', action: 'index')
+
+    expect(links).to include('/finance/documents')
+  end
 end
