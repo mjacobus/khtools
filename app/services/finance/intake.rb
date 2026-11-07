@@ -154,8 +154,12 @@ module Finance
     end
 
     def cash_holder(document, query)
-      cash_update(document, cash_holder_telegram_id: query.dig('from', 'id'),
-                            cash_holder_name: name(query))
+      if !document.cash_received_at && document.cash_holder_telegram_id == query.dig('from', 'id')
+        Messages::ALREADY_WITH_YOU
+      else
+        cash_update(document, cash_holder_telegram_id: query.dig('from', 'id'),
+                              cash_holder_name: name(query))
+      end
     end
 
     def cash_received(document, query)

@@ -266,6 +266,12 @@ RSpec.describe Finance::Intake do
                                              text: a_string_including('está com Ana'))
     end
 
+    it 'tells whoever already has it that it is with them' do
+      intake.handle(update: callback('cash_holder', document, from: 7))
+
+      expect(telegram.answers.last[:text]).to eq(Finance::Messages::ALREADY_WITH_YOU)
+    end
+
     it 'lets the treasurer say the cash arrived' do
       intake.handle(update: callback('cash_received', document))
 
