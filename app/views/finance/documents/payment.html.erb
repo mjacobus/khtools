@@ -1,3 +1,4 @@
+<div data-turbo="true">
 <h1 class="h3">Pagamento da fatura</h1>
 <p class="text-muted">
   <%= link_to @bill.drive_name, @bill.drive_url, target: '_blank', rel: 'noopener' %>
@@ -38,3 +39,4 @@
   <%= f.submit 'Salvar', class: 'btn btn-primary' %>
   <%= link_to 'Cancelar', finance_documents_path(month: @bill.competence), class: 'btn btn-link' %>
 <% end %>
+</div>
