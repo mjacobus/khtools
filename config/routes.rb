@@ -33,6 +33,8 @@ Rails.application.routes.draw do
         post :cash_received
       end
       collection do
+        get :archive
+        post :archive, action: :move_to_archive
         post :meeting_exceptions, action: :create_meeting_exception
         delete :meeting_exceptions, action: :destroy_meeting_exception
       end

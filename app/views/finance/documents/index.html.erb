@@ -21,6 +21,8 @@
   <% end %>
 </div>
 
+<p class="mb-3 small"><%= link_to 'Arquivar meses auditados', archive_finance_documents_path %></p>
+
 <% if flash[:notice] %>
   <div class="alert alert-success" role="alert"><%= flash[:notice] %></div>
 <% end %>

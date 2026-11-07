@@ -5,6 +5,7 @@ module Finance
     include BillPayments
     include MeetingExceptions
     include CashHandover
+    include ArchiveMoves
 
     MONTH = /\A\d{4}-\d{2}\z/
 
