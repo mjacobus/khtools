@@ -20,6 +20,12 @@ RSpec.describe Finance::Correction do
                                         value_source: 'human')
   end
 
+  it 'fixes the total written on the S-24, which only feeds the mismatch warning' do
+    apply('total 213,10')
+
+    expect(document).to have_attributes(written_total_cents: 21_310, amount_cents: nil)
+  end
+
   it 'accepts Portuguese type labels, Brazilian dates and a free description' do
     apply('tipo comprovante valor 104,33 data 26/10/2026 desc RGE luz')
 
@@ -45,7 +51,7 @@ RSpec.describe Finance::Correction do
     expect do
       apply('preco 10')
     end.to raise_error(described_class::Error,
-                       /tipo, data, valor, local, mundial, mes, desc/)
+                       /tipo, data, valor, local, mundial, total, mes, desc/)
   end
 
   it 'rejects bad values' do
