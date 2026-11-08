@@ -15,6 +15,7 @@ module Finance
       @months = (months | [@month]).compact.sort.reverse
       @groups = groups
       @paid_bills = paid_bills
+      @cash_ledger = cash_ledger
     end
 
     def edit
@@ -36,6 +37,12 @@ module Finance
 
     def documents
       current_account.finance_documents.where.not(state: 'discarded')
+    end
+
+    # Per person: [name, S-24 count, cents] of the cash they still hold.
+    def cash_ledger
+      documents.cash_pending.group(:cash_holder_name).order(:cash_holder_name)
+        .pluck(:cash_holder_name, Arel.sql('COUNT(*)'), Arel.sql('SUM(amount_cents)'))
     end
 
     def editable

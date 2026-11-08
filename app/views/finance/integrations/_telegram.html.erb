@@ -7,7 +7,7 @@
 
 <fieldset class="mb-3">
   <legend class="h6">Pessoas do grupo</legend>
-  <p class="text-muted small">Marque quem pode confirmar documentos. Ligue cada pessoa a um publicador para o bot chamá-la pelo nome dele.</p>
+  <p class="text-muted small">Marque quem pode confirmar documentos. Ligue cada pessoa a um publicador para o bot chamá-la pelo nome dele, e dê um papel a quem cuida das contas ou recolhe o dinheiro.</p>
   <% if @integration.people.empty? %>
     <p class="text-muted">Ninguém apareceu no grupo ainda. Peça para cada pessoa mandar uma mensagem lá.</p>
   <% end %>
@@ -23,6 +23,10 @@
                      options_for_select(@integration.publishers, @integration.member_publisher_ids[id]),
                      include_blank: 'Sem publicador', class: 'form-select form-select-sm w-auto',
                      'aria-label': "Publicador de #{name || id}" %>
+      <%= select_tag "integration[member_roles][#{id}]",
+                     options_for_select(Db::FinanceTelegramMember::ROLES.invert, @integration.member_roles[id]),
+                     include_blank: 'Sem papel', class: 'form-select form-select-sm w-auto',
+                     'aria-label': "Papel de #{name || id}" %>
     </div>
   <% end %>
 </fieldset>

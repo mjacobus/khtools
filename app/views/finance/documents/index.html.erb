@@ -54,6 +54,25 @@
   </details>
 <% end %>
 
+<% if @cash_ledger.any? %>
+  <details id="cash-ledger" class="card mb-2">
+    <summary class="card-header">
+      <i class="bi bi-cash-stack"></i>
+      Dinheiro em mãos · <%= Finance::Money.format(cents: @cash_ledger.sum { |_, _, cents| cents.to_i }) %>
+      <small class="text-muted d-block">Quem não aparece está quite.</small>
+    </summary>
+    <ul class="list-group list-group-flush">
+      <% @cash_ledger.each do |name, count, cents| %>
+        <li class="list-group-item d-flex align-items-center gap-3">
+          <span class="flex-grow-1"><%= name %></span>
+          <small class="text-muted text-nowrap"><%= count %> S-24</small>
+          <span class="text-nowrap"><%= Finance::Money.format(cents: cents.to_i) %></span>
+        </li>
+      <% end %>
+    </ul>
+  </details>
+<% end %>
+
 <% if @month %>
   <% done = checklist.count(&:done) %>
   <details id="checklist-panel" class="card mb-3">

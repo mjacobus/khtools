@@ -28,6 +28,10 @@ class Db::FinanceDocument < ApplicationRecord
   scope :open_bills, lambda {
     where(kind: 'bill', paid_on: nil).where.not(due_date: nil).where.not(state: 'discarded')
   }
+  # S-24 cash someone still holds: the treasurer hasn't tapped "Recebi" yet.
+  scope :cash_pending, lambda {
+    where(kind: 's24', state: 'archived', cash_received_at: nil).where.not(cash_holder_name: nil)
+  }
   scope :stuck, -> { where(state: %w[received confirmed]).where(updated_at: ...10.minutes.ago) }
 
   # Moves from one state to another only if nobody else did first (Telegram delivers

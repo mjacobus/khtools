@@ -30,6 +30,15 @@ RSpec.describe Finance::CashReminders do
                                                 '<a href="tg://user?id=7">Bia &lt;Lima&gt;</a>')
   end
 
+  it 'names who looks after the accounts, mentioning them' do
+    account.finance_telegram_members.create!(telegram_id: 1, name: 'Marcelo', role: 'treasurer')
+    s24(4)
+
+    expect(remind[:text]).to start_with(
+      "💵 Dinheiro a entregar a <a href=\"tg://user?id=1\">Marcelo</a>\n"
+    )
+  end
+
   it 'leaves out cash already received, S-24s without a holder and today' do
     s24(4, cash_received_at: Time.current)
     s24(7, cash_holder_name: nil, cash_holder_telegram_id: nil)
