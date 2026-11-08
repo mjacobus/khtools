@@ -44,9 +44,9 @@ module Finance
     end
 
     def integration_params
-      params.require(:integration).permit(:telegram_chat_id, :drive_root_folder_id,
-                                          *Integration::SECRETS.keys, confirmer_telegram_ids: [],
-                                                                      member_publisher_ids: {})
+      params.require(:integration)
+        .permit(:telegram_chat_id, :drive_root_folder_id, *Integration::SECRETS.keys,
+                confirmer_telegram_ids: [], **Integration::MEMBER_FIELDS.keys.index_with({}))
     end
   end
 end

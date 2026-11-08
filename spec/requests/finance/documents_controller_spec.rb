@@ -113,6 +113,19 @@ RSpec.describe Finance::DocumentsController do
 
     before { allow(Telegram::Client).to receive(:new).and_return(telegram) }
 
+    it 'adds up the cash each person still holds, in any month' do
+      document(kind: 's24', cash_holder_name: 'Bia', amount_cents: 10_000, competence: '2026-08')
+      document(kind: 's24', cash_holder_name: 'Bia', amount_cents: 5_000)
+      document(kind: 's24', cash_holder_name: 'Caio', amount_cents: 2_000)
+      document(kind: 's24', cash_holder_name: 'Caio', amount_cents: 9_000,
+               cash_received_at: Time.current)
+
+      get '/finance/documents', params: { month: '2026-09' }
+
+      expect(page.css('#cash-ledger li').map { |line| line.text.squish })
+        .to eq(['Bia 2 S-24 R$ 150,00', 'Caio 1 S-24 R$ 20,00'])
+    end
+
     it 'shows who holds it' do
       s24
 

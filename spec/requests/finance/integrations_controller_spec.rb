@@ -70,6 +70,31 @@ RSpec.describe Finance::IntegrationsController do
     expect(member.reload.publisher).to be_nil
   end
 
+  it 'does not link a publisher of another congregation' do
+    stranger = factories.publishers.create
+    member = current_account.finance_telegram_members.create!(telegram_id: 7, name: 'Bia')
+
+    update(:telegram, member_publisher_ids: { '7' => stranger.id.to_s })
+
+    expect(response).to have_http_status(:unprocessable_entity)
+    expect(member.reload.publisher).to be_nil
+  end
+
+  it 'gives people a role' do
+    member = current_account.finance_telegram_members.create!(telegram_id: 7, name: 'Marcelo J')
+
+    get '/finance/integrations/telegram'
+    select = Nokogiri::HTML(response.body).at('select[name="integration[member_roles][7]"]')
+    expect(select.text).to include('Cuida das contas', 'Recolhe')
+
+    update(:telegram, member_roles: { '7' => 'treasurer' })
+    expect(member.reload.role).to eq('treasurer')
+
+    update(:telegram, member_roles: { '7' => 'boss' })
+    expect(member.reload.role).to eq('treasurer')
+    expect(response).to have_http_status(:unprocessable_entity)
+  end
+
   it 'saves who can confirm from the checkboxes' do
     update(:telegram, confirmer_telegram_ids: ['', '8', '9'], telegram_chat_id: '-500')
 

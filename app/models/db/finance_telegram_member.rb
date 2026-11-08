@@ -6,6 +6,12 @@ class Db::FinanceTelegramMember < ApplicationRecord
   belongs_to :account, class_name: 'Db::Account'
   belongs_to :publisher, optional: true, class_name: 'Db::Publisher'
 
+  # Who confirms documents is kept apart, on the account: anyone may have that and a role.
+  ROLES = { 'treasurer' => 'Cuida das contas', 'collector' => 'Recolhe' }.freeze
+
+  validates :role, inclusion: { in: ROLES.keys }, allow_nil: true
+  validate :publisher_of_the_account
+
   # How the bot calls them: the linked publisher's name, else the one they use on Telegram.
   def display_name
     publisher&.name || name
@@ -37,5 +43,13 @@ class Db::FinanceTelegramMember < ApplicationRecord
 
   def self.words(text)
     I18n.transliterate(text.to_s).downcase.scan(/[a-z]+/)
+  end
+
+  private
+
+  def publisher_of_the_account
+    if publisher && publisher.account_id != account_id
+      errors.add(:publisher, :invalid)
+    end
   end
 end
