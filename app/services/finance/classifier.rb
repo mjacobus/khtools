@@ -26,6 +26,7 @@ module Finance
       [/S-25/, :audit_report],
       [/#{Regexp.escape(ATV_CNPJ)}/, :remittance_receipt],
       [/Carta de Agradecimento/i, :thank_you_letter],
+      [/Fundos mantidos em Betel|Conta da Congrega[çc][ãa]o em Betel/i, :betel_statement],
       [/Extrato/i, :statement],
       [/Comprovante de (?:transa|pagamento)|Dados do pagamento/i, :payment_receipt],
       [/Vencimento|Fatura|Boleto|Nota Fiscal|NF-e/i, :bill]
@@ -86,12 +87,17 @@ module Finance
 
     # The last complete month covered: banks put the previous day's balance and the
     # emission date around the month, so the latest date decides.
-    def statement
+    def statement(kind: 'statement')
       last = @text.scan(DATE).filter_map { |day| date(day.join('/')) }.max
       if last && last != last.end_of_month
         last = last.prev_month
       end
-      Result.new(kind: 'statement', period: last&.strftime('%Y-%m'))
+      Result.new(kind:, period: last&.strftime('%Y-%m'))
+    end
+
+    # The congregation's funds kept at Betel, apart from the bank account.
+    def betel_statement
+      statement(kind: 'betel_statement')
     end
 
     def bill

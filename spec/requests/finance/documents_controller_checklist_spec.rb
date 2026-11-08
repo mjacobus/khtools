@@ -26,7 +26,7 @@ RSpec.describe Finance::DocumentsController do
     get '/finance/documents', params: { month: '2026-09' }
     html = Nokogiri::HTML(response.body)
 
-    expect(html.at('details#checklist-panel summary').text.squish).to eq('Checklist 1/7')
+    expect(html.at('details#checklist-panel summary').text.squish).to eq('Checklist 1/8')
     expect(html.at('[data-turbo="true"] details#checklist-panel #checklist')).to be_present
   end
 

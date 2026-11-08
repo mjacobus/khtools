@@ -7,6 +7,7 @@ module Finance
       'payment_receipt' => 'Comprovante',
       'bill' => 'Fatura',
       'statement' => 'Extrato',
+      'betel_statement' => 'Extrato Betel',
       's26' => 'S-26',
       's30' => 'S-30',
       'remittance_record' => 'Remessa Betel TO-62',
