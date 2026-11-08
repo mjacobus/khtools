@@ -64,6 +64,14 @@ RSpec.describe Finance::Classifier do
     expect(classify(text)).to have_attributes(kind: 'statement', period: '2026-10')
   end
 
+  it 'tells the Betel account statement apart from the bank statement' do
+    text = "Extrato de Outubro 2026\nCongregação Exemplo\nFundos mantidos em Betel (BRL)\n" \
+           "Saldo inicial 1.000,00\n31/10/2026 1234567 Donativos recebidos 100,00\n" \
+           'quarta-feira, 4 de novembro de 2026 10:10'
+
+    expect(classify(text)).to have_attributes(kind: 'betel_statement', period: '2026-10')
+  end
+
   it 'files a statement under the last complete month it covers' do
     text = "Extrato\nPeríodo: 30/09/2026 a 03/11/2026\n30/09/2026 Saldo Anterior\n" \
            "15/10/2026 Pix recebido\n03/11/2026 Saldo do dia"

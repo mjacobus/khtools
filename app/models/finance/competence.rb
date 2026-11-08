@@ -2,7 +2,7 @@
 
 module Finance
   module Competence
-    MONTHLY = %w[statement s26 s30 thank_you_letter audit_report].freeze
+    MONTHLY = %w[statement betel_statement s26 s30 thank_you_letter audit_report].freeze
     REMITTANCE = %w[remittance_record remittance_receipt].freeze
 
     module_function

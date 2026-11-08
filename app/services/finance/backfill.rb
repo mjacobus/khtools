@@ -84,6 +84,7 @@ module Finance
         [/S-?26(?!\d)|folha de contas/i, 's26'],
         [/S-?30(?!\d)|relat[óo]rio mensal/i, 's30'],
         [/TO-?62|registro de transfer|transa[çc](?:[ãa]o|[õo]es)/i, 'remittance_record'],
+        [/extrato.*betel|betel.*extrato/i, 'betel_statement'],
         [/extrato/i, 'statement'],
         [/remessa|betel/i, 'remittance_receipt'],
         [/recibo|S-?24|donativo/i, 's24'],

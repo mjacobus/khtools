@@ -3,7 +3,7 @@
 class Db::FinanceDocument < ApplicationRecord
   STATES = %w[received suggested confirmed archived discarded failed].freeze
   KINDS = %w[
-    s24 payment_receipt bill statement s26 s30 remittance_record remittance_receipt
+    s24 payment_receipt bill statement betel_statement s26 s30 remittance_record remittance_receipt
     thank_you_letter audit_report unknown
   ].freeze
 
