@@ -55,20 +55,19 @@ RSpec.describe Finance::IntegrationsController do
     expect(response.body).to include('-500', 'Bia Lima', 'Caio Reis')
   end
 
-  it 'links each person in the group to a user, so the bot calls them by that name' do
-    marcelo = factories.users.create(name: 'Marcelo Jacobus', account: current_account)
-    current_account.finance_telegram_members.create!(telegram_id: 7, name: 'Marcelo J')
+  it 'links each person in the group to a publisher, so the bot calls them by that name' do
+    marcelo = factories.publishers.create(name: 'Marcelo Jacobus', account: current_account)
+    member = current_account.finance_telegram_members.create!(telegram_id: 7, name: 'Marcelo J')
 
     get '/finance/integrations/telegram'
-    page = Nokogiri::HTML(response.body)
-    select = page.at('select[name="integration[member_user_ids][7]"]')
+    select = Nokogiri::HTML(response.body).at('select[name="integration[member_publisher_ids][7]"]')
     expect(select.text).to include('Marcelo Jacobus')
 
-    update(:telegram, member_user_ids: { '7' => marcelo.id.to_s })
-    expect(current_account.finance_telegram_members.find_by(telegram_id: 7).user).to eq(marcelo)
+    update(:telegram, member_publisher_ids: { '7' => marcelo.id.to_s })
+    expect(member.reload.publisher).to eq(marcelo)
 
-    update(:telegram, member_user_ids: { '7' => '' })
-    expect(current_account.finance_telegram_members.find_by(telegram_id: 7).user).to be_nil
+    update(:telegram, member_publisher_ids: { '7' => '' })
+    expect(member.reload.publisher).to be_nil
   end
 
   it 'saves who can confirm from the checkboxes' do

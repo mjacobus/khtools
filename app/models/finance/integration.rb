@@ -10,7 +10,7 @@ module Finance
                 statement_password: :finance_statement_password }.freeze
 
     attr_reader :account, :telegram_chat_id, :drive_root_folder_id, :confirmer_telegram_ids,
-                :member_user_ids
+                :member_publisher_ids
 
     CHAT_ID_MESSAGE = ->(*) { I18n.t('app.messages.finance_chat_id') }
 
@@ -27,8 +27,8 @@ module Finance
       @telegram_chat_id = account.finance_telegram_chat_id
       @drive_root_folder_id = account.finance_drive_root_folder_id
       @confirmer_telegram_ids = account.finance_confirmer_telegram_ids.to_s.split(',')
-      @member_user_ids = account.finance_telegram_members.where.not(user_id: nil)
-        .to_h { |member| [member.telegram_id.to_s, member.user_id] }
+      @member_publisher_ids = account.finance_telegram_members.where.not(publisher_id: nil)
+        .to_h { |member| [member.telegram_id.to_s, member.publisher_id] }
     end
 
     # Only the fields sent are touched: each section's page sends its own.
@@ -56,8 +56,8 @@ module Finance
       members + unknown.map { |id| [id, nil] }
     end
 
-    def users
-      account.users.order(:name).pluck(:name, :id)
+    def publishers
+      account.publishers.pluck(:name, :id)
     end
 
     private
@@ -76,8 +76,8 @@ module Finance
       if params.key?(:confirmer_telegram_ids)
         @confirmer_telegram_ids = Array(params[:confirmer_telegram_ids]).compact_blank
       end
-      if params.key?(:member_user_ids)
-        @member_user_ids = params[:member_user_ids].to_h.transform_values(&:presence)
+      if params.key?(:member_publisher_ids)
+        @member_publisher_ids = params[:member_publisher_ids].to_h.transform_values(&:presence)
       end
     end
 
@@ -88,7 +88,7 @@ module Finance
       assign_secrets(params)
       account.transaction do
         account.save!
-        link_users(params)
+        link_publishers(params)
       end
     end
 
@@ -101,11 +101,11 @@ module Finance
     end
 
     # A person can be linked before the bot has seen them (a confirmer saved by id).
-    def link_users(params)
-      if params.key?(:member_user_ids)
-        member_user_ids.each do |telegram_id, user_id|
+    def link_publishers(params)
+      if params.key?(:member_publisher_ids)
+        member_publisher_ids.each do |telegram_id, publisher_id|
           account.finance_telegram_members.find_or_initialize_by(telegram_id:)
-            .update!(user: user_id && account.users.find(user_id))
+            .update!(publisher: publisher_id && account.publishers.find(publisher_id))
         end
       end
     end

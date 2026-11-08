@@ -212,10 +212,10 @@ module Finance
       end
     end
 
-    # The linked user's name when there is one: the bot calls people by it.
+    # The linked publisher's name when there is one: the bot calls people by it.
     def name(payload)
       member = account.finance_telegram_members.find_by(telegram_id: payload.dig('from', 'id'))
-      member&.user&.name || telegram_name(payload)
+      member&.publisher&.name || telegram_name(payload)
     end
 
     def telegram_name(payload)

@@ -55,9 +55,9 @@ RSpec.describe Finance::Intake do
                                                                sent_by_name: 'Bia Lima')
   end
 
-  it 'calls people by the name of the user they are linked to' do
-    user = factories.users.create(name: 'Beatriz Lima', account:)
-    account.finance_telegram_members.create!(telegram_id: 7, name: 'Bia', user:)
+  it 'calls people by the name of the publisher they are linked to' do
+    publisher = factories.publishers.create(name: 'Beatriz Lima', account:)
+    account.finance_telegram_members.create!(telegram_id: 7, name: 'Bia', publisher:)
 
     intake.handle(update: photo_update)
 

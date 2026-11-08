@@ -4,11 +4,11 @@
 # instead of Telegram ids. The Bot API can't list a group's members.
 class Db::FinanceTelegramMember < ApplicationRecord
   belongs_to :account, class_name: 'Db::Account'
-  belongs_to :user, optional: true
+  belongs_to :publisher, optional: true, class_name: 'Db::Publisher'
 
-  # How the bot calls them: the linked user's name, else the one they use on Telegram.
+  # How the bot calls them: the linked publisher's name, else the one they use on Telegram.
   def display_name
-    user&.name || name
+    publisher&.name || name
   end
 
   def self.remember(account:, telegram_id:, name:)
@@ -18,13 +18,14 @@ class Db::FinanceTelegramMember < ApplicationRecord
     nil # the same person arrived twice at the same time
   end
 
-  # The only member whose name (on Telegram or of the linked user) has every word of a
+  # The only member whose name (on Telegram or of the linked publisher) has every word of a
   # hand-printed name ("CAIO S." finds "Caio Souza"), accents and case aside; nil when none
   # or several match.
   def self.matching(account:, name:)
     words = words(name)
-    found = account.finance_telegram_members.includes(:user).select do |member|
-      words.any? && [member.name, member.user&.name].any? { |known| abbreviates?(words, known) }
+    found = account.finance_telegram_members.includes(:publisher).select do |member|
+      known_names = [member.name, member.publisher&.name]
+      words.any? && known_names.any? { |known| abbreviates?(words, known) }
     end
     found.one? ? found.first : nil
   end

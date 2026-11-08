@@ -113,9 +113,10 @@ RSpec.describe Finance::ArchiveJob do
       expect(holder_after_run('Caio S.')).to eq([8, 'Caio Souza'])
     end
 
-    it 'finds the member by the name of the user linked to them' do
-      user = factories.users.create(name: 'Joana Prado', account: document.account)
-      document.account.finance_telegram_members.create!(telegram_id: 10, name: 'Jô', user:)
+    it 'finds the member by the name of the publisher linked to them' do
+      publisher = factories.publishers.create(name: 'Joana Prado', account: document.account)
+      document.account.finance_telegram_members.create!(telegram_id: 10, name: 'Jô',
+                                                        publisher:)
 
       expect(holder_after_run('JOANA P.')).to eq([10, 'Joana Prado'])
     end
