@@ -4,6 +4,12 @@
 # instead of Telegram ids. The Bot API can't list a group's members.
 class Db::FinanceTelegramMember < ApplicationRecord
   belongs_to :account, class_name: 'Db::Account'
+  belongs_to :user, optional: true
+
+  # How the bot calls them: the linked user's name, else the one they use on Telegram.
+  def display_name
+    user&.name || name
+  end
 
   def self.remember(account:, telegram_id:, name:)
     member = account.finance_telegram_members.find_or_initialize_by(telegram_id:)
@@ -12,15 +18,20 @@ class Db::FinanceTelegramMember < ApplicationRecord
     nil # the same person arrived twice at the same time
   end
 
-  # The only member whose name has every word of a hand-printed name ("CAIO S." finds
-  # "Caio Souza"), accents and case aside; nil when none or several match.
+  # The only member whose name (on Telegram or of the linked user) has every word of a
+  # hand-printed name ("CAIO S." finds "Caio Souza"), accents and case aside; nil when none
+  # or several match.
   def self.matching(account:, name:)
     words = words(name)
-    found = account.finance_telegram_members.select do |member|
-      member_words = words(member.name)
-      words.any? && words.all? { |word| member_words.any? { |other| other.start_with?(word) } }
+    found = account.finance_telegram_members.includes(:user).select do |member|
+      words.any? && [member.name, member.user&.name].any? { |known| abbreviates?(words, known) }
     end
     found.one? ? found.first : nil
+  end
+
+  def self.abbreviates?(words, name)
+    known = words(name)
+    words.all? { |word| known.any? { |other| other.start_with?(word) } }
   end
 
   def self.words(text)

@@ -67,7 +67,7 @@ module Finance
       else
         member = Db::FinanceTelegramMember.matching(account: @document.account, name:)
         { cash_holder_telegram_id: member&.telegram_id,
-          cash_holder_name: member&.name || name.titleize }
+          cash_holder_name: member&.display_name || name.titleize }
       end
     end
 
