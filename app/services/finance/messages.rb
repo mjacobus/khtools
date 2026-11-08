@@ -2,7 +2,7 @@
 
 module Finance
   # Bot copy shown in the Telegram group.
-  module Messages
+  module Messages # rubocop:disable Metrics/ModuleLength -- all bot copy in one place
     ORIGINS = { 'ai' => 'lido por IA', 'rules' => 'lido do PDF', 'human' => 'informado' }.freeze
     NOT_A_CONFIRMER = 'Só quem confirma as contas pode usar estes botões.'
     NOT_AN_EDITOR = 'Só quem enviou o arquivo ou quem confirma as contas pode corrigir.'
@@ -69,19 +69,25 @@ module Finance
       date = document.document_date
       day = date && "#{WEEKDAYS[date.wday]} #{date.strftime('%d/%m')}"
       what = "💵 Dinheiro do S-24 de #{day} (#{Money.format(cents: document.amount_cents.to_i)})"
-      if document.cash_received_at
-        "#{what}: recebido por #{document.cash_received_by}."
-      else
-        "#{what}\nEstá com: #{document.cash_holder_name}\n" \
-          'O irmão que faz o Pix já recebeu este dinheiro?'
-      end
+      holder = if document.cash_received_at
+                 "Entregue a: #{document.cash_received_by}"
+               else
+                 "Está com: #{document.cash_holder_name}"
+               end
+      pix = document.cash_pix_at ? "Pix: feito por #{document.cash_pix_by}" : 'Pix: pendente'
+      [what, holder, pix].join("\n")
     end
 
     def cash_buttons(document)
+      rows = []
       unless document.cash_received_at
-        [[['🙋 Está comigo', "fin:cash_holder:#{document.id}"],
-          ['✅ Já recebi (faço o Pix)', "fin:cash_received:#{document.id}"]]]
+        rows << [['🙋 Está comigo', "fin:cash_holder:#{document.id}"],
+                 ['✅ Recebi', "fin:cash_received:#{document.id}"]]
       end
+      unless document.cash_pix_at
+        rows << [['💸 Fiz o Pix', "fin:cash_pix:#{document.id}"]]
+      end
+      rows.presence
     end
 
     def edit_prompt

@@ -66,7 +66,7 @@ module Finance
 
     def callback(query)
       action, id = query['data'].to_s
-        .match(/\Afin:(confirm|edit|discard|cash_holder|cash_received):(\d+)\z/)&.captures
+        .match(/\Afin:(confirm|edit|discard|cash_holder|cash_received|cash_pix):(\d+)\z/)&.captures
       document = id && documents.find_by(id:)
       telegram.answer_callback(id: query['id'], **callback_answer(action, document, query))
     end
@@ -163,7 +163,9 @@ module Finance
     end
 
     def cash_holder(document, query)
-      if !document.cash_received_at && document.cash_holder_telegram_id == query.dig('from', 'id')
+      if document.cash_received_at
+        Messages::ALREADY_HANDLED
+      elsif document.cash_holder_telegram_id == query.dig('from', 'id')
         Messages::ALREADY_WITH_YOU
       else
         cash_update(document, cash_holder_telegram_id: query.dig('from', 'id'),
@@ -172,21 +174,30 @@ module Finance
     end
 
     def cash_received(document, query)
-      cash_update(document, cash_received_at: Time.current,
-                            cash_received_by: query.dig('from', 'first_name'))
-    end
-
-    def cash_update(document, changes)
       if document.cash_received_at
         Messages::ALREADY_HANDLED
       else
-        document.update!(changes)
-        telegram.edit_message(chat_id: document.telegram_chat_id,
-                              message_id: document.cash_message_id,
-                              text: Messages.cash(document),
-                              buttons: Messages.cash_buttons(document))
-        nil
+        cash_update(document, cash_received_at: Time.current,
+                              cash_received_by: query.dig('from', 'first_name'))
       end
+    end
+
+    def cash_pix(document, query)
+      if document.cash_pix_at
+        Messages::ALREADY_HANDLED
+      else
+        cash_update(document, cash_pix_at: Time.current,
+                              cash_pix_by: query.dig('from', 'first_name'))
+      end
+    end
+
+    def cash_update(document, changes)
+      document.update!(changes)
+      telegram.edit_message(chat_id: document.telegram_chat_id,
+                            message_id: document.cash_message_id,
+                            text: Messages.cash(document),
+                            buttons: Messages.cash_buttons(document))
+      nil
     end
 
     def edit_bot_message(document, text)

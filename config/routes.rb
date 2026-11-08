@@ -31,6 +31,7 @@ Rails.application.routes.draw do
         get :payment
         patch :payment, action: :update_payment
         post :cash_received
+        post :cash_pix
       end
       collection do
         get :archive

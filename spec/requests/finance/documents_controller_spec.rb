@@ -113,8 +113,26 @@ RSpec.describe Finance::DocumentsController do
 
       expect(s24.reload).to have_attributes(cash_received_by: current_user.name,
                                             cash_received_at: be_present)
-      expect(telegram.edits.last).to include(message_id: 900, buttons: nil)
+      expect(telegram.edits.last).to include(message_id: 900,
+                                             text: a_string_including('Pix: pendente'))
       expect(response).to redirect_to('/finance/documents?month=2026-09')
+    end
+
+    it 'marks the Pix done and updates the message in the group' do
+      post "/finance/documents/#{s24.id}/cash_pix"
+
+      expect(s24.reload).to have_attributes(cash_pix_by: current_user.name, cash_pix_at: be_present)
+      expect(telegram.edits.last).to include(message_id: 900,
+                                             text: a_string_including('Pix: feito por'))
+      expect(response).to redirect_to('/finance/documents?month=2026-09')
+    end
+
+    it 'shows the Pix is still to do' do
+      s24
+
+      get '/finance/documents', params: { month: '2026-09' }
+
+      expect(page.css('li .badge').map(&:text)).to include('Pix pendente')
     end
   end
 
