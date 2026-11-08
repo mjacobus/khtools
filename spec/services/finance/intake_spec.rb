@@ -65,6 +65,14 @@ RSpec.describe Finance::Intake do
     expect(account.finance_telegram_members.pluck(:telegram_id, :name)).to eq([[7, 'Bia Lima']])
   end
 
+  it 'follows the group when Telegram upgrades it to a supergroup with a new id' do
+    intake.handle(update: { 'update_id' => 5,
+                            'message' => { 'message_id' => 13, 'chat' => { 'id' => chat_id },
+                                           'migrate_to_chat_id' => -100_777 } })
+
+    expect(account.reload.finance_telegram_chat_id).to eq('-100777')
+  end
+
   it 'ignores people from other chats' do
     intake.handle(update: photo_update(chat: -1))
 

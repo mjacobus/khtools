@@ -15,13 +15,22 @@ module Finance
         callback(update['callback_query'])
       elsif update['message'] && update.dig('message', 'chat',
                                             'id').to_s == @account.finance_telegram_chat_id.to_s
-        remember(update['message'])
-        message(update['message'])
+        group_message(update['message'])
       end
       retry_stuck
     end
 
     private
+
+    def group_message(message)
+      if message['migrate_to_chat_id']
+        # the group became a supergroup, which has a new id; anything else sent there is ignored
+        @account.update!(finance_telegram_chat_id: message['migrate_to_chat_id'].to_s)
+      else
+        remember(message)
+        message(message)
+      end
+    end
 
     attr_reader :account, :telegram
 
