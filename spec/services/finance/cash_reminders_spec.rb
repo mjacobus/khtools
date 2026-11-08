@@ -25,7 +25,7 @@ RSpec.describe Finance::CashReminders do
   it 'mentions who still holds the cash of past meetings' do
     s24(4)
 
-    expect(remind).to include(html: true, text: "💵 Dinheiro a entregar a quem faz o Pix\n" \
+    expect(remind).to include(html: true, text: "💵 Dinheiro a entregar a quem cuida das contas\n" \
                                                 '• qua 04/11 · R$ 315,00 · com ' \
                                                 '<a href="tg://user?id=7">Bia &lt;Lima&gt;</a>')
   end

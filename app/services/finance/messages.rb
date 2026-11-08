@@ -73,14 +73,14 @@ module Finance
         "#{what}: recebido por #{document.cash_received_by}."
       else
         "#{what}\nEstá com: #{document.cash_holder_name}\n" \
-          'O irmão que faz o Pix já recebeu este dinheiro?'
+          'Já foi entregue a quem cuida das contas?'
       end
     end
 
     def cash_buttons(document)
       unless document.cash_received_at
         [[['🙋 Está comigo', "fin:cash_holder:#{document.id}"],
-          ['✅ Já recebi (faço o Pix)', "fin:cash_received:#{document.id}"]]]
+          ['✅ Recebi', "fin:cash_received:#{document.id}"]]]
       end
     end
 

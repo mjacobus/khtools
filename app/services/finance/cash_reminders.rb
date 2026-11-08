@@ -15,7 +15,7 @@ module Finance
         .where.not(cash_holder_name: nil).order(:document_date)
       if pending.any?
         @telegram.send_message(chat_id: @account.finance_telegram_chat_id, html: true,
-                               text: ['💵 Dinheiro a entregar a quem faz o Pix',
+                               text: ['💵 Dinheiro a entregar a quem cuida das contas',
                                       *pending.map { |document| line(document) }].join("\n"))
       end
     end
