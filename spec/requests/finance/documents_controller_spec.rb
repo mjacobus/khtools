@@ -91,6 +91,19 @@ RSpec.describe Finance::DocumentsController do
     expect(response.body).not_to include('apagado')
   end
 
+  it 'splits each S-24 and the S-24 total into worldwide work and local expenses' do
+    document(kind: 's24', amount_cents: 16_000, worldwide_cents: 11_000, congregation_cents: 5000)
+    document(kind: 's24', amount_cents: 10_000, worldwide_cents: 2000, congregation_cents: 8000)
+
+    get '/finance/documents', params: { month: '2026-09' }
+
+    section = page.at('section[data-kind="s24"]')
+    expect(section.at('.card-header').text.squish)
+      .to include('Obra R$ 130,00 · Local R$ 130,00 · Total R$ 260,00')
+    expect(section.css('li .s24-split').map { |split| split.text.squish })
+      .to contain_exactly('obra R$ 110,00 · local R$ 50,00', 'obra R$ 20,00 · local R$ 80,00')
+  end
+
   describe 'cash of an S-24' do
     let(:telegram) { FakeTelegram.new }
     let(:s24) do

@@ -85,7 +85,13 @@
       </h2>
       <span class="badge rounded-pill bg-secondary"><%= documents.size %></span>
       <% if total.positive? %>
-        <span class="ms-auto text-muted small">Total <%= Finance::Money.format(cents: total) %></span>
+        <span class="ms-auto text-muted small">
+          <% if kind == 's24' %>
+            Obra <%= Finance::Money.format(cents: documents.sum { |d| d.worldwide_cents.to_i }) %> ·
+            Local <%= Finance::Money.format(cents: documents.sum { |d| d.congregation_cents.to_i }) %> ·
+          <% end %>
+          Total <%= Finance::Money.format(cents: total) %>
+        </span>
       <% end %>
     </div>
     <ul class="list-group list-group-flush">
@@ -118,8 +124,14 @@
               <small class="text-muted">· pagou <%= link_to paid.drive_name, payment_finance_document_path(paid) %></small>
             <% end %>
           </span>
-          <span class="text-nowrap">
+          <span class="text-nowrap text-end">
             <%= document.amount_cents && Finance::Money.format(cents: document.amount_cents) %>
+            <% if kind == 's24' && (document.worldwide_cents || document.congregation_cents) %>
+              <small class="s24-split d-block text-muted">
+                obra <%= Finance::Money.format(cents: document.worldwide_cents.to_i) %> ·
+                local <%= Finance::Money.format(cents: document.congregation_cents.to_i) %>
+              </small>
+            <% end %>
           </span>
           <% if document.cash_holder_name && !document.cash_received_at %>
             <%= button_to cash_received_finance_document_path(document), class: 'btn btn-sm btn-outline-success',
