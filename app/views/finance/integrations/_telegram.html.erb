@@ -7,26 +7,50 @@
 
 <fieldset class="mb-3">
   <legend class="h6">Pessoas do grupo</legend>
-  <p class="text-muted small">Marque quem pode confirmar documentos. Ligue cada pessoa a um publicador para o bot chamá-la pelo nome dele, e dê um papel a quem cuida das contas ou recolhe o dinheiro.</p>
+  <p class="text-muted small">Ligue cada pessoa a um publicador para o bot chamá-la pelo nome dele, dê um papel a quem cuida das contas ou recolhe o dinheiro, e marque quem pode confirmar documentos.</p>
   <% if @integration.people.empty? %>
     <p class="text-muted">Ninguém apareceu no grupo ainda. Peça para cada pessoa mandar uma mensagem lá.</p>
   <% end %>
   <%= hidden_field_tag 'integration[confirmer_telegram_ids][]', '' %>
-  <% @integration.people.each do |id, name| %>
-    <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-      <label class="flex-grow-1">
-        <%= check_box_tag 'integration[confirmer_telegram_ids][]', id,
-                          @integration.confirmer_telegram_ids.include?(id), id: "confirmer_#{id}" %>
-        <%= name || 'Sem nome' %> <small class="text-muted">(<%= id %>)</small>
-      </label>
-      <%= select_tag "integration[member_publisher_ids][#{id}]",
-                     options_for_select(@integration.publishers, @integration.member_publisher_ids[id]),
-                     include_blank: 'Sem publicador', class: 'form-select form-select-sm w-auto',
-                     'aria-label': "Publicador de #{name || id}" %>
-      <%= select_tag "integration[member_roles][#{id}]",
-                     options_for_select(Db::FinanceTelegramMember::ROLES.invert, @integration.member_roles[id]),
-                     include_blank: 'Sem papel', class: 'form-select form-select-sm w-auto',
-                     'aria-label': "Papel de #{name || id}" %>
+  <% if @integration.people.any? %>
+    <div class="table-responsive">
+      <table id="group-people" class="table table-sm align-middle">
+        <thead>
+          <tr>
+            <th scope="col">No Telegram</th>
+            <th scope="col">Publicador</th>
+            <th scope="col">Papel</th>
+            <th scope="col" class="text-center">Confirma</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @integration.people.each do |id, name| %>
+            <tr>
+              <td>
+                <%= name || 'Sem nome' %>
+                <small class="text-muted d-block"><%= id %></small>
+              </td>
+              <td>
+                <%= select_tag "integration[member_publisher_ids][#{id}]",
+                               options_for_select(@integration.publishers, @integration.member_publisher_ids[id]),
+                               include_blank: 'Sem publicador', class: 'form-select form-select-sm', style: 'min-width: 10rem',
+                               'aria-label': "Publicador de #{name || id}" %>
+              </td>
+              <td>
+                <%= select_tag "integration[member_roles][#{id}]",
+                               options_for_select(Db::FinanceTelegramMember::ROLES.invert, @integration.member_roles[id]),
+                               include_blank: 'Sem papel', class: 'form-select form-select-sm', style: 'min-width: 10rem',
+                               'aria-label': "Papel de #{name || id}" %>
+              </td>
+              <td class="text-center">
+                <%= check_box_tag 'integration[confirmer_telegram_ids][]', id,
+                                  @integration.confirmer_telegram_ids.include?(id), id: "confirmer_#{id}",
+                                  class: 'form-check-input', 'aria-label': "#{name || id} confirma documentos" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   <% end %>
 </fieldset>
