@@ -6,18 +6,23 @@
 </div>
 
 <fieldset class="mb-3">
-  <legend class="h6">Quem pode confirmar documentos</legend>
+  <legend class="h6">Pessoas do grupo</legend>
+  <p class="text-muted small">Marque quem pode confirmar documentos. Ligue cada pessoa a um publicador para o bot chamá-la pelo nome dele.</p>
   <% if @integration.people.empty? %>
     <p class="text-muted">Ninguém apareceu no grupo ainda. Peça para cada pessoa mandar uma mensagem lá.</p>
   <% end %>
   <%= hidden_field_tag 'integration[confirmer_telegram_ids][]', '' %>
   <% @integration.people.each do |id, name| %>
-    <div>
-      <label>
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+      <label class="flex-grow-1">
         <%= check_box_tag 'integration[confirmer_telegram_ids][]', id,
                           @integration.confirmer_telegram_ids.include?(id), id: "confirmer_#{id}" %>
         <%= name || 'Sem nome' %> <small class="text-muted">(<%= id %>)</small>
       </label>
+      <%= select_tag "integration[member_publisher_ids][#{id}]",
+                     options_for_select(@integration.publishers, @integration.member_publisher_ids[id]),
+                     include_blank: 'Sem publicador', class: 'form-select form-select-sm w-auto',
+                     'aria-label': "Publicador de #{name || id}" %>
     </div>
   <% end %>
 </fieldset>

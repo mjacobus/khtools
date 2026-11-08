@@ -107,7 +107,7 @@ module Finance
     end
 
     def confirmation(query)
-      { confirmed_at: Time.current, confirmed_by: query.dig('from', 'first_name'),
+      { confirmed_at: Time.current, confirmed_by: name(query),
         confirmed_by_telegram_id: query.dig('from', 'id') }
     end
 
@@ -178,7 +178,7 @@ module Finance
         Messages::ALREADY_HANDLED
       else
         cash_update(document, cash_received_at: Time.current,
-                              cash_received_by: query.dig('from', 'first_name'))
+                              cash_received_by: name(query))
       end
     end
 
@@ -187,7 +187,7 @@ module Finance
         Messages::ALREADY_HANDLED
       else
         cash_update(document, cash_pix_at: Time.current,
-                              cash_pix_by: query.dig('from', 'first_name'))
+                              cash_pix_by: name(query))
       end
     end
 
@@ -208,11 +208,17 @@ module Finance
     def remember(payload)
       telegram_id = payload.dig('from', 'id')
       if telegram_id
-        Db::FinanceTelegramMember.remember(account:, telegram_id:, name: name(payload))
+        Db::FinanceTelegramMember.remember(account:, telegram_id:, name: telegram_name(payload))
       end
     end
 
+    # The linked publisher's name when there is one: the bot calls people by it.
     def name(payload)
+      member = account.finance_telegram_members.find_by(telegram_id: payload.dig('from', 'id'))
+      member&.publisher&.name || telegram_name(payload)
+    end
+
+    def telegram_name(payload)
       payload['from'].to_h.values_at('first_name', 'last_name').compact.join(' ').presence
     end
 

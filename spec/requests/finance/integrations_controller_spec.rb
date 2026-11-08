@@ -55,6 +55,21 @@ RSpec.describe Finance::IntegrationsController do
     expect(response.body).to include('-500', 'Bia Lima', 'Caio Reis')
   end
 
+  it 'links each person in the group to a publisher, so the bot calls them by that name' do
+    marcelo = factories.publishers.create(name: 'Marcelo Jacobus', account: current_account)
+    member = current_account.finance_telegram_members.create!(telegram_id: 7, name: 'Marcelo J')
+
+    get '/finance/integrations/telegram'
+    select = Nokogiri::HTML(response.body).at('select[name="integration[member_publisher_ids][7]"]')
+    expect(select.text).to include('Marcelo Jacobus')
+
+    update(:telegram, member_publisher_ids: { '7' => marcelo.id.to_s })
+    expect(member.reload.publisher).to eq(marcelo)
+
+    update(:telegram, member_publisher_ids: { '7' => '' })
+    expect(member.reload.publisher).to be_nil
+  end
+
   it 'saves who can confirm from the checkboxes' do
     update(:telegram, confirmer_telegram_ids: ['', '8', '9'], telegram_chat_id: '-500')
 

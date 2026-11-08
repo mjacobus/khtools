@@ -9,7 +9,8 @@ module Finance
     SECRETS = { telegram_bot_token: :finance_telegram_bot_token, ai_api_key: :ai_api_key,
                 statement_password: :finance_statement_password }.freeze
 
-    attr_reader :account, :telegram_chat_id, :drive_root_folder_id, :confirmer_telegram_ids
+    attr_reader :account, :telegram_chat_id, :drive_root_folder_id, :confirmer_telegram_ids,
+                :member_publisher_ids
 
     CHAT_ID_MESSAGE = ->(*) { I18n.t('app.messages.finance_chat_id') }
 
@@ -26,6 +27,8 @@ module Finance
       @telegram_chat_id = account.finance_telegram_chat_id
       @drive_root_folder_id = account.finance_drive_root_folder_id
       @confirmer_telegram_ids = account.finance_confirmer_telegram_ids.to_s.split(',')
+      @member_publisher_ids = account.finance_telegram_members.where.not(publisher_id: nil)
+        .to_h { |member| [member.telegram_id.to_s, member.publisher_id] }
     end
 
     # Only the fields sent are touched: each section's page sends its own.
@@ -53,17 +56,28 @@ module Finance
       members + unknown.map { |id| [id, nil] }
     end
 
+    def publishers
+      account.publishers.pluck(:name, :id)
+    end
+
     private
 
     def assign(params)
+      assign_people(params)
       if params.key?(:telegram_chat_id)
         @telegram_chat_id = params[:telegram_chat_id].to_s.strip.delete_suffix('.')
       end
       if params.key?(:drive_root_folder_id)
         @drive_root_folder_id = folder_id(params[:drive_root_folder_id].to_s.strip)
       end
+    end
+
+    def assign_people(params)
       if params.key?(:confirmer_telegram_ids)
         @confirmer_telegram_ids = Array(params[:confirmer_telegram_ids]).compact_blank
+      end
+      if params.key?(:member_publisher_ids)
+        @member_publisher_ids = params[:member_publisher_ids].to_h.transform_values(&:presence)
       end
     end
 
@@ -71,12 +85,29 @@ module Finance
       account.assign_attributes(finance_telegram_chat_id: telegram_chat_id,
                                 finance_drive_root_folder_id: drive_root_folder_id,
                                 finance_confirmer_telegram_ids: confirmer_telegram_ids.join(','))
+      assign_secrets(params)
+      account.transaction do
+        account.save!
+        link_publishers(params)
+      end
+    end
+
+    def assign_secrets(params)
       SECRETS.each do |field, attribute|
         if params[field].present?
           account.public_send(:"#{attribute}=", params[field].strip)
         end
       end
-      account.save!
+    end
+
+    # A person can be linked before the bot has seen them (a confirmer saved by id).
+    def link_publishers(params)
+      if params.key?(:member_publisher_ids)
+        member_publisher_ids.each do |telegram_id, publisher_id|
+          account.finance_telegram_members.find_or_initialize_by(telegram_id:)
+            .update!(publisher: publisher_id && account.publishers.find(publisher_id))
+        end
+      end
     end
 
     # Accepts the folder's Drive link as well as its id.
