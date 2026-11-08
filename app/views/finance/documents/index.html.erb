@@ -122,13 +122,13 @@
             <%= document.amount_cents && Finance::Money.format(cents: document.amount_cents) %>
           </span>
           <% if document.cash_holder_name && !document.cash_received_at %>
-            <%= button_to cash_received_finance_document_path(document), class: 'btn btn-sm btn-outline-success',
+            <%= button_to cash_received_finance_document_path(document), class: 'btn btn-sm btn-outline-success text-nowrap',
                                                                          title: 'Recebi o dinheiro' do %>
               <i class="bi bi-cash"></i> Recebi
             <% end %>
           <% end %>
           <% if document.cash_holder_name && !document.cash_pix_at %>
-            <%= button_to cash_pix_finance_document_path(document), class: 'btn btn-sm btn-outline-success',
+            <%= button_to cash_pix_finance_document_path(document), class: 'btn btn-sm btn-outline-success text-nowrap',
                                                                     title: 'Fiz o Pix' do %>
               <i class="bi bi-send"></i> Fiz o Pix
             <% end %>
