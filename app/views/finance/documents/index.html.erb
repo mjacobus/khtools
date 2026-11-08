@@ -109,6 +109,9 @@
             <% elsif document.cash_holder_name %>
               <span class="badge bg-warning text-dark">💵 com <%= document.cash_holder_name %></span>
             <% end %>
+            <% if document.cash_holder_name && !document.cash_pix_at %>
+              <span class="badge bg-warning text-dark">Pix pendente</span>
+            <% end %>
             <% if kind == 'bill' %>
               <%= render 'payment_badge', bill: document %>
             <% elsif (paid = @paid_bills[document.bill_id]) %>
@@ -122,6 +125,12 @@
             <%= button_to cash_received_finance_document_path(document), class: 'btn btn-sm btn-outline-success',
                                                                          title: 'Recebi o dinheiro' do %>
               <i class="bi bi-cash"></i> Recebi
+            <% end %>
+          <% end %>
+          <% if document.cash_holder_name && !document.cash_pix_at %>
+            <%= button_to cash_pix_finance_document_path(document), class: 'btn btn-sm btn-outline-success',
+                                                                    title: 'Fiz o Pix' do %>
+              <i class="bi bi-send"></i> Fiz o Pix
             <% end %>
           <% end %>
           <% if kind == 'bill' && document.drive_file_id %>

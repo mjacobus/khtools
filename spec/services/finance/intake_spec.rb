@@ -280,13 +280,39 @@ RSpec.describe Finance::Intake do
       expect(telegram.answers.last[:text]).to eq(Finance::Messages::ALREADY_WITH_YOU)
     end
 
-    it 'lets the treasurer say the cash arrived' do
+    it 'lets the treasurer say the cash arrived, still asking about the Pix' do
       intake.handle(update: callback('cash_received', document))
 
       expect(document.reload).to have_attributes(cash_received_by: 'Ana',
                                                  cash_received_at: be_present)
-      expect(telegram.edits.last).to include(text: a_string_including('recebido por Ana'),
-                                             buttons: nil)
+      expect(telegram.edits.last).to include(text: a_string_including('Entregue a: Ana'),
+                                             buttons: [[['💸 Fiz o Pix',
+                                                         "fin:cash_pix:#{document.id}"]]])
+    end
+
+    # The treasurer makes the Pix whether or not the cash has arrived yet.
+    it 'lets the treasurer say the Pix is done, before the cash arrives' do
+      intake.handle(update: callback('cash_pix', document))
+
+      expect(document.reload).to have_attributes(cash_pix_by: 'Ana', cash_pix_at: be_present,
+                                                 cash_received_at: nil)
+      expect(telegram.edits.last[:text]).to end_with("Está com: Bia Lima\nPix: feito por Ana")
+      expect(telegram.edits.last[:buttons].flatten).not_to include('💸 Fiz o Pix')
+    end
+
+    it 'closes the message once the cash arrived and the Pix is done' do
+      document.update!(cash_pix_at: Time.current, cash_pix_by: 'Ana')
+
+      intake.handle(update: callback('cash_received', document))
+
+      expect(telegram.edits.last).to include(buttons: nil)
+    end
+
+    it 'only lets confirmers say the Pix is done' do
+      intake.handle(update: callback('cash_pix', document, from: 8))
+
+      expect(document.reload.cash_pix_at).to be_nil
+      expect(telegram.answers.last[:text]).to eq(Finance::Messages::NOT_A_CONFIRMER)
     end
 
     it 'only lets confirmers say the cash arrived' do
