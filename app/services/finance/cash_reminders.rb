@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Finance
-  # Daily nudge to whoever still holds the cash of a past meeting, mentioning them so Telegram
+  # Meeting-day nudge to whoever still holds the cash of a past meeting, mentioning them so Telegram
   # notifies them, until the treasurer taps "Recebi".
   class CashReminders
     def initialize(account:, telegram:)

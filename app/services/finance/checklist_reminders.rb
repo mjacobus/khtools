@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Finance
-  # Daily nudge in the finance group about what the month checklist is missing: the S-24s of
-  # the last week's meetings, and, on a few days of the month, the documents (and audit
+  # Nudges in the finance group about what the month checklist is missing: on meeting days, the
+  # S-24s of the last week's meetings; on a few days of the month, the documents (and audit
   # report) of the month that ended.
   class ChecklistReminders
     WEEK = 7
@@ -14,15 +14,22 @@ module Finance
       @telegram = telegram
     end
 
-    def remind(today: Date.current)
-      lines = meetings(today) + monthly(today)
+    def remind_meetings(today: Date.current)
+      send_lines(meetings(today))
+    end
+
+    def remind_month(today: Date.current)
+      send_lines(monthly(today))
+    end
+
+    private
+
+    def send_lines(lines)
       if lines.any?
         @telegram.send_message(chat_id: @account.finance_telegram_chat_id,
                                text: ['📋 Faltando nas contas', *lines].join("\n"))
       end
     end
-
-    private
 
     def meetings(today)
       week = (today - WEEK)..(today - 1)
