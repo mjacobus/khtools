@@ -116,8 +116,7 @@
       <thead>
         <tr>
           <th scope="col" class="d-none d-md-table-cell">Data</th>
-          <th scope="col" class="d-none d-md-table-cell">Tipo</th>
-          <th scope="col" class="ps-0 ps-md-2">Documento</th>
+          <th scope="col" class="ps-0 ps-md-2">Tipo</th>
           <th scope="col" class="text-end">Valor</th>
           <th scope="col" class="pe-0"><span class="visually-hidden">Ações</span></th>
         </tr>
@@ -129,27 +128,28 @@
             <td class="text-secondary small text-nowrap d-none d-md-table-cell">
               <%= document.document_date&.strftime('%d/%m/%Y') %>
             </td>
-            <td class="kind d-none d-md-table-cell text-nowrap">
-              <% if kind == 'unknown' %><i class="bi bi-exclamation-triangle text-warning"></i><% end %>
-              <%= kind_label.call(kind) %>
-            </td>
-            <td class="text-break ps-0 ps-md-2">
+            <td class="kind text-break ps-0 ps-md-2">
               <% icon = { '.pdf' => 'bi-file-earmark-pdf text-danger', '.jpg' => 'bi-file-earmark-image text-primary',
                           '.jpeg' => 'bi-file-earmark-image text-primary', '.png' => 'bi-file-earmark-image text-primary' } %>
-              <i class="bi <%= icon.fetch(File.extname(document.drive_name.to_s).downcase, 'bi-file-earmark text-secondary') %>"></i>
-              <% if document.drive_url %>
-                <%= link_to Finance::Naming.short(document.drive_name), document.drive_url,
-                            target: '_blank', rel: 'noopener', title: document.drive_name %>
+              <% if kind == 'unknown' %>
+                <i class="bi bi-exclamation-triangle text-warning"></i>
               <% else %>
-                <span title="<%= document.drive_name %>"><%= Finance::Naming.short(document.drive_name) %></span>
+                <i class="bi <%= icon.fetch(File.extname(document.drive_name.to_s).downcase, 'bi-file-earmark text-secondary') %>"></i>
+              <% end %>
+              <% if document.drive_url %>
+                <%= link_to document.drive_url, target: '_blank', rel: 'noopener', title: document.drive_name do %>
+                  <span class="kind-label"><%= kind_label.call(kind) %></span>
+                <% end %>
+              <% else %>
+                <span class="kind-label" title="<%= document.drive_name %>"><%= kind_label.call(kind) %></span>
                 <span class="badge bg-secondary"><%= t("app.finance_document_states.#{document.state}") %></span>
               <% end %>
-              <% phone_details = [document.document_date&.strftime('%d/%m')] %>
-              <% unless Finance::Naming.short(document.drive_name) == kind_label.call(kind) %>
-                <% phone_details << kind_label.call(kind) %>
+              <% details = document.description.presence || (Finance::Naming.short(document.drive_name) if kind == 'unknown') %>
+              <% if details %>
+                <small class="details text-secondary"><%= details %></small>
               <% end %>
-              <% if phone_details.compact.any? %>
-                <small class="d-block d-md-none text-muted"><%= phone_details.compact.join(' · ') %></small>
+              <% if document.document_date %>
+                <small class="d-block d-md-none text-muted"><%= document.document_date.strftime('%d/%m') %></small>
               <% end %>
               <% if document.cash_received_at %>
                 <span class="badge bg-success">💵 recebido</span>
@@ -162,7 +162,7 @@
               <% if kind == 'bill' %>
                 <%= render 'payment_badge', bill: document %>
               <% elsif (paid = @paid_bills[document.bill_id]) %>
-                <small class="text-muted">· pagou <%= link_to paid.drive_name, payment_finance_document_path(paid) %></small>
+                <small class="text-secondary">· pagou <%= link_to [kind_label.call(paid.kind), paid.description].compact.join(' '), payment_finance_document_path(paid), title: paid.drive_name %></small>
               <% end %>
             </td>
             <td class="text-end">
@@ -209,7 +209,7 @@
         <tfoot class="text-end text-secondary small">
           <% if s24_total.positive? %>
             <tr>
-              <td colspan="5">
+              <td colspan="4">
                 Donativos (<%= s24s.size %> S-24) ·
                 Obra <%= Finance::Money.format(cents: s24s.sum { |d| d.worldwide_cents.to_i }) %> ·
                 Local <%= Finance::Money.format(cents: s24s.sum { |d| d.congregation_cents.to_i }) %> ·
@@ -219,7 +219,7 @@
           <% end %>
           <% if kind_total %>
             <tr>
-              <td colspan="5">
+              <td colspan="4">
                 <%= pluralize(@documents.size, 'documento', plural: 'documentos') %> ·
                 Total <%= Finance::Money.format(cents: total) %>
               </td>
