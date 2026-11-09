@@ -34,7 +34,11 @@ RSpec.describe Finance::CorrectionJob do
     described_class.perform_now(document.id, voice)
 
     expect(document.reload).to have_attributes(kind: 'audit_report', competence: '2026-05')
-    expect(telegram.sent.last).to include(reply_to: 20, text: Finance::Messages::CORRECTED)
+    expect(telegram.sent.last).to include(
+      reply_to: 20,
+      text: "✏️ Corrigido.\n🎤 auditoria de março a maio → tipo audit_report mes 2026-05\n" \
+            'Confira a sugestão acima e confirme.'
+    )
   end
 
   it 'keeps what was heard in the history' do

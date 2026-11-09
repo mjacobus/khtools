@@ -27,7 +27,7 @@ module Finance
       elsif document.state == 'suggested'
         apply_correction(document, message, heard)
         show_suggestion(document)
-        reply(message, Messages::CORRECTED)
+        reply(message, Messages.corrected(heard:))
       end
     rescue Correction::Error => exception
       reply(message, exception.message)

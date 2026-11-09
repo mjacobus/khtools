@@ -27,6 +27,15 @@ module Finance
 
     module_function
 
+    # With what was said in plain words, so whoever corrected can check what was understood.
+    def corrected(heard: nil)
+      if heard
+        "✏️ Corrigido.\n#{heard}\nConfira a sugestão acima e confirme."
+      else
+        CORRECTED
+      end
+    end
+
     def suggestion(document:)
       [suggestion_text(document), buttons(document)]
     end
