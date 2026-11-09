@@ -54,6 +54,16 @@ RSpec.describe Finance::DocumentsController do
     expect(page.at('#document-tabs a.active').text.squish).to eq('Todos')
   end
 
+  it 'lists undated documents among the others, by the end of their month' do
+    document(kind: 's24', competence: '2026-09', document_date: Date.new(2026, 9, 20))
+    document(kind: 'statement', competence: '2026-10')
+    document(kind: 's26', competence: '2026-08')
+
+    get '/finance/documents', params: { view: 'all' }
+
+    expect(kinds).to eq(%w[Extrato S-24 S-26])
+  end
+
   it 'pages the all documents view, with the totals of every page' do
     stub_const('Finance::DocumentFilters::PER_PAGE', 2)
     (1..3).each do |day|

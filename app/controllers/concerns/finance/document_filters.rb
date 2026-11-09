@@ -7,6 +7,7 @@ module Finance
     extend ActiveSupport::Concern
 
     PER_PAGE = 50
+    DATED = "COALESCE(document_date, date(competence || '-01', '+1 month', '-1 day'))"
 
     included { helper_method :all_documents_view?, :reminders_view?, :archive_reminders }
 
@@ -29,7 +30,7 @@ module Finance
     def list_documents
       scope = all_documents_view? ? documents : documents.where(competence: @month)
       @kinds = scope.distinct.pluck(:kind).sort_by { |kind| Db::FinanceDocument::KINDS.index(kind) }
-      @listed = search(of_kind(scope).order(Arel.sql('document_date IS NULL'), document_order).to_a)
+      @listed = search(of_kind(scope).order(document_order).to_a)
       @documents = paged(@listed)
     end
 
@@ -42,11 +43,13 @@ module Finance
       end
     end
 
+    # Newest first in "Todos"; undated documents (statements, S-26...) count as the last day of
+    # their month. The month in date order. Either way, what has no date at all goes last.
     def document_order
       if all_documents_view?
-        { document_date: :desc, id: :desc }
+        Arel.sql("#{DATED} IS NULL, #{DATED} DESC, id DESC")
       else
-        { document_date: :asc, id: :asc }
+        Arel.sql('document_date IS NULL, document_date, id')
       end
     end
 
