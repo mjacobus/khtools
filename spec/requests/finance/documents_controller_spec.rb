@@ -19,14 +19,18 @@ RSpec.describe Finance::DocumentsController do
     Nokogiri::HTML(response.body)
   end
 
-  it "lists the month's documents by type, linking to Drive" do
-    document(kind: 's26', drive_url: 'https://drive/s26')
+  def kinds
+    page.css('#documents tbody td.kind').map { |cell| cell.text.strip }
+  end
+
+  it "lists the month's documents by date, with their type, linking to Drive" do
+    document(kind: 's26', document_date: Date.new(2026, 9, 10), drive_url: 'https://drive/s26')
     document(kind: 's24', document_date: Date.new(2026, 9, 2), amount_cents: 22_000,
              drive_url: 'https://drive/s24')
 
     get '/finance/documents', params: { month: '2026-09' }
 
-    expect(page.css('[data-kind] h2').map { |h2| h2.text.strip }).to eq(%w[S-24 S-26])
+    expect(kinds).to eq(%w[S-24 S-26])
     expect(page.at('a[href="https://drive/s24"]').text).to eq('2026-09-02 - R$ 220,00 - S-24.jpg')
     expect(response.body).to include('02/09/2026', 'R$ 220,00')
   end
@@ -47,7 +51,31 @@ RSpec.describe Finance::DocumentsController do
 
     get '/finance/documents', params: { month: '2026-09' }
 
-    expect(page.css('[data-kind] h2')).to be_empty
+    expect(page.css('#documents tbody tr')).to be_empty
+  end
+
+  it "filters by type, offering the month's types" do
+    document(kind: 's26', document_date: Date.new(2026, 9, 10))
+    document(kind: 's24', document_date: Date.new(2026, 9, 2))
+    document(kind: 's24', document_date: Date.new(2026, 9, 5))
+
+    get '/finance/documents', params: { month: '2026-09', kind: 's24' }
+
+    expect(kinds).to eq(%w[S-24 S-24])
+    expect(page.css('select#kind option').map { |option| [option.text, option['value']] })
+      .to eq([['Todos os tipos', ''], %w[S-24 s24], %w[S-26 s26]])
+    expect(page.at('select#kind option[selected]')['value']).to eq('s24')
+  end
+
+  it 'searches the file names' do
+    document(kind: 'bill', description: 'Luz', document_date: Date.new(2026, 9, 3))
+    document(kind: 'bill', description: 'Agua', document_date: Date.new(2026, 9, 4))
+
+    get '/finance/documents', params: { month: '2026-09', q: 'luz' }
+
+    expect(page.css('#documents tbody tr').map { |row| row.text.squish })
+      .to all(include('Luz'))
+    expect(page.css('#documents tbody tr').size).to eq(1)
   end
 
   it 'opens on the latest month with documents and offers the others' do
@@ -65,7 +93,7 @@ RSpec.describe Finance::DocumentsController do
 
     get '/finance/documents', params: { month: '2026-09' }
 
-    expect(page.at('[data-kind] h2').text.strip).to eq('Não identificados')
+    expect(kinds).to eq(['Não identificado'])
   end
 
   it 'shows where the documents not archived yet stand' do
@@ -73,7 +101,7 @@ RSpec.describe Finance::DocumentsController do
 
     get '/finance/documents', params: { month: '2026-09' }
 
-    expect(page.at('li .badge').text).to eq('aguardando confirmação')
+    expect(page.at('#documents tbody .badge').text).to eq('aguardando confirmação')
   end
 
   it 'refreshes in place, keeping the scroll, after an action' do
@@ -95,12 +123,11 @@ RSpec.describe Finance::DocumentsController do
     document(kind: 's24', amount_cents: 16_000, worldwide_cents: 11_000, congregation_cents: 5000)
     document(kind: 's24', amount_cents: 10_000, worldwide_cents: 2000, congregation_cents: 8000)
 
-    get '/finance/documents', params: { month: '2026-09' }
+    get '/finance/documents', params: { month: '2026-09', kind: 's24' }
 
-    section = page.at('section[data-kind="s24"]')
-    expect(section.at('.card-header').text.squish)
+    expect(page.at('#documents tfoot').text.squish)
       .to include('Obra R$ 130,00 · Local R$ 130,00 · Total R$ 260,00')
-    expect(section.css('li .s24-split').map { |split| split.text.squish })
+    expect(page.css('#documents tbody .s24-split').map { |split| split.text.squish })
       .to contain_exactly('obra R$ 110,00 · local R$ 50,00', 'obra R$ 20,00 · local R$ 80,00')
   end
 
@@ -131,7 +158,7 @@ RSpec.describe Finance::DocumentsController do
 
       get '/finance/documents', params: { month: '2026-09' }
 
-      expect(page.at('li .badge').text).to eq('💵 com Bia')
+      expect(page.at('#documents tbody .badge').text).to eq('💵 com Bia')
     end
 
     it 'marks it received and updates the message in the group' do
@@ -158,7 +185,7 @@ RSpec.describe Finance::DocumentsController do
 
       get '/finance/documents', params: { month: '2026-09' }
 
-      expect(page.css('li .badge').map(&:text)).to include('Pix pendente')
+      expect(page.css('#documents tbody .badge').map(&:text)).to include('Pix pendente')
     end
   end
 

@@ -6,6 +6,7 @@ module Finance
     include MeetingExceptions
     include CashHandover
     include ArchiveMoves
+    include DocumentFilters
 
     MONTH = /\A\d{4}-\d{2}\z/
 
@@ -13,7 +14,7 @@ module Finance
       months = documents.where.not(competence: nil).distinct.pluck(:competence)
       @month = requested_month || months.max
       @months = (months | [@month]).compact.sort.reverse
-      @groups = groups
+      list_month
       @paid_bills = paid_bills
       @cash_ledger = cash_ledger
     end
@@ -54,11 +55,6 @@ module Finance
       params[:month].to_s[MONTH]
     end
 
-    def groups
-      documents.where(competence: @month).order(:document_date, :id).group_by(&:kind)
-        .sort_by { |kind, _| Db::FinanceDocument::KINDS.index(kind) }
-    end
-
     helper_method def checklist
       MonthChecklist.new(account: current_account, month: @month).items
     end
@@ -74,7 +70,7 @@ module Finance
 
     # The bills paid by this month's receipts, by id.
     def paid_bills
-      documents.where(id: @groups.flat_map(&:last).filter_map(&:bill_id)).index_by(&:id)
+      documents.where(id: @documents.filter_map(&:bill_id)).index_by(&:id)
     end
 
     def assign_and_validate
