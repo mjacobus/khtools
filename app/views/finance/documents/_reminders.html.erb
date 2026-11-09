@@ -1,0 +1,31 @@
+<% due = archive_reminders.due %>
+<div id="reminders-due" class="card mb-3">
+  <div class="card-header"><i class="bi bi-bell"></i> A fazer</div>
+  <% if due.empty? %>
+    <p class="card-body mb-0 text-secondary">Nada pendente agora.</p>
+  <% else %>
+    <ul class="list-group list-group-flush">
+      <% due.each do |reminder| %>
+        <li class="list-group-item">
+          <%= reminder.title %>
+          <small class="d-block text-secondary"><%= reminder.source %></small>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header"><i class="bi bi-journal-text"></i> Regras do arquivo</div>
+  <ul id="reminders-rules" class="list-group list-group-flush">
+    <% archive_reminders.rules.each do |rule| %>
+      <li class="list-group-item">
+        <%= rule.title %>
+        <% if rule.link == :archive %>
+          · <%= link_to 'Arquivar', archive_finance_documents_path %>
+        <% end %>
+        <small class="d-block text-secondary"><%= rule.source %></small>
+      </li>
+    <% end %>
+  </ul>
+</div>

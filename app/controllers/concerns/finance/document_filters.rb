@@ -2,16 +2,24 @@
 
 module Finance
   # The month's documents by date ("Por período"), or every month's, newest first ("Todos"),
-  # filtered by type and by a search on the file name.
+  # filtered by type and by a search on the file name; or the archive reminders ("Lembretes").
   module DocumentFilters
     extend ActiveSupport::Concern
 
-    included { helper_method :all_documents_view? }
+    included { helper_method :all_documents_view?, :reminders_view?, :archive_reminders }
 
     private
 
     def all_documents_view?
       params[:view] == 'all'
+    end
+
+    def reminders_view?
+      params[:view] == 'reminders'
+    end
+
+    def archive_reminders
+      @archive_reminders ||= ArchiveReminders.new(account: current_account)
     end
 
     # ponytail: no pagination; a congregation files a few hundred documents a year.

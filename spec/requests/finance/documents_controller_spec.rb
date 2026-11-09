@@ -50,7 +50,7 @@ RSpec.describe Finance::DocumentsController do
     get '/finance/documents', params: { view: 'all' }
 
     tabs = page.css('#document-tabs a')
-    expect(tabs.map { |tab| tab.text.squish }).to eq(['Por período', 'Todos'])
+    expect(tabs.map { |tab| tab.text.squish }).to eq(['Por período', 'Todos', 'Lembretes'])
     expect(page.at('#document-tabs a.active').text.squish).to eq('Todos')
   end
 
@@ -75,6 +75,14 @@ RSpec.describe Finance::DocumentsController do
 
     expect(page.css('#documents tbody td.people').map { |cell| cell.text.squish })
       .to eq(['enviou Ana confirmou Marcelo', 'já estava no Drive'])
+  end
+
+  it 'has a reminders tab with what to do and the rules' do
+    get '/finance/documents', params: { view: 'reminders' }
+
+    expect(page.at('#document-tabs a.active').text.squish).to eq('Lembretes')
+    expect(page.css('#reminders-rules li').size).to be >= 3
+    expect(page.at('#documents')).to be_nil
   end
 
   it 'names files found by the backfill as they are called in Drive' do

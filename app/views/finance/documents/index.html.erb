@@ -1,5 +1,6 @@
 <% month_label = ->(month) { l(Date.parse("#{month}-01"), format: '%B de %Y').capitalize } %>
 <% all = all_documents_view? %>
+<% reminders = reminders_view? %>
 <% turbo_refreshes_with method: :morph, scroll: :preserve %>
 
 <div data-turbo="true">
@@ -10,7 +11,7 @@
     <%= link_to archive_finance_documents_path, class: 'btn btn-outline-secondary', title: 'Arquivar meses auditados' do %>
       <i class="bi bi-archive"></i> Arquivar
     <% end %>
-    <% if @month && !all %>
+    <% if @month && !all && !reminders %>
       <% first_day = Date.parse("#{@month}-01") %>
       <%= form_with url: finance_documents_path, method: :get, class: 'd-flex align-items-center gap-1' do %>
         <%= link_to finance_documents_path(month: first_day.prev_month.strftime('%Y-%m'), kind: params[:kind].presence),
@@ -30,14 +31,21 @@
   </div>
 </div>
 
-<ul id="document-tabs" class="nav nav-tabs mb-3">
+<ul id="document-tabs" class="nav nav-tabs flex-nowrap text-nowrap mb-3">
   <li class="nav-item">
-    <%= link_to 'Por período', finance_documents_path(month: @month), class: "nav-link #{'active' unless all}",
-                                                                      aria: { current: (all ? nil : 'page') } %>
+    <%= link_to 'Por período', finance_documents_path(month: @month),
+                class: "nav-link #{'active' unless all || reminders}", aria: { current: (all || reminders ? nil : 'page') } %>
   </li>
   <li class="nav-item">
     <%= link_to 'Todos', finance_documents_path(view: 'all'), class: "nav-link #{'active' if all}",
                                                               aria: { current: (all ? 'page' : nil) } %>
+  </li>
+  <li class="nav-item">
+    <%= link_to finance_documents_path(view: 'reminders'), class: "nav-link #{'active' if reminders}",
+                                                           aria: { current: (reminders ? 'page' : nil) } do %>
+      Lembretes
+      <% if (due = archive_reminders.due.size).positive? %><span class="badge bg-warning text-dark"><%= due %></span><% end %>
+    <% end %>
   </li>
 </ul>
 
@@ -86,6 +94,9 @@
   </details>
 <% end %>
 
+<% if reminders %>
+  <%= render 'reminders' %>
+<% else %>
 <% if @month && !all %>
   <% done = checklist.count(&:done) %>
   <details id="checklist-panel" class="card mb-3">
@@ -269,5 +280,6 @@
       <% end %>
     </table>
   <% end %>
+<% end %>
 <% end %>
 </div>
