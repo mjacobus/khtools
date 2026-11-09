@@ -56,7 +56,8 @@ RSpec.describe Finance::Naming do
       expect(described_class.short('2026-09-02 - R$ 315,00 - S-24.jpg')).to eq('S-24')
       expect(described_class.short('2026-09-15 - R$ 74,12 - Fatura Água.pdf')).to eq('Fatura Água')
       expect(described_class.short('2026-09 - Extrato Betel.pdf')).to eq('Extrato Betel')
-      expect(described_class.short('2026-09-09 R$250 Recibo Donativos.jpg')).to eq('Recibo Donativos')
+      expect(described_class.short('2026-09-09 R$250 Recibo Donativos.jpg'))
+        .to eq('Recibo Donativos')
       expect(described_class.short('20261227 - 77,90 - Pag. Água.pdf')).to eq('Pag. Água')
       expect(described_class.short('Fatura Energia.pdf')).to eq('Fatura Energia')
     end
