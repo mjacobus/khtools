@@ -1,30 +1,35 @@
 # frozen_string_literal: true
 
 module Finance
-  # Once a day (config/recurring.yml): bring in what changed in Drive, then remind the bills
-  # due soon and what the month checklist is missing, for every account with the bot on.
+  # Scheduled in config/recurring.yml, for every account with the bot on. Every morning: bring
+  # in what changed in Drive, then remind the bills due soon and the month's missing documents.
+  # On meeting days, near the meeting ('meeting_day'): the missing S-24s and the cash to hand.
   class DailyJob < ApplicationJob
-    def perform
+    def perform(part = 'morning')
       Db::Account.find_each do |account|
         if account.finance_enabled?
-          run(account)
+          public_send(part, account,
+                      Telegram::Client.new(token: account.finance_telegram_bot_token))
         end
       rescue StandardError => exception
         ErrorHandler.new.notify_error(exception) # one account failing must not skip the others
       end
     end
 
-    private
-
-    def run(account)
+    def morning(account, telegram)
       if account.finance_google_refresh_token.present?
         DriveSync.new(account:, drive: drive(account)).sync
       end
-      telegram = Telegram::Client.new(token: account.finance_telegram_bot_token)
       BillReminders.new(account:, telegram:).remind
-      ChecklistReminders.new(account:, telegram:).remind
+      ChecklistReminders.new(account:, telegram:).remind_month
+    end
+
+    def meeting_day(account, telegram)
+      ChecklistReminders.new(account:, telegram:).remind_meetings
       CashReminders.new(account:, telegram:).remind
     end
+
+    private
 
     def drive(account)
       GoogleDrive::Client.new(

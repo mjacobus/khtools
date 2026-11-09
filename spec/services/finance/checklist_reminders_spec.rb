@@ -13,15 +13,16 @@ RSpec.describe Finance::ChecklistReminders do
                                        **attributes)
   end
 
-  def remind(today)
-    described_class.new(account:, telegram:).remind(today:)
+  def remind(today, part: :remind_month)
+    described_class.new(account:, telegram:).public_send(part, today:)
     telegram.sent.last&.fetch(:text)
   end
 
   it 'asks for the S-24 of the meetings in the last week' do
     document('s24', '2026-11', document_date: Date.new(2026, 11, 4))
 
-    expect(remind(Date.new(2026, 11, 9))).to eq("📋 Faltando nas contas\n• S-24 de sáb 07/11")
+    expect(remind(Date.new(2026, 11, 9),
+                  part: :remind_meetings)).to eq("📋 Faltando nas contas\n• S-24 de sáb 07/11")
   end
 
   it 'asks for the documents of the month that ended, on the 5th, 10th, 15th and 20th' do
@@ -29,7 +30,7 @@ RSpec.describe Finance::ChecklistReminders do
     document('audit_report', '2026-11')
 
     expect(remind(Date.new(2026, 12, 10))).to include('• Comprovante Remessa Betel de 2026-11')
-    expect(remind(Date.new(2026, 12, 11))).not_to include('2026-11')
+    expect { remind(Date.new(2026, 12, 11)) }.not_to(change { telegram.sent.size })
   end
 
   it 'asks for the audit report after the last month of an audited quarter' do
@@ -40,6 +41,7 @@ RSpec.describe Finance::ChecklistReminders do
   it 'stays quiet when nothing is missing' do
     [28, 31].each { |day| document('s24', '2026-10', document_date: Date.new(2026, 10, day)) }
 
+    expect(remind(Date.new(2026, 11, 2), part: :remind_meetings)).to be_nil
     expect(remind(Date.new(2026, 11, 2))).to be_nil
   end
 end
