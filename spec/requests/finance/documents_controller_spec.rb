@@ -46,6 +46,26 @@ RSpec.describe Finance::DocumentsController do
       .to eq(%w[Data Tipo Valor Ações])
   end
 
+  it 'offers the month view and the all documents view as tabs' do
+    get '/finance/documents', params: { view: 'all' }
+
+    tabs = page.css('#document-tabs a')
+    expect(tabs.map { |tab| tab.text.squish }).to eq(['Por período', 'Todos'])
+    expect(page.at('#document-tabs a.active').text.squish).to eq('Todos')
+  end
+
+  it 'lists the documents of every month, newest first, with their month' do
+    document(kind: 'audit_report', competence: '2025-11', document_date: Date.new(2025, 12, 3))
+    document(kind: 'audit_report', competence: '2026-05', document_date: Date.new(2026, 6, 2))
+    document(kind: 's24', competence: '2026-05', document_date: Date.new(2026, 5, 2))
+
+    get '/finance/documents', params: { view: 'all', kind: 'audit_report' }
+
+    expect(page.css('#documents tbody td.month').map { |cell| cell.text.strip })
+      .to eq(%w[2026-05 2025-11])
+    expect(page.at('select#month')).to be_nil
+  end
+
   it 'names files found by the backfill as they are called in Drive' do
     document(flags: 'backfill', original_filename: 'Recibo velho.jpg', telegram_message_id: nil,
              telegram_chat_id: nil, telegram_file_id: nil, drive_url: 'https://drive/old')
