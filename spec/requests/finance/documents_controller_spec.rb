@@ -43,7 +43,7 @@ RSpec.describe Finance::DocumentsController do
     get '/finance/documents', params: { month: '2026-09' }
 
     expect(page.css('#documents thead th').map { |th| th.text.strip })
-      .to eq(%w[Data Tipo Por Valor Ações])
+      .to eq(%w[Data Tipo Valor Ações])
   end
 
   it 'offers the month view and the all documents view as tabs' do
@@ -79,15 +79,19 @@ RSpec.describe Finance::DocumentsController do
     expect(page.at('select#month')).to be_nil
   end
 
-  it 'shows who sent each document and who confirmed it' do
-    document(kind: 's26', sent_by_name: 'Ana', confirmed_by: 'Marcelo', drive_url: 'https://drive/a')
-    document(kind: 's30', flags: 'backfill', original_filename: 'S-30.pdf', drive_url: 'https://drive/b',
-             telegram_message_id: nil, telegram_chat_id: nil, telegram_file_id: nil)
+  it 'shows when hovering the type who sent each document and who confirmed it, and when' do
+    document(kind: 's26', sent_by_name: 'Ana', created_at: Time.zone.local(2026, 9, 5, 14, 30),
+             confirmed_by: 'Marcelo', confirmed_at: Time.zone.local(2026, 9, 6, 10, 0),
+             document_date: Date.new(2026, 9, 1))
+    document(kind: 's30', flags: 'backfill', telegram_message_id: nil,
+             document_date: Date.new(2026, 9, 2))
 
     get '/finance/documents', params: { month: '2026-09' }
 
-    expect(page.css('#documents tbody td.people').map { |cell| cell.text.squish })
-      .to eq(['enviou Ana confirmou Marcelo', 'já estava no Drive'])
+    titles = page.css('td.kind > [title]').map { |type| type['title'].lines(chomp: true).last(2) }
+    sent = ['Enviado por Ana em 05/09/2026 às 14:30',
+            'Confirmado por Marcelo em 06/09/2026 às 10:00']
+    expect(titles).to eq([sent, ['Já estava no Drive']])
   end
 
   it 'counts on the reminders tab the audits still to do' do
@@ -112,7 +116,7 @@ RSpec.describe Finance::DocumentsController do
 
     get '/finance/documents', params: { month: '2026-09' }
 
-    expect(page.at('a[href="https://drive/old"]')['title']).to eq('Recibo velho.jpg')
+    expect(page.at('a[href="https://drive/old"]')['title']).to start_with('Recibo velho.jpg')
   end
 
   it 'leaves out other months, other accounts and discarded files' do
@@ -344,8 +348,8 @@ RSpec.describe Finance::DocumentsController do
       get "/finance/documents/#{archived.id}/edit"
 
       expect(page.css('#history li').map { |item| item.text.squish }).to eq(
-        ['Enviado por Ana em 02/09/2026', 'Confirmado por Marcelo em 03/09/2026',
-         'Corrigido por Bia em 04/09/2026: tipo comprovante']
+        ['Enviado por Ana em 02/09/2026 às 10:00', 'Confirmado por Marcelo em 03/09/2026 às 09:00',
+         'Corrigido por Bia em 04/09/2026 às 08:00: tipo comprovante']
       )
     end
 

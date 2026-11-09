@@ -150,7 +150,6 @@
           <th scope="col" class="d-none d-md-table-cell">Data</th>
           <% if all %><th scope="col" class="d-none d-md-table-cell">Mês</th><% end %>
           <th scope="col" class="ps-0 ps-md-2">Tipo</th>
-          <th scope="col" class="d-none d-md-table-cell">Por</th>
           <th scope="col" class="text-end">Valor</th>
           <th scope="col" class="pe-0"><span class="visually-hidden">Ações</span></th>
         </tr>
@@ -173,12 +172,14 @@
               <% else %>
                 <i class="bi <%= icon.fetch(File.extname(document.drive_name.to_s).downcase, 'bi-file-earmark text-secondary') %>"></i>
               <% end %>
+              <%# Hovering the type shows the file name and the history (sent, confirmed, corrections). %>
+              <% tooltip = [document.drive_name, *finance_document_history(document)].compact.join("\n") %>
               <% if document.drive_url %>
-                <%= link_to document.drive_url, target: '_blank', rel: 'noopener', title: document.drive_name do %>
+                <%= link_to document.drive_url, target: '_blank', rel: 'noopener', title: tooltip do %>
                   <span class="kind-label"><%= kind_label.call(kind) %></span>
                 <% end %>
               <% else %>
-                <span class="kind-label" title="<%= document.drive_name %>"><%= kind_label.call(kind) %></span>
+                <span class="kind-label" title="<%= tooltip %>"><%= kind_label.call(kind) %></span>
                 <span class="badge bg-secondary"><%= t("app.finance_document_states.#{document.state}") %></span>
               <% end %>
               <%# Only what is still pending; nothing once the cash arrived and the Pix is done. %>
@@ -202,18 +203,6 @@
                 <%= render 'payment_badge', bill: document %>
               <% elsif (paid = @paid_bills[document.bill_id]) %>
                 <small class="text-secondary">· pagou <%= link_to [kind_label.call(paid.kind), paid.description].compact.join(' '), payment_finance_document_path(paid), title: paid.drive_name %></small>
-              <% end %>
-            </td>
-            <td class="people small text-secondary d-none d-md-table-cell">
-              <% if document.sent_by_name.blank? && document.backfilled? %>
-                já estava no Drive
-              <% else %>
-                <% if document.sent_by_name.present? %>
-                  <span class="d-block" title="Enviou pelo Telegram em <%= l(document.created_at, format: '%d/%m/%Y') %>">enviou <%= document.sent_by_name %></span>
-                <% end %>
-                <% if document.confirmed_by.present? %>
-                  <span class="d-block" title="Confirmou o tipo<%= " em #{l(document.confirmed_at, format: '%d/%m/%Y')}" if document.confirmed_at %>">confirmou <%= document.confirmed_by %></span>
-                <% end %>
               <% end %>
             </td>
             <td class="text-end">
