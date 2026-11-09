@@ -76,6 +76,11 @@ class Db::Account < ApplicationRecord
     [cloudinary_cloud_name, cloudinary_api_key, cloudinary_api_secret].all?(&:present?)
   end
 
+  # Who takes care of the accounts: the only one who says the meeting cash arrived.
+  def finance_treasurer
+    finance_telegram_members.find_by(role: 'treasurer')
+  end
+
   def finance_confirmer?(telegram_user_id)
     finance_confirmer_telegram_ids.to_s.split(',').map(&:strip).include?(telegram_user_id.to_s)
   end

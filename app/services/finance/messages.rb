@@ -5,6 +5,7 @@ module Finance
   module Messages # rubocop:disable Metrics/ModuleLength -- all bot copy in one place
     ORIGINS = { 'ai' => 'lido por IA', 'rules' => 'lido do PDF', 'human' => 'informado' }.freeze
     NOT_A_CONFIRMER = 'Só quem confirma as contas pode usar estes botões.'
+    NOT_THE_TREASURER = 'Só quem cuida das contas pode marcar que recebeu o dinheiro.'
     NOT_AN_EDITOR = 'Só quem enviou o arquivo ou quem confirma as contas pode corrigir.'
     ALREADY_WITH_YOU = 'Já está com você.'
     CORRECTED = '✏️ Corrigido. Confira a sugestão acima e confirme.'

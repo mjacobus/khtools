@@ -28,7 +28,7 @@ module Finance
     end
 
     def treasurer
-      member = @account.finance_telegram_members.find_by(role: 'treasurer')
+      member = @account.finance_treasurer
       if member
         mention(member.telegram_id, member.display_name)
       else

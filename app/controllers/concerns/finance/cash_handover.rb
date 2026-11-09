@@ -4,11 +4,19 @@ module Finance
   # The treasurer got the cash of an S-24 or made its Pix, as with the group buttons (actions
   # of DocumentsController, so the same access covers them).
   module CashHandover
+    extend ActiveSupport::Concern
+
+    included { helper_method :cash_receiver? }
+
     def cash_received
       document = documents.where(kind: 's24').find(params[:id])
-      document.update!(cash_received_at: Time.current, cash_received_by: current_user.name)
-      update_cash_message(document)
-      redirect_to finance_documents_path(month: document.competence)
+      if cash_receiver?
+        document.update!(cash_received_at: Time.current, cash_received_by: current_user.name)
+        update_cash_message(document)
+        redirect_to finance_documents_path(month: document.competence)
+      else
+        head :forbidden
+      end
     end
 
     def cash_pix
@@ -19,6 +27,13 @@ module Finance
     end
 
     private
+
+    # Who takes care of the accounts, when their publisher is this user. With nobody in that
+    # role, or not linked to a user yet, anyone with access to the documents can.
+    def cash_receiver?
+      user_id = current_account.finance_treasurer&.publisher&.user_id
+      user_id.nil? || user_id == current_user.id
+    end
 
     def update_cash_message(document)
       if document.cash_message_id
