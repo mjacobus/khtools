@@ -31,7 +31,9 @@ RSpec.describe Finance::DocumentsController do
     get '/finance/documents', params: { month: '2026-09' }
 
     expect(kinds).to eq(%w[S-24 S-26])
-    expect(page.at('a[href="https://drive/s24"]').text).to eq('2026-09-02 - R$ 220,00 - S-24.jpg')
+    link = page.at('a[href="https://drive/s24"]')
+    expect(link.text).to eq('S-24')
+    expect(link['title']).to eq('2026-09-02 - R$ 220,00 - S-24.jpg')
     expect(response.body).to include('02/09/2026', 'R$ 220,00')
   end
 
@@ -41,7 +43,7 @@ RSpec.describe Finance::DocumentsController do
 
     get '/finance/documents', params: { month: '2026-09' }
 
-    expect(page.at('a[href="https://drive/old"]').text).to eq('Recibo velho.jpg')
+    expect(page.at('a[href="https://drive/old"]')['title']).to eq('Recibo velho.jpg')
   end
 
   it 'leaves out other months, other accounts and discarded files' do
@@ -122,11 +124,12 @@ RSpec.describe Finance::DocumentsController do
   it 'splits each S-24 and the S-24 total into worldwide work and local expenses' do
     document(kind: 's24', amount_cents: 16_000, worldwide_cents: 11_000, congregation_cents: 5000)
     document(kind: 's24', amount_cents: 10_000, worldwide_cents: 2000, congregation_cents: 8000)
+    document(kind: 'bill', amount_cents: 5000)
 
-    get '/finance/documents', params: { month: '2026-09', kind: 's24' }
+    get '/finance/documents', params: { month: '2026-09' }
 
     expect(page.at('#documents tfoot').text.squish)
-      .to include('Obra R$ 130,00 · Local R$ 130,00 · Total R$ 260,00')
+      .to eq('Donativos (2 S-24) · Obra R$ 130,00 · Local R$ 130,00 · Total R$ 260,00')
     expect(page.css('#documents tbody .s24-split').map { |split| split.text.squish })
       .to contain_exactly('obra R$ 110,00 · local R$ 50,00', 'obra R$ 20,00 · local R$ 80,00')
   end

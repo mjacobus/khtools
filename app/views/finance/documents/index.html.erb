@@ -109,37 +109,48 @@
     </p>
   <% else %>
     <% total = @documents.filter_map(&:amount_cents).sum %>
-    <% split = params[:kind] == 's24' && @documents.any? { |d| d.worldwide_cents || d.congregation_cents } %>
+    <% s24s = @documents.select { |document| document.kind == 's24' } %>
+    <% s24_total = s24s.filter_map(&:amount_cents).sum %>
+    <% kind_total = total.positive? && params[:kind].present? && params[:kind] != 's24' %>
     <table id="documents" class="table align-middle">
       <thead>
         <tr>
-          <th scope="col">Data</th>
+          <th scope="col" class="d-none d-md-table-cell">Data</th>
           <th scope="col" class="d-none d-md-table-cell">Tipo</th>
-          <th scope="col">Documento</th>
+          <th scope="col" class="ps-0 ps-md-2">Documento</th>
           <th scope="col" class="text-end">Valor</th>
-          <th scope="col"><span class="visually-hidden">Ações</span></th>
+          <th scope="col" class="pe-0"><span class="visually-hidden">Ações</span></th>
         </tr>
       </thead>
       <tbody>
         <% @documents.each do |document| %>
           <% kind = document.kind %>
           <tr data-kind="<%= kind %>" class="<%= 'table-warning' if kind == 'unknown' %>">
-            <td class="text-secondary small text-nowrap"><%= document.document_date&.strftime('%d/%m/%Y') %></td>
+            <td class="text-secondary small text-nowrap d-none d-md-table-cell">
+              <%= document.document_date&.strftime('%d/%m/%Y') %>
+            </td>
             <td class="kind d-none d-md-table-cell text-nowrap">
               <% if kind == 'unknown' %><i class="bi bi-exclamation-triangle text-warning"></i><% end %>
               <%= kind_label.call(kind) %>
             </td>
-            <td class="text-break">
+            <td class="text-break ps-0 ps-md-2">
               <% icon = { '.pdf' => 'bi-file-earmark-pdf text-danger', '.jpg' => 'bi-file-earmark-image text-primary',
                           '.jpeg' => 'bi-file-earmark-image text-primary', '.png' => 'bi-file-earmark-image text-primary' } %>
               <i class="bi <%= icon.fetch(File.extname(document.drive_name.to_s).downcase, 'bi-file-earmark text-secondary') %>"></i>
               <% if document.drive_url %>
-                <%= link_to document.drive_name, document.drive_url, target: '_blank', rel: 'noopener' %>
+                <%= link_to Finance::Naming.short(document.drive_name), document.drive_url,
+                            target: '_blank', rel: 'noopener', title: document.drive_name %>
               <% else %>
-                <%= document.drive_name %>
+                <span title="<%= document.drive_name %>"><%= Finance::Naming.short(document.drive_name) %></span>
                 <span class="badge bg-secondary"><%= t("app.finance_document_states.#{document.state}") %></span>
               <% end %>
-              <small class="d-block d-md-none text-muted"><%= kind_label.call(kind) %></small>
+              <% phone_details = [document.document_date&.strftime('%d/%m')] %>
+              <% unless Finance::Naming.short(document.drive_name) == kind_label.call(kind) %>
+                <% phone_details << kind_label.call(kind) %>
+              <% end %>
+              <% if phone_details.compact.any? %>
+                <small class="d-block d-md-none text-muted"><%= phone_details.compact.join(' · ') %></small>
+              <% end %>
               <% if document.cash_received_at %>
                 <span class="badge bg-success">💵 recebido</span>
               <% elsif document.cash_holder_name %>
@@ -154,16 +165,16 @@
                 <small class="text-muted">· pagou <%= link_to paid.drive_name, payment_finance_document_path(paid) %></small>
               <% end %>
             </td>
-            <td class="text-nowrap text-end">
-              <%= document.amount_cents && Finance::Money.format(cents: document.amount_cents) %>
+            <td class="text-end">
+              <span class="text-nowrap"><%= document.amount_cents && Finance::Money.format(cents: document.amount_cents) %></span>
               <% if kind == 's24' && (document.worldwide_cents || document.congregation_cents) %>
                 <small class="s24-split d-block text-muted">
-                  obra <%= Finance::Money.format(cents: document.worldwide_cents.to_i) %> ·
-                  local <%= Finance::Money.format(cents: document.congregation_cents.to_i) %>
+                  <span class="text-nowrap">obra <%= Finance::Money.format(cents: document.worldwide_cents.to_i) %></span>
+                  <span class="text-nowrap">· local <%= Finance::Money.format(cents: document.congregation_cents.to_i) %></span>
                 </small>
               <% end %>
             </td>
-            <td>
+            <td class="pe-0">
               <div class="d-flex flex-wrap justify-content-end gap-1">
                 <% if document.cash_holder_name && !document.cash_received_at %>
                   <%= button_to cash_received_finance_document_path(document), class: 'btn btn-sm btn-outline-success text-nowrap',
@@ -194,18 +205,26 @@
           </tr>
         <% end %>
       </tbody>
-      <% if total.positive? && params[:kind].present? %>
-        <tfoot>
-          <tr>
-            <td colspan="5" class="text-end text-secondary small">
-              <%= pluralize(@documents.size, 'documento', plural: 'documentos') %> ·
-              <% if split %>
-                Obra <%= Finance::Money.format(cents: @documents.sum { |d| d.worldwide_cents.to_i }) %> ·
-                Local <%= Finance::Money.format(cents: @documents.sum { |d| d.congregation_cents.to_i }) %> ·
-              <% end %>
-              Total <%= Finance::Money.format(cents: total) %>
-            </td>
-          </tr>
+      <% if s24_total.positive? || kind_total %>
+        <tfoot class="text-end text-secondary small">
+          <% if s24_total.positive? %>
+            <tr>
+              <td colspan="5">
+                Donativos (<%= s24s.size %> S-24) ·
+                Obra <%= Finance::Money.format(cents: s24s.sum { |d| d.worldwide_cents.to_i }) %> ·
+                Local <%= Finance::Money.format(cents: s24s.sum { |d| d.congregation_cents.to_i }) %> ·
+                Total <%= Finance::Money.format(cents: s24_total) %>
+              </td>
+            </tr>
+          <% end %>
+          <% if kind_total %>
+            <tr>
+              <td colspan="5">
+                <%= pluralize(@documents.size, 'documento', plural: 'documentos') %> ·
+                Total <%= Finance::Money.format(cents: total) %>
+              </td>
+            </tr>
+          <% end %>
         </tfoot>
       <% end %>
     </table>

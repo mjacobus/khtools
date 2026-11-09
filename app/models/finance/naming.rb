@@ -29,6 +29,14 @@ module Finance
       "#{parts.compact.join(' - ')}#{extension(document)}"
     end
 
+    # The name without what the table shows in its own columns: date, amount, extension.
+    def short(name)
+      base = File.basename(name, File.extname(name))
+      short = base.sub(/\A\d{4}-?\d{2}(-?\d{2})?[\s_-]*/, '')
+        .sub(/\A(R\$\s*[\d.,]+|\d[\d.]*,\d{2})[\s-]*/, '')
+      short.presence || base
+    end
+
     def folder_path(document:)
       ['Arquivo Corrente', document.competence]
     end
