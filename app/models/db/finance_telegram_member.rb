@@ -7,7 +7,13 @@ class Db::FinanceTelegramMember < ApplicationRecord
   belongs_to :publisher, optional: true, class_name: 'Db::Publisher'
 
   # Who confirms documents is kept apart, on the account: anyone may have that and a role.
-  ROLES = { 'treasurer' => 'Cuida das contas', 'collector' => 'Recolhe' }.freeze
+  ROLES = {
+    'overseer' => 'Responsável pelas contas (secretário ou ancião designado)',
+    'servant' => 'Servo de contas',
+    'helper' => 'Ajudante de contas'
+  }.freeze
+  # Who may receive the meeting cash.
+  CASH_RECEIVERS = %w[servant helper].freeze
 
   validates :role, inclusion: { in: ROLES.keys }, allow_nil: true
   validate :publisher_of_the_account

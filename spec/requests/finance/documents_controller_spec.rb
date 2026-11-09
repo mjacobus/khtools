@@ -174,11 +174,11 @@ RSpec.describe Finance::DocumentsController do
       expect(response).to redirect_to('/finance/documents?month=2026-09')
     end
 
-    context 'with someone who takes care of the accounts' do
+    context 'with an accounts servant or helper' do
       def treasurer(user)
         publisher = factories.publishers.create(account: current_account, user:)
         current_account.finance_telegram_members.create!(telegram_id: 50, name: 'Tesoureiro',
-                                                         role: 'treasurer', publisher:)
+                                                         role: 'helper', publisher:)
       end
 
       it 'shows the Recebi button only to them' do

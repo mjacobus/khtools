@@ -96,15 +96,19 @@ module Finance
       case action
       when 'edit' then Messages::NOT_AN_EDITOR
       when 'cash_received'
-        account.finance_treasurer ? Messages::NOT_THE_TREASURER : Messages::NOT_A_CONFIRMER
+        if account.finance_cash_receivers.exists?
+          Messages::NOT_A_CASH_RECEIVER
+        else
+          Messages::NOT_A_CONFIRMER
+        end
       else Messages::NOT_A_CONFIRMER
       end
     end
 
     def receiver?(query)
-      treasurer = account.finance_treasurer
-      if treasurer
-        treasurer.telegram_id.to_s == query.dig('from', 'id').to_s
+      receivers = account.finance_cash_receivers
+      if receivers.exists?
+        receivers.exists?(telegram_id: query.dig('from', 'id'))
       else
         confirmer?(query)
       end

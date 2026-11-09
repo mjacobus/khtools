@@ -2,7 +2,7 @@
 
 module Finance
   # Meeting-day nudge to whoever still holds the cash of a past meeting, mentioning them so Telegram
-  # notifies them, until the treasurer taps "Recebi".
+  # notifies them, until the accounts servant or a helper taps "Recebi".
   class CashReminders
     def initialize(account:, telegram:)
       @account = account
@@ -14,7 +14,7 @@ module Finance
         .order(:document_date)
       if pending.any?
         @telegram.send_message(chat_id: @account.finance_telegram_chat_id, html: true,
-                               text: ["💵 Dinheiro a entregar a #{treasurer}",
+                               text: ["💵 Dinheiro a entregar #{receivers}",
                                       *pending.map { |document| line(document) }].join("\n"))
       end
     end
@@ -27,12 +27,13 @@ module Finance
         "#{Money.format(cents: document.amount_cents.to_i)} · com #{holder(document)}"
     end
 
-    def treasurer
-      member = @account.finance_treasurer
-      if member
-        mention(member.telegram_id, member.display_name)
+    def receivers
+      members = @account.finance_cash_receivers
+      if members.any?
+        names = members.map { |member| mention(member.telegram_id, member.display_name) }
+        "a #{names.join(' ou ')}"
       else
-        'quem cuida das contas'
+        'ao servo de contas'
       end
     end
 

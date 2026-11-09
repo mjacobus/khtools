@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Finance
-  # The treasurer got the cash of an S-24 or made its Pix, as with the group buttons (actions
-  # of DocumentsController, so the same access covers them).
+  # The accounts servant or a helper got the cash of an S-24, or its Pix was made, as with the
+  # group buttons (actions of DocumentsController, so the same access covers them).
   module CashHandover
     extend ActiveSupport::Concern
 
@@ -28,11 +28,12 @@ module Finance
 
     private
 
-    # Who takes care of the accounts, when their publisher is this user. With nobody in that
-    # role, or not linked to a user yet, anyone with access to the documents can.
+    # The accounts servant or a helper, when their publisher is this user. With nobody in those
+    # roles linked to a user yet, anyone with access to the documents can.
     def cash_receiver?
-      user_id = current_account.finance_treasurer&.publisher&.user_id
-      user_id.nil? || user_id == current_user.id
+      user_ids = current_account.finance_cash_receivers.includes(:publisher)
+        .filter_map { |member| member.publisher&.user_id }
+      user_ids.empty? || user_ids.include?(current_user.id)
     end
 
     def update_cash_message(document)
