@@ -14,7 +14,7 @@ module Finance
       months = documents.where.not(competence: nil).distinct.pluck(:competence)
       @month = requested_month || months.max
       @months = (months | [@month]).compact.sort.reverse
-      list_month
+      list_documents
       @paid_bills = paid_bills
       @cash_ledger = cash_ledger
     end

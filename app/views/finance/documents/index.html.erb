@@ -1,4 +1,5 @@
 <% month_label = ->(month) { l(Date.parse("#{month}-01"), format: '%B de %Y').capitalize } %>
+<% all = all_documents_view? %>
 <% turbo_refreshes_with method: :morph, scroll: :preserve %>
 
 <div data-turbo="true">
@@ -9,7 +10,7 @@
     <%= link_to archive_finance_documents_path, class: 'btn btn-outline-secondary', title: 'Arquivar meses auditados' do %>
       <i class="bi bi-archive"></i> Arquivar
     <% end %>
-    <% if @month %>
+    <% if @month && !all %>
       <% first_day = Date.parse("#{@month}-01") %>
       <%= form_with url: finance_documents_path, method: :get, class: 'd-flex align-items-center gap-1' do %>
         <%= link_to finance_documents_path(month: first_day.prev_month.strftime('%Y-%m'), kind: params[:kind].presence),
@@ -28,6 +29,17 @@
     <% end %>
   </div>
 </div>
+
+<ul id="document-tabs" class="nav nav-tabs mb-3">
+  <li class="nav-item">
+    <%= link_to 'Por período', finance_documents_path(month: @month), class: "nav-link #{'active' unless all}",
+                                                                      aria: { current: (all ? nil : 'page') } %>
+  </li>
+  <li class="nav-item">
+    <%= link_to 'Todos', finance_documents_path(view: 'all'), class: "nav-link #{'active' if all}",
+                                                              aria: { current: (all ? 'page' : nil) } %>
+  </li>
+</ul>
 
 <% if flash[:notice] %>
   <div class="alert alert-success" role="alert"><%= flash[:notice] %></div>
@@ -74,7 +86,7 @@
   </details>
 <% end %>
 
-<% if @month %>
+<% if @month && !all %>
   <% done = checklist.count(&:done) %>
   <details id="checklist-panel" class="card mb-3">
     <summary class="card-header">
@@ -92,20 +104,29 @@
   <p class="text-muted">Nenhum documento arquivado ainda.</p>
 <% else %>
   <%= form_with url: finance_documents_path, method: :get, id: 'filters', class: 'd-flex flex-wrap align-items-center gap-2 mb-2' do %>
-    <%= hidden_field_tag :month, @month, id: nil %>
+    <% if all %>
+      <%= hidden_field_tag :view, 'all', id: nil %>
+    <% else %>
+      <%= hidden_field_tag :month, @month, id: nil %>
+    <% end %>
     <%= select_tag :kind, options_for_select([['Todos os tipos', '']] + @kinds.map { |kind| [kind_label.call(kind), kind] }, params[:kind]),
                    class: 'form-select w-auto', aria: { label: 'Tipo' }, data: { searchable: false },
                    onchange: 'this.form.requestSubmit()' %>
     <%= search_field_tag :q, params[:q], class: 'form-control w-auto flex-grow-1', style: 'max-width: 20rem',
                          placeholder: 'Buscar no nome', aria: { label: 'Buscar no nome' } %>
     <% if filtered %>
-      <%= link_to 'Limpar filtros', finance_documents_path(month: @month), class: 'btn btn-link' %>
+      <%= link_to 'Limpar filtros', all ? finance_documents_path(view: 'all') : finance_documents_path(month: @month),
+                  class: 'btn btn-link' %>
     <% end %>
   <% end %>
 
   <% if @documents.empty? %>
     <p class="text-muted">
-      <%= filtered ? 'Nenhum documento com esses filtros.' : "Nada arquivado em #{month_label.call(@month).downcase}." %>
+      <% if filtered %>
+        Nenhum documento com esses filtros.
+      <% else %>
+        Nada arquivado em <%= month_label.call(@month).downcase %>.
+      <% end %>
     </p>
   <% else %>
     <% total = @documents.filter_map(&:amount_cents).sum %>
@@ -116,6 +137,7 @@
       <thead>
         <tr>
           <th scope="col" class="d-none d-md-table-cell">Data</th>
+          <% if all %><th scope="col" class="d-none d-md-table-cell">Mês</th><% end %>
           <th scope="col" class="ps-0 ps-md-2">Tipo</th>
           <th scope="col" class="text-end">Valor</th>
           <th scope="col" class="pe-0"><span class="visually-hidden">Ações</span></th>
@@ -128,6 +150,9 @@
             <td class="text-secondary small text-nowrap d-none d-md-table-cell">
               <%= document.document_date&.strftime('%d/%m/%Y') %>
             </td>
+            <% if all %>
+              <td class="month text-secondary small text-nowrap d-none d-md-table-cell"><%= document.competence %></td>
+            <% end %>
             <td class="kind text-break ps-0 ps-md-2">
               <% icon = { '.pdf' => 'bi-file-earmark-pdf text-danger', '.jpg' => 'bi-file-earmark-image text-primary',
                           '.jpeg' => 'bi-file-earmark-image text-primary', '.png' => 'bi-file-earmark-image text-primary' } %>
@@ -156,8 +181,10 @@
               <% if details %>
                 <small class="details text-secondary"><%= details %></small>
               <% end %>
-              <% if document.document_date %>
-                <small class="d-block d-md-none text-muted"><%= document.document_date.strftime('%d/%m') %></small>
+              <% phone_line = [document.document_date&.strftime(all ? '%d/%m/%Y' : '%d/%m'),
+                               (all && document.competence) ? "mês #{document.competence}" : nil].compact %>
+              <% if phone_line.any? %>
+                <small class="d-block d-md-none text-muted"><%= phone_line.join(' · ') %></small>
               <% end %>
               <% if kind == 'bill' %>
                 <%= render 'payment_badge', bill: document %>
@@ -209,7 +236,7 @@
         <tfoot class="text-end text-secondary small">
           <% if s24_total.positive? %>
             <tr>
-              <td colspan="4">
+              <td colspan="<%= all ? 5 : 4 %>">
                 Donativos (<%= s24s.size %> S-24) ·
                 Obra <%= Finance::Money.format(cents: s24s.sum { |d| d.worldwide_cents.to_i }) %> ·
                 Local <%= Finance::Money.format(cents: s24s.sum { |d| d.congregation_cents.to_i }) %> ·
@@ -219,7 +246,7 @@
           <% end %>
           <% if kind_total %>
             <tr>
-              <td colspan="4">
+              <td colspan="<%= all ? 5 : 4 %>">
                 <%= pluralize(@documents.size, 'documento', plural: 'documentos') %> ·
                 Total <%= Finance::Money.format(cents: total) %>
               </td>
