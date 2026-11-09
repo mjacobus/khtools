@@ -87,8 +87,7 @@ RSpec.describe Finance::IntegrationsController do
 
     select = Nokogiri::HTML(response.body).at('select[name="integration[member_roles][7]"]')
     expect(select.css('option').map(&:text)).to eq(
-      ['Sem papel', 'Responsável pelas contas (secretário ou ancião designado)',
-       'Servo de contas', 'Ajudante de contas']
+      ['Sem papel', 'Responsável pelas contas', 'Servo de contas', 'Ajudante de contas']
     )
   end
 

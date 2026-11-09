@@ -8,7 +8,7 @@ class Db::FinanceTelegramMember < ApplicationRecord
 
   # Who confirms documents is kept apart, on the account: anyone may have that and a role.
   ROLES = {
-    'overseer' => 'Responsável pelas contas (secretário ou ancião designado)',
+    'overseer' => 'Responsável pelas contas', # secretary or appointed elder
     'servant' => 'Servo de contas',
     'helper' => 'Ajudante de contas'
   }.freeze
