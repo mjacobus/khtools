@@ -33,10 +33,17 @@ RSpec.describe Finance::DocumentsController do
     expect(kinds).to eq(%w[S-24 S-26])
     link = page.at('a[href="https://drive/s24"]')
     expect(link.text.strip).to eq('S-24')
-    expect(page.css('#documents thead th').map { |th| th.text.strip })
-      .to eq(['Data', 'Tipo', 'Valor', 'Ações'])
     expect(link['title']).to eq('2026-09-02 - R$ 220,00 - S-24.jpg')
     expect(response.body).to include('02/09/2026', 'R$ 220,00')
+  end
+
+  it 'has no file name column: the type links to the file' do
+    document(kind: 's26')
+
+    get '/finance/documents', params: { month: '2026-09' }
+
+    expect(page.css('#documents thead th').map { |th| th.text.strip })
+      .to eq(%w[Data Tipo Valor Ações])
   end
 
   it 'names files found by the backfill as they are called in Drive' do
