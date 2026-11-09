@@ -3,18 +3,9 @@
 <p class="text-muted">
   <%= link_to @document.drive_name, @document.drive_url, target: '_blank', rel: 'noopener' %>
 </p>
-<% day = ->(time) { time && l(time, format: '%d/%m/%Y') } %>
 <ul id="history" class="list-unstyled small text-secondary">
-  <% if @document.sent_by_name.present? %>
-    <li>Enviado por <%= @document.sent_by_name %> em <%= day.call(@document.created_at) %></li>
-  <% elsif @document.backfilled? %>
-    <li>Já estava no Drive</li>
-  <% end %>
-  <% if @document.confirmed_by.present? %>
-    <li>Confirmado por <%= @document.confirmed_by %><%= " em #{day.call(@document.confirmed_at)}" if @document.confirmed_at %></li>
-  <% end %>
-  <% @document.corrections.each do |correction| %>
-    <li>Corrigido por <%= correction['by_name'] %> em <%= day.call(Time.zone.parse(correction['at'].to_s)) %>: <%= correction['text'] %></li>
+  <% finance_document_history(@document).each do |line| %>
+    <li><%= line %></li>
   <% end %>
 </ul>
 
