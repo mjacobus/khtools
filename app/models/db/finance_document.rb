@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Db::FinanceDocument < ApplicationRecord
+class Db::FinanceDocument < ApplicationRecord # rubocop:disable Metrics/ClassLength -- states, cash, bills, naming
   STATES = %w[received suggested confirmed archived discarded failed].freeze
   KINDS = %w[
     s24 payment_receipt bill statement betel_statement s26 s30 remittance_record remittance_receipt
@@ -21,6 +21,10 @@ class Db::FinanceDocument < ApplicationRecord
   validates :state, inclusion: { in: STATES }
   validates :kind, inclusion: { in: KINDS }
   validates :competence, format: { with: /\A\d{4}-(0[1-9]|1[0-2])\z/ }, allow_nil: true
+  validate :audit_report_in_last_month, if: lambda {
+    kind == 'audit_report' && competence.present? &&
+      (will_save_change_to_competence? || will_save_change_to_kind?)
+  }
   validates :telegram_message_id, uniqueness: { scope: %i[account_id telegram_chat_id] },
                                   allow_nil: true
 
@@ -132,5 +136,14 @@ class Db::FinanceDocument < ApplicationRecord
 
   def add_flag(flag)
     self.flags = (flag_list | [flag.to_s]).join(',')
+  end
+
+  private
+
+  def audit_report_in_last_month
+    message = Finance::Competence.audit_month_error(competence)
+    if message
+      errors.add(:competence, message)
+    end
   end
 end

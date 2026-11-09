@@ -8,7 +8,6 @@ module Finance
     # ponytail: the congregation's meeting days; an account setting when another one needs it.
     MEETING_DAYS = [3, 6].freeze # Wednesday, Saturday
     MONTHLY = %w[statement betel_statement s26 s30 remittance_record remittance_receipt].freeze
-    AUDIT_MONTHS = [2, 5, 8, 11].freeze # quarters Dec-Feb, Mar-May, Jun-Aug, Sep-Nov
     Item = Struct.new(:kind, :date, :done, keyword_init: true)
 
     def initialize(account:, month:, today: Date.current)
@@ -38,7 +37,7 @@ module Finance
     end
 
     def monthly
-      kinds = MONTHLY + (AUDIT_MONTHS.include?(@first.month) ? ['audit_report'] : [])
+      kinds = MONTHLY + (Competence::AUDIT_MONTHS.include?(@first.month) ? ['audit_report'] : [])
       present = documents.where(kind: kinds, competence: Competence.month(@first))
         .distinct.pluck(:kind)
       kinds.map { |kind| Item.new(kind:, done: present.include?(kind)) }

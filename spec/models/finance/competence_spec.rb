@@ -24,6 +24,13 @@ RSpec.describe Finance::Competence do
     expect(default_for('remittance_record', '2026-10-28')).to eq('2026-10')
   end
 
+  it 'files an audit report under the last month of the period before its date' do
+    expect(default_for('audit_report', '2026-09-01')).to eq('2026-08')
+    expect(default_for('audit_report', '2026-12-03')).to eq('2026-11')
+    expect(default_for('audit_report', '2027-03-10')).to eq('2027-02')
+    expect(default_for('audit_report', '2026-10-03', '2026-08')).to eq('2026-08')
+  end
+
   it 'returns nil without date or period' do
     expect(default_for('s24', nil)).to be_nil
   end
