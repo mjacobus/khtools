@@ -1,0 +1,71 @@
+<% granted = @user.controller_accesses.to_a %>
+<%# Screens the user can open first (open), then the rest; Active Admin's last. %>
+<% screens = ControllerAcl.controller_actions_for_acl.group_by { |item| item.split('#').first }
+             .sort_by { |screen, actions| [actions.intersect?(granted) ? 0 : 1, screen.start_with?('admin/') ? 1 : 0, screen] } %>
+
+<h1 class="h3 mb-1"><%= @user.name %></h1>
+<p class="text-secondary"><%= @user.email %></p>
+
+<% if @user.errors.any? %>
+  <div class="alert alert-danger" role="alert"><%= @user.errors.full_messages.to_sentence %></div>
+<% end %>
+
+<%= form_with model: @user, url: user_path(@user), method: :patch, data: { turbo: false } do |f| %>
+  <div class="row g-3 mb-3" style="max-width: 40rem">
+    <div class="col-12 col-md-6">
+      <%= f.label :account_id, 'Congregação', class: 'form-label' %>
+      <%= f.select :account_id, Db::Account.order(:congregation_name).map { |a| [a.congregation_name, a.id] },
+                   { include_blank: 'Nenhuma' }, class: 'form-select' %>
+    </div>
+    <div class="col-12 col-md-6">
+      <%= label_tag 'user_publisher_id', 'Publicador', class: 'form-label' %>
+      <%= select_tag 'user[publisher_id]',
+                     options_for_select(@user.account ? @user.account.publishers.order(:name).pluck(:name, :id) : [], @user.publisher&.id),
+                     include_blank: 'Nenhum', id: 'user_publisher_id', class: 'form-select' %>
+      <div class="form-text">Quem o usuário é na congregação. Ao trocar a congregação, salve antes de escolher o publicador.</div>
+    </div>
+    <div class="col-12">
+      <div class="form-check">
+        <%= f.check_box :enabled, class: 'form-check-input' %>
+        <%= f.label :enabled, 'Ativo', class: 'form-check-label' %>
+        <div class="form-text">Sem isso, o usuário não consegue entrar.</div>
+      </div>
+      <div class="form-check">
+        <%= f.check_box :master, class: 'form-check-input' %>
+        <%= f.label :master, 'Admin', class: 'form-check-label' %>
+        <div class="form-text">Vê todas as telas, de todas as congregações, e esta página de usuários.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="h5">Telas</h2>
+  <p class="form-text">O que o usuário pode abrir, por tela. Admins veem tudo.</p>
+  <%= hidden_field_tag 'user[controller_accesses][]', '', id: nil %>
+  <div id="screens" class="mb-3">
+    <% screens.each do |screen, actions| %>
+      <% checked = actions.count { |action| granted.include?(action) } %>
+      <details class="border rounded px-2 py-1 mb-1" data-screen="<%= screen %>" <%= 'open' if checked.positive? %>>
+        <summary>
+          <%= screen %>
+          <span class="badge <%= checked.positive? ? 'bg-success' : 'bg-secondary' %>"><%= checked %>/<%= actions.size %></span>
+        </summary>
+        <div class="d-flex flex-wrap gap-3 py-2">
+          <label class="form-check">
+            <input type="checkbox" class="form-check-input"
+                   onchange="this.closest('details').querySelectorAll('input[name]').forEach(box => box.checked = this.checked)">
+            <span class="form-check-label fw-semibold">Todas</span>
+          </label>
+          <% actions.each do |action| %>
+            <label class="form-check">
+              <%= check_box_tag 'user[controller_accesses][]', action, granted.include?(action), id: nil, class: 'form-check-input' %>
+              <span class="form-check-label"><%= action.split('#').last %></span>
+            </label>
+          <% end %>
+        </div>
+      </details>
+    <% end %>
+  </div>
+
+  <%= f.submit 'Salvar', class: 'btn btn-primary' %>
+  <%= link_to 'Voltar', users_path, class: 'btn btn-link' %>
+<% end %>

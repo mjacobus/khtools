@@ -31,7 +31,7 @@ class User < ApplicationRecord
   # that is for active admin form
   def controller_accesses=(items)
     permissions['controllers'] = []
-    Array.wrap(items).compact.reject { |i| i == '#' }.each do |item|
+    Array.wrap(items).compact.reject { |i| i.blank? || i == '#' }.each do |item|
       parts = item.split('#')
       grant_controller_access(parts[0], action: parts[1])
     end

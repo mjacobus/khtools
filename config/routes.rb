@@ -101,14 +101,7 @@ Rails.application.routes.draw do
     resources :territory_assignments, only: %i[index]
   end
 
-  resources :users, only: %i[index] do
-    member do
-      patch :enable
-      patch :disable
-      patch :grant_admin
-      patch :revoke_admin
-    end
-  end
+  resources :users, only: %i[index edit update]
 
   get '/auth/:provider/callback', to: 'sessions#create'
   get 'logout', to: 'sessions#destroy'
