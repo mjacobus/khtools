@@ -54,6 +54,19 @@ RSpec.describe Finance::DocumentsController do
     expect(page.at('#document-tabs a.active').text.squish).to eq('Todos')
   end
 
+  it 'pages the all documents view, with the totals of every page' do
+    stub_const('Finance::DocumentFilters::PER_PAGE', 2)
+    (1..3).each do |day|
+      document(kind: 's24', amount_cents: 100, document_date: Date.new(2026, 9, day))
+    end
+
+    get '/finance/documents', params: { view: 'all', page: 2 }
+
+    expect(page.css('#documents tbody tr').size).to eq(1)
+    expect(page.css('.pagination a').map { |link| link.text.squish }).to include('1')
+    expect(page.at('#documents tfoot').text.squish).to include('Donativos (3 S-24)')
+  end
+
   it 'lists the documents of every month, newest first, with their month' do
     document(kind: 'audit_report', competence: '2025-11', document_date: Date.new(2025, 12, 3))
     document(kind: 'audit_report', competence: '2026-05', document_date: Date.new(2026, 6, 2))

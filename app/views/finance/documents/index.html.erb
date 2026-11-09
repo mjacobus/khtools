@@ -131,7 +131,7 @@
     <% end %>
   <% end %>
 
-  <% if @documents.empty? %>
+  <% if @listed.empty? %>
     <p class="text-muted">
       <% if filtered %>
         Nenhum documento com esses filtros.
@@ -140,8 +140,8 @@
       <% end %>
     </p>
   <% else %>
-    <% total = @documents.filter_map(&:amount_cents).sum %>
-    <% s24s = @documents.select { |document| document.kind == 's24' } %>
+    <% total = @listed.filter_map(&:amount_cents).sum %>
+    <% s24s = @listed.select { |document| document.kind == 's24' } %>
     <% s24_total = s24s.filter_map(&:amount_cents).sum %>
     <% kind_total = total.positive? && params[:kind].present? && params[:kind] != 's24' %>
     <table id="documents" class="table align-middle">
@@ -271,7 +271,7 @@
           <% if kind_total %>
             <tr>
               <td colspan="<%= all ? 6 : 5 %>">
-                <%= pluralize(@documents.size, 'documento', plural: 'documentos') %> ·
+                <%= pluralize(@listed.size, 'documento', plural: 'documentos') %> ·
                 Total <%= Finance::Money.format(cents: total) %>
               </td>
             </tr>
@@ -279,6 +279,7 @@
         </tfoot>
       <% end %>
     </table>
+    <% if all %><%= paginate @documents %><% end %>
   <% end %>
 <% end %>
 <% end %>
