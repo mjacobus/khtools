@@ -6,6 +6,8 @@ module Finance
   module DocumentFilters
     extend ActiveSupport::Concern
 
+    PER_PAGE = 50
+
     included { helper_method :all_documents_view?, :reminders_view?, :archive_reminders }
 
     private
@@ -22,12 +24,22 @@ module Finance
       @archive_reminders ||= ArchiveReminders.new(account: current_account)
     end
 
-    # ponytail: no pagination; a congregation files a few hundred documents a year.
+    # @listed is every match (the totals); @documents is what the page shows. Only "Todos" is
+    # paged: a month has a few dozen documents.
     def list_documents
       scope = all_documents_view? ? documents : documents.where(competence: @month)
       @kinds = scope.distinct.pluck(:kind).sort_by { |kind| Db::FinanceDocument::KINDS.index(kind) }
-      @documents = search(of_kind(scope).order(Arel.sql('document_date IS NULL'), document_order)
-                            .to_a)
+      @listed = search(of_kind(scope).order(Arel.sql('document_date IS NULL'), document_order).to_a)
+      @documents = paged(@listed)
+    end
+
+    # ponytail: pages in Ruby because the search runs on the built name; fine for thousands.
+    def paged(list)
+      if all_documents_view?
+        Kaminari.paginate_array(list).page(params[:page]).per(PER_PAGE)
+      else
+        list
+      end
     end
 
     def document_order
