@@ -1,35 +1,42 @@
-<h1>Users</h1>
+<h1 class="h3 mb-3">Usuários</h1>
 
-
-<% @users.each do |user| %>
-  <hr>
-  <div class="row">
-    <div class="col-sm-1"> 
-      <% if user.avatar %>
-        <%= image_tag("#{user.avatar}?sz=25", class: 'avatar-25') %>
-      <% end %>
-    </div>
-    <div class="col-sm-1">
-      <%= 'Admin' if user.master? %>
-      <%= 'Enabled' if user.enabled? %>
-    </div>
-    <div class="col-sm-3"> 
-      <div> <%= user.name %> </div>
-      <div> <%= user.congregation_name %> </div>
-    </div>
-    <div class="col-sm-3"> <%= user.email %></div>
-    <div class="col-sm-4">
-      <% if user.enabled? %>
-        <a href="/users/<%= user.id %>/disable" data-method="PATCH" class="btn btn-danger" data-confirm="Sure you want to disable the account for <%= user.name %> (<%= user.email %> )?">Disable</a>
-      <% else %>
-        <a href="/users/<%= user.id %>/enable" data-method="PATCH" class="btn btn-success" data-confirm="Sure you want to enable the account for <%= user.name %> (<%= user.email %> )?">Enable</a>
-      <% end %>
-
-      <% if user.master? %>
-        <a href="/users/<%= user.id %>/revoke_admin" data-method="PATCH" class="btn btn-danger" data-confirm="Sure you want to revoke admin rights from <%= user.name %> (<%= user.email %> )?">Revoke Admin</a>
-      <% else %>
-        <a href="/users/<%= user.id %>/grant_admin" data-method="PATCH" class="btn btn-success" data-confirm="Sure you want to grant admin rights to <%= user.name %> (<%= user.email %> )?">Grant Admin</a>
-      <% end %>
-    </div>
-  </div>
+<% if flash[:notice] %>
+  <div class="alert alert-success" role="alert"><%= flash[:notice] %></div>
 <% end %>
+
+<table class="table align-middle">
+  <thead>
+    <tr>
+      <th scope="col">Nome</th>
+      <th scope="col" class="d-none d-md-table-cell">Congregação</th>
+      <th scope="col" class="d-none d-md-table-cell">Publicador</th>
+      <th scope="col"><span class="visually-hidden">Ações</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.includes(:account, :publisher).each do |user| %>
+      <tr id="user-<%= user.id %>">
+        <td class="text-break">
+          <% if user.avatar %>
+            <%= image_tag("#{user.avatar}?sz=25", class: 'avatar-25 me-1', alt: '') %>
+          <% end %>
+          <%= user.name %>
+          <% if user.master? %><span class="badge bg-primary">Admin</span><% end %>
+          <% unless user.enabled? %><span class="badge bg-secondary">Desativado</span><% end %>
+          <small class="d-block text-secondary"><%= user.email %></small>
+          <small class="d-block d-md-none text-secondary">
+            <%= [user.congregation_name, user.publisher&.name].compact.join(' · ') %>
+          </small>
+        </td>
+        <td class="d-none d-md-table-cell"><%= user.congregation_name %></td>
+        <td class="d-none d-md-table-cell"><%= user.publisher&.name %></td>
+        <td class="text-end">
+          <%= link_to edit_user_path(user), class: 'btn btn-sm btn-outline-secondary',
+                                            title: 'Editar', aria: { label: "Editar #{user.name}" } do %>
+            <i class="bi bi-pencil"></i>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
