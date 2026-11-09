@@ -20,6 +20,24 @@ module Finance
       retry_stuck
     end
 
+    # +heard+ is what was said in plain words, kept in the history next to the fields.
+    def correct(document, message, heard: nil)
+      if !editor?(document, message)
+        reply(message, Messages::NOT_AN_EDITOR)
+      elsif document.state == 'suggested'
+        apply_correction(document, message, heard)
+        show_suggestion(document)
+        reply(message, Messages.corrected(heard:))
+      end
+    rescue Correction::Error => exception
+      reply(message, exception.message)
+    end
+
+    def reply(message, text)
+      telegram.send_message(chat_id: message.dig('chat', 'id'), text:,
+                            reply_to: message['message_id'])
+    end
+
     private
 
     def group_message(message)
@@ -38,10 +56,29 @@ module Finance
       prompt_id = message.dig('reply_to_message', 'message_id')
       document = prompt_id && documents.find_by(edit_prompt_message_id: prompt_id)
       if document
-        correct(document, message)
+        correction(document, message)
       else
         file_of(message)&.then { |file| receive(message, file) }
       end
+    end
+
+    # The fields format is applied right away; anything else is understood by the assistant,
+    # when there is an OpenAI key.
+    def correction(document, message)
+      plain_words = !fields_format?(message) && editor?(document, message)
+      if plain_words && account.ai_api_key.present?
+        CorrectionJob.perform_later(document.id, message)
+        reply(message, Messages::LISTENING)
+      elsif plain_words && !message['text']
+        reply(message, Messages::NEEDS_AI)
+      else
+        correct(document, message)
+      end
+    end
+
+    def fields_format?(message)
+      first_word = message['text'].to_s.split.first.to_s
+      Correction::KEYS.include?(Correction.normalize(first_word))
     end
 
     def file_of(message)
@@ -156,33 +193,16 @@ module Finance
       end
     end
 
-    def correct(document, message)
-      if !editor?(document, message)
-        reply(message, Messages::NOT_AN_EDITOR)
-      elsif document.state == 'suggested'
-        apply_correction(document, message)
-        show_suggestion(document)
-        reply(message, Messages::CORRECTED)
-      end
-    rescue Correction::Error => exception
-      reply(message, exception.message)
-    end
-
     def show_suggestion(document)
       text, buttons = Messages.suggestion(document:)
       telegram.edit_message(chat_id: document.telegram_chat_id,
                             message_id: document.bot_message_id, text:, buttons:)
     end
 
-    def reply(message, text)
-      telegram.send_message(chat_id: message.dig('chat', 'id'), text:,
-                            reply_to: message['message_id'])
-    end
-
-    def apply_correction(document, message)
+    def apply_correction(document, message, heard)
       Correction.apply(document:, text: message['text'])
       document.record_correction(by_telegram_id: message.dig('from', 'id'),
-                                 by_name: name(message), text: message['text'])
+                                 by_name: name(message), text: heard || message['text'])
       document.save!
     end
 

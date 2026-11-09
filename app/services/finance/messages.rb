@@ -18,9 +18,23 @@ module Finance
     REPLACES = '⚠️ Substitui o arquivo já arquivado ' \
                '(a versão anterior fica no histórico do Drive)'
     EDIT_PROMPT = 'Responda a esta mensagem com os campos a mudar, por exemplo: ' \
-                  "data 2026-11-05 local 120 mundial 30\nCampos: %{keys}"
+                  "data 2026-11-05 local 120 mundial 30\nCampos: %{keys}\n" \
+                  'Ou diga com suas palavras, por escrito ou num áudio: ' \
+                  '"é a auditoria de março a maio".'
+    LISTENING = '🎧 Entendendo a correção…'
+    NEEDS_AI = 'Para entender áudios e frases, cadastre a chave da OpenAI nas integrações. ' \
+               'Ou responda com os campos, por exemplo: local 120 mundial 30'
 
     module_function
+
+    # With what was said in plain words, so whoever corrected can check what was understood.
+    def corrected(heard: nil)
+      if heard
+        "✏️ Corrigido.\n#{heard}\nConfira a sugestão acima e confirme."
+      else
+        CORRECTED
+      end
+    end
 
     def suggestion(document:)
       [suggestion_text(document), buttons(document)]
