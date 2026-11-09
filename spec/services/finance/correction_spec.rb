@@ -47,6 +47,13 @@ RSpec.describe Finance::Correction do
     expect(document.competence).to eq('2026-09')
   end
 
+  it 'refuses an audit report month outside the last month of a period' do
+    document.kind = 'audit_report'
+
+    expect { apply('mes 2026-09') }
+      .to raise_error(described_class::Error, /não é o último mês de um período de auditoria/)
+  end
+
   it 'rejects unknown keys listing the valid ones' do
     expect do
       apply('preco 10')

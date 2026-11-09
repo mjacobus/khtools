@@ -15,7 +15,16 @@ module Finance
       sum_s24(document) if document.kind == 's24' && fields.keys.intersect?(%w[local mundial])
       refresh_competence(document) if !fields.key?('mes') && fields.keys.intersect?(%w[tipo data])
       document.value_source = 'human'
+      check_audit_month(document)
       document
+    end
+
+    def check_audit_month(document)
+      document.validate
+      message = document.errors[:competence].first
+      if message
+        raise Error, message
+      end
     end
 
     def sum_s24(document)

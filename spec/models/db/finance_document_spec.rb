@@ -23,6 +23,25 @@ RSpec.describe Db::FinanceDocument do
   it { is_expected.to validate_inclusion_of(:state).in_array(described_class::STATES) }
   it { is_expected.to validate_inclusion_of(:kind).in_array(described_class::KINDS) }
 
+  describe 'audit report month' do
+    let(:audit) { factories.finance_documents.create(kind: 'audit_report', competence: '2026-08') }
+
+    it 'must be the last month of an audit period' do
+      audit.competence = '2026-09'
+
+      expect(audit).not_to be_valid
+      expect(audit.errors[:competence].first)
+        .to eq('2026-09 não é o último mês de um período de auditoria. O S-25b fica em ' \
+               'fevereiro, maio, agosto ou novembro (S-27b par. 54): use 2026-08.')
+    end
+
+    it 'leaves alone a report already filed elsewhere' do
+      audit.update_column(:competence, '2026-09')
+
+      expect(audit.reload.update(description: 'Junho a agosto')).to be(true)
+    end
+  end
+
   it 'defaults to received/unknown' do
     expect(described_class.new).to have_attributes(state: 'received', kind: 'unknown')
   end
