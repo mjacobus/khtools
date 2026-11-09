@@ -66,7 +66,7 @@ RSpec.describe Finance::DocumentsController do
     expect(page.at('select#month')).to be_nil
   end
 
-  it 'shows on a history icon who sent each document and who confirmed it, and when' do
+  it 'shows when hovering the type who sent each document and who confirmed it, and when' do
     document(kind: 's26', sent_by_name: 'Ana', created_at: Time.zone.local(2026, 9, 5, 14, 30),
              confirmed_by: 'Marcelo', confirmed_at: Time.zone.local(2026, 9, 6, 10, 0),
              document_date: Date.new(2026, 9, 1))
@@ -75,10 +75,10 @@ RSpec.describe Finance::DocumentsController do
 
     get '/finance/documents', params: { month: '2026-09' }
 
-    expect(page.css('#documents tbody a.history').pluck('title')).to eq(
-      ["Enviado por Ana em 05/09/2026 às 14:30\nConfirmado por Marcelo em 06/09/2026 às 10:00",
-       'Já estava no Drive']
-    )
+    titles = page.css('td.kind > [title]').map { |type| type['title'].lines(chomp: true).last(2) }
+    sent = ['Enviado por Ana em 05/09/2026 às 14:30',
+            'Confirmado por Marcelo em 06/09/2026 às 10:00']
+    expect(titles).to eq([sent, ['Já estava no Drive']])
   end
 
   it 'counts on the reminders tab the audits still to do' do
@@ -103,7 +103,7 @@ RSpec.describe Finance::DocumentsController do
 
     get '/finance/documents', params: { month: '2026-09' }
 
-    expect(page.at('a[href="https://drive/old"]')['title']).to eq('Recibo velho.jpg')
+    expect(page.at('a[href="https://drive/old"]')['title']).to start_with('Recibo velho.jpg')
   end
 
   it 'leaves out other months, other accounts and discarded files' do
