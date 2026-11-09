@@ -43,7 +43,7 @@ RSpec.describe Finance::DocumentsController do
     get '/finance/documents', params: { month: '2026-09' }
 
     expect(page.css('#documents thead th').map { |th| th.text.strip })
-      .to eq(%w[Data Tipo Valor Ações])
+      .to eq(%w[Data Tipo Por Valor Ações])
   end
 
   it 'offers the month view and the all documents view as tabs' do
@@ -64,6 +64,17 @@ RSpec.describe Finance::DocumentsController do
     expect(page.css('#documents tbody td.month').map { |cell| cell.text.strip })
       .to eq(%w[2026-05 2025-11])
     expect(page.at('select#month')).to be_nil
+  end
+
+  it 'shows who sent each document and who confirmed it' do
+    document(kind: 's26', sent_by_name: 'Ana', confirmed_by: 'Marcelo', drive_url: 'https://drive/a')
+    document(kind: 's30', flags: 'backfill', original_filename: 'S-30.pdf', drive_url: 'https://drive/b',
+             telegram_message_id: nil, telegram_chat_id: nil, telegram_file_id: nil)
+
+    get '/finance/documents', params: { month: '2026-09' }
+
+    expect(page.css('#documents tbody td.people').map { |cell| cell.text.squish })
+      .to eq(['enviou Ana confirmou Marcelo', 'já estava no Drive'])
   end
 
   it 'names files found by the backfill as they are called in Drive' do
@@ -293,6 +304,20 @@ RSpec.describe Finance::DocumentsController do
       patch "/finance/documents/#{archived.id}",
             params: { document: { kind: 'bill', competence: '2026-10', document_date: '2026-10-05',
                                   amount: '74,12', description: 'Luz' }.merge(fields) }
+    end
+
+    it 'tells who sent, confirmed and corrected it' do
+      archived.update!(sent_by_name: 'Ana', created_at: Time.zone.local(2026, 9, 2, 10),
+                       confirmed_by: 'Marcelo', confirmed_at: Time.zone.local(2026, 9, 3, 9),
+                       corrections: [{ 'at' => '2026-09-04T08:00:00-03:00', 'by_name' => 'Bia',
+                                       'text' => 'tipo comprovante' }])
+
+      get "/finance/documents/#{archived.id}/edit"
+
+      expect(page.css('#history li').map { |item| item.text.squish }).to eq(
+        ['Enviado por Ana em 02/09/2026', 'Confirmado por Marcelo em 03/09/2026',
+         'Corrigido por Bia em 04/09/2026: tipo comprovante']
+      )
     end
 
     it 'shows the form' do

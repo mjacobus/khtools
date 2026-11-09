@@ -139,6 +139,7 @@
           <th scope="col" class="d-none d-md-table-cell">Data</th>
           <% if all %><th scope="col" class="d-none d-md-table-cell">Mês</th><% end %>
           <th scope="col" class="ps-0 ps-md-2">Tipo</th>
+          <th scope="col" class="d-none d-md-table-cell">Por</th>
           <th scope="col" class="text-end">Valor</th>
           <th scope="col" class="pe-0"><span class="visually-hidden">Ações</span></th>
         </tr>
@@ -192,6 +193,18 @@
                 <small class="text-secondary">· pagou <%= link_to [kind_label.call(paid.kind), paid.description].compact.join(' '), payment_finance_document_path(paid), title: paid.drive_name %></small>
               <% end %>
             </td>
+            <td class="people small text-secondary d-none d-md-table-cell">
+              <% if document.sent_by_name.blank? && document.backfilled? %>
+                já estava no Drive
+              <% else %>
+                <% if document.sent_by_name.present? %>
+                  <span class="d-block" title="Enviou pelo Telegram em <%= l(document.created_at, format: '%d/%m/%Y') %>">enviou <%= document.sent_by_name %></span>
+                <% end %>
+                <% if document.confirmed_by.present? %>
+                  <span class="d-block" title="Confirmou o tipo<%= " em #{l(document.confirmed_at, format: '%d/%m/%Y')}" if document.confirmed_at %>">confirmou <%= document.confirmed_by %></span>
+                <% end %>
+              <% end %>
+            </td>
             <td class="text-end">
               <span class="text-nowrap"><%= document.amount_cents && Finance::Money.format(cents: document.amount_cents) %></span>
               <% if kind == 's24' && (document.worldwide_cents || document.congregation_cents) %>
@@ -236,7 +249,7 @@
         <tfoot class="text-end text-secondary small">
           <% if s24_total.positive? %>
             <tr>
-              <td colspan="<%= all ? 5 : 4 %>">
+              <td colspan="<%= all ? 6 : 5 %>">
                 Donativos (<%= s24s.size %> S-24) ·
                 Obra <%= Finance::Money.format(cents: s24s.sum { |d| d.worldwide_cents.to_i }) %> ·
                 Local <%= Finance::Money.format(cents: s24s.sum { |d| d.congregation_cents.to_i }) %> ·
@@ -246,7 +259,7 @@
           <% end %>
           <% if kind_total %>
             <tr>
-              <td colspan="<%= all ? 5 : 4 %>">
+              <td colspan="<%= all ? 6 : 5 %>">
                 <%= pluralize(@documents.size, 'documento', plural: 'documentos') %> ·
                 Total <%= Finance::Money.format(cents: total) %>
               </td>
