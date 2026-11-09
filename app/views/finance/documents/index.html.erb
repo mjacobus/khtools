@@ -144,20 +144,20 @@
                 <span class="kind-label" title="<%= document.drive_name %>"><%= kind_label.call(kind) %></span>
                 <span class="badge bg-secondary"><%= t("app.finance_document_states.#{document.state}") %></span>
               <% end %>
+              <%# Only what is still pending; nothing once the cash arrived and the Pix is done. %>
+              <% if document.cash_holder_name && !document.cash_received_at %>
+                <span class="pending-sign" role="img" title="Dinheiro com <%= document.cash_holder_name %>"
+                      aria-label="Dinheiro com <%= document.cash_holder_name %>">💵</span>
+              <% end %>
+              <% if document.cash_holder_name && !document.cash_pix_at %>
+                <span class="pending-sign" role="img" title="Pix pendente" aria-label="Pix pendente">💸</span>
+              <% end %>
               <% details = document.description.presence || (Finance::Naming.short(document.drive_name) if kind == 'unknown') %>
               <% if details %>
                 <small class="details text-secondary"><%= details %></small>
               <% end %>
               <% if document.document_date %>
                 <small class="d-block d-md-none text-muted"><%= document.document_date.strftime('%d/%m') %></small>
-              <% end %>
-              <% if document.cash_received_at %>
-                <span class="badge bg-success">💵 recebido</span>
-              <% elsif document.cash_holder_name %>
-                <span class="badge bg-warning text-dark">💵 com <%= document.cash_holder_name %></span>
-              <% end %>
-              <% if document.cash_holder_name && !document.cash_pix_at %>
-                <span class="badge bg-warning text-dark">Pix pendente</span>
               <% end %>
               <% if kind == 'bill' %>
                 <%= render 'payment_badge', bill: document %>

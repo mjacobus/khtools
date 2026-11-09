@@ -179,7 +179,8 @@ RSpec.describe Finance::DocumentsController do
 
       get '/finance/documents', params: { month: '2026-09' }
 
-      expect(page.at('#documents tbody .badge').text).to eq('💵 com Bia')
+      expect(page.css('#documents tbody .pending-sign').pluck('title'))
+        .to eq(['Dinheiro com Bia', 'Pix pendente'])
     end
 
     it 'marks it received and updates the message in the group' do
@@ -241,7 +242,15 @@ RSpec.describe Finance::DocumentsController do
 
       get '/finance/documents', params: { month: '2026-09' }
 
-      expect(page.css('#documents tbody .badge').map(&:text)).to include('Pix pendente')
+      expect(page.css('#documents tbody .pending-sign').pluck('title')).to include('Pix pendente')
+    end
+
+    it 'says nothing once the cash arrived and the Pix is done' do
+      s24.update!(cash_received_at: Time.current, cash_pix_at: Time.current)
+
+      get '/finance/documents', params: { month: '2026-09' }
+
+      expect(page.css('#documents tbody .pending-sign, #documents tbody .badge')).to be_empty
     end
   end
 
