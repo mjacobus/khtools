@@ -174,6 +174,41 @@ RSpec.describe Finance::DocumentsController do
       expect(response).to redirect_to('/finance/documents?month=2026-09')
     end
 
+    context 'with someone who takes care of the accounts' do
+      def treasurer(user)
+        publisher = factories.publishers.create(account: current_account, user:)
+        current_account.finance_telegram_members.create!(telegram_id: 50, name: 'Tesoureiro',
+                                                         role: 'treasurer', publisher:)
+      end
+
+      it 'shows the Recebi button only to them' do
+        treasurer(factories.users.create(account: current_account))
+        s24
+
+        get '/finance/documents', params: { month: '2026-09' }
+
+        expect(page.css('button[title="Recebi o dinheiro"]')).to be_empty
+      end
+
+      it 'refuses anyone else' do
+        treasurer(factories.users.create(account: current_account))
+
+        post "/finance/documents/#{s24.id}/cash_received"
+
+        expect(response).to have_http_status(:forbidden)
+        expect(s24.reload.cash_received_at).to be_nil
+      end
+
+      it 'lets them mark it received' do
+        treasurer(current_user)
+        s24
+
+        get '/finance/documents', params: { month: '2026-09' }
+
+        expect(page.css('button[title="Recebi o dinheiro"]').size).to eq(1)
+      end
+    end
+
     it 'marks the Pix done and updates the message in the group' do
       post "/finance/documents/#{s24.id}/cash_pix"
 

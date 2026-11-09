@@ -176,7 +176,7 @@
             </td>
             <td class="pe-0">
               <div class="d-flex flex-wrap justify-content-end gap-1">
-                <% if document.cash_holder_name && !document.cash_received_at %>
+                <% if document.cash_holder_name && !document.cash_received_at && cash_receiver? %>
                   <%= button_to cash_received_finance_document_path(document), class: 'btn btn-sm btn-outline-success text-nowrap',
                                                                                title: 'Recebi o dinheiro' do %>
                     <i class="bi bi-cash"></i> Recebi

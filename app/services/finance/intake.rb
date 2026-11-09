@@ -77,16 +77,36 @@ module Finance
       elsif allowed?(action, document, query)
         { text: send(action, document, query) }
       else
-        { text: action == 'edit' ? Messages::NOT_AN_EDITOR : Messages::NOT_A_CONFIRMER }
+        { text: refusal(action) }
       end
     end
 
-    # Anyone can say they have the cash; whoever sent the file can correct it.
+    # Anyone can say they have the cash; whoever sent the file can correct it; only who takes
+    # care of the accounts (if anyone has that role) says the cash arrived.
     def allowed?(action, document, query)
       case action
       when 'cash_holder' then true
       when 'edit' then editor?(document, query)
+      when 'cash_received' then receiver?(query)
       else confirmer?(query)
+      end
+    end
+
+    def refusal(action)
+      case action
+      when 'edit' then Messages::NOT_AN_EDITOR
+      when 'cash_received'
+        account.finance_treasurer ? Messages::NOT_THE_TREASURER : Messages::NOT_A_CONFIRMER
+      else Messages::NOT_A_CONFIRMER
+      end
+    end
+
+    def receiver?(query)
+      treasurer = account.finance_treasurer
+      if treasurer
+        treasurer.telegram_id.to_s == query.dig('from', 'id').to_s
+      else
+        confirmer?(query)
       end
     end
 
