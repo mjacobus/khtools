@@ -50,7 +50,7 @@ module Finance
 
     # Last months of the periods that start at +from+ or later and ended before today.
     def audit_ends(from:)
-      last = from >> ((MonthChecklist::AUDIT_MONTHS.first - from.month) % 3)
+      last = from >> ((Competence::AUDIT_MONTHS.first - from.month) % 3)
       ends = []
       while last.end_of_month < @today
         ends << last

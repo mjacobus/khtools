@@ -244,6 +244,58 @@ RSpec.describe Finance::Intake do
     end
   end
 
+  describe 'corrections in plain words' do
+    let(:document) { suggested }
+
+    def voice_reply
+      reply(nil).tap do |update|
+        update['message'].delete('text')
+        update['message']['voice'] = { 'file_id' => 'V1', 'mime_type' => 'audio/ogg' }
+      end
+    end
+
+    before { intake.handle(update: callback('edit', document)) }
+
+    context 'with an OpenAI key' do
+      before { account.update!(ai_api_key: 'key') }
+
+      it 'hands a voice message to the assistant' do
+        intake.handle(update: voice_reply)
+
+        expect(Finance::CorrectionJob).to have_been_enqueued
+          .with(document.id, hash_including('voice' => hash_including('file_id' => 'V1')))
+        expect(telegram.sent.last).to include(reply_to: 20, text: Finance::Messages::LISTENING)
+      end
+
+      it 'hands a sentence that is not in the fields format to the assistant' do
+        intake.handle(update: reply('auditoria de mar-mai'))
+
+        expect(Finance::CorrectionJob).to have_been_enqueued
+      end
+
+      it 'still applies the fields format right away' do
+        intake.handle(update: reply('local 120'))
+
+        expect(Finance::CorrectionJob).not_to have_been_enqueued
+        expect(document.reload.congregation_cents).to eq(12_000)
+      end
+
+      it 'does not listen to who cannot correct it' do
+        intake.handle(update: reply('auditoria', from: 8))
+
+        expect(Finance::CorrectionJob).not_to have_been_enqueued
+        expect(telegram.sent.last).to include(text: Finance::Messages::NOT_AN_EDITOR)
+      end
+    end
+
+    it 'asks for the OpenAI key to understand voice messages' do
+      intake.handle(update: voice_reply)
+
+      expect(Finance::CorrectionJob).not_to have_been_enqueued
+      expect(telegram.sent.last).to include(reply_to: 20, text: Finance::Messages::NEEDS_AI)
+    end
+  end
+
   # Whoever collected the offering (signature 1) usually sends the photo; the second signer
   # confirms it, so only confirmers can confirm.
   describe 'corrections by whoever sent the file' do
