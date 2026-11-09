@@ -20,7 +20,7 @@ RSpec.describe Finance::DocumentsController do
   end
 
   def kinds
-    page.css('#documents tbody td.kind').map { |cell| cell.text.strip }
+    page.css('#documents tbody .kind-label').map { |label| label.text.strip }
   end
 
   it "lists the month's documents by date, with their type, linking to Drive" do
@@ -32,9 +32,18 @@ RSpec.describe Finance::DocumentsController do
 
     expect(kinds).to eq(%w[S-24 S-26])
     link = page.at('a[href="https://drive/s24"]')
-    expect(link.text).to eq('S-24')
+    expect(link.text.strip).to eq('S-24')
     expect(link['title']).to eq('2026-09-02 - R$ 220,00 - S-24.jpg')
     expect(response.body).to include('02/09/2026', 'R$ 220,00')
+  end
+
+  it 'has no file name column: the type links to the file' do
+    document(kind: 's26')
+
+    get '/finance/documents', params: { month: '2026-09' }
+
+    expect(page.css('#documents thead th').map { |th| th.text.strip })
+      .to eq(%w[Data Tipo Valor Ações])
   end
 
   it 'names files found by the backfill as they are called in Drive' do
@@ -90,12 +99,21 @@ RSpec.describe Finance::DocumentsController do
     expect(page.css('select#month option').pluck('value')).to eq(%w[2026-10 2026-08])
   end
 
-  it 'calls out the files it could not tell the type of' do
-    document(kind: 'unknown')
+  it 'calls out the files it could not tell the type of, with their name' do
+    document(kind: 'unknown', flags: 'backfill', original_filename: 'Anotações.docx')
 
     get '/finance/documents', params: { month: '2026-09' }
 
     expect(kinds).to eq(['Não identificado'])
+    expect(page.at('#documents tbody .details').text.strip).to eq('Anotações')
+  end
+
+  it 'adds only the description to the type' do
+    document(kind: 'bill', description: 'Água', drive_url: 'https://drive/agua')
+
+    get '/finance/documents', params: { month: '2026-09' }
+
+    expect(page.at('#documents tbody .details').text.strip).to eq('Água')
   end
 
   it 'shows where the documents not archived yet stand' do
