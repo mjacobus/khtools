@@ -77,6 +77,14 @@ RSpec.describe Finance::DocumentsController do
       .to eq(['enviou Ana confirmou Marcelo', 'já estava no Drive'])
   end
 
+  it 'counts on the reminders tab the audits still to do' do
+    document(kind: 's24', competence: '2025-09')
+
+    travel_to(Date.new(2025, 12, 10)) { get '/finance/documents' }
+
+    expect(page.at('#document-tabs a[href*="reminders"] .badge').text).to eq('1')
+  end
+
   it 'has a reminders tab with what to do and the rules' do
     get '/finance/documents', params: { view: 'reminders' }
 
