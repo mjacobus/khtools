@@ -25,17 +25,20 @@ RSpec.describe Finance::CashReminders do
   it 'mentions who still holds the cash of past meetings' do
     s24(4)
 
-    expect(remind).to include(html: true, text: "💵 Dinheiro a entregar a quem cuida das contas\n" \
+    expect(remind).to include(html: true, text: "💵 Dinheiro a entregar ao servo de contas\n" \
                                                 '• qua 04/11 · R$ 315,00 · com ' \
                                                 '<a href="tg://user?id=7">Bia &lt;Lima&gt;</a>')
   end
 
-  it 'names who looks after the accounts, mentioning them' do
-    account.finance_telegram_members.create!(telegram_id: 1, name: 'Marcelo', role: 'treasurer')
+  it 'names the accounts servant and helpers, mentioning them' do
+    account.finance_telegram_members.create!(telegram_id: 1, name: 'Marcelo', role: 'servant')
+    account.finance_telegram_members.create!(telegram_id: 2, name: 'Caio', role: 'helper')
+    account.finance_telegram_members.create!(telegram_id: 3, name: 'Davi', role: 'overseer')
     s24(4)
 
     expect(remind[:text]).to start_with(
-      "💵 Dinheiro a entregar a <a href=\"tg://user?id=1\">Marcelo</a>\n"
+      '💵 Dinheiro a entregar a <a href="tg://user?id=1">Marcelo</a> ou ' \
+      "<a href=\"tg://user?id=2\">Caio</a>\n"
     )
   end
 

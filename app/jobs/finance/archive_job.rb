@@ -40,8 +40,9 @@ module Finance
       start_cash_handover
     end
 
-    # The cash of a meeting stays with someone until the treasurer gets it; the first guess is
-    # whoever printed their name on the S-24, else whoever sent it. "Está comigo" corrects it.
+    # The cash of a meeting stays with someone until the accounts servant or a helper gets it;
+    # the first guess is whoever printed their name on the S-24, else whoever sent it.
+    # "Está comigo" corrects it.
     def start_cash_handover
       if cash_to_track?
         @document.assign_attributes(cash_holder)

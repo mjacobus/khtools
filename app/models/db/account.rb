@@ -76,9 +76,10 @@ class Db::Account < ApplicationRecord
     [cloudinary_cloud_name, cloudinary_api_key, cloudinary_api_secret].all?(&:present?)
   end
 
-  # Who takes care of the accounts: the only one who says the meeting cash arrived.
-  def finance_treasurer
-    finance_telegram_members.find_by(role: 'treasurer')
+  # The accounts servant and helpers: the ones who receive the meeting cash, servant first.
+  def finance_cash_receivers
+    finance_telegram_members.where(role: Db::FinanceTelegramMember::CASH_RECEIVERS)
+      .in_order_of(:role, Db::FinanceTelegramMember::CASH_RECEIVERS).order(:id)
   end
 
   def finance_confirmer?(telegram_user_id)

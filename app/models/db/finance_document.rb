@@ -28,7 +28,7 @@ class Db::FinanceDocument < ApplicationRecord
   scope :open_bills, lambda {
     where(kind: 'bill', paid_on: nil).where.not(due_date: nil).where.not(state: 'discarded')
   }
-  # S-24 cash someone still holds: the treasurer hasn't tapped "Recebi" yet.
+  # S-24 cash someone still holds: the accounts servant or a helper hasn't tapped "Recebi" yet.
   scope :cash_pending, lambda {
     where(kind: 's24', state: 'archived', cash_received_at: nil).where.not(cash_holder_name: nil)
   }

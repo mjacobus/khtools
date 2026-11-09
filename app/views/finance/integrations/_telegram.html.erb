@@ -12,15 +12,16 @@
     <dd>Quem a pessoa é na congregação. O bot passa a chamá-la por esse nome.</dd>
     <dt>Papel</dt>
     <dd>
-      <strong>Cuida das contas</strong>: recebe o dinheiro das reuniões; o lembrete das quartas e sábados pede para entregar a essa pessoa,
-      e só ela toca em ✅ Recebi (no grupo e na página de documentos, se o publicador dela estiver ligado ao usuário).
-      <strong>Recolhe</strong>: conta e leva o dinheiro das reuniões (por enquanto só identifica).
+      <strong>Responsável pelas contas</strong> (secretário ou ancião designado): acompanha as contas; por enquanto só identifica.
+      <strong>Servo de contas</strong> e <strong>Ajudante de contas</strong>: recebem o dinheiro das reuniões.
+      O lembrete das quartas e sábados pede para entregar a eles, e só eles tocam em ✅ Recebi
+      (no grupo e, na página de documentos, quem tiver o publicador ligado a um usuário).
     </dd>
     <dt>Pode confirmar documentos</dt>
     <dd>
       Quando alguém manda um documento no grupo, o bot sugere tipo, data e valor e espera uma confirmação.
       Só quem está marcado pode tocar em ✅ Confirmar (arquiva no Drive) e 🗑️ Não é das contas,
-      e em 💸 Fiz o Pix no dinheiro dos S-24 (e em ✅ Recebi, enquanto ninguém cuidar das contas). ✏️ Corrigir também vale para quem mandou o documento.
+      e em 💸 Fiz o Pix no dinheiro dos S-24 (e em ✅ Recebi, enquanto ninguém for servo ou ajudante de contas). ✏️ Corrigir também vale para quem mandou o documento.
     </dd>
   </dl>
   <% if @integration.people.empty? %>
@@ -42,13 +43,13 @@
           <span class="fw-semibold"><%= name || 'Sem nome' %></span>
           <small class="text-muted">· <%= id %></small>
         </div>
-        <div class="col-6 col-md-3">
+        <div class="col-12 col-md-3">
           <%= select_tag "integration[member_publisher_ids][#{id}]",
                          options_for_select(@integration.publishers, @integration.member_publisher_ids[id]),
                          include_blank: 'Sem publicador', class: 'form-select form-select-sm',
                          'aria-label': "Publicador de #{name || id}" %>
         </div>
-        <div class="col-6 col-md-3">
+        <div class="col-12 col-md-3">
           <%= select_tag "integration[member_roles][#{id}]",
                          options_for_select(Db::FinanceTelegramMember::ROLES.invert, @integration.member_roles[id]),
                          include_blank: 'Sem papel', class: 'form-select form-select-sm',

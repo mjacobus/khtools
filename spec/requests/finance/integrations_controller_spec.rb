@@ -80,18 +80,25 @@ RSpec.describe Finance::IntegrationsController do
     expect(member.reload.publisher).to be_nil
   end
 
+  it 'offers the accounts roles' do
+    current_account.finance_telegram_members.create!(telegram_id: 7, name: 'Marcelo J')
+
+    get '/finance/integrations/telegram'
+
+    select = Nokogiri::HTML(response.body).at('select[name="integration[member_roles][7]"]')
+    expect(select.css('option').map(&:text)).to eq(
+      ['Sem papel', 'Responsável pelas contas', 'Servo de contas', 'Ajudante de contas']
+    )
+  end
+
   it 'gives people a role' do
     member = current_account.finance_telegram_members.create!(telegram_id: 7, name: 'Marcelo J')
 
-    get '/finance/integrations/telegram'
-    select = Nokogiri::HTML(response.body).at('select[name="integration[member_roles][7]"]')
-    expect(select.text).to include('Cuida das contas', 'Recolhe')
-
-    update(:telegram, member_roles: { '7' => 'treasurer' })
-    expect(member.reload.role).to eq('treasurer')
+    update(:telegram, member_roles: { '7' => 'servant' })
+    expect(member.reload.role).to eq('servant')
 
     update(:telegram, member_roles: { '7' => 'boss' })
-    expect(member.reload.role).to eq('treasurer')
+    expect(member.reload.role).to eq('servant')
     expect(response).to have_http_status(:unprocessable_entity)
   end
 
