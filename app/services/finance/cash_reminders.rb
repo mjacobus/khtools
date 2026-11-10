@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 module Finance
-  # Meeting-day nudge to whoever still holds the cash of a past meeting, mentioning them so Telegram
-  # notifies them, until the accounts servant or a helper taps "Recebi".
+  # Meeting-day nudge, one message per S-24 whose cash is still held, mentioning who has it so
+  # Telegram notifies them. The message carries the cash buttons and becomes the one they update,
+  # so older messages lost up the chat no longer matter.
   class CashReminders
     def initialize(account:, telegram:)
       @account = account
@@ -12,25 +13,24 @@ module Finance
     def remind(today: Date.current)
       pending = @account.finance_documents.cash_pending.where(document_date: ...today)
         .order(:document_date).select(&:cash_owed?)
-      if pending.any?
-        @telegram.send_message(chat_id: @account.finance_telegram_chat_id, html: true,
-                               text: ["💵 Dinheiro a entregar #{receivers}",
-                                      *pending.map { |document| line(document) }].join("\n"))
+      pending.each do |document|
+        id = @telegram.send_message(chat_id: @account.finance_telegram_chat_id, html: true,
+                                    text: text(document),
+                                    buttons: Messages.cash_buttons(document))
+        document.update!(cash_message_id: id)
       end
     end
 
     private
 
-    def line(document)
-      date = document.document_date
-      "• #{Messages::WEEKDAYS[date.wday]} #{date.strftime('%d/%m')} · " \
-        "#{Money.format(cents: document.amount_cents.to_i)} · com #{holder(document)}" \
-        "#{creditor(document)}"
+    def text(document)
+      ["⏰ #{holder(document)}, dinheiro a entregar #{receivers}",
+       CGI.escapeHTML(Messages.cash(document)), link(document)].compact.join("\n")
     end
 
-    def creditor(document)
-      if document.cash_creditor
-        " · entregar a #{CGI.escapeHTML(document.cash_creditor)} (fez o Pix)"
+    def link(document)
+      if document.drive_url
+        %(<a href="#{CGI.escapeHTML(document.drive_url)}">📄 Ver o S-24</a>)
       end
     end
 
