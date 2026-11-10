@@ -9,7 +9,8 @@ module Finance
     PER_PAGE = 50
 
     included do
-      helper_method :all_documents_view?, :reminders_view?, :archive_reminders, :month_summary
+      helper_method :all_documents_view?, :reminders_view?, :archive_reminders, :month_summary,
+                    :pending_reminders
     end
 
     private
@@ -24,6 +25,11 @@ module Finance
 
     def archive_reminders
       @archive_reminders ||= ArchiveReminders.new(account: current_account)
+    end
+
+    def pending_reminders
+      @pending_reminders ||= current_account.finance_reminders.order(:day, :id)
+        .select { |reminder| reminder.pending?(Date.current) }
     end
 
     def month_summary

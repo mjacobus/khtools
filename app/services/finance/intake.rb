@@ -102,10 +102,27 @@ module Finance
     end
 
     def callback(query)
+      reminder_id = query['data'].to_s[/\Afin:reminder_done:(\d+)\z/, 1]
+      if reminder_id
+        return reminder_done(query, reminder_id)
+      end
+
       action, id = query['data'].to_s
         .match(/\Afin:(confirm|edit|discard|cash_holder|cash_received|cash_pix):(\d+)\z/)&.captures
       document = id && documents.find_by(id:)
       telegram.answer_callback(id: query['id'], **callback_answer(action, document, query))
+    end
+
+    # Anyone in the group can say a monthly reminder is done.
+    def reminder_done(query, id)
+      reminder = account.finance_reminders.find_by(id:)
+      if reminder
+        reminder.done!(Date.current)
+        RecurringReminders.new(account:, telegram:)
+          .update(message_id: query.dig('message', 'message_id'),
+                  done: "✅ #{reminder.title} · #{name(query)}")
+      end
+      telegram.answer_callback(id: query['id'], text: reminder && '✅ Feito')
     end
 
     def callback_answer(action, document, query)
@@ -145,7 +162,7 @@ module Finance
     def receiver?(query)
       receivers = account.finance_cash_receivers
       if receivers.exists?
-        receivers.exists?(telegram_id: query.dig('from', 'id'))
+        account.finance_cash_checkers.exists?(telegram_id: query.dig('from', 'id'))
       else
         confirmer?(query)
       end

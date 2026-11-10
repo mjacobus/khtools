@@ -31,6 +31,7 @@ Rails.application.routes.draw do
         get :payment
         post :confirm
         post :discard
+        get :file
         patch :payment, action: :update_payment
         post :cash_received
         post :cash_pix
@@ -41,6 +42,9 @@ Rails.application.routes.draw do
         post :meeting_exceptions, action: :create_meeting_exception
         delete :meeting_exceptions, action: :destroy_meeting_exception
       end
+    end
+    resources :reminders, except: :show do
+      post :done, on: :member
     end
     resources :integrations, only: %i[show update], param: :section do
       post :members, on: :member

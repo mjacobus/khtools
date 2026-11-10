@@ -5,8 +5,10 @@ module Finance
     include BillPayments
     include MeetingExceptions
     include DocumentDecisions
+    include DocumentFiles
     include CashHandover
     include ArchiveMoves
+    include DocumentValues
     include DocumentFilters
 
     MONTH = /\A\d{4}-\d{2}\z/
@@ -72,19 +74,6 @@ module Finance
     # The bills paid by this month's receipts, by id.
     def paid_bills
       documents.where(id: @documents.filter_map(&:bill_id)).index_by(&:id)
-    end
-
-    def assign_and_validate
-      fields = params.require(:document).permit(:kind, :competence, :document_date, :description,
-                                                :amount)
-      amount = fields.delete(:amount)
-      @document.assign_attributes(fields.merge(amount_cents: Money.parse(text: amount)))
-      valid = @document.valid?
-      if amount.present? && @document.amount_cents.nil?
-        @document.errors.add(:base, "Valor inválido: #{amount}")
-        valid = false
-      end
-      valid
     end
 
     def refile

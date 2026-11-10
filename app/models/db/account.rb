@@ -24,6 +24,7 @@ class Db::Account < ApplicationRecord
                                         class_name: 'Db::FinanceMeetingException'
   has_many :finance_telegram_members, dependent: :delete_all,
                                       class_name: 'Db::FinanceTelegramMember'
+  has_many :finance_reminders, dependent: :delete_all, class_name: 'Db::FinanceReminder'
 
   FINANCE_SECRETS = %i[
     finance_telegram_bot_token finance_telegram_webhook_secret finance_telegram_chat_id
@@ -80,6 +81,10 @@ class Db::Account < ApplicationRecord
   def finance_cash_receivers
     finance_telegram_members.where(role: Db::FinanceTelegramMember::CASH_RECEIVERS)
       .in_order_of(:role, Db::FinanceTelegramMember::CASH_RECEIVERS).order(:id)
+  end
+
+  def finance_cash_checkers
+    finance_telegram_members.where(role: Db::FinanceTelegramMember::CASH_CHECKERS)
   end
 
   def finance_confirmer?(telegram_user_id)

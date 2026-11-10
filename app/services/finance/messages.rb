@@ -5,7 +5,8 @@ module Finance
   module Messages # rubocop:disable Metrics/ModuleLength -- all bot copy in one place
     ORIGINS = { 'ai' => 'lido por IA', 'rules' => 'lido do PDF', 'human' => 'informado' }.freeze
     NOT_A_CONFIRMER = 'Só quem confirma as contas pode usar estes botões.'
-    NOT_A_CASH_RECEIVER = 'Só o servo de contas ou um ajudante pode marcar que recebeu o dinheiro.'
+    NOT_A_CASH_RECEIVER = 'Só o servo de contas, um ajudante ou o responsável pelas contas pode ' \
+                          'marcar que recebeu o dinheiro.'
     NOT_AN_EDITOR = 'Só quem enviou o arquivo ou quem confirma as contas pode corrigir.'
     ALREADY_WITH_YOU = 'Já está com você.'
     CORRECTED = '✏️ Corrigido. Confira a sugestão acima e confirme.'
@@ -69,7 +70,16 @@ module Finance
     # HTML (parse_mode), like duplicate.
     def archived(document:, replaced: false)
       verb = replaced ? 'Substituído' : 'Arquivado'
-      "#{verb}: #{drive_link(document)} → Arquivo Corrente/#{document.competence}/"
+      ["#{verb}: #{drive_link(document)} → Arquivo Corrente/#{document.competence}/",
+       edit_link(document)].compact.join("\n")
+    end
+
+    # The edit page in khtools; APP_URL is set in config/deploy.yml (none in development).
+    def edit_link(document)
+      if ENV['APP_URL'].present?
+        url = "#{ENV['APP_URL'].delete_suffix('/')}/finance/documents/#{document.id}/edit"
+        %(✏️ <a href="#{CGI.escapeHTML(url)}">Corrigir no khtools</a>)
+      end
     end
 
     def drive_link(document)

@@ -38,11 +38,28 @@
       <%= f.text_field :document_date, class: 'form-control', **br_date_options(@document.document_date) %>
     </div>
   </div>
-  <div class="mb-3">
-    <%= f.label :amount, 'Valor', class: 'form-label' %>
-    <%= f.text_field :amount, inputmode: 'decimal', placeholder: '0,00', class: 'form-control',
-                              value: @document.amount_cents && Finance::Money.format(cents: @document.amount_cents) %>
-  </div>
+  <% money = ->(cents) { cents && Finance::Money.format(cents:) } %>
+  <% if @document.kind == 's24' %>
+    <%# The total is the sum of both. %>
+    <div class="row">
+      <div class="col mb-3">
+        <%= f.label :worldwide, 'Obra mundial', class: 'form-label' %>
+        <%= f.text_field :worldwide, inputmode: 'decimal', placeholder: '0,00', class: 'form-control',
+                                     value: money.call(@document.worldwide_cents) %>
+      </div>
+      <div class="col mb-3">
+        <%= f.label :congregation, 'Local', class: 'form-label' %>
+        <%= f.text_field :congregation, inputmode: 'decimal', placeholder: '0,00', class: 'form-control',
+                                        value: money.call(@document.congregation_cents) %>
+      </div>
+    </div>
+  <% else %>
+    <div class="mb-3">
+      <%= f.label :amount, 'Valor', class: 'form-label' %>
+      <%= f.text_field :amount, inputmode: 'decimal', placeholder: '0,00', class: 'form-control',
+                                value: money.call(@document.amount_cents) %>
+    </div>
+  <% end %>
   <div class="mb-3">
     <%= f.label :description, 'Descrição', class: 'form-label' %>
     <%= f.text_field :description, placeholder: 'Ex.: Luz, Água, Internet', class: 'form-control' %>

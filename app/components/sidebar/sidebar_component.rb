@@ -76,6 +76,8 @@ class Sidebar::SidebarComponent < ApplicationComponent
     entry(t('app.links.finance'), '#', icon: 'cash-stack').tap do |section|
       section.append_child(entry(t('app.links.finance_documents'), finance_documents_path,
                                  icon: 'folder2-open'))
+      section.append_child(entry(t('app.links.finance_reminders'), finance_reminders_path,
+                                 icon: 'arrow-repeat'))
       icons.each do |key, icon|
         section.append_child(entry(t("app.links.finance_integration_#{key}"),
                                    finance_integration_path(key), icon:))

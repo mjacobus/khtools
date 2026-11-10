@@ -44,7 +44,7 @@
     <%= link_to finance_documents_path(view: 'reminders'), class: "nav-link #{'active' if reminders}",
                                                            aria: { current: (reminders ? 'page' : nil) } do %>
       Lembretes
-      <% if (due = archive_reminders.due.size).positive? %><span class="badge bg-warning text-dark"><%= due %></span><% end %>
+      <% if (due = archive_reminders.due.size + pending_reminders.size).positive? %><span class="badge bg-warning text-dark"><%= due %></span><% end %>
     <% end %>
   </li>
 </ul>
@@ -179,6 +179,11 @@
                 <%= link_to document.drive_url, target: '_blank', rel: 'noopener', title: tooltip do %>
                   <span class="kind-label"><%= kind_label.call(kind) %></span>
                 <% end %>
+              <% elsif document.telegram_file_id %>
+                <%= link_to file_finance_document_path(document), target: '_blank', rel: 'noopener', title: tooltip do %>
+                  <span class="kind-label"><%= kind_label.call(kind) %></span>
+                <% end %>
+                <span class="badge bg-secondary"><%= t("app.finance_document_states.#{document.state}") %></span>
               <% else %>
                 <span class="kind-label" title="<%= tooltip %>"><%= kind_label.call(kind) %></span>
                 <span class="badge bg-secondary"><%= t("app.finance_document_states.#{document.state}") %></span>

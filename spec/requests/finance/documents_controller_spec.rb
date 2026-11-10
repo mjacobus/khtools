@@ -311,6 +311,17 @@ RSpec.describe Finance::DocumentsController do
 
         expect(page.css('button[title="Recebi o dinheiro"]').size).to eq(1)
       end
+
+      it 'lets who is responsible for the accounts mark it received' do
+        treasurer(factories.users.create(account: current_account))
+        publisher = factories.publishers.create(account: current_account, user: current_user)
+        current_account.finance_telegram_members.create!(telegram_id: 60, name: 'Responsável',
+                                                         role: 'overseer', publisher:)
+
+        post "/finance/documents/#{s24.id}/cash_received"
+
+        expect(s24.reload.cash_received_at).to be_present
+      end
     end
 
     it 'marks the Pix done and updates the message in the group' do
@@ -397,6 +408,25 @@ RSpec.describe Finance::DocumentsController do
 
       expect(archived.reload.drive_name).to eq('2026-10-05 - R$ 74,12 - Fatura Luz.pdf')
       expect(archived.corrections.last).to include('by_name' => current_user.name)
+    end
+
+    it 'corrects the worldwide work and local split of an S-24, adding up the total' do
+      archived.update!(kind: 's24', worldwide_cents: 3000, congregation_cents: 21_500,
+                       amount_cents: 24_500)
+      get "/finance/documents/#{archived.id}/edit"
+      expect(page.at('input[name="document[worldwide]"]')['value']).to eq('R$ 30,00')
+
+      update(kind: 's24', amount: '', description: '', worldwide: '215,00', congregation: '30')
+
+      expect(archived.reload).to have_attributes(worldwide_cents: 21_500, congregation_cents: 3000,
+                                                 amount_cents: 24_500)
+    end
+
+    it 'refuses a split that is not money' do
+      update(kind: 's24', worldwide: 'duzentos')
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to include('Valor inválido: duzentos')
     end
 
     it 'keeps everything as it was when Drive fails' do
