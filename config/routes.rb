@@ -29,6 +29,8 @@ Rails.application.routes.draw do
     resources :documents, only: %i[index edit update] do
       member do
         get :payment
+        post :confirm
+        post :discard
         get :file
         patch :payment, action: :update_payment
         post :cash_received
