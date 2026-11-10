@@ -46,6 +46,27 @@ RSpec.describe Finance::DocumentsController do
       .to eq(%w[Data Tipo Valor Ações])
   end
 
+  it 'sums up the month donations and what goes to Betel' do
+    current_account.update!(finance_resolution_cents: 80_000)
+    document(kind: 's24', worldwide_cents: 15_000, congregation_cents: 30_000)
+    document(kind: 'remittance_record', amount_cents: 95_000)
+
+    get '/finance/documents', params: { month: '2026-09' }
+
+    expect(page.css('#month-summary li').map { |item| item.text.squish })
+      .to eq(['Obra mundial R$ 150,00', 'Local R$ 300,00', 'Resolução R$ 800,00',
+              'Remessa para Betel R$ 950,00 ✓ TO-62'])
+  end
+
+  it 'shows a TO-62 that differs from the expected remittance' do
+    document(kind: 's24', worldwide_cents: 15_000)
+    document(kind: 'remittance_record', amount_cents: 10_000)
+
+    get '/finance/documents', params: { month: '2026-09' }
+
+    expect(page.at('#month-summary').text.squish).to include('TO-62 R$ 100,00')
+  end
+
   it 'offers the month view and the all documents view as tabs' do
     get '/finance/documents', params: { view: 'all' }
 

@@ -21,7 +21,7 @@ RSpec.describe Finance::IntegrationsController do
   end
 
   it 'shows each section without revealing secrets' do
-    %w[telegram drive ai].each do |section|
+    %w[telegram drive ai resolution].each do |section|
       get "/finance/integrations/#{section}"
 
       expect(response).to have_http_status(:ok)
@@ -138,6 +138,21 @@ RSpec.describe Finance::IntegrationsController do
     update(:drive, drive_root_folder_id: 'https://drive.google.com/drive/folders/1AbC-d_9?usp=sharing')
 
     expect(current_account.reload.finance_drive_root_folder_id).to eq('1AbC-d_9')
+  end
+
+  it 'saves the monthly resolution for the worldwide work' do
+    update(:resolution, resolution: 'R$ 800,00')
+
+    expect(current_account.reload.finance_resolution_cents).to eq(80_000)
+    get '/finance/integrations/resolution'
+    expect(Nokogiri::HTML(response.body).at('#integration_resolution')['value']).to eq('800,00')
+  end
+
+  it 'rejects a resolution that is not money' do
+    update(:resolution, resolution: 'oitocentos')
+
+    expect(response).to have_http_status(:unprocessable_entity)
+    expect(response.body).to include('Valor da resolução inválido')
   end
 
   it 'rejects a chat id that is not a number' do

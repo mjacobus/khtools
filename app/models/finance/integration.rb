@@ -2,7 +2,7 @@
 
 module Finance
   # The finance bot settings of an account, as edited on the integrations pages.
-  class Integration
+  class Integration # rubocop:disable Metrics/ClassLength
     include ActiveModel::Model
 
     # Write-only: a blank field keeps what is saved.
@@ -18,6 +18,7 @@ module Finance
 
     validates :telegram_chat_id, allow_blank: true,
                                  format: { with: /\A-?\d+\z/, message: CHAT_ID_MESSAGE }
+    validate :resolution_money
 
     def self.model_name
       ActiveModel::Name.new(self, nil, 'Integration')
@@ -36,6 +37,11 @@ module Finance
     end
 
     def member_publisher_ids = @members[:member_publisher_ids]
+
+    # As typed: "800,00".
+    def resolution
+      @resolution ||= account.finance_resolution_cents&.then { |cents| Money.format(cents:)[3..] }
+    end
 
     def member_roles = @members[:member_roles]
 
@@ -78,6 +84,9 @@ module Finance
       if params.key?(:telegram_chat_id)
         @telegram_chat_id = params[:telegram_chat_id].to_s.strip.delete_suffix('.')
       end
+      if params.key?(:resolution)
+        @resolution = params[:resolution].to_s.strip
+      end
       if params.key?(:drive_root_folder_id)
         @drive_root_folder_id = folder_id(params[:drive_root_folder_id].to_s.strip)
       end
@@ -97,7 +106,8 @@ module Finance
     def save(params)
       account.assign_attributes(finance_telegram_chat_id: telegram_chat_id,
                                 finance_drive_root_folder_id: drive_root_folder_id,
-                                finance_confirmer_telegram_ids: confirmer_telegram_ids.join(','))
+                                finance_confirmer_telegram_ids: confirmer_telegram_ids.join(','),
+                                finance_resolution_cents: Money.parse(text: resolution))
       assign_secrets(params)
       account.transaction do
         account.save!
@@ -120,6 +130,12 @@ module Finance
           account.finance_telegram_members.find_or_initialize_by(telegram_id:)
             .update!(column => value)
         end
+      end
+    end
+
+    def resolution_money
+      if resolution.present? && !Money.parse(text: resolution)
+        errors.add(:resolution, I18n.t('app.messages.finance_resolution'))
       end
     end
 

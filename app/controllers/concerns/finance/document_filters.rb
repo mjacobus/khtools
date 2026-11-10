@@ -8,7 +8,9 @@ module Finance
 
     PER_PAGE = 50
 
-    included { helper_method :all_documents_view?, :reminders_view?, :archive_reminders }
+    included do
+      helper_method :all_documents_view?, :reminders_view?, :archive_reminders, :month_summary
+    end
 
     private
 
@@ -22,6 +24,10 @@ module Finance
 
     def archive_reminders
       @archive_reminders ||= ArchiveReminders.new(account: current_account)
+    end
+
+    def month_summary
+      MonthSummary.new(account: current_account, month: @month)
     end
 
     # @listed is every match (the totals); @documents is what the page shows. Only "Todos" is

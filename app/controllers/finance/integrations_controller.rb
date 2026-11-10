@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module Finance
-  # The finance bot settings, one page per service: Telegram, Google Drive and OpenAI.
+  # The finance settings, one page each: Telegram, Google Drive, OpenAI and the resolution.
   class IntegrationsController < ApplicationController
-    SECTIONS = %w[telegram drive ai].freeze
+    SECTIONS = %w[telegram drive ai resolution].freeze
 
     before_action :find_section
 
@@ -45,7 +45,7 @@ module Finance
 
     def integration_params
       params.require(:integration)
-        .permit(:telegram_chat_id, :drive_root_folder_id, *Integration::SECRETS.keys,
+        .permit(:telegram_chat_id, :drive_root_folder_id, :resolution, *Integration::SECRETS.keys,
                 confirmer_telegram_ids: [], **Integration::MEMBER_FIELDS.keys.index_with({}))
     end
   end
