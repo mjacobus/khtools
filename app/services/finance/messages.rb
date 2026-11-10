@@ -69,7 +69,16 @@ module Finance
     # HTML (parse_mode), like duplicate.
     def archived(document:, replaced: false)
       verb = replaced ? 'Substituído' : 'Arquivado'
-      "#{verb}: #{drive_link(document)} → Arquivo Corrente/#{document.competence}/"
+      ["#{verb}: #{drive_link(document)} → Arquivo Corrente/#{document.competence}/",
+       edit_link(document)].compact.join("\n")
+    end
+
+    # The edit page in khtools; APP_URL is set in config/deploy.yml (none in development).
+    def edit_link(document)
+      if ENV['APP_URL'].present?
+        url = "#{ENV['APP_URL'].delete_suffix('/')}/finance/documents/#{document.id}/edit"
+        %(✏️ <a href="#{CGI.escapeHTML(url)}">Corrigir no khtools</a>)
+      end
     end
 
     def drive_link(document)

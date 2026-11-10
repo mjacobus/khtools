@@ -164,6 +164,15 @@ RSpec.describe Finance::ArchiveJob do
     )
   end
 
+  it 'links to the document in khtools, to correct it there' do
+    stub_const('ENV', ENV.to_h.merge('APP_URL' => 'https://khtools.example'))
+
+    run
+
+    link = %(<a href="https://khtools.example/finance/documents/#{document.id}/edit">)
+    expect(telegram.edits.last[:text]).to end_with("\n✏️ #{link}Corrigir no khtools</a>")
+  end
+
   context 'when a monthly file was already archived for the month' do
     let(:previous) do
       factories.finance_documents.create(account:, state: 'archived', kind: 's26',
