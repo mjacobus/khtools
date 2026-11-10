@@ -17,34 +17,43 @@ RSpec.describe Finance::RemindersController do
     current_account.finance_reminders.create!(title: 'Pagamento internet', day: 10)
   end
 
-  it 'adds a monthly reminder with who is responsible' do
-    member = current_account.finance_telegram_members.create!(telegram_id: 7, name: 'Bia')
-
-    post '/finance/reminders', params: { reminder: { title: 'Pagamento internet', day: 10,
-                                                     finance_telegram_member_id: member.id } }
-
-    expect(response).to redirect_to('/finance/reminders')
-    expect(current_account.finance_reminders.last).to have_attributes(day: 10, responsible: member)
+  def create(**attributes)
+    post '/finance/reminders', params: { reminder: attributes }
   end
 
-  it 'lists the reminders to edit, with their state this month' do
+  it 'adds a monthly reminder with who is responsible' do
+    member = current_account.finance_telegram_members.create!(telegram_id: 7, name: 'Bia')
+    get '/finance/reminders/new'
+    expect(page.css('#reminder_finance_telegram_member_id option').map(&:text))
+      .to eq(['Sem responsável', 'Bia'])
+
+    create(title: 'Pagamento internet', day: 10, finance_telegram_member_id: member.id)
+
+    expect(response).to redirect_to('/finance/reminders')
+    expect(Db::FinanceReminder.last).to have_attributes(day: 10, responsible: member)
+  end
+
+  it 'lists the reminders with their state this month' do
     internet
 
     get '/finance/reminders'
 
-    expect(page.at('#recurring input[name="reminder[title]"]')['value']).to eq('Pagamento internet')
-    expect(page.at('#recurring').text).to include('pendente')
+    expect(page.at('#recurring').text.squish)
+      .to include('Pagamento internet', 'Todo dia 10', 'Pendente')
+    expect(page.at('#recurring a[href$="/done"]').text).to eq('Feito')
   end
 
-  it 'explains a reminder that could not be saved' do
-    post '/finance/reminders', params: { reminder: { title: '', day: 10 } }
+  it 'shows what is wrong with a reminder' do
+    create(title: '', day: 40)
 
-    follow_redirect!
-    expect(response.body).to include('Informe o lembrete e um dia de 1 a 31.')
+    expect(response).to have_http_status(:unprocessable_entity)
+    expect(page.css('.invalid-feedback, .error').size).to be >= 2
   end
 
   it 'changes a reminder' do
     reminder = internet
+    get "/finance/reminders/#{reminder.id}/edit"
+    expect(response).to have_http_status(:ok)
 
     patch "/finance/reminders/#{reminder.id}", params: { reminder: { title: 'Internet', day: 12 } }
 
@@ -76,10 +85,9 @@ RSpec.describe Finance::RemindersController do
 
     delete "/finance/reminders/#{other.id}"
     expect(response).to have_http_status(:not_found)
-
-    post '/finance/reminders', params: { reminder: { title: 'X', day: 1,
-                                                     finance_telegram_member_id: stranger.id } }
-    expect(response).to have_http_status(:not_found)
     expect(other.reload).to be_persisted
+
+    create(title: 'X', day: 1, finance_telegram_member_id: stranger.id)
+    expect(response).to have_http_status(:unprocessable_entity)
   end
 end

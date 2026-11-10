@@ -28,6 +28,7 @@ pt-BR:
       db/letter_box_type: Tipo de Caixa de Correio
       db/preaching_method: Método de Pregação
       db/preaching_campaign: Campanha de Pregação
+      db/finance_reminder: Lembrete recorrente
     attributes:
       user:
         name: Nome
@@ -69,6 +70,10 @@ pt-BR:
         value: Conteúdo
         created_at: Criado em
         updated_at: Atualizado em
+      db/finance_reminder:
+        title: Lembrete
+        day: Dia do mês
+        finance_telegram_member_id: Responsável
       db/congregation:
         name: Nome
         address: Endereço
