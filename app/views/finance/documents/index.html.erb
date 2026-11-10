@@ -98,6 +98,7 @@
   <%= render 'reminders' %>
 <% else %>
 <% if @month && !all %>
+  <%= render 'month_summary', summary: month_summary %>
   <% done = checklist.count(&:done) %>
   <details id="checklist-panel" class="card mb-3">
     <summary class="card-header">

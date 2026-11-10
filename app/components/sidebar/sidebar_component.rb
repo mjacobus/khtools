@@ -71,7 +71,8 @@ class Sidebar::SidebarComponent < ApplicationComponent
 
   # Contas: the documents, then the settings of the bot that files them.
   def finance_section
-    icons = { 'telegram' => 'telegram', 'drive' => 'google', 'ai' => 'cpu' }
+    icons = { 'telegram' => 'telegram', 'drive' => 'google', 'ai' => 'cpu',
+              'settings' => 'gear' }
     entry(t('app.links.finance'), '#', icon: 'cash-stack').tap do |section|
       section.append_child(entry(t('app.links.finance_documents'), finance_documents_path,
                                  icon: 'folder2-open'))

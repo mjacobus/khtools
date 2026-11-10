@@ -28,7 +28,7 @@ class Db::Account < ApplicationRecord
   FINANCE_SECRETS = %i[
     finance_telegram_bot_token finance_telegram_webhook_secret finance_telegram_chat_id
     finance_confirmer_telegram_ids finance_google_refresh_token finance_drive_root_folder_id
-    finance_statement_password ai_api_key
+    finance_statement_password ai_api_key finance_resolution_cents
   ].freeze
 
   FINANCE_SECRETS.each do |name|

@@ -1,0 +1,29 @@
+<%# What the filed S-24s add up to, and what goes to Betel (S-27b par. 26). %>
+<% money = ->(cents) { Finance::Money.format(cents:) } %>
+<div id="month-summary" class="card mb-2">
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item d-flex gap-3">
+      <span class="flex-grow-1">Obra mundial</span> <span><%= money.call(summary.worldwide_cents) %></span>
+    </li>
+    <li class="list-group-item d-flex gap-3">
+      <span class="flex-grow-1">Local</span> <span><%= money.call(summary.local_cents) %></span>
+    </li>
+    <li class="list-group-item d-flex gap-3">
+      <span class="flex-grow-1">Resolução</span>
+      <% if summary.resolution_cents.positive? %>
+        <span><%= money.call(summary.resolution_cents) %></span>
+      <% else %>
+        <%= link_to 'Definir', finance_integration_path('settings') %>
+      <% end %>
+    </li>
+    <li class="list-group-item d-flex gap-3 fw-semibold">
+      <span class="flex-grow-1">Remessa para Betel</span>
+      <span><%= money.call(summary.remittance_cents) %></span>
+      <% if summary.remitted_cents == summary.remittance_cents %>
+        <small class="text-success fw-normal">✓ TO-62</small>
+      <% elsif summary.remitted_cents %>
+        <small class="text-danger fw-normal">TO-62 <%= money.call(summary.remitted_cents) %></small>
+      <% end %>
+    </li>
+  </ul>
+</div>
