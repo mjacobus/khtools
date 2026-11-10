@@ -235,6 +235,17 @@
                     <i class="bi bi-cash-coin"></i>
                   <% end %>
                 <% end %>
+                <% if document.state == 'suggested' %>
+                  <%= button_to confirm_finance_document_path(document), class: 'btn btn-sm btn-outline-success',
+                                                                         title: 'Confirmar', aria: { label: 'Confirmar' } do %>
+                    <i class="bi bi-check-lg"></i>
+                  <% end %>
+                  <%= button_to discard_finance_document_path(document), class: 'btn btn-sm btn-outline-secondary',
+                                                                         title: 'Não é das contas', aria: { label: 'Descartar' },
+                                                                         form: { data: { turbo_confirm: 'Descartar? Não vai para o Drive.' } } do %>
+                    <i class="bi bi-trash"></i>
+                  <% end %>
+                <% end %>
                 <% if document.drive_file_id %>
                   <%= link_to edit_finance_document_path(document), class: 'btn btn-sm btn-outline-secondary',
                                                                     title: 'Editar', aria: { label: 'Editar' } do %>
