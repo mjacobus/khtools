@@ -247,8 +247,8 @@ module Finance
       if document.cash_pix_at
         Messages::ALREADY_HANDLED
       else
-        cash_update(document, cash_pix_at: Time.current,
-                              cash_pix_by: name(query))
+        cash_update(document, cash_pix_at: Time.current, cash_pix_by: name(query),
+                              cash_pix_by_telegram_id: query.dig('from', 'id'))
       end
     end
 

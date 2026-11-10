@@ -44,9 +44,16 @@ module Finance
     end
 
     # Per person: [name, S-24 count, cents] of the cash they still hold.
+    # [who, how many S-24s, cents], "who" saying who they owe when someone else made the Pix.
     def cash_ledger
-      documents.cash_pending.group(:cash_holder_name).order(:cash_holder_name)
-        .pluck(:cash_holder_name, Arel.sql('COUNT(*)'), Arel.sql('SUM(amount_cents)'))
+      owed = documents.cash_pending.select(&:cash_owed?)
+      owed.group_by { |document| [document.cash_holder_name, document.cash_creditor.to_s] }
+        .sort.map { |(holder, creditor), list| ledger_line(holder, creditor, list) }
+    end
+
+    def ledger_line(holder, creditor, list)
+      [[holder, creditor.presence].compact.join(' deve a '), list.size,
+       list.sum { |document| document.amount_cents.to_i }]
     end
 
     def editable

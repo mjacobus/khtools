@@ -357,8 +357,9 @@ RSpec.describe Finance::Intake do
       intake.handle(update: callback('cash_pix', document))
 
       expect(document.reload).to have_attributes(cash_pix_by: 'Ana', cash_pix_at: be_present,
-                                                 cash_received_at: nil)
-      expect(telegram.edits.last[:text]).to end_with("Está com: Bia Lima\nPix: feito por Ana")
+                                                 cash_pix_by_telegram_id: 42, cash_received_at: nil)
+      expect(telegram.edits.last[:text])
+        .to end_with("Está com: Bia Lima (entregar a Ana, que fez o Pix)\nPix: feito por Ana")
       expect(telegram.edits.last[:buttons].flatten).not_to include('💸 Fiz o Pix')
     end
 

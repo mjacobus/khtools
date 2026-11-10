@@ -246,17 +246,21 @@ RSpec.describe Finance::DocumentsController do
 
     before { allow(Telegram::Client).to receive(:new).and_return(telegram) }
 
+    def s24_held(holder, amount_cents, **extra)
+      document(kind: 's24', cash_holder_name: holder, amount_cents:, **extra)
+    end
+
     it 'adds up the cash each person still holds, in any month' do
-      document(kind: 's24', cash_holder_name: 'Bia', amount_cents: 10_000, competence: '2026-08')
-      document(kind: 's24', cash_holder_name: 'Bia', amount_cents: 5_000)
-      document(kind: 's24', cash_holder_name: 'Caio', amount_cents: 2_000)
-      document(kind: 's24', cash_holder_name: 'Caio', amount_cents: 9_000,
-               cash_received_at: Time.current)
+      [['Bia', 10_000, { competence: '2026-08' }], ['Bia', 5_000, {}], ['Caio', 2_000, {}],
+       ['Caio', 4_000, { cash_received_at: Time.current }],
+       ['Caio', 4_000, { cash_pix_at: Time.current, cash_pix_by: 'Caio' }], # even: his own Pix
+       ['Caio', 4_000, { cash_pix_at: Time.current, cash_pix_by: 'Dani' }]]
+        .each { |holder, cents, extra| s24_held(holder, cents, **extra) }
 
       get '/finance/documents', params: { month: '2026-09' }
 
       expect(page.css('#cash-ledger li').map { |line| line.text.squish })
-        .to eq(['Bia 2 S-24 R$ 150,00', 'Caio 1 S-24 R$ 20,00'])
+        .to eq(['Bia 2 S-24 R$ 150,00', 'Caio 1 S-24 R$ 20,00', 'Caio deve a Dani 1 S-24 R$ 40,00'])
     end
 
     it 'shows who holds it' do

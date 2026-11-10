@@ -189,7 +189,7 @@
                 <span class="badge bg-secondary"><%= t("app.finance_document_states.#{document.state}") %></span>
               <% end %>
               <%# Only what is still pending; nothing once the cash arrived and the Pix is done. %>
-              <% if document.cash_holder_name && !document.cash_received_at %>
+              <% if document.cash_owed? %>
                 <span class="pending-sign" role="img" title="Dinheiro com <%= document.cash_holder_name %>"
                       aria-label="Dinheiro com <%= document.cash_holder_name %>">💵</span>
               <% end %>

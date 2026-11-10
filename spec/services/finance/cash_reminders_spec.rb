@@ -42,8 +42,15 @@ RSpec.describe Finance::CashReminders do
     )
   end
 
-  it 'leaves out cash already received, S-24s without a holder and today' do
+  it 'says who to hand it to when someone else made the Pix' do
+    s24(4, cash_pix_at: Time.current, cash_pix_by: 'Marcelo', cash_pix_by_telegram_id: 9)
+
+    expect(remind[:text]).to end_with('· entregar a Marcelo (fez o Pix)')
+  end
+
+  it 'leaves out cash received or paid by Pix by its holder, S-24s without a holder and today' do
     s24(4, cash_received_at: Time.current)
+    s24(5, cash_pix_at: Time.current, cash_pix_by_telegram_id: 7)
     s24(7, cash_holder_name: nil, cash_holder_telegram_id: nil)
     s24(9)
 

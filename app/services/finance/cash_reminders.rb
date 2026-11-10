@@ -11,7 +11,7 @@ module Finance
 
     def remind(today: Date.current)
       pending = @account.finance_documents.cash_pending.where(document_date: ...today)
-        .order(:document_date)
+        .order(:document_date).select(&:cash_owed?)
       if pending.any?
         @telegram.send_message(chat_id: @account.finance_telegram_chat_id, html: true,
                                text: ["💵 Dinheiro a entregar #{receivers}",
@@ -24,7 +24,14 @@ module Finance
     def line(document)
       date = document.document_date
       "• #{Messages::WEEKDAYS[date.wday]} #{date.strftime('%d/%m')} · " \
-        "#{Money.format(cents: document.amount_cents.to_i)} · com #{holder(document)}"
+        "#{Money.format(cents: document.amount_cents.to_i)} · com #{holder(document)}" \
+        "#{creditor(document)}"
+    end
+
+    def creditor(document)
+      if document.cash_creditor
+        " · entregar a #{CGI.escapeHTML(document.cash_creditor)} (fez o Pix)"
+      end
     end
 
     def receivers
