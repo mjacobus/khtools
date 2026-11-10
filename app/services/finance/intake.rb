@@ -145,7 +145,7 @@ module Finance
     def receiver?(query)
       receivers = account.finance_cash_receivers
       if receivers.exists?
-        receivers.exists?(telegram_id: query.dig('from', 'id'))
+        account.finance_cash_checkers.exists?(telegram_id: query.dig('from', 'id'))
       else
         confirmer?(query)
       end

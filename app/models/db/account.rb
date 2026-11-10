@@ -82,6 +82,10 @@ class Db::Account < ApplicationRecord
       .in_order_of(:role, Db::FinanceTelegramMember::CASH_RECEIVERS).order(:id)
   end
 
+  def finance_cash_checkers
+    finance_telegram_members.where(role: Db::FinanceTelegramMember::CASH_CHECKERS)
+  end
+
   def finance_confirmer?(telegram_user_id)
     finance_confirmer_telegram_ids.to_s.split(',').map(&:strip).include?(telegram_user_id.to_s)
   end

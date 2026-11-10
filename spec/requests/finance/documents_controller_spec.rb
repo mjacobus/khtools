@@ -311,6 +311,17 @@ RSpec.describe Finance::DocumentsController do
 
         expect(page.css('button[title="Recebi o dinheiro"]').size).to eq(1)
       end
+
+      it 'lets who is responsible for the accounts mark it received' do
+        treasurer(factories.users.create(account: current_account))
+        publisher = factories.publishers.create(account: current_account, user: current_user)
+        current_account.finance_telegram_members.create!(telegram_id: 60, name: 'Responsável',
+                                                         role: 'overseer', publisher:)
+
+        post "/finance/documents/#{s24.id}/cash_received"
+
+        expect(s24.reload.cash_received_at).to be_present
+      end
     end
 
     it 'marks the Pix done and updates the message in the group' do

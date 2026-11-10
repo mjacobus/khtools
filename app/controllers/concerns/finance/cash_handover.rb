@@ -28,12 +28,15 @@ module Finance
 
     private
 
-    # The accounts servant or a helper, when their publisher is this user. With nobody in those
-    # roles linked to a user yet, anyone with access to the documents can.
+    # The accounts servant, a helper or who is responsible for the accounts, when their publisher
+    # is this user. With no servant or helper linked to a user yet, anyone with access can.
     def cash_receiver?
-      user_ids = current_account.finance_cash_receivers.includes(:publisher)
-        .filter_map { |member| member.publisher&.user_id }
-      user_ids.empty? || user_ids.include?(current_user.id)
+      user_ids(current_account.finance_cash_receivers).empty? ||
+        user_ids(current_account.finance_cash_checkers).include?(current_user.id)
+    end
+
+    def user_ids(members)
+      members.includes(:publisher).filter_map { |member| member.publisher&.user_id }
     end
 
     def update_cash_message(document)

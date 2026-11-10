@@ -384,11 +384,18 @@ RSpec.describe Finance::Intake do
         account.finance_telegram_members.create!(telegram_id: 42, name: 'Ana', role: 'overseer')
       end
 
-      it 'only lets them say the cash arrived' do
-        intake.handle(update: callback('cash_received', document))
+      it 'only lets them and who is responsible for the accounts say the cash arrived' do
+        intake.handle(update: callback('cash_received', document, from: 99))
 
         expect(document.reload.cash_received_at).to be_nil
         expect(telegram.answers.last[:text]).to eq(Finance::Messages::NOT_A_CASH_RECEIVER)
+      end
+
+      it 'lets who is responsible for the accounts say the cash arrived' do
+        intake.handle(update: callback('cash_received', document))
+
+        expect(document.reload).to have_attributes(cash_received_by: 'Ana',
+                                                   cash_received_at: be_present)
       end
 
       it 'lets them say it even when they do not confirm documents' do
