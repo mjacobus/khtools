@@ -7,7 +7,9 @@ module Finance
   class MonthChecklist
     # ponytail: the congregation's meeting days; an account setting when another one needs it.
     MEETING_DAYS = [3, 6].freeze # Wednesday, Saturday
-    MONTHLY = %w[statement betel_statement s26 s30 remittance_record remittance_receipt].freeze
+    # Betel sends a thank-you letter every month (S-27b par. 46).
+    MONTHLY = %w[statement betel_statement s26 s30 thank_you_letter
+                 remittance_record remittance_receipt].freeze
     Item = Struct.new(:kind, :date, :done, keyword_init: true)
 
     def initialize(account:, month:, today: Date.current)
