@@ -24,6 +24,7 @@ class Db::Account < ApplicationRecord
                                         class_name: 'Db::FinanceMeetingException'
   has_many :finance_telegram_members, dependent: :delete_all,
                                       class_name: 'Db::FinanceTelegramMember'
+  has_many :finance_reminders, dependent: :delete_all, class_name: 'Db::FinanceReminder'
 
   FINANCE_SECRETS = %i[
     finance_telegram_bot_token finance_telegram_webhook_secret finance_telegram_chat_id

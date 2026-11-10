@@ -1,10 +1,20 @@
 <% due = archive_reminders.due %>
 <div id="reminders-due" class="card mb-3">
   <div class="card-header"><i class="bi bi-bell"></i> A fazer</div>
-  <% if due.empty? %>
+  <% if due.empty? && pending_reminders.empty? %>
     <p class="card-body mb-0 text-secondary">Nada pendente agora.</p>
   <% else %>
     <ul class="list-group list-group-flush">
+      <% pending_reminders.each do |reminder| %>
+        <li class="list-group-item d-flex align-items-center gap-2">
+          <span class="flex-grow-1">
+            <%= reminder.title %>
+            <small class="d-block text-secondary">Todo mês, dia <%= reminder.day %></small>
+          </span>
+          <%= button_to 'Feito', reminder_done_finance_documents_path(reminder_id: reminder.id),
+                        class: 'btn btn-sm btn-success' %>
+        </li>
+      <% end %>
       <% due.each do |reminder| %>
         <li class="list-group-item">
           <%= reminder.title %>
@@ -13,6 +23,39 @@
       <% end %>
     </ul>
   <% end %>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header"><i class="bi bi-arrow-repeat"></i> Todo mês</div>
+  <ul id="recurring" class="list-group list-group-flush">
+    <% recurring_reminders.each do |reminder| %>
+      <li class="list-group-item d-flex align-items-center gap-2">
+        <span class="flex-grow-1">
+          <%= reminder.title %> <small class="text-secondary">todo dia <%= reminder.day %></small>
+        </span>
+        <% if reminder.pending?(Date.current) %>
+          <small class="text-warning-emphasis">pendente</small>
+        <% elsif reminder.done_month %>
+          <small class="text-success">✓ feito em <%= reminder.done_month %></small>
+        <% end %>
+        <%= button_to reminder_finance_documents_path(reminder_id: reminder.id), method: :delete,
+                      class: 'btn btn-sm btn-link text-secondary', title: 'Remover',
+                      form: { data: { turbo_confirm: "Remover \"#{reminder.title}\"?" } } do %>
+          <i class="bi bi-trash"></i>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+  <div class="card-body">
+    <%= form_with scope: :reminder, url: reminders_finance_documents_path, class: 'd-flex gap-2 flex-wrap' do |f| %>
+      <%= f.text_field :title, class: 'form-control', style: 'max-width: 20rem', placeholder: 'Ex.: Pagamento internet', required: true %>
+      <div class="input-group" style="max-width: 9rem">
+        <span class="input-group-text">dia</span>
+        <%= f.number_field :day, class: 'form-control', min: 1, max: 31, required: true %>
+      </div>
+      <%= f.submit 'Adicionar', class: 'btn btn-outline-primary' %>
+    <% end %>
+  </div>
 </div>
 
 <div class="card mb-3">

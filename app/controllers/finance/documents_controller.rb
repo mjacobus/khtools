@@ -4,6 +4,7 @@ module Finance
   class DocumentsController < ApplicationController
     include BillPayments
     include MeetingExceptions
+    include RecurringReminderActions
     include CashHandover
     include ArchiveMoves
     include DocumentFilters

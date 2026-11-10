@@ -38,6 +38,9 @@ Rails.application.routes.draw do
         post :archive, action: :move_to_archive
         post :meeting_exceptions, action: :create_meeting_exception
         delete :meeting_exceptions, action: :destroy_meeting_exception
+        post :reminders, action: :create_reminder
+        post 'reminders/:reminder_id/done', action: :reminder_done, as: :reminder_done
+        delete 'reminders/:reminder_id', action: :destroy_reminder, as: :reminder
       end
     end
     resources :integrations, only: %i[show update], param: :section do
