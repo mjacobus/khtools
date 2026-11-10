@@ -21,7 +21,7 @@ RSpec.describe Finance::IntegrationsController do
   end
 
   it 'shows each section without revealing secrets' do
-    %w[telegram drive ai resolution].each do |section|
+    %w[telegram drive ai settings].each do |section|
       get "/finance/integrations/#{section}"
 
       expect(response).to have_http_status(:ok)
@@ -141,15 +141,15 @@ RSpec.describe Finance::IntegrationsController do
   end
 
   it 'saves the monthly resolution for the worldwide work' do
-    update(:resolution, resolution: 'R$ 800,00')
+    update(:settings, resolution: 'R$ 800,00')
 
     expect(current_account.reload.finance_resolution_cents).to eq(80_000)
-    get '/finance/integrations/resolution'
+    get '/finance/integrations/settings'
     expect(Nokogiri::HTML(response.body).at('#integration_resolution')['value']).to eq('800,00')
   end
 
   it 'rejects a resolution that is not money' do
-    update(:resolution, resolution: 'oitocentos')
+    update(:settings, resolution: 'oitocentos')
 
     expect(response).to have_http_status(:unprocessable_entity)
     expect(response.body).to include('Valor da resolução inválido')

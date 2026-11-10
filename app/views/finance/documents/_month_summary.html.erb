@@ -13,7 +13,7 @@
       <% if summary.resolution_cents.positive? %>
         <span><%= money.call(summary.resolution_cents) %></span>
       <% else %>
-        <%= link_to 'Definir', finance_integration_path('resolution') %>
+        <%= link_to 'Definir', finance_integration_path('settings') %>
       <% end %>
     </li>
     <li class="list-group-item d-flex gap-3 fw-semibold">

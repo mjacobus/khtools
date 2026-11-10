@@ -337,7 +337,7 @@ pt-BR:
       finance_integration_telegram: 'Telegram'
       finance_integration_drive: 'Google Drive'
       finance_integration_ai: 'OpenAI'
-      finance_integration_resolution: 'Resolução'
+      finance_integration_settings: 'Configurações'
       locations: 'Localizações'
       log_contact: 'Marcar como contatado'
       create_tokenized_link_to_files: "Criar links para download"

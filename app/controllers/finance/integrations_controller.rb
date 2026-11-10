@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module Finance
-  # The finance settings, one page each: Telegram, Google Drive, OpenAI and the resolution.
+  # The finance settings, one page each: Telegram, Google Drive, OpenAI and the other settings.
   class IntegrationsController < ApplicationController
-    SECTIONS = %w[telegram drive ai resolution].freeze
+    SECTIONS = %w[telegram drive ai settings].freeze
 
     before_action :find_section
 
