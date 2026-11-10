@@ -52,6 +52,7 @@ env:
     RAILS_ENV: production
     RAILS_LOG_TO_STDOUT: "true"
     SOLID_QUEUE_IN_PUMA: "true"
+    APP_URL: https://central.mjsoft.com.br # links from the finance bot back to khtools
   secret:
     - RAILS_MASTER_KEY
 
