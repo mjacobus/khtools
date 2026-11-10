@@ -12,8 +12,10 @@ class Db::FinanceTelegramMember < ApplicationRecord
     'servant' => 'Servo de contas',
     'helper' => 'Ajudante de contas'
   }.freeze
-  # Who may receive the meeting cash.
+  # Who the meeting cash goes to.
   CASH_RECEIVERS = %w[servant helper].freeze
+  # Who may say the cash arrived: them, and who is responsible for the accounts.
+  CASH_CHECKERS = [*CASH_RECEIVERS, 'overseer'].freeze
 
   validates :role, inclusion: { in: ROLES.keys }, allow_nil: true
   validate :publisher_of_the_account
