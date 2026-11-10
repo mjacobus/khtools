@@ -48,12 +48,27 @@ RSpec.describe Finance::Classifier do
                                               amount_cents: 158_705)
   end
 
-  it 'recognizes a thank-you letter' do
+  # Filed with the remittance it confirms (S-27b par. 27 and 48): one made early in the month
+  # is the previous month's.
+  it 'files a thank-you letter in the month of the remittance it confirms' do
     text = "(12345) Congregação Exemplo Setembro 2026\nCarta de Agradecimento\n" \
            "Agradecemos por seu apoio à obra mundial.\n" \
            '09/09/2026 Donativos (Obra Mundial) 10,00 BRL'
 
-    expect(classify(text)).to have_attributes(kind: 'thank_you_letter', period: '2026-09')
+    expect(classify(text)).to have_attributes(kind: 'thank_you_letter', period: '2026-08')
+  end
+
+  it 'keeps a thank-you letter in its month when the remittance was late in the month' do
+    text = "Setembro 2026\nCarta de Agradecimento\nobra mundial\n" \
+           '25/09/2026 Donativos (Obra Mundial) 10,00 BRL'
+
+    expect(classify(text)).to have_attributes(period: '2026-09')
+  end
+
+  it 'files a thank-you letter without dates in the month before its own' do
+    text = "Setembro 2026\nCarta de Agradecimento\nAgradecemos por seu apoio à obra mundial."
+
+    expect(classify(text)).to have_attributes(period: '2026-08')
   end
 
   it 'reads a bank statement period' do

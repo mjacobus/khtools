@@ -57,7 +57,14 @@ module Finance
         return
       end
 
-      Result.new(kind: 'thank_you_letter', period: first_period)
+      Result.new(kind: 'thank_you_letter', period: letter_month)
+    end
+
+    # Filed with the remittance it lists (S-27b par. 27 and 48), like the remittance documents.
+    # ponytail: the first date is the remittance's; without one, the 1st of the letter's month.
+    def letter_month
+      remitted = date(@text[DATE]) || first_period&.then { |month| Date.parse("#{month}-01") }
+      remitted && Competence.remittance_month(remitted)
     end
 
     def remittance_record
