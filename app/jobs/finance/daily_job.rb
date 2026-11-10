@@ -2,7 +2,8 @@
 
 module Finance
   # Scheduled in config/recurring.yml, for every account with the bot on. Every morning: bring
-  # in what changed in Drive, then remind the bills due soon and the month's missing documents.
+  # in what changed in Drive, then remind the bills due soon, the monthly reminders and the
+  # month's missing documents.
   # On meeting days, near the meeting ('meeting_day'): the missing S-24s and the cash to hand.
   class DailyJob < ApplicationJob
     def perform(part = 'morning')
@@ -21,6 +22,7 @@ module Finance
         DriveSync.new(account:, drive: drive(account)).sync
       end
       BillReminders.new(account:, telegram:).remind
+      RecurringReminders.new(account:, telegram:).remind
       ChecklistReminders.new(account:, telegram:).remind_month
     end
 

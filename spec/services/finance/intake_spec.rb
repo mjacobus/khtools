@@ -405,4 +405,41 @@ RSpec.describe Finance::Intake do
       expect(telegram.answers.last[:text]).to eq(Finance::Messages::NOT_A_CONFIRMER)
     end
   end
+
+  describe 'monthly reminders' do
+    let(:reminder) { account.finance_reminders.create!(title: 'Pagamento internet', day: 10) }
+
+    def done(reminder_id, from: 7)
+      intake.handle(update: {
+                      'update_id' => 3,
+                      'callback_query' => {
+                        'id' => 'cb9', 'data' => "fin:reminder_done:#{reminder_id}",
+                        'from' => { 'id' => from, 'first_name' => 'Bia' },
+                        'message' => { 'message_id' => 500, 'chat' => { 'id' => chat_id } }
+                      }
+                    })
+    end
+
+    it 'marks one done for the month from its button, by anyone in the group' do
+      account.finance_reminders.create!(title: 'Conferir o extrato', day: 1)
+      travel_to(Date.new(2026, 11, 12)) { done(reminder.id) }
+
+      expect(reminder.reload.done_month).to eq('2026-11')
+      expect(telegram.answers.last).to eq(id: 'cb9', text: '✅ Feito')
+      expect(telegram.edits.last).to include(
+        message_id: 500,
+        text: "🔔 Lembretes\n• Conferir o extrato (dia 1)\nToque no botão quando estiver feito.\n" \
+              '✅ Pagamento internet · Bia'
+      )
+    end
+
+    it 'does not mark the reminders of another congregation' do
+      other = factories.accounts.create.finance_reminders.create!(title: 'Outro', day: 1)
+
+      done(other.id)
+
+      expect(other.reload.done_month).to be_nil
+      expect(telegram.edits).to be_empty
+    end
+  end
 end

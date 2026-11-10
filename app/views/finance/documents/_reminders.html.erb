@@ -1,10 +1,23 @@
 <% due = archive_reminders.due %>
 <div id="reminders-due" class="card mb-3">
-  <div class="card-header"><i class="bi bi-bell"></i> A fazer</div>
-  <% if due.empty? %>
+  <div class="card-header d-flex">
+    <span class="flex-grow-1"><i class="bi bi-bell"></i> A fazer</span>
+    <%= link_to 'Recorrentes', finance_reminders_path, class: 'small' %>
+  </div>
+  <% if due.empty? && pending_reminders.empty? %>
     <p class="card-body mb-0 text-secondary">Nada pendente agora.</p>
   <% else %>
     <ul class="list-group list-group-flush">
+      <% pending_reminders.each do |reminder| %>
+        <li class="list-group-item d-flex align-items-center gap-2">
+          <span class="flex-grow-1">
+            <%= reminder.title %>
+            <small class="d-block text-secondary">Todo mês, dia <%= reminder.day %></small>
+          </span>
+          <%= button_to 'Feito', done_finance_reminder_path(reminder),
+                        class: 'btn btn-sm btn-success' %>
+        </li>
+      <% end %>
       <% due.each do |reminder| %>
         <li class="list-group-item">
           <%= reminder.title %>

@@ -1,0 +1,55 @@
+<%= render breadcrumb %>
+
+<%= render DropdownMenuComponent.new(classes: ['btn-primary'], type: :list_options) do |component| %>
+  <% component.item do %>
+    <%= new_link %>
+  <% end %>
+<% end %>
+
+<p class="text-secondary small">
+  A partir do dia, o robô lembra no grupo toda manhã, marcando o responsável, até alguém tocar em ✅.
+</p>
+
+<div id="recurring" class="index-list">
+  <% reminders.each do |reminder| %>
+    <div class="item position-relative">
+      <%= render DropdownMenuComponent.new(type: :item_options) do |component| %>
+        <% if pending?(reminder) %>
+          <% component.item do %>
+            <%= done_link(reminder) %>
+          <% end %>
+        <% end %>
+        <% component.item do %>
+          <%= edit_link(reminder) %>
+        <% end %>
+        <% component.item do %>
+          <%= destroy_link(reminder) %>
+        <% end %>
+      <% end %>
+      <div class="row">
+        <div class="col-sm-12 title mb-2">
+          <%= icon('arrow-repeat') { reminder.title } %>
+        </div>
+      </div>
+      <div class="row small">
+        <div class="col-sm-12 col-lg-4">
+          <%= icon('calendar') { "Todo dia #{reminder.day}" } %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+          <% if reminder.responsible %>
+            <%= icon('person') { reminder.responsible.display_name } %>
+          <% end %>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+          <% if pending?(reminder) %>
+            <span class="text-warning-emphasis"><%= icon('hourglass-split') { 'Pendente' } %></span>
+          <% elsif reminder.done_month %>
+            <span class="text-success"><%= icon('check-circle') { "Feito em #{reminder.done_month}" } %></span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <%= render PaginationComponent.new(reminders, position: :bottom) %>
+</div>

@@ -44,7 +44,7 @@
     <%= link_to finance_documents_path(view: 'reminders'), class: "nav-link #{'active' if reminders}",
                                                            aria: { current: (reminders ? 'page' : nil) } do %>
       Lembretes
-      <% if (due = archive_reminders.due.size).positive? %><span class="badge bg-warning text-dark"><%= due %></span><% end %>
+      <% if (due = archive_reminders.due.size + pending_reminders.size).positive? %><span class="badge bg-warning text-dark"><%= due %></span><% end %>
     <% end %>
   </li>
 </ul>

@@ -41,6 +41,9 @@ Rails.application.routes.draw do
         delete :meeting_exceptions, action: :destroy_meeting_exception
       end
     end
+    resources :reminders, except: :show do
+      post :done, on: :member
+    end
     resources :integrations, only: %i[show update], param: :section do
       post :members, on: :member
     end

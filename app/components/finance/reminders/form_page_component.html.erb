@@ -1,0 +1,17 @@
+<%= render breadcrumb %>
+
+<%= simple_form_for(reminder, url: target_url, as: :reminder) do |f| %>
+  <%= input_wrapper do %>
+    <%= f.input :title, label: 'Lembrete', placeholder: 'Ex.: Pagamento internet' %>
+  <% end %>
+  <%= input_wrapper do %>
+    <%= f.input :day, input_html: { min: 1, max: 31 }, hint: 'Num mês mais curto, vale o último dia.' %>
+  <% end %>
+  <%= input_wrapper do %>
+    <%= f.input :finance_telegram_member_id, collection: people, include_blank: 'Sem responsável',
+                hint: 'Quem o robô marca no grupo do Telegram.' %>
+  <% end %>
+  <%= input_wrapper do %>
+    <%= f.submit(class: 'btn btn-primary mt-3 float-right') %>
+  <% end %>
+<% end %>
