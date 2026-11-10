@@ -252,6 +252,8 @@ RSpec.describe Finance::DocumentsController do
       document(kind: 's24', cash_holder_name: 'Caio', amount_cents: 2_000)
       document(kind: 's24', cash_holder_name: 'Caio', amount_cents: 9_000,
                cash_received_at: Time.current)
+      document(kind: 's24', cash_holder_name: 'Caio', amount_cents: 7_000,
+               cash_pix_at: Time.current) # the Pix settles it
 
       get '/finance/documents', params: { month: '2026-09' }
 

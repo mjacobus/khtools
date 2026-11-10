@@ -32,9 +32,11 @@ class Db::FinanceDocument < ApplicationRecord # rubocop:disable Metrics/ClassLen
   scope :open_bills, lambda {
     where(kind: 'bill', paid_on: nil).where.not(due_date: nil).where.not(state: 'discarded')
   }
-  # S-24 cash someone still holds: the accounts servant or a helper hasn't tapped "Recebi" yet.
+  # S-24 cash someone still holds: nobody tapped "Recebi" and the Pix isn't done (once the money
+  # is in the account, whoever kept the cash is even).
   scope :cash_pending, lambda {
-    where(kind: 's24', state: 'archived', cash_received_at: nil).where.not(cash_holder_name: nil)
+    where(kind: 's24', state: 'archived', cash_received_at: nil, cash_pix_at: nil)
+      .where.not(cash_holder_name: nil)
   }
   scope :stuck, -> { where(state: %w[received confirmed]).where(updated_at: ...10.minutes.ago) }
 

@@ -42,8 +42,9 @@ RSpec.describe Finance::CashReminders do
     )
   end
 
-  it 'leaves out cash already received, S-24s without a holder and today' do
+  it 'leaves out cash already received or paid by Pix, S-24s without a holder and today' do
     s24(4, cash_received_at: Time.current)
+    s24(5, cash_pix_at: Time.current)
     s24(7, cash_holder_name: nil, cash_holder_telegram_id: nil)
     s24(9)
 
