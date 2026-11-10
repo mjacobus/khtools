@@ -32,11 +32,9 @@ class Db::FinanceDocument < ApplicationRecord # rubocop:disable Metrics/ClassLen
   scope :open_bills, lambda {
     where(kind: 'bill', paid_on: nil).where.not(due_date: nil).where.not(state: 'discarded')
   }
-  # S-24 cash someone still holds: nobody tapped "Recebi" and the Pix isn't done (once the money
-  # is in the account, whoever kept the cash is even).
+  # S-24 cash nobody tapped "Recebi" for yet; see cash_owed? for the Pix.
   scope :cash_pending, lambda {
-    where(kind: 's24', state: 'archived', cash_received_at: nil, cash_pix_at: nil)
-      .where.not(cash_holder_name: nil)
+    where(kind: 's24', state: 'archived', cash_received_at: nil).where.not(cash_holder_name: nil)
   }
   scope :stuck, -> { where(state: %w[received confirmed]).where(updated_at: ...10.minutes.ago) }
 
@@ -92,6 +90,18 @@ class Db::FinanceDocument < ApplicationRecord # rubocop:disable Metrics/ClassLen
 
   # The name the file has in Drive: the bot names what it uploads, the backfill keeps names
   # until someone edits the file in khtools, and a rename in Drive itself wins over both.
+  # Whoever kept an S-24's cash is even once someone got it ("Recebi") or once they made the Pix
+  # themselves. When someone else made the Pix, the cash is owed to them.
+  def cash_owed?
+    cash_holder_name.present? && cash_received_at.nil? && !pix_by_holder?
+  end
+
+  def cash_creditor
+    if cash_pix_at && cash_owed?
+      cash_pix_by
+    end
+  end
+
   def drive_name
     if drive_filename.present? # renamed in Drive itself (DriveSync)
       drive_filename
@@ -141,6 +151,18 @@ class Db::FinanceDocument < ApplicationRecord # rubocop:disable Metrics/ClassLen
   end
 
   private
+
+  # By Telegram id; by name for older records and for a Pix marked on the web by someone not
+  # linked to the group.
+  def pix_by_holder?
+    if cash_pix_at.nil?
+      false
+    elsif cash_pix_by_telegram_id && cash_holder_telegram_id
+      cash_pix_by_telegram_id == cash_holder_telegram_id
+    else
+      cash_pix_by == cash_holder_name
+    end
+  end
 
   def audit_report_in_last_month
     message = Finance::Competence.audit_month_error(competence)

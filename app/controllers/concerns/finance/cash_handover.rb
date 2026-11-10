@@ -21,7 +21,8 @@ module Finance
 
     def cash_pix
       document = documents.where(kind: 's24').find(params[:id])
-      document.update!(cash_pix_at: Time.current, cash_pix_by: current_user.name)
+      document.update!(cash_pix_at: Time.current, cash_pix_by: current_user.name,
+                       cash_pix_by_telegram_id: own_telegram_id)
       update_cash_message(document)
       redirect_to finance_documents_path(month: document.competence)
     end
@@ -33,6 +34,12 @@ module Finance
     def cash_receiver?
       user_ids(current_account.finance_cash_receivers).empty? ||
         user_ids(current_account.finance_cash_checkers).include?(current_user.id)
+    end
+
+    # The group member linked to this user, if any.
+    def own_telegram_id
+      current_account.finance_telegram_members.joins(:publisher)
+        .find_by(publishers: { user_id: current_user.id })&.telegram_id
     end
 
     def user_ids(members)

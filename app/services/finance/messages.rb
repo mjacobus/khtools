@@ -98,10 +98,16 @@ module Finance
       holder = if document.cash_received_at
                  "Entregue a: #{document.cash_received_by}"
                else
-                 "Está com: #{document.cash_holder_name}"
+                 "Está com: #{document.cash_holder_name}#{creditor_note(document)}"
                end
       pix = document.cash_pix_at ? "Pix: feito por #{document.cash_pix_by}" : 'Pix: pendente'
       [what, holder, pix].join("\n")
+    end
+
+    def creditor_note(document)
+      if document.cash_creditor
+        " (entregar a #{document.cash_creditor}, que fez o Pix)"
+      end
     end
 
     def cash_buttons(document)

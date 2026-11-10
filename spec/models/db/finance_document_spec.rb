@@ -166,4 +166,33 @@ RSpec.describe Db::FinanceDocument do
       expect(bill.payment_status(today:)).to be_nil
     end
   end
+
+  describe 'S-24 cash' do
+    def s24(**attributes)
+      described_class.new(kind: 's24', cash_holder_name: 'Gabriel', cash_holder_telegram_id: 8,
+                          **attributes)
+    end
+
+    it 'is owed while nobody got it and nobody made the Pix' do
+      expect(s24).to have_attributes(cash_owed?: true, cash_creditor: nil)
+    end
+
+    it 'is even when whoever kept it made the Pix' do
+      expect(s24(cash_pix_at: Time.current, cash_pix_by: 'Gabriel', cash_pix_by_telegram_id: 8))
+        .to have_attributes(cash_owed?: false)
+    end
+
+    it 'is owed to whoever made the Pix for someone else, until they get it' do
+      paid = s24(cash_pix_at: Time.current, cash_pix_by: 'Marcelo', cash_pix_by_telegram_id: 9)
+
+      expect(paid).to have_attributes(cash_owed?: true, cash_creditor: 'Marcelo')
+      paid.cash_received_at = Time.current
+      expect(paid.cash_owed?).to be(false)
+    end
+
+    it 'compares names when the Pix has no Telegram id (older records, or made on the web)' do
+      expect(s24(cash_pix_at: Time.current, cash_pix_by: 'Gabriel'))
+        .to have_attributes(cash_owed?: false)
+    end
+  end
 end
