@@ -20,10 +20,23 @@ RSpec.describe Finance::RecurringReminders do
     account.finance_reminders.create!(title: 'Conferir o extrato', day: 20)
   end
 
-  it 'reminds every morning what is pending until it is marked done' do
+  it 'reminds every morning what is pending, with a button to mark each one done' do
+    internet = account.finance_reminders.find_by(day: 10)
+
     expect(remind(Date.new(2026, 11, 12))).to include(
-      text: "🔔 Lembretes\n• Pagamento internet (dia 10)\n" \
-            'Marque como feito em Contas › Documentos › Lembretes.'
+      text: "🔔 Lembretes\n• Pagamento internet (dia 10)\nToque no botão quando estiver feito.",
+      buttons: [[['✅ Pagamento internet', "fin:reminder_done:#{internet.id}"]]]
+    )
+  end
+
+  it 'mentions who is responsible' do
+    member = account.finance_telegram_members.create!(telegram_id: 77, name: 'Caio & Cia')
+    account.finance_reminders.find_by(day: 10).update!(responsible: member)
+
+    expect(remind(Date.new(2026, 11, 12))).to include(
+      text: a_string_including('• Pagamento internet (dia 10) · ' \
+                               '<a href="tg://user?id=77">Caio &amp; Cia</a>'),
+      html: true
     )
   end
 

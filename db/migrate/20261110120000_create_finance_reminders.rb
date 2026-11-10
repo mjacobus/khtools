@@ -7,6 +7,7 @@ class CreateFinanceReminders < ActiveRecord::Migration[7.1]
       t.string :title, null: false
       t.integer :day, null: false
       t.string :done_month
+      t.references :finance_telegram_member, foreign_key: { on_delete: :nullify }
       t.timestamps
     end
   end

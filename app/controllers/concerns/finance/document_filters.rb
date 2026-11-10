@@ -10,7 +10,7 @@ module Finance
 
     included do
       helper_method :all_documents_view?, :reminders_view?, :archive_reminders, :month_summary,
-                    :recurring_reminders, :pending_reminders
+                    :pending_reminders
     end
 
     private
@@ -27,12 +27,9 @@ module Finance
       @archive_reminders ||= ArchiveReminders.new(account: current_account)
     end
 
-    def recurring_reminders
-      @recurring_reminders ||= current_account.finance_reminders.order(:day, :id).to_a
-    end
-
     def pending_reminders
-      recurring_reminders.select { |reminder| reminder.pending?(Date.current) }
+      @pending_reminders ||= current_account.finance_reminders.order(:day, :id)
+        .select { |reminder| reminder.pending?(Date.current) }
     end
 
     def month_summary
