@@ -41,7 +41,8 @@ RSpec.describe Finance::MonthChecklist do
 
     expect(items.reject { |item| item.kind == 's24' }.to_h { |item| [item.kind, item.done] })
       .to eq('statement' => false, 'betel_statement' => false, 's26' => true, 's30' => false,
-             'remittance_record' => false, 'remittance_receipt' => false)
+             'thank_you_letter' => false, 'remittance_record' => false,
+             'remittance_receipt' => false)
   end
 
   it 'only counts what is filed in Drive' do
