@@ -1,0 +1,73 @@
+<% money = ->(cents) { cents && "#{'-' if cents.negative?}#{Finance::Money.format(cents: cents.abs)}" } %>
+<% reasons = { deposit: 'Depósito do S-24', donation: 'Donativo eletrônico (CE)', interest: 'Rendimento (J)',
+               expense: 'Comprovante', remittance: 'Remessa (TO-62)', unexplained_deposit: 'Pix do titular sem S-24 de mesmo valor',
+               unexplained: 'Saída sem comprovante' } %>
+<% date = ->(document) { document.document_date&.strftime('%d/%m') } %>
+<% doc_link = ->(document, label) { document.drive_url ? link_to(label, document.drive_url, target: '_blank', rel: 'noopener') : label } %>
+
+<h1 class="h3">Conferência com o extrato · <%= @month %></h1>
+<p class="text-secondary">
+  Envie o extrato do banco (PDF) que cobre o mês; ele não fica guardado. Cada linha é ligada ao documento
+  arquivado que a explica, e o saldo esperado pelos documentos é comparado com o do extrato (S-27b, par. 27-34).
+</p>
+
+<%= form_with url: finance_reconciliation_path, method: :post, multipart: true, class: 'row g-3 align-items-start mb-4' do %>
+  <div class="col-sm-3">
+    <%= label_tag :month, 'Mês', class: 'form-label' %>
+    <%= month_field_tag :month, @month, class: 'form-control' %>
+  </div>
+  <div class="col-sm-3">
+    <%= label_tag :opening, 'Saldo inicial da Conta', class: 'form-label' %>
+    <%= text_field_tag :opening, @opening_cents && money.call(@opening_cents).delete_prefix('R$ '), class: 'form-control', inputmode: 'decimal' %>
+    <div class="form-text">Como fechou o S-26 do mês anterior.</div>
+  </div>
+  <div class="col-sm-4">
+    <%= label_tag :statements, 'Extratos (PDF)', class: 'form-label' %>
+    <%= file_field_tag 'statements[]', multiple: true, accept: 'application/pdf', class: 'form-control', id: 'statements' %>
+  </div>
+  <div class="col-sm-2 align-self-start pt-sm-4"><%= submit_tag 'Conferir', class: 'btn btn-primary w-100 mt-sm-2' %></div>
+<% end %>
+
+<% if (r = @reconciliation) %>
+  <div class="table-responsive">
+    <table id="statement-lines" class="table table-sm align-middle">
+      <thead><tr><th>Data</th><th class="text-end">Valor</th><th>De / para</th><th>Explicação</th></tr></thead>
+      <tbody>
+        <% r.entries.each do |entry| %>
+          <tr class="<%= 'table-warning' if entry.reason.to_s.start_with?('unexplained') %>">
+            <td><%= entry.line.date.strftime('%d/%m') %></td>
+            <td class="text-end text-nowrap"><%= money.call(entry.line.cents) %></td>
+            <td><%= entry.line.who || entry.line.history %></td>
+            <td>
+              <% label = reasons[entry.reason] %>
+              <%= entry.document ? doc_link.call(entry.document, "#{label} de #{date.call(entry.document)}") : label %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <% { 'S-24 não depositados até o fim do mês' => r.undeposited, 'Comprovantes sem saída no extrato' => r.unpaid,
+       'Remessa ainda não debitada' => r.pending_remittances }.each do |title, list| %>
+    <% if list.any? %>
+      <h2 class="h6 mt-3"><%= title %></h2>
+      <ul>
+        <% list.each do |document| %>
+          <li><%= doc_link.call(document, "#{date.call(document)} · #{money.call(document.amount_cents.to_i)}") %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+
+  <table id="balances" class="table table-sm w-auto mt-3">
+    <tbody>
+      <tr><th>Saldo do extrato no fim do mês</th><td class="text-end"><%= money.call(r.statement_cents) || '—' %></td></tr>
+      <tr><th>Confronto (+ S-24 não depositados − remessa não debitada)</th><td class="text-end"><%= money.call(r.confronto_cents) %></td></tr>
+      <tr><th>Esperado pelos documentos (saldo inicial + entradas − saídas)</th><td class="text-end"><%= money.call(r.expected_cents) || 'informe o saldo inicial' %></td></tr>
+      <tr class="<%= r.difference_cents&.nonzero? ? 'table-danger' : 'table-success' %>">
+        <th>Diferença</th><td class="text-end"><%= money.call(r.difference_cents) || '—' %></td>
+      </tr>
+    </tbody>
+  </table>
+<% end %>

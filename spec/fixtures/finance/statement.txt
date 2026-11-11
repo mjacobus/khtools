@@ -1,0 +1,34 @@
+                                                         Extrato de Conta Corrente
+                                                         Nome:       ANA TESOUREIRA DA SILVA
+                                            Movimentação entre:      28/09/2026 e 03/11/2026
+
+Data         Histórico                                            Docto.               Crédito (R$)           Débito (R$)           Saldo (R$)
+
+27/09/2026   Saldo Anterior                                                                                                         R$ 1.000,00
+
+             3212-PIX RECEBIDO
+30/09/2026                                                        100001               R$ 200,00                                    R$ 1.200,00
+             REM: ANA TESOUREIRA 30/09
+
+             Saldo do Dia                                                                                                           R$ 1.200,00
+
+             3212-PIX RECEBIDO
+02/10/2026                                                        100002               R$ 150,00                                    R$ 1.350,00
+             REM: ANA TESOUREIRA 01/10
+
+             3212-PIX RECEBIDO
+                                                                  100003               R$ 50,00                                     R$ 1.400,00
+             REM: JOAO DOADOR 02/10
+
+             3330-PIX QR CODE
+                                                                  100004                                      R$ -1.074,49          R$ 325,51
+             DES: LOJA DE EXTINTORES 02/10
+
+             Saldo do Dia                                                                                                           R$ 325,51
+
+             0410-RENDIMENTO
+31/10/2026                                                        100005               R$ 1,20                                      R$ 326,71
+
+             3205-PIX ENVIADO
+03/11/2026                                                        100006                                      R$ -300,00            R$ 26,71
+             DES: ASSOCIACAO TORRE DE VIGIA 03/11
