@@ -11,6 +11,9 @@
     <%= link_to archive_finance_documents_path, class: 'btn btn-outline-secondary', title: 'Arquivar meses auditados' do %>
       <i class="bi bi-archive"></i> Arquivar
     <% end %>
+    <%= link_to finance_reconciliation_path(month: @month), class: 'btn btn-outline-secondary', title: 'Conferir o mês com o extrato do banco' do %>
+      <i class="bi bi-bank"></i> Extrato
+    <% end %>
     <% if @month && !all && !reminders %>
       <% first_day = Date.parse("#{@month}-01") %>
       <%= form_with url: finance_documents_path, method: :get, class: 'd-flex align-items-center gap-1' do %>
