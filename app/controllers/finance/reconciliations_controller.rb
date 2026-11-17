@@ -1,25 +1,26 @@
 # frozen_string_literal: true
 
 module Finance
-  # Checks a month's documents against the bank statement PDFs (nothing from them is kept: only
-  # the opening balance is).
+  # Checks a month's documents against the statements filed for it (kind "statement"), read
+  # from Drive or, before archiving, the local copy. Only the opening balance is stored.
   class ReconciliationsController < ApplicationController
+    include DocumentFiles
+
     MONTH = /\A\d{4}-\d{2}\z/
 
     def show
       @month = month
       @opening_cents = balance.opening_cents
+      @statements = statements.to_a
+      @reconciliation = reconciliation
+    rescue Pdf::Error, GoogleDrive::Client::Error => exception
+      flash.now[:alert] = "Não consegui ler o extrato: #{exception.message}"
     end
 
     def create
       @month = month
       save_opening
-      @opening_cents = balance.opening_cents
-      @reconciliation = reconciliation
-      render :show
-    rescue Pdf::Error => exception
-      flash.now[:alert] = "Não consegui ler o extrato: #{exception.message}"
-      render :show, status: :unprocessable_entity
+      redirect_to finance_reconciliation_path(month: @month)
     end
 
     private
@@ -39,8 +40,13 @@ module Finance
       end
     end
 
+    def statements
+      current_account.finance_documents.where(kind: 'statement', competence: @month)
+        .where.not(state: %w[discarded failed]).order(:id)
+    end
+
     def reconciliation
-      texts = Array(params[:statements]).compact_blank.map { |file| text(file.path) }
+      texts = @statements.map { |document| text(document) }
       if texts.any?
         Reconciliation.new(account: current_account, month: @month,
                            holder: Statement.holder(texts.first),
@@ -49,10 +55,34 @@ module Finance
       end
     end
 
-    def text(path)
+    def text(document)
+      Tempfile.create(['statement', '.pdf'], binmode: true) do |file|
+        file.write(bytes(document))
+        file.flush
+        pdf_text(file.path)
+      end
+    end
+
+    def bytes(document)
+      if document.drive_file_id
+        drive.download(id: document.drive_file_id)
+      else
+        File.binread(local_file(document))
+      end
+    end
+
+    def pdf_text(path)
       Pdf.text(path:)
     rescue Pdf::PasswordError
       Pdf.text(path:, password: current_account.finance_statement_password)
+    end
+
+    def drive
+      @drive ||= GoogleDrive::Client.new(
+        refresh_token: current_account.finance_google_refresh_token,
+        client_id: Rails.application.credentials.dig(:oauth, :google, :key),
+        client_secret: Rails.application.credentials.dig(:oauth, :google, :secret)
+      )
     end
   end
 end

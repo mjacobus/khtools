@@ -30,8 +30,12 @@ module Finance
     def unpaid = left_over('payment_receipt')
     def pending_remittances = left_over('remittance_record')
 
+    # Checking balance plus what went to Invest Fácil, which is still the Conta's money.
+    # ponytail: assumes nothing was invested before the statement starts; ask for that balance
+    # if a statement ever opens with money already in Invest Fácil.
     def statement_cents
-      @lines.last&.balance_cents
+      last = @lines.last
+      last && (last.balance_cents - @lines.select { investment?(_1) }.sum(&:cents))
     end
 
     def confronto_cents
@@ -65,8 +69,17 @@ module Finance
         .order(:document_date).to_a
     end
 
+    # Its income (RENTAB) has no sender, so it comes out as interest.
+    INVESTMENT = /\A(APLIC|RESGATE).*INVEST/
+
+    def investment?(line) = line.history.to_s.match?(INVESTMENT)
+
     def explain(line)
-      line.cents.positive? ? credit(line) : debit(line)
+      if investment?(line)
+        Entry.new(line, :investment)
+      else
+        line.cents.positive? ? credit(line) : debit(line)
+      end
     end
 
     def credit(line)

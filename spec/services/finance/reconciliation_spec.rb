@@ -62,4 +62,19 @@ RSpec.describe Finance::Reconciliation do
 
     expect([reconciliation.expected_cents, reconciliation.difference_cents]).to eq([nil, nil])
   end
+
+  it 'keeps money moved to Invest Fácil in the statement balance, and its income as interest' do
+    line = lambda { |doc, history, cents, balance|
+      Finance::Statement::Line.new(date: Date.new(2026, 10, 5), doc:, history:, cents:,
+                                   balance_cents: balance)
+    }
+    lines = [line.call('1', 'APLIC.INVEST FACIL', -10_000, 100),
+             line.call('2', 'RENTAB.INVEST FACILCRED*', 3, 103)]
+
+    reconciliation = described_class.new(account:, month: '2026-10', lines:, holder: nil,
+                                         opening_cents: nil)
+
+    expect(reconciliation.entries.map(&:reason)).to eq(%i[investment interest])
+    expect(reconciliation.statement_cents).to eq(10_103)
+  end
 end

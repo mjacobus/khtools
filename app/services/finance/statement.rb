@@ -9,7 +9,8 @@ module Finance
     Line = Struct.new(:date, :doc, :history, :cents, :balance_cents, :who, keyword_init: true)
 
     DATE = %r{\A\s*(\d\d/\d\d/\d{4})}
-    HISTORY = /\A\s+\d{4}-(.+?)\s*\z/
+    # Alone on its row, or on the amounts row (with the date, on Invest Fácil moves).
+    HISTORY = %r{\A(?:\d\d/\d\d/\d{4})?\s+\d{4}-(.+?)(?:\s{2,}|\s*\z)}
     AMOUNTS = /\s(\d{4,})\s+(R\$ -?[\d.,]+)\s+(?:R\$ -?[\d.,]+\s+)?R\$ (-?[\d.,]+)\s*\z/
     WHO = %r{\A\s+(?:REM|DES|DEST): (.+?)(?:\s+\d\d/\d\d)?\s*\z}
     HOLDER = /^\s*Nome:\s+(.+?)\s*$/
@@ -29,12 +30,8 @@ module Finance
       if row[DATE, 1]
         @date = Date.strptime(row[DATE, 1], '%d/%m/%Y')
       end
-      history(row) || amounts(row) || who(row)
-    end
-
-    def history(row)
       @history = row[HISTORY, 1] || @history
-      row.match?(HISTORY)
+      amounts(row) || who(row)
     end
 
     def amounts(row)

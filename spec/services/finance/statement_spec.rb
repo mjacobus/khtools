@@ -29,4 +29,18 @@ RSpec.describe Finance::Statement do
   it 'drops repeated lines when statements overlap' do
     expect(described_class.parse(text + text).size).to eq(6)
   end
+
+  it 'reads a history on the same row as the date and amounts (Invest Fácil)' do
+    text = <<~TEXT
+      23/06/2026   2573-APLIC.INVEST FACIL                           4973813                                     R$ -2.084,46          R$ 1,00
+                   3584-RENTAB.INVEST FACILCRED*                        4973814               R$ 0,03                                    R$ 1,03
+    TEXT
+
+    lines = described_class.parse(text)
+
+    expect(lines.map { [_1.date, _1.history, _1.cents, _1.balance_cents] }).to eq(
+      [[Date.new(2026, 6, 23), 'APLIC.INVEST FACIL', -208_446, 100],
+       [Date.new(2026, 6, 23), 'RENTAB.INVEST FACILCRED*', 3, 103]]
+    )
+  end
 end
