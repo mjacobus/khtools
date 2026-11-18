@@ -104,6 +104,11 @@ module GoogleDrive
       get("#{FILES_URL}/#{id}", fields: 'name').fetch('name')
     end
 
+    def download(id:)
+      uri = URI("#{FILES_URL}/#{id}?alt=media&supportsAllDrives=true")
+      raw_request(Net::HTTP::Get.new(uri))
+    end
+
     # Everything changed since page_token, and the token to ask from next time.
     def changes(page_token:)
       pages = [changes_page(page_token)]
@@ -197,13 +202,17 @@ module GoogleDrive
     end
 
     def request(http_request, authorize: true)
+      JSON.parse(raw_request(http_request, authorize:))
+    end
+
+    def raw_request(http_request, authorize: true)
       http_request['Authorization'] = "Bearer #{access_token}" if authorize
       uri = http_request.uri
       response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         http.request(http_request)
       end
       if response.code.start_with?('2')
-        return JSON.parse(response.body)
+        return response.body
       end
 
       raise Error, "Drive HTTP #{response.code}: #{response.body.to_s[0, 300]}"

@@ -49,6 +49,7 @@ Rails.application.routes.draw do
     resources :integrations, only: %i[show update], param: :section do
       post :members, on: :member
     end
+    resource :reconciliation, only: %i[show create]
     resource :drive_connection, only: %i[show] do
       get :callback
     end
