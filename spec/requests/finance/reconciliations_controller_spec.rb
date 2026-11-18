@@ -13,10 +13,10 @@ RSpec.describe Finance::ReconciliationsController do
     allow(GoogleDrive::Client).to receive(:new).and_return(drive)
   end
 
-  def statement_document(competence: '2026-10')
+  def statement_document(competence: '2026-10', drive_file_id: 'f1', drive_filename: nil)
     factories.finance_documents.create(account: current_account, state: 'archived',
-                                       kind: 'statement', competence:, drive_file_id: 'f1',
-                                       drive_url: 'https://drive/statement')
+                                       kind: 'statement', competence:, drive_file_id:,
+                                       drive_filename:, drive_url: 'https://drive/statement')
   end
 
   def document(kind, date, cents)
@@ -27,6 +27,16 @@ RSpec.describe Finance::ReconciliationsController do
   end
 
   def page = Nokogiri::HTML(response.body)
+
+  def fail_to_open(bytes)
+    allow(Finance::Pdf).to receive(:text) do |path:, **|
+      if File.binread(path) == bytes
+        raise Finance::Pdf::PasswordError, 'Incorrect password'
+      end
+
+      statement
+    end
+  end
 
   it 'says how to mark a statement when the month has none' do
     statement_document(competence: '2026-09')
@@ -74,5 +84,18 @@ RSpec.describe Finance::ReconciliationsController do
     get '/finance/reconciliation', params: { month: '2026-10' }
 
     expect(page.css('#statement-lines tbody tr').size).to eq(4)
+  end
+
+  it "still checks the month when one statement can't be opened, saying which one" do
+    statement_document
+    locked = statement_document(drive_file_id: 'f2', drive_filename: 'com-senha.pdf')
+    allow(drive).to receive(:download).with(id: 'f2').and_return('%LOCKED')
+    fail_to_open('%LOCKED')
+
+    get '/finance/reconciliation', params: { month: '2026-10' }
+
+    expect(page.css('#statement-lines tbody tr').size).to eq(4)
+    expect(page.at("#statements li[data-id='#{locked.id}']").text.squish)
+      .to include('com-senha.pdf', 'não consegui abrir: Incorrect password')
   end
 end

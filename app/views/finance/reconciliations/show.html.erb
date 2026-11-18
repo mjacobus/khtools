@@ -25,7 +25,12 @@
     <% if @statements.any? %>
       <ul id="statements" class="list-unstyled mb-0">
         <% @statements.each do |document| %>
-          <li><%= doc_link.call(document, document.drive_filename || document.original_filename || "##{document.id}") %></li>
+          <li data-id="<%= document.id %>">
+            <%= doc_link.call(document, document.drive_filename || document.original_filename || "##{document.id}") %>
+            <% if (error = @unreadable[document.id]) %>
+              <span class="text-danger small d-block">não consegui abrir: <%= error %></span>
+            <% end %>
+          </li>
         <% end %>
       </ul>
     <% else %>

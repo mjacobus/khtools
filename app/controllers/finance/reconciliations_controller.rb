@@ -12,9 +12,8 @@ module Finance
       @month = month
       @opening_cents = balance.opening_cents
       @statements = statements.to_a
+      @unreadable = {}
       @reconciliation = reconciliation
-    rescue Pdf::Error, GoogleDrive::Client::Error => exception
-      flash.now[:alert] = "Não consegui ler o extrato: #{exception.message}"
     end
 
     def create
@@ -46,13 +45,21 @@ module Finance
     end
 
     def reconciliation
-      texts = @statements.map { |document| text(document) }
+      texts = @statements.filter_map { |document| readable_text(document) }
       if texts.any?
         Reconciliation.new(account: current_account, month: @month,
                            holder: Statement.holder(texts.first),
                            lines: texts.flat_map { |text| Statement.parse(text) }.uniq(&:doc),
                            opening_cents: @opening_cents)
       end
+    end
+
+    # A statement that can't be opened is named on the page; the others are still checked.
+    def readable_text(document)
+      text(document)
+    rescue Pdf::Error, GoogleDrive::Client::Error => exception
+      @unreadable[document.id] = exception.message
+      nil
     end
 
     def text(document)
